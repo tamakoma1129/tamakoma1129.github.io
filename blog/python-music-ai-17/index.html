@@ -1,0 +1,172 @@
+<!DOCTYPE html><html lang="ja" class="text-slate-700"><head><meta charset="utf-8"><title>【17日目】シンセ音源を自動ラベリングするアプリを制作する | tamakoma.com</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v7.0.3"><meta name="twitter:card" content="summary"><meta property="og:title" content="【17日目】シンセ音源を自動ラベリングするアプリを制作する"><meta property="og:type" content="website"><meta property="og:url" content="https://tamakoma.com/blog/python-music-ai-17/"><meta property="og:image" content="/_astro/mikuteto-OGP.DYQebPDj.png"><meta property="og:description" content="学んだことを残すブログ"><meta property="og:site_name" content="tamakoma.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.0.1/dist/css/yakuhanjp_s.css"><link rel="sitemap" href="/sitemap-index.xml"><link rel="stylesheet" href="/_astro/BaseLayout.Ddu7R_5r.css"><style>/*! tailwindcss v4.2.2 | MIT License | https://tailwindcss.com */
+.article-toc[data-astro-cid-tqqy2vud] .toc-link{font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));display:block}@media (hover:hover){.article-toc[data-astro-cid-tqqy2vud] .toc-link:hover{color:var(--color-slate-600,oklch(44.6% .043 257.281));text-decoration-line:underline}}.article-toc[data-astro-cid-tqqy2vud] .toc-link.to-link-active{color:var(--color-miku-500,oklch(63.7% .1071 185.34))}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H2){margin-left:var(--spacing-24,24px)}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H3){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:10px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H4){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:20px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H5){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:30px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H6){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:40px}.article-toc[data-astro-cid-tqqy2vud] .toc-list{list-style-type:decimal;list-style-position:outside}@layer properties{@supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))){*,:before,:after,::backdrop{--tw-font-weight:initial;--tw-border-style:solid}}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a{--tw-font-weight:var(--font-weight-semibold,600);font-weight:var(--font-weight-semibold,600);color:var(--color-miku-500,oklch(63.7% .1071 185.34));text-underline-offset:2px;text-decoration-line:underline}@media (hover:hover){article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a:hover{color:var(--color-miku-700,oklch(50.5% .0901 187.01))}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] code:not(pre>code){margin-inline:var(--spacing-4,4px);border-radius:var(--radius-md,.375rem);border-style:var(--tw-border-style);background-color:var(--color-sumi-100,oklch(97% 0 0));padding-inline:var(--spacing-4,4px);--tw-font-weight:var(--font-weight-normal,400);font-weight:var(--font-weight-normal,400);color:var(--color-black,#000);border-width:0;padding-block:2px}@property --tw-font-weight{syntax:"*";inherits:false}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid}
+</style><script type="module" src="/_astro/page.DCEeCLip.js"></script><script>!(function(w,p,f,c){if(!window.crossOriginIsolated && !navigator.serviceWorker) return;c=w[p]=Object.assign(w[p]||{},{"lib":"/~partytown/","debug":false});c[f]=(c[f]||[])})(window,'partytown','forward');/* Partytown 0.13.2 - MIT QwikDev */
+const t={preserveBehavior:!1},e=e=>{if("string"==typeof e)return[e,t];const[n,r=t]=e;return[n,{...t,...r}]},n=Object.freeze((t=>{const e=new Set;let n=[];do{Object.getOwnPropertyNames(n).forEach((t=>{"function"==typeof n[t]&&e.add(t)}))}while((n=Object.getPrototypeOf(n))!==Object.prototype);return Array.from(e)})());!function(t,r,o,i,a,s,c,l,d,p,u=t,f){function h(){f||(f=1,"/"==(c=(s.lib||"/~partytown/")+(s.debug?"debug/":""))[0]&&(d=r.querySelectorAll('script[type="text/partytown"]'),i!=t?i.dispatchEvent(new CustomEvent("pt1",{detail:t})):(l=setTimeout(v,(null==s?void 0:s.fallbackTimeout)||1e4),r.addEventListener("pt0",w),a?y(1):o.serviceWorker?o.serviceWorker.register(c+(s.swPath||"partytown-sw.js"),{scope:c}).then((function(t){t.active?y():t.installing&&t.installing.addEventListener("statechange",(function(t){"activated"==t.target.state&&y()}))}),console.error):v())))}function y(e){p=r.createElement(e?"script":"iframe"),t._pttab=Date.now(),e||(p.style.display="block",p.style.width="0",p.style.height="0",p.style.border="0",p.style.visibility="hidden",p.setAttribute("aria-hidden",!0)),p.src=c+"partytown-"+(e?"atomics.js?v=0.13.2":"sandbox-sw.html?"+t._pttab),r.querySelector(s.sandboxParent||"body").appendChild(p)}function v(n,o){for(w(),i==t&&(s.forward||[]).map((function(n){const[r]=e(n);delete t[r.split(".")[0]]})),n=0;n<d.length;n++)(o=r.createElement("script")).innerHTML=d[n].innerHTML,o.nonce=s.nonce,r.head.appendChild(o);p&&p.parentNode.removeChild(p)}function w(){clearTimeout(l)}s=t.partytown||{},i==t&&(s.forward||[]).map((function(r){const[o,{preserveBehavior:i}]=e(r);u=t,o.split(".").map((function(e,r,o){var a;u=u[o[r]]=r+1<o.length?u[o[r]]||(a=o[r+1],n.includes(a)?[]:{}):(()=>{let e=null;if(i){const{methodOrProperty:n,thisObject:r}=((t,e)=>{let n=t;for(let t=0;t<e.length-1;t+=1)n=n[e[t]];return{thisObject:n,methodOrProperty:e.length>0?n[e[e.length-1]]:void 0}})(t,o);"function"==typeof n&&(e=(...t)=>n.apply(r,...t))}return function(){let n;return e&&(n=e(arguments)),(t._ptf=t._ptf||[]).push(o,arguments),n}})()}))})),"complete"==r.readyState?h():(t.addEventListener("DOMContentLoaded",h),t.addEventListener("load",h))}(window,document,navigator,top,window.crossOriginIsolated);;(e=>{e.addEventListener("astro:before-swap",e=>{let r=document.body.querySelector("iframe[src*='/~partytown/']");if(r)e.newDocument.body.append(r)})})(document);</script></head><body class="bg-repeat bg-white anywhere" style="background-image: url(/_astro/mikuteto-gray.Dix8k1Tp.gif)"><div class="min-h-screen flex flex-col justify-between" id="container"><div><header><nav class="flex flex-col items-center pt-40 pb-24"><a href="/blog" class="text-3xl md:text-5xl font-bold mb-40 text-slate-400 drop-shadow-2xl">tamakoma.com</a><div class="w-full flex justify-center [&amp;&gt;a]:bg-white [&amp;&gt;a]:border-slate-400"><a href="/" class="block py-8 px-16 text-sumi-600 rounded-l border-l border-y">home</a><a href="/blog/" class="block py-8 px-16 text-sumi-600 border">blog</a><a href="/about/" class="block py-8 px-16 text-sumi-600 rounded-r border-r border-y">about</a></div></nav></header><main class="bg-slate-100 w-full flex justify-end" data-astro-cid-e2rqhpi3><article class="grow" data-pagefind-body data-astro-cid-e2rqhpi3><header class="mt-24 w-11/12 max-w-[700px] mx-auto" data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-pagefind-weight="6.7" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a><svg viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16 mx-4 mt-[2px]" data-astro-cid-e2rqhpi3="true">
+  <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+</svg><a href="/blog#python%E3%81%A7%E9%9F%B3%E6%A5%BD%E7%B3%BB%E4%BA%BA%E5%B7%A5%E7%9F%A5%E8%83%BD%E3%82%92%E4%BD%9C%E3%82%8B%E3%81%BE%E3%81%A7%E3%81%AE%E6%97%A5%E8%A8%98" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">pythonで音楽系人工知能を作るまでの日記</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-pagefind-weight="6.5" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Python"># Python</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%97%A5%E8%A8%98"># 日記</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E5%AE%9F%E8%B7%B5%E7%B7%A8"># 実践編</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%A9%9F%E6%A2%B0%E5%AD%A6%E7%BF%92"># 機械学習</a></div><h1 class="text-center text-xl md:text-3xl font-bold px-24 mt-40" data-astro-cid-e2rqhpi3>【17日目】シンセ音源を自動ラベリングするアプリを制作する</h1><div class="text-slate-400 text-sm gap-16 flex justify-center mt-24" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>投稿日 <time datetime="2023-06-25T00:00:00.000Z">2023/06/25</time></span><span data-astro-cid-e2rqhpi3>最終更新日 <time datetime="2023-06-25T00:00:00.000Z">2023/06/25</time></span></div></header><hr class="bg-slate-200 rounded-full mx-auto h-4 my-40 w-40 border-0"><div class="flex mx-auto justify-center gap-40" data-astro-cid-e2rqhpi3><section id="article-body" class="
+                            prose prose-neutral
+                            prose-blockquote:border-miku-400 prose-blockquote:font-normal
+                            w-0 grow
+                            max-w-[650px] bg-white box-content px-16 md:px-40 py-24 rounded-md
+                            " data-astro-cid-e2rqhpi3><p>2023年6月25日</p>
+<p>とりあえず、規模は小さくということで、ジャンルを絞った音源分類ツールを作る。</p>
+<p>前回のドラム音源分類の続きなので、それを見ないと何やってるのかわからないかも。</p>
+<p>前回試作的なものを作ったけど、とりあえずそれにフロントエンドっぽい所を追加して、実際に使えるソフトを作りたいと思う。1週間で。</p>
+<p><strong>作る理由は</strong></p>
+<ol>
+<li>
+<p>私自身、音楽にプログラミングで貢献したいため</p>
+</li>
+<li>
+<p>ブログのタイトルにもある通り、Pythonで音楽系人工知能を作るため</p>
+</li>
+</ol>
+<p><strong>実践する前に考えてること</strong></p>
+<ul>
+<li>
+<p>今回は音源をSpliceから取ってくる予定。恐らく、日本の法律的に勝手にスクレイピングしても問題ない気もするんだけど（出来るかはわからん）、普通に世界の法がよくわからんってのと、クレジットめっちゃ余ってるから買ったものを使用する。大体600クレジット強あるので、6種類を100音ぐらい？</p>
+</li>
+<li>
+<p>今回は手軽さからSVMを使うけど、SVMだと音源の”時間の違い”を食わせるのが難しい。だから、もっと違う方法の方がいいとは思う。調べたら色々出てくるんだけど、論文の読み方とかがちょっとまだわかんなくて学習コストが高いので、今回はSVMで勘弁。</p>
+</li>
+<li>
+<p>それと、今回のSVMを各ジャンルごとに学習させる方法の悪いところ？　にタグ同士の関連性を考慮できないってのもある。Stabっていうタグが付いてたらEDMっていうタグが付いてる可能性が高いと思うんだけど、それぞれタグ毎にSVMのモデルを作るからそういう考察ができない。果たしてこれがいいのか悪いのかはちょっとまだわからない。</p>
+</li>
+<li>
+<p>将来的には、Spliceにある音を大量に、Spliceにあるタグを正解ラベルとして食わせたら普通に実用的な物になると確信してる。けど、正直結構真似しやすいツールにはなると思うので、こうやってブログに残してる。</p>
+</li>
+<li>
+<p>あと、音楽みたいに多様性がすこぶるある物の分類の場合、もっとサンプル数があったほうが絶対にいいと思う。</p>
+</li>
+</ul>
+<h2 id="今回作るものとデータ集め"><strong>今回作るものと、データ集め</strong></h2>
+<p>最初は前回と同じドラムの分類にしようと思ったんだけど、前回と同じだとちょっと面白くないのでシンセ音の分類にする。</p>
+<p>Spliceにある代表的なシンセタグの子タグは以下の感じ。</p>
+<p><img alt="" loading="lazy" decoding="async" width="551" height="326" src="/_astro/0044bdd70faebb166aac86c01a002a82.venaY3be_ZAmKcn.webp" srcset=""></p>
+<p>ここから6種類となると……</p>
+<ol>
+<li>
+<p>Bass<br>
+言わずもがなのベース。しかし、ベースといってもサブベースとかkickっぽいベースとか、ジャンルによっても全然違うので、SVMで捌けるかが今回の見せ所。</p>
+</li>
+<li>
+<p>Leads<br>
+なんだろうね、リードって。なんか、音が高くて長めなメロディを奏でてる感じ？こちらも癖強リード…というかリードの種類が多いので、SVMで捌けない気がする。</p>
+</li>
+<li>
+<p>Pads<br>
+パッドは空間を作る系の音。なんか優しい。これは簡単に分類できそう。</p>
+</li>
+<li>
+<p>Stabs<br>
+正直あんまよくわかってないんだけど、アクセント系の音。EDMっぽい感じ。FXと何が違うねんと言われたらわからんし、ベースっぽいものもあればブラスっぽいのもある。こういうのを機械学習にいい感じにラベル付けして欲しい。</p>
+</li>
+<li>
+<p>Plucks<br>
+プラックは一応弦楽器っぽい音となんだけど、シンセになるとそうでもない。対旋律とかでかっこいいプラックが奏でられてると超テンション上がる。</p>
+</li>
+<li>
+<p>FX<br>
+その他＝FXみたいな感じが正直あるから、機械学習で捌くには大量のデータが必要な気がするんだけど、機械学習にやってほしいのは”正解に分類すること”じゃなくて”この音はこのジャンルの音にも聞こえます”ってことなので、かき乱し要員で入れる。</p>
+</li>
+</ol>
+<p>こんな感じ。</p>
+<p>とりあえず、全部One-Shotsで人気順に100個ずつ取っていこうかな。普通に私の音楽制作にも使えるし。あと、1分とかの長すぎる音はダウンロードしてない。</p>
+<p>あと、時々複数の要素を持ってる音源があるんだけど、マジでどうしよう。</p>
+<p><img alt="" loading="lazy" decoding="async" width="1380" height="85" src="/_astro/e5c1fb530eaacee5a98c331022db4f64.DAPe7HTe_Zm9QIh.webp" srcset=""></p>
+<p>上のやつとか、fxとplucksの2要素を持ってる。<br>
+ラベル付けする時フォルダに分けてラベル付けしてたからちょいと困る。<br>
+普通に2つのフォルダに入れればいいか？　とりあえず今回はそれでやろう。</p>
+<p>ダウンロードしてみると、1ページで50個の音源が表示されるっぽいので、1種類につき2ページ分かな。</p>
+<p>まとめると、</p>
+<ul>
+<li>
+<p>学習の為の素材はSpliceから買ってダウンロードしてくる</p>
+</li>
+<li>
+<p>1タグ当たり100個程度の音源</p>
+</li>
+<li>
+<p>One-Shots形式、wav形式</p>
+</li>
+<li>
+<p>1分以上のものは、容量が重いのと、少し例外的なので除外</p>
+</li>
+<li>
+<p>余りにもそのジャンルの音でないものはそのタグが付いてても除外（padはpadでも紙を叩く音みたいのがあったのでそれは除外）</p>
+</li>
+<li>
+<p>複数の要素を持ってたら、すべてのラベルを付ける。</p>
+</li>
+</ul>
+<h2 id="実際にsvmに食わせてみる"><strong>実際にSVMに食わせてみる</strong></h2>
+<p>上の要件の感じで、ダウンロードし……ました！</p>
+<p>マジで疲れた。1時間以上はかかった。下手したら2時間くらいかかったかもしれない。<br>
+やっぱり学習データは既にあるものを使うか、スクレイピングして自動的に収集したほうがいいね。</p>
+<p>最終的に</p>
+<ul>
+<li>
+<p>Bass 136個</p>
+</li>
+<li>
+<p>Leads 102個</p>
+</li>
+<li>
+<p>Pads 100個</p>
+</li>
+<li>
+<p>Stabs 101個</p>
+</li>
+<li>
+<p>Plucks 100個</p>
+</li>
+<li>
+<p>FX 137個</p>
+</li>
+</ul>
+<p>になった。</p>
+<p>FXとBassが多いのは他のタグとよく被ったからだね。特に、Stab×Bass、Pad×FXで被ることが多かった印象。Most popular順に並べて、ダウンロードした順番も影響した結果こんな比率になってるよ。</p>
+<p>結構今更なんだけど、これサンプルによってサンプリングレート違うこととかあるかな？</p>
+<p>……</p>
+<p>調べてみた感じ、サンプルによってサンプリングレートは違う。<br>
+mfccs = librosa.feature.mfcc(y=y, sr=44100, n_mfcc=20)で勝手に44100に統一はしてくれるっぽいんだけど、max_length = int(44100 * 3)でパッティングの時間指定をしてて、これだと44100の時の時間指定になるから、ちょっと不具合というか、想定してないことにはなるかもしれない。</p>
+<p>もし、ダメそうなら一回wavファイルを44100に変換→パッティング→mfccs化という動作が必要そう。</p>
+<p>とりあえず、前回作ったドラムの分類のコードにシンセ音源を入れてみよう。</p>
+<p>設定はとりあえずサンプリングレート44100で、3秒、次元数20でやってみる。</p>
+<p>結果はこんな感じ。</p>
+<p><img alt="" loading="lazy" decoding="async" width="524" height="573" src="/_astro/fe21ab91a471236a920fa469395f86c8.Bzb4DavF_1pNwDN.webp" srcset=""></p>
+<p>100回あたりの平均正答率は52％弱。うーん。<br>
+正直、正答率というよりどう特徴を捉え、どう間違えたかが大事だと思うので、この数字はそこまで悪くないかなと思う。</p>
+<p>混同行列を見ると、</p>
+<ul>
+<li>
+<p>Bassの正答率は大体75％で、主に、Pads,Plucks,Stabsと間違えてる。PluckとStabに間違えるのはむしろ成功だと思うんだけど、Padと間違えるのはあんま良くないかなぁという感じ。</p>
+</li>
+<li>
+<p>FXの正答率は大体48％で、主にPadと間違えてる。これは普通に良い間違いなので、おｋ</p>
+</li>
+<li>
+<p>Leadの正答率は大体23.5％で、主にPlucks,Stabsと間違えてる。ここは正直Leadの特徴が捉えきれてない感じが正直する。難しいな。</p>
+</li>
+<li>
+<p>Padの正答率は大体70％で、主にFXと間違えてる。これも良い間違いなのでおｋ。</p>
+</li>
+<li>
+<p>Plucksの正答率は大体67％で、主にBassと間違えてる。これも良い間違い。</p>
+</li>
+<li>
+<p>Stabsの正答率は大体21％でかなり低い。でも、Stabの場合はどの音をどう間違えたかが結構大事なので、％だけじゃ評価できないかな。って感じ。</p>
+</li>
+</ul>
+<p>今のところは概ねいい感じだけど、Leadだけちょっと不安かな。</p>
+<p>一回、前回正答率が伸びたパッティング0.2、サンプリングレート176400、次元数40とパッティング2、サンプリングレート44100、次元数40をやってみる</p>
+<p><strong>パッティング0.2、サンプリングレート176400、次元数40</strong></p>
+<p><img alt="" loading="lazy" decoding="async" width="517" height="576" src="/_astro/700d122ca3f80ae9adf163b3325b4598.DTy5gTSk_Z1EWLE2.webp" srcset=""></p>
+<p><strong>パッティング2、サンプリングレート44100、次元数40</strong></p>
+<p><img alt="" loading="lazy" decoding="async" width="510" height="578" src="/_astro/3f3c5cde73e48f306e7a66549a90e5d0.BwFUo6mf_Z1XY6GO.webp" srcset=""></p>
+<p>うーん。とりあえずサンプリングレートはやっぱり関係なさそう。<br>
+そんで、今回の場合、Padは基本的に時間が長い傾向があるから、パッティングはある程度長いほうがPadの正答率は上がる感じがする。</p>
+<p>とりあえず、実際に音を食わせてどんなラベルを付けるかというのをやりたいので、閾値を決めて一定以上になったらラベルをつけるというコードを作りたい……が、もう今日は夜遅いので今日はここまでで明日やろう。</p>
+<p>おやすみなさい。</p></section><aside class="w-[300px] hidden lg:block shrink-0" data-astro-cid-e2rqhpi3><nav class="sticky top-16 h-fit  bg-white py-24 pl-24 rounded-md" data-astro-cid-tqqy2vud><section data-astro-cid-tqqy2vud><header data-astro-cid-tqqy2vud><h2 class="font-bold text-lg" data-astro-cid-tqqy2vud>目次</h2></header></section><div class="article-toc scroll-smooth mt-4 py-16 pr-24 overflow-y-auto max-h-[90svh]" data-astro-cid-tqqy2vud></div></nav><script type="module" src="/_astro/ArticleTOC.astro_astro_type_script_index_0_lang.mX9zJvT_.js"></script></aside></div><div class="mt-40 mb-64" data-pagefind-ignore data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a><svg viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16 mx-4 mt-[2px]" data-astro-cid-e2rqhpi3="true">
+  <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+</svg><a href="/blog#python%E3%81%A7%E9%9F%B3%E6%A5%BD%E7%B3%BB%E4%BA%BA%E5%B7%A5%E7%9F%A5%E8%83%BD%E3%82%92%E4%BD%9C%E3%82%8B%E3%81%BE%E3%81%A7%E3%81%AE%E6%97%A5%E8%A8%98" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">pythonで音楽系人工知能を作るまでの日記</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Python"># Python</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%97%A5%E8%A8%98"># 日記</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E5%AE%9F%E8%B7%B5%E7%B7%A8"># 実践編</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%A9%9F%E6%A2%B0%E5%AD%A6%E7%BF%92"># 機械学習</a></div></div></article></main></div><footer class="pb-40 px-24 md:px-0 bg-white"><hr class="mx-auto w-2/3 md:w-1/2 my-24 h-[1px] border-0 bg-slate-400"><div class="mx-8 md:mx-64"><a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" target="_blank" rel="noopener noreferrer"><img src="/_astro/by-nc.DpMeGFcJ_ZF0RGK.svg" alt="クリエイティブコモンズ 表示-非営利 4.0 ライセンス" loading="lazy" decoding="async" width="125" height="44"></a><p class="text-xs md:text-sm">本サイト「<a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">tamakoma.com</a>」から提供されるブログ内の文章、プログラミングコードは、<a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">クリエイティブ・コモンズ 表示-非営利 4.0 ライセンス</a>の下に提供されます。</p><p class="text-xs md:text-sm">音楽や画像などのメディアコンテンツにはこのライセンスは適用されません。</p></div><p class="text-center text-sm"><a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Top</a> / <a href="/contact" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Contact</a> / <a href="/feed.xml" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">RSS Feed</a></p><p class="mt-24 text-center">&copy; tamakoma 2018-2026</p></footer></div></body></html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html><html lang="ja" class="text-slate-700"><head><meta charset="utf-8"><title>【18日目】様々な機械学習モデルを試す | tamakoma.com</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v7.0.3"><meta name="twitter:card" content="summary"><meta property="og:title" content="【18日目】様々な機械学習モデルを試す"><meta property="og:type" content="website"><meta property="og:url" content="https://tamakoma.com/blog/python-music-ai-18/"><meta property="og:image" content="/_astro/mikuteto-OGP.DYQebPDj.png"><meta property="og:description" content="学んだことを残すブログ"><meta property="og:site_name" content="tamakoma.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.0.1/dist/css/yakuhanjp_s.css"><link rel="sitemap" href="/sitemap-index.xml"><link rel="stylesheet" href="/_astro/BaseLayout.Ddu7R_5r.css"><style>/*! tailwindcss v4.2.2 | MIT License | https://tailwindcss.com */
+.article-toc[data-astro-cid-tqqy2vud] .toc-link{font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));display:block}@media (hover:hover){.article-toc[data-astro-cid-tqqy2vud] .toc-link:hover{color:var(--color-slate-600,oklch(44.6% .043 257.281));text-decoration-line:underline}}.article-toc[data-astro-cid-tqqy2vud] .toc-link.to-link-active{color:var(--color-miku-500,oklch(63.7% .1071 185.34))}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H2){margin-left:var(--spacing-24,24px)}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H3){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:10px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H4){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:20px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H5){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:30px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H6){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:40px}.article-toc[data-astro-cid-tqqy2vud] .toc-list{list-style-type:decimal;list-style-position:outside}@layer properties{@supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))){*,:before,:after,::backdrop{--tw-font-weight:initial;--tw-border-style:solid}}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a{--tw-font-weight:var(--font-weight-semibold,600);font-weight:var(--font-weight-semibold,600);color:var(--color-miku-500,oklch(63.7% .1071 185.34));text-underline-offset:2px;text-decoration-line:underline}@media (hover:hover){article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a:hover{color:var(--color-miku-700,oklch(50.5% .0901 187.01))}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] code:not(pre>code){margin-inline:var(--spacing-4,4px);border-radius:var(--radius-md,.375rem);border-style:var(--tw-border-style);background-color:var(--color-sumi-100,oklch(97% 0 0));padding-inline:var(--spacing-4,4px);--tw-font-weight:var(--font-weight-normal,400);font-weight:var(--font-weight-normal,400);color:var(--color-black,#000);border-width:0;padding-block:2px}@property --tw-font-weight{syntax:"*";inherits:false}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid}
+</style><script type="module" src="/_astro/page.DCEeCLip.js"></script><script>!(function(w,p,f,c){if(!window.crossOriginIsolated && !navigator.serviceWorker) return;c=w[p]=Object.assign(w[p]||{},{"lib":"/~partytown/","debug":false});c[f]=(c[f]||[])})(window,'partytown','forward');/* Partytown 0.13.2 - MIT QwikDev */
+const t={preserveBehavior:!1},e=e=>{if("string"==typeof e)return[e,t];const[n,r=t]=e;return[n,{...t,...r}]},n=Object.freeze((t=>{const e=new Set;let n=[];do{Object.getOwnPropertyNames(n).forEach((t=>{"function"==typeof n[t]&&e.add(t)}))}while((n=Object.getPrototypeOf(n))!==Object.prototype);return Array.from(e)})());!function(t,r,o,i,a,s,c,l,d,p,u=t,f){function h(){f||(f=1,"/"==(c=(s.lib||"/~partytown/")+(s.debug?"debug/":""))[0]&&(d=r.querySelectorAll('script[type="text/partytown"]'),i!=t?i.dispatchEvent(new CustomEvent("pt1",{detail:t})):(l=setTimeout(v,(null==s?void 0:s.fallbackTimeout)||1e4),r.addEventListener("pt0",w),a?y(1):o.serviceWorker?o.serviceWorker.register(c+(s.swPath||"partytown-sw.js"),{scope:c}).then((function(t){t.active?y():t.installing&&t.installing.addEventListener("statechange",(function(t){"activated"==t.target.state&&y()}))}),console.error):v())))}function y(e){p=r.createElement(e?"script":"iframe"),t._pttab=Date.now(),e||(p.style.display="block",p.style.width="0",p.style.height="0",p.style.border="0",p.style.visibility="hidden",p.setAttribute("aria-hidden",!0)),p.src=c+"partytown-"+(e?"atomics.js?v=0.13.2":"sandbox-sw.html?"+t._pttab),r.querySelector(s.sandboxParent||"body").appendChild(p)}function v(n,o){for(w(),i==t&&(s.forward||[]).map((function(n){const[r]=e(n);delete t[r.split(".")[0]]})),n=0;n<d.length;n++)(o=r.createElement("script")).innerHTML=d[n].innerHTML,o.nonce=s.nonce,r.head.appendChild(o);p&&p.parentNode.removeChild(p)}function w(){clearTimeout(l)}s=t.partytown||{},i==t&&(s.forward||[]).map((function(r){const[o,{preserveBehavior:i}]=e(r);u=t,o.split(".").map((function(e,r,o){var a;u=u[o[r]]=r+1<o.length?u[o[r]]||(a=o[r+1],n.includes(a)?[]:{}):(()=>{let e=null;if(i){const{methodOrProperty:n,thisObject:r}=((t,e)=>{let n=t;for(let t=0;t<e.length-1;t+=1)n=n[e[t]];return{thisObject:n,methodOrProperty:e.length>0?n[e[e.length-1]]:void 0}})(t,o);"function"==typeof n&&(e=(...t)=>n.apply(r,...t))}return function(){let n;return e&&(n=e(arguments)),(t._ptf=t._ptf||[]).push(o,arguments),n}})()}))})),"complete"==r.readyState?h():(t.addEventListener("DOMContentLoaded",h),t.addEventListener("load",h))}(window,document,navigator,top,window.crossOriginIsolated);;(e=>{e.addEventListener("astro:before-swap",e=>{let r=document.body.querySelector("iframe[src*='/~partytown/']");if(r)e.newDocument.body.append(r)})})(document);</script></head><body class="bg-repeat bg-white anywhere" style="background-image: url(/_astro/mikuteto-gray.Dix8k1Tp.gif)"><div class="min-h-screen flex flex-col justify-between" id="container"><div><header><nav class="flex flex-col items-center pt-40 pb-24"><a href="/blog" class="text-3xl md:text-5xl font-bold mb-40 text-slate-400 drop-shadow-2xl">tamakoma.com</a><div class="w-full flex justify-center [&amp;&gt;a]:bg-white [&amp;&gt;a]:border-slate-400"><a href="/" class="block py-8 px-16 text-sumi-600 rounded-l border-l border-y">home</a><a href="/blog/" class="block py-8 px-16 text-sumi-600 border">blog</a><a href="/about/" class="block py-8 px-16 text-sumi-600 rounded-r border-r border-y">about</a></div></nav></header><main class="bg-slate-100 w-full flex justify-end" data-astro-cid-e2rqhpi3><article class="grow" data-pagefind-body data-astro-cid-e2rqhpi3><header class="mt-24 w-11/12 max-w-[700px] mx-auto" data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-pagefind-weight="6.7" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a><svg viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16 mx-4 mt-[2px]" data-astro-cid-e2rqhpi3="true">
+  <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+</svg><a href="/blog#python%E3%81%A7%E9%9F%B3%E6%A5%BD%E7%B3%BB%E4%BA%BA%E5%B7%A5%E7%9F%A5%E8%83%BD%E3%82%92%E4%BD%9C%E3%82%8B%E3%81%BE%E3%81%A7%E3%81%AE%E6%97%A5%E8%A8%98" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">pythonで音楽系人工知能を作るまでの日記</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-pagefind-weight="6.5" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Python"># Python</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%97%A5%E8%A8%98"># 日記</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%A9%9F%E6%A2%B0%E5%AD%A6%E7%BF%92"># 機械学習</a></div><h1 class="text-center text-xl md:text-3xl font-bold px-24 mt-40" data-astro-cid-e2rqhpi3>【18日目】様々な機械学習モデルを試す</h1><div class="text-slate-400 text-sm gap-16 flex justify-center mt-24" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>投稿日 <time datetime="2023-06-26T00:00:00.000Z">2023/06/26</time></span><span data-astro-cid-e2rqhpi3>最終更新日 <time datetime="2024-10-12T00:00:00.000Z">2024/10/12</time></span></div></header><hr class="bg-slate-200 rounded-full mx-auto h-4 my-40 w-40 border-0"><div class="flex mx-auto justify-center gap-40" data-astro-cid-e2rqhpi3><section id="article-body" class="
+                            prose prose-neutral
+                            prose-blockquote:border-miku-400 prose-blockquote:font-normal
+                            w-0 grow
+                            max-w-[650px] bg-white box-content px-16 md:px-40 py-24 rounded-md
+                            " data-astro-cid-e2rqhpi3><p>2023年6月26日</p>
+<p><strong>※手探りで学んでいるので、何か間違っている、冗長なところはあると思われます。本当に参考程度にしてください。</strong></p>
+<p>昨日の続きを。</p>
+<p>とりあえず、それぞれのジャンルの確率を出してあげなきゃいけないのだけど、SVMは学習してできた関数が正か負かによって判定を出すものだから、確率を出すのは本質的じゃないらしい。一応、無理やり出す方法はあるっぽいんだけど、色んなモデルを経験したいので、今回は<strong>色んな機械学習モデルを試そう！　なんちゃって交差検証編！</strong> にしたいと思う。</p>
+<p>深層学習はまだちょっと置いといて、他の有名機械学習モデルをいろいろ試して、交差検証……といっても、いつも通りランダムにテストデータと学習データに分けるってのを100回やってその平均を見てみるものをやって、どのモデルがいいのかを見ていくよ。</p>
+<p>さて、今回試す機械学習モデルだけど……<br>
+うーん。機械学習モデルがありすぎてどれを試せばいいか本当にわからん。</p>
+<p>うーーーーーん……</p>
+<p>なんだかんだ色々調べて、思ったのは「<strong>情報がマジでないから、いろいろ試そう</strong>」ということ。</p>
+<p>ちょこっと調べたけど、今回は分類問題・教師あり学習・確率を出したい、が条件なのでこれ等の条件を満たす「決定木」「ランダムフォレスト」「勾配ブースティング決定木」「K近傍法」らへんをやってみる。</p>
+<p>決定木の応用がランダムフォレストと勾配ブースティング決定木なので決定木はやんなくてもいい気するけど、基礎は大事だし、経験として。</p>
+<p>勾配ブースティング決定木ってKaggleで定番のやつだよね？　自ら使う日が来るとは思わなかった。感動。</p>
+<p>というか、「機械学習　分類　音」で調べたら自分のブログ出てきたわ。我ながら邪魔だ。本当に情報がないことがわかる。</p>
+<p>出来ることならは人工知能学会みたいなとこの会員になって論文読んで～とかするのがいいと思うんだけど、ちょっと時間が足りないし、文系学生が出来るのかわからないので一旦がむしゃら戦法で行く。</p>
+<p>先ずは決定木からやりますか。</p>
+<h2 id="決定木"><strong>決定木</strong></h2>
+<p>モデルの詳しい説明は先人の<a href="https://qiita.com/3000manJPY/items/ef7495960f472ec14377" rel="noopener noreferrer" target="_blank">わかりやすい記事</a>と、<a href="https://qiita.com/renesisu727/items/844648d6c60e578ce944" rel="noopener noreferrer" target="_blank">少し理論的な記事</a>にお任せして、とりあえず簡易な説明を。</p>
+<p>少し決定木を学んでみて思ったのは。決定木が未だに使われてるのは、モデルの分かりやすさと、決定木で起きてることがブラックボックス化されてないからじゃないかな。と思うなどした。</p>
+<p>以下が少し学んで得たもの。</p>
+<ul>
+<li>
+<p>決定木自体は機械学習の手法ではなく、概念。私たちが選択する時のルールとして自分たちで組み立てて使う事もできる。しかし、便宜上今回は決定木と言ったほうがわかりやすいので、今回は決定木＝決定木を作成する機械学習モデルとして扱う。</p>
+</li>
+<li>
+<p>決定木は選択肢をYes/No→閾値以上未満で分岐させていって分類する手法。</p>
+</li>
+<li>
+<p>このYes/Noの判定の閾値を動的に決めて決定木を作る機械学習を決定木と言ってしまっている？</p>
+</li>
+<li>
+<p>深層学習と違い、決定木はどこでどう分岐して分類されているのかが分かりやすいので、説明が必要な時とかに重宝する。</p>
+</li>
+<li>
+<p>分類・回帰どっちも行ける。非線形も行けるが、あまり向いてはいない。</p>
+</li>
+</ul>
+<p>といった感じ？</p>
+<p>間違っているところはあるかもしれないので、参考程度に。</p>
+<p>では、実装していきたいんだけど、これもしかしてSVMのプログラムをmodel = DecisionTreeClassifier()にして、model.predict_proba(X_test)ってやれば各ジャンルに合う確率出る！？　保守性ってこういうことか。</p>
+<p>とりあえず、決定木のMax階層を3に設定してやってみた。</p>
+<p><img alt="" loading="lazy" decoding="async" width="672" height="593" src="/_astro/74a29b98ed3adf6027e32de4aef1ca33.D9rAbwQj_Z1qlhdF.webp" srcset=""></p>
+<p>[0.1047619  0.04761905 0.33333333 0.02857143 0.08571429 0.4       ]っていうのが、ある1つのテストデータがそれぞれのジャンルにこれだけ近い可能性がありますよっていう確率。この場合0.4のStabsに分類されて、次点が0.333…のLeadsっていう感じか。すんげえなこれ。</p>
+<p>しかし、SVMと比べ正答率はやっぱり結構落ちている。Max3層にしてるからっていうのもありそうなので、5層にしてみる。</p>
+<p><img alt="" loading="lazy" decoding="async" width="735" height="613" src="/_astro/8c0abae545c709571d8e5c3b48c4f907.BUlsA6pL_Z1W6DJY.webp" srcset=""></p>
+<p>うーん。正答率は上がってない割に、多様性が減って結構極端に回答するようになった。</p>
+<p>↓0の回答が多く、0.9以上の回答が増えた。</p>
+<p><img alt="" loading="lazy" decoding="async" width="501" height="615" src="/_astro/73921ae1dffc55b1fdf16ed70ae7b4f1.LMtdaPgp_Z1lgDQL.webp" srcset=""></p>
+<p>理想とするものは、音源に対し偏見なく「この音源はBassにもFXにも使えますね！」って言ってくれる機械学習なので、もし決定木でやるなら何層にするかが重要そう。</p>
+<p>正直、多様性という意味で3層の決定木は悪くない気がする。ベース音突っ込んでみたら「この音はLeadで使えそうですね～」って判定するみたいなのも可愛くていいんじゃないだろうか。しかし、実用性には欠けるだろうので、他のも試す。</p>
+<h2 id="ランダムフォレスト"><strong>ランダムフォレスト</strong></h2>
+<p>なんだぁ、ランダムフォレストって。</p>
+<p>少し調べてみた感じ、<strong>バギング形式</strong>で<strong>アンサンブル学習</strong>の結果を出す為に、多様性のある決定木を複数作ってその決定木で多数決をとる方法みたい。</p>
+<p>はい、もう意味わからん。</p>
+<p>専門用語で説明されると、ちょっと何言ってるのかわかんない状態に陥りがちではあるんだけど、<a href="https://toukei-lab.com/ensemble#i" rel="noopener noreferrer" target="_blank">分かりやすい記事</a>があったのでバギングとアンサンブル学習の説明はそちらに任せて、大まかな説明を。</p>
+<p>アンサンブル学習は複数の分類器（今回は決定木）で多数決を取って分類または回帰するというもの。バギングは、その複数の分類器を並列的に学習させることを言う。だから、ある程度学習の効率はいいのかな。</p>
+<p>ここまではどの記事にも書いてあったから、何故バギングなのか、何故アンサンブル学習なのかみたいなところを知りたいんだけど、因果関係みたいなものになると情報がやっぱりない。<a href="https://link.springer.com/content/pdf/10.1007/BF00058655.pdf" rel="noopener noreferrer" target="_blank">バギングの論文</a>とか読むと何か掴めるかもしれないんだけど、英語だけじゃなく、数学も入ってくると如何せん学習コストが高い。</p>
+<p>とりあえず、やってみる。</p>
+<p>やってみた結果、以下の通り。</p>
+<p><img alt="" loading="lazy" decoding="async" width="574" height="585" src="/_astro/05211c2d7a0d463f594444e4fb1d7c70.U1bhUzeM_Z10RjnO.webp" srcset=""></p>
+<p>やはり正答率は決定木より高いので、優秀。</p>
+<p>多様性もある程度確保できており、素晴らしい。（優柔不断とも言う）↓</p>
+<p><img alt="" loading="lazy" decoding="async" width="494" height="610" src="/_astro/068c0166c13b3e312ea55ed9f431737b.Dlg3_MM1_Z1VaW3M.webp" srcset=""></p>
+<p>しかし、Colabの無料GPUを使ってるけど学習時間は時間がかかるようになってきていて、今まで2、3分で終わってたのが今回は5分半くらいになっている。</p>
+<p>決定木を使うよりはランダムフォレストを使うほうが良さそうだね。</p>
+<h2 id="勾配ブースティング決定木"><strong>勾配ブースティング決定木</strong></h2>
+<p>Kaggleで人気なあれ。勾配ブースティング決定木だとちょっと長いから<strong>GBDT</strong>(Gradient Boosting Decision Tree)と呼ぶことにする。</p>
+<p>超おおざっぱに言うと、ランダムフォレストが並列で複数の決定木を学習させたのに対し、GBDTは直列で分類器を学習させる。直列だから、前の分類器が間違えたところを重点的に学習することができて、最終的に作った分類器に重みをつけて、そこから答えを導くといったもの。</p>
+<p>先人の記事だと、<a href="https://nisshingeppo.com/ai/whats-gbdt/#toc1" rel="noopener noreferrer" target="_blank">これがマジでわかりやすい</a>。</p>
+<p>さっき言った、直列で学習というのが<strong>ブースティング</strong>というもので、前のモデルの間違ったところを重点的に学習するというのが、<strong>勾配降下法</strong>というもの。勾配降下法って深層学習でも使うやつだよね？</p>
+<p>GBDTのモデルはscikit-learnにもあるんだけど、Kaggleとかで使われる<strong>XGBoost</strong>や<strong>LightGBM</strong>を使いたい場合は別に入れる必要あり。</p>
+<p>今回はとりあえずscikit-learnを使ってGBDTを実装する。</p>
+<p><a href="https://ebi-works.com/gbdt/" rel="noopener noreferrer" target="_blank">こちらの方</a>の、scikit-learnのGBDTの使い方を見たんだけど、交差検証ってライブラリに実装されてたのか。わざわざforで回すのって結構アホなことやってたんだなこれ。<br>
+交差検証について調べてみると色んな意見が見られるので、単純なものではなさそう。<br>
+とりあえず、scikit-learnの機能にある交差検証を使ってGBDTを回してみる。</p>
+<p>うーん。流石に学習が遅いなぁ……って思ったらこんな通知が。</p>
+<p><img alt="" loading="lazy" decoding="async" width="713" height="49" src="/_astro/ab3dde11a969302d48951829b30c41f2.tn4DTHUu_17T02G.webp" srcset=""></p>
+<p>いや、私はちゃんとGPUに設定したし、GPUに設定されていることも確認したぞ？？</p>
+<p><img alt="" loading="lazy" decoding="async" width="639" height="405" src="/_astro/161df0fba04e71060595c52eeb801602.CBAVQyqj_ZjO7ki.webp" srcset=""></p>
+<p>と思ったんだけど、処理時間がやけに長いから色々調べたんだけど……<strong>scikit-learnってもしかしてGPUに対応してない！？</strong></p>
+<p><a href="https://scikit-learn.org/stable/faq.html#will-you-add-gpu-support" rel="noopener noreferrer" target="_blank">SKlearnのF&#x26;Q</a>によると「依存関係があーだこーだで、アルゴリズムである程度速くはなるから、GPUに対応する予定はないよ」と言っている。</p>
+<p>まじか。知らなかった。<br>
+結構普通に対応してるもんだと思ってたよ私は。確かに、ローカル環境でGPUアリの深層学習を動かそうとすると面倒くさかった記憶があるから、色々あるんだろうなぁ。<br>
+じゃあ今まで意味もなくGoogleColabの無料GPU枠を使ってたのか。申し訳ない。</p>
+<p>先にも紹介したXGBoostやLightGBMはGPUに対応しているらしいので、それを使うか？<br>
+でも、今思ったんだけどこれってもし、ソフトウェアとして配布する場合、GPUが無いと動かないソフトウェアになってしまうのだろうか？<br>
+そこら辺の知見がなさ過ぎて本当にわからない。別に学習させたモデルであればCPUだけで動くのか？？</p>
+<p>色々調べてやってみるしかないね。</p>
+<p>やっと、32分29秒でGBDTの交差検証終了。k=5でやった結果は。</p>
+<p><img alt="" loading="lazy" decoding="async" width="426" height="41" src="/_astro/5a0e742c8f56a9b210226b6f38d0bee0.DdfBQQ7e_Z2sNNFG.webp" srcset=""></p>
+<p>で大体平均は43％くらい。</p>
+<p>結果としてはランダムフォレストとあまり変わらない結果に。<br>
+しかし、GBDTはハイパーパラメータを調整する必要があるっていうのと、XGBoost、LightGBMがあることを考慮すると、やっぱり調整さえすれば一番精度は高いのかなと思う。<br>
+というか、SVMが50％台叩き出してたのすごいんだなあれ。過学習してた説はあるけど。</p>
+<p>最後にK-近傍法いってみよう。</p>
+<h2 id="k-近傍法"><strong>K-近傍法</strong></h2>
+<p>ちょっと疲れてきたので、K-近傍法の解説は<a href="https://qiita.com/yshi12/items/26771139672d40a0be32" rel="noopener noreferrer" target="_blank">先人の素晴らしい記事</a>にお任せ。しかし、考え方は結構シンプルで面白いので、是非見てほしい。人間って色んなアプローチ考えるなぁ、すげえなぁと思う。</p>
+<p><strong>実践！</strong></p>
+<p>k=3~49でさっきの交差検証の方法で実施。</p>
+<p><img alt="" loading="lazy" decoding="async" width="437" height="156" src="/_astro/b27f378d29e538dd653379c41731383d.DNtvlDQG_Z1J6uNF.webp" srcset=""></p>
+<p>結果は、パーセントが最も高かったのがk=5の時で平均50％くらい。最小はk=47の時で46％くらい。<br>
+分類精度は結構良さげ。速度も50回くらいの実行が46秒で終わるので、滅茶苦茶早い。<br>
+なんか別に悪くない気がするんだけど、どうなんだろう。</p>
+<p>k-近傍法に正直そこまで期待してなかったから、こうなるとは思わなかったんだけど、一応デメリットを挙げると、学習データが増えると計算量も増える&#x26;データの次元数が増えると精度が悪くなるといったものらしい。</p>
+<p>今回は学習データが400程度だと思うので、少なくて爆速だったという訳だ。今回MFCCの次元数は40なので精度も悪くなかった？　ということ？<br>
+というか、MFCCのどういった要素を特徴量にしているのかが直感的にわからなくて、そこらへんが何も見えないのはちょっと課題かもしれない。</p>
+<p>ちょっとk=8で今まで通りの100回検証もしてみる。</p>
+<p>結果は</p>
+<p><img alt="" loading="lazy" decoding="async" width="584" height="579" src="/_astro/354f6bc5faf19d46af248a3f7abdb872.ClmbJJVV_Z1Bhutm.webp" srcset=""></p>
+<p>という感じで、悪くない気がするぞ。</p>
+<p>今回k=8なので各データの各ジャンル予想は0.125単位みたいになってる。</p>
+<p><img alt="" loading="lazy" decoding="async" width="329" height="718" src="/_astro/d3d01003ca713a4aad657017a3521f2b.ChprXZ7p_Z1b65bs.webp" srcset=""></p>
+<p>みたいな感じになってる。<br>
+使いやすくて滅茶苦茶いいと個人的には思う。</p>
+<p>うーん。精度的に言えば最終的にGBDTがいいとしても、今回の目的と使い勝手を考えるとK-近傍法が結構魅力的に感じる。</p>
+<h2 id="結論"><strong>結論</strong></h2>
+<p>本当に素人の雑感としては今回の条件の場合、K-近傍法>ランダムフォレスト>=GBDT>決定木の順で、使いやすくて、精度も悪くないなと感じた。</p>
+<p>K-近傍法に正直全然期待してなかったので結構驚きなんだけど、軽い+わかりやすい+精度もある程度良いことを考えると、<del>今のところK-近傍法が一番有力かな</del>。<br>
+<strong>【追記】K-近傍法はアルゴリズム的にサンプル数が均等に分散してないと結果が偏ってしまうで使いませんでした。（今回のパターンだとBassとFXの比重が多い為、BassとFXに分類されやすい）</strong></p>
+<p>これを、ソフトにして、自分の好きな音源を入れたらそれがどの確率が高いかというところを明日やろう。<br>
+一応バックエンドはこのままPythonで問題ないと思うんだけど、フロントエンド系の言語はSwiftと学校で習った程度のPHPとかしか技術がないので、そこが課題になるかなぁと思う。</p>
+<p>理想は、Windowsのローカル環境で動くソフトウェアにすることなんだけど、叶うかはわからない。できるだけやろう。</p></section><aside class="w-[300px] hidden lg:block shrink-0" data-astro-cid-e2rqhpi3><nav class="sticky top-16 h-fit  bg-white py-24 pl-24 rounded-md" data-astro-cid-tqqy2vud><section data-astro-cid-tqqy2vud><header data-astro-cid-tqqy2vud><h2 class="font-bold text-lg" data-astro-cid-tqqy2vud>目次</h2></header></section><div class="article-toc scroll-smooth mt-4 py-16 pr-24 overflow-y-auto max-h-[90svh]" data-astro-cid-tqqy2vud></div></nav><script type="module" src="/_astro/ArticleTOC.astro_astro_type_script_index_0_lang.mX9zJvT_.js"></script></aside></div><div class="mt-40 mb-64" data-pagefind-ignore data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a><svg viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16 mx-4 mt-[2px]" data-astro-cid-e2rqhpi3="true">
+  <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+</svg><a href="/blog#python%E3%81%A7%E9%9F%B3%E6%A5%BD%E7%B3%BB%E4%BA%BA%E5%B7%A5%E7%9F%A5%E8%83%BD%E3%82%92%E4%BD%9C%E3%82%8B%E3%81%BE%E3%81%A7%E3%81%AE%E6%97%A5%E8%A8%98" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">pythonで音楽系人工知能を作るまでの日記</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Python"># Python</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%97%A5%E8%A8%98"># 日記</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%A9%9F%E6%A2%B0%E5%AD%A6%E7%BF%92"># 機械学習</a></div></div></article></main></div><footer class="pb-40 px-24 md:px-0 bg-white"><hr class="mx-auto w-2/3 md:w-1/2 my-24 h-[1px] border-0 bg-slate-400"><div class="mx-8 md:mx-64"><a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" target="_blank" rel="noopener noreferrer"><img src="/_astro/by-nc.DpMeGFcJ_ZF0RGK.svg" alt="クリエイティブコモンズ 表示-非営利 4.0 ライセンス" loading="lazy" decoding="async" width="125" height="44"></a><p class="text-xs md:text-sm">本サイト「<a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">tamakoma.com</a>」から提供されるブログ内の文章、プログラミングコードは、<a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">クリエイティブ・コモンズ 表示-非営利 4.0 ライセンス</a>の下に提供されます。</p><p class="text-xs md:text-sm">音楽や画像などのメディアコンテンツにはこのライセンスは適用されません。</p></div><p class="text-center text-sm"><a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Top</a> / <a href="/contact" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Contact</a> / <a href="/feed.xml" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">RSS Feed</a></p><p class="mt-24 text-center">&copy; tamakoma 2018-2026</p></footer></div></body></html>

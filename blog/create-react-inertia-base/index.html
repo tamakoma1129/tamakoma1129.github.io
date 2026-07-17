@@ -1,0 +1,1163 @@
+<!DOCTYPE html><html lang="ja" class="text-slate-700"><head><meta charset="utf-8"><title>【1日目】React+Inertiaへ移行する環境を作る | tamakoma.com</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v7.0.3"><meta name="twitter:card" content="summary"><meta property="og:title" content="【1日目】React+Inertiaへ移行する環境を作る"><meta property="og:type" content="website"><meta property="og:url" content="https://tamakoma.com/blog/create-react-inertia-base/"><meta property="og:image" content="/_astro/mikuteto-OGP.DYQebPDj.png"><meta property="og:description" content="学んだことを残すブログ"><meta property="og:site_name" content="tamakoma.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.0.1/dist/css/yakuhanjp_s.css"><link rel="sitemap" href="/sitemap-index.xml"><link rel="stylesheet" href="/_astro/BaseLayout.Ddu7R_5r.css"><style>/*! tailwindcss v4.2.2 | MIT License | https://tailwindcss.com */
+.article-toc[data-astro-cid-tqqy2vud] .toc-link{font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));display:block}@media (hover:hover){.article-toc[data-astro-cid-tqqy2vud] .toc-link:hover{color:var(--color-slate-600,oklch(44.6% .043 257.281));text-decoration-line:underline}}.article-toc[data-astro-cid-tqqy2vud] .toc-link.to-link-active{color:var(--color-miku-500,oklch(63.7% .1071 185.34))}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H2){margin-left:var(--spacing-24,24px)}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H3){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:10px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H4){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:20px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H5){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:30px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H6){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:40px}.article-toc[data-astro-cid-tqqy2vud] .toc-list{list-style-type:decimal;list-style-position:outside}@layer properties{@supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))){*,:before,:after,::backdrop{--tw-font-weight:initial;--tw-border-style:solid}}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a{--tw-font-weight:var(--font-weight-semibold,600);font-weight:var(--font-weight-semibold,600);color:var(--color-miku-500,oklch(63.7% .1071 185.34));text-underline-offset:2px;text-decoration-line:underline}@media (hover:hover){article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a:hover{color:var(--color-miku-700,oklch(50.5% .0901 187.01))}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] code:not(pre>code){margin-inline:var(--spacing-4,4px);border-radius:var(--radius-md,.375rem);border-style:var(--tw-border-style);background-color:var(--color-sumi-100,oklch(97% 0 0));padding-inline:var(--spacing-4,4px);--tw-font-weight:var(--font-weight-normal,400);font-weight:var(--font-weight-normal,400);color:var(--color-black,#000);border-width:0;padding-block:2px}@property --tw-font-weight{syntax:"*";inherits:false}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid}
+</style><script type="module" src="/_astro/page.DCEeCLip.js"></script><script>!(function(w,p,f,c){if(!window.crossOriginIsolated && !navigator.serviceWorker) return;c=w[p]=Object.assign(w[p]||{},{"lib":"/~partytown/","debug":false});c[f]=(c[f]||[])})(window,'partytown','forward');/* Partytown 0.13.2 - MIT QwikDev */
+const t={preserveBehavior:!1},e=e=>{if("string"==typeof e)return[e,t];const[n,r=t]=e;return[n,{...t,...r}]},n=Object.freeze((t=>{const e=new Set;let n=[];do{Object.getOwnPropertyNames(n).forEach((t=>{"function"==typeof n[t]&&e.add(t)}))}while((n=Object.getPrototypeOf(n))!==Object.prototype);return Array.from(e)})());!function(t,r,o,i,a,s,c,l,d,p,u=t,f){function h(){f||(f=1,"/"==(c=(s.lib||"/~partytown/")+(s.debug?"debug/":""))[0]&&(d=r.querySelectorAll('script[type="text/partytown"]'),i!=t?i.dispatchEvent(new CustomEvent("pt1",{detail:t})):(l=setTimeout(v,(null==s?void 0:s.fallbackTimeout)||1e4),r.addEventListener("pt0",w),a?y(1):o.serviceWorker?o.serviceWorker.register(c+(s.swPath||"partytown-sw.js"),{scope:c}).then((function(t){t.active?y():t.installing&&t.installing.addEventListener("statechange",(function(t){"activated"==t.target.state&&y()}))}),console.error):v())))}function y(e){p=r.createElement(e?"script":"iframe"),t._pttab=Date.now(),e||(p.style.display="block",p.style.width="0",p.style.height="0",p.style.border="0",p.style.visibility="hidden",p.setAttribute("aria-hidden",!0)),p.src=c+"partytown-"+(e?"atomics.js?v=0.13.2":"sandbox-sw.html?"+t._pttab),r.querySelector(s.sandboxParent||"body").appendChild(p)}function v(n,o){for(w(),i==t&&(s.forward||[]).map((function(n){const[r]=e(n);delete t[r.split(".")[0]]})),n=0;n<d.length;n++)(o=r.createElement("script")).innerHTML=d[n].innerHTML,o.nonce=s.nonce,r.head.appendChild(o);p&&p.parentNode.removeChild(p)}function w(){clearTimeout(l)}s=t.partytown||{},i==t&&(s.forward||[]).map((function(r){const[o,{preserveBehavior:i}]=e(r);u=t,o.split(".").map((function(e,r,o){var a;u=u[o[r]]=r+1<o.length?u[o[r]]||(a=o[r+1],n.includes(a)?[]:{}):(()=>{let e=null;if(i){const{methodOrProperty:n,thisObject:r}=((t,e)=>{let n=t;for(let t=0;t<e.length-1;t+=1)n=n[e[t]];return{thisObject:n,methodOrProperty:e.length>0?n[e[e.length-1]]:void 0}})(t,o);"function"==typeof n&&(e=(...t)=>n.apply(r,...t))}return function(){let n;return e&&(n=e(arguments)),(t._ptf=t._ptf||[]).push(o,arguments),n}})()}))})),"complete"==r.readyState?h():(t.addEventListener("DOMContentLoaded",h),t.addEventListener("load",h))}(window,document,navigator,top,window.crossOriginIsolated);;(e=>{e.addEventListener("astro:before-swap",e=>{let r=document.body.querySelector("iframe[src*='/~partytown/']");if(r)e.newDocument.body.append(r)})})(document);</script></head><body class="bg-repeat bg-white anywhere" style="background-image: url(/_astro/mikuteto-gray.Dix8k1Tp.gif)"><div class="min-h-screen flex flex-col justify-between" id="container"><div><header><nav class="flex flex-col items-center pt-40 pb-24"><a href="/blog" class="text-3xl md:text-5xl font-bold mb-40 text-slate-400 drop-shadow-2xl">tamakoma.com</a><div class="w-full flex justify-center [&amp;&gt;a]:bg-white [&amp;&gt;a]:border-slate-400"><a href="/" class="block py-8 px-16 text-sumi-600 rounded-l border-l border-y">home</a><a href="/blog/" class="block py-8 px-16 text-sumi-600 border">blog</a><a href="/about/" class="block py-8 px-16 text-sumi-600 rounded-r border-r border-y">about</a></div></nav></header><main class="bg-slate-100 w-full flex justify-end" data-astro-cid-e2rqhpi3><article class="grow" data-pagefind-body data-astro-cid-e2rqhpi3><header class="mt-24 w-11/12 max-w-[700px] mx-auto" data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-pagefind-weight="6.7" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a><svg viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16 mx-4 mt-[2px]" data-astro-cid-e2rqhpi3="true">
+  <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+</svg><a href="/blog#%E4%BD%9C%E6%9B%B2%E7%9F%A5%E8%AD%98%E5%85%B1%E6%9C%89%E3%82%B5%E3%82%A4%E3%83%88%E3%82%92%E6%94%B9%E5%96%84%E3%81%99%E3%82%8B%E6%97%A5%E8%A8%98" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">作曲知識共有サイトを改善する日記</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-pagefind-weight="6.5" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Laravel"># Laravel</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=React"># React</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Inertia"># Inertia</a></div><h1 class="text-center text-xl md:text-3xl font-bold px-24 mt-40" data-astro-cid-e2rqhpi3>【1日目】React+Inertiaへ移行する環境を作る</h1><div class="text-slate-400 text-sm gap-16 flex justify-center mt-24" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>投稿日 <time datetime="2025-10-12T00:00:00.000Z">2025/10/12</time></span><span data-astro-cid-e2rqhpi3>最終更新日 <time datetime="2025-10-13T00:00:00.000Z">2025/10/13</time></span></div></header><hr class="bg-slate-200 rounded-full mx-auto h-4 my-40 w-40 border-0"><div class="flex mx-auto justify-center gap-40" data-astro-cid-e2rqhpi3><section id="article-body" class="
+                            prose prose-neutral
+                            prose-blockquote:border-miku-400 prose-blockquote:font-normal
+                            w-0 grow
+                            max-w-[650px] bg-white box-content px-16 md:px-40 py-24 rounded-md
+                            " data-astro-cid-e2rqhpi3><p>2025年07月25日~2025年10月12日</p>
+<p>半年前くらいに作曲知識共有サイトをどうにか動く形にしてdtmru α版としてリリースしたんだけど、改善したいところが無限にあるので改善する。</p>
+<h2 id="なにをしたいのか">なにをしたいのか</h2>
+<p>とりあえず、以下の２つを実行したい</p>
+<ol>
+<li>フロントをInertia.js + Reactへ</li>
+<li>記事エディタをCKEditorからTipTapへ</li>
+</ol>
+<h2 id="半年間やってたこと">半年間やってたこと</h2>
+<p>dtmruを少しいじったりはしてたものの、普通に関係ないプログラミングやったり、ゲームやったり、始めての一人暮らし+社会人にてんやわんやしてたりした。</p>
+<p>そんな中、２ヶ月前くらいにClaude Codeという自律型コーディングAIが出てきた。<br>
+結構革命的で「これでInertia移行余裕やろ！」と思ったら本当にうまく行かなかったので、やっぱり私はこうやって日記形式で学んだことを吐き出しながら作業するのが向いているんだなと思って戻ってきた。</p>
+<p>何がだめなのかわからないんだけど、Claude CodeはLaravelの実装はいけてもInertiaを使った実装がダメダメなんだよね。おそらく、Inertiaの情報が少なすぎるのが原因かなと思ったり。<br>
+あと、その時はReactへ移行しようと思ってたんだけど、Calude Codeが吐き出したReactの実装を見ても私がReactわからないので、毎回コードチェックにめっちゃ時間かかる。<br>
+そんなことするなら私が日記に知識を落としながら主導して実装していくのがいいよなぁという。</p>
+<h2 id="reactjsかvuejsか">React.jsかVue.jsか</h2>
+<p>大前提としてInertiaを使いSPA + SSRへ移行することは確定している。<br>
+理由は以下</p>
+<ul>
+<li>Laravelを使いたい
+<ul>
+<li>Laravelが好きだから</li>
+<li>Laravelのスキルが既にある程度あるから</li>
+<li>既にLaravelで実装しているから</li>
+<li>仕事でも使うから</li>
+</ul>
+</li>
+<li>Laravelを完全バックエンドオンリーのAPIにはしない
+<ul>
+<li>学習コストデカすぎなので
+<ul>
+<li>ただでさえInertiaだけでも以下を学ばなきゃいけない
+<ul>
+<li>Inertia</li>
+<li>React or Vue</li>
+<li>TS</li>
+</ul>
+</li>
+<li>それに加えてLaravelをAPI的に使うとなると以下を学ばなきゃいけない
+<ul>
+<li>API設計</li>
+<li>SSRをするために必要なフレームワーク</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>LaravelがInertia推してるので</li>
+</ul>
+</li>
+<li>記事エディタをTipTapにしたい
+<ul>
+<li>現在のCKEditorが使いにくいから</li>
+<li>ヘッドレスでUIを自由自在にいじれるから</li>
+<li><a href="https://github.com/ueberdosis/tiptap-php" rel="noopener noreferrer" target="_blank">PHP用のサニタイズライブラリ</a>があったり、Livewire、AlpineのチュートリアルがあったりとLaravelと相性が良さげ。どっちも使わない予定だけど。</li>
+</ul>
+</li>
+<li>エディタをTipTapにするついでにフロントをモダンにしたい
+<ul>
+<li>SSR + SPAにはしたい</li>
+<li>まだわからないけど、音を扱う以上、音のプレイヤーとか実装するとなったらSPAじゃなきゃだめだし、記事共有サイトという性質上、SEOのためにSSRでありたい</li>
+</ul>
+</li>
+</ul>
+<p>その上で、取れる選択肢は以下</p>
+<ol>
+<li>Livewire へ移行
+<ul>
+<li>Livewireを使うんだったらReactかVueを学びたいのでペケ</li>
+</ul>
+</li>
+<li>現行のBlade+Alpine.jsで実装
+<ul>
+<li>Blade + Alpine.jsは非常にありなんだけど、ならLivewireでよくない？　となるし、先のことを考えるとSSR + SPAにしたいのでペケ</li>
+</ul>
+</li>
+<li>LaravelをバックエンドAPI化して、Next.jsとかをフロント側にする
+<ul>
+<li>最初はフロントとバックエンドで完全にサーバーを分けるこの形を考えていたんだけど、明らかにオーバースペックなのでペケ。あと、Next.jsを使うならもうNext.jsだけで実装しちゃいたいかも。</li>
+</ul>
+</li>
+<li>Inertia + Reactへ移行</li>
+<li>Inertia + Vue へ移行</li>
+</ol>
+<p>ということで、残りは<code>Inertia + React</code> or <code>Inertia + Vue</code>という感じ。</p>
+<h3 id="react-vs-vueの雑感">React vs Vueの雑感</h3>
+<p>雑な感想としては</p>
+<ul>
+<li>おそらく、どっちを採用してもやりたいことはできる</li>
+<li>学習のコストを取るか、将来の可能性を取るかという感じ</li>
+<li>React
+<ul>
+<li>好印象なとこ
+<ul>
+<li>シェアは日本・世界共にVueより上</li>
+<li><a href="https://laravel-news.com/state-of-laravel-survey-2024" rel="noopener noreferrer" target="_blank">Laravelとの組み合わせ</a>でもシェア上げつつある</li>
+<li>エコシステムでかめ</li>
+<li>Webエンジニアとして、アプリとして長い将来を考えるならReact</li>
+<li>生のjsを使うjsxが個人的にすこ</li>
+</ul>
+</li>
+<li>懸念点
+<ul>
+<li>規模が大きく複雑で、選択肢が多く学習・実装が長くなりそう</li>
+</ul>
+</li>
+<li>ただ、しっかり触ったこと無いのでよくわからん</li>
+</ul>
+</li>
+<li>Vue
+<ul>
+<li>好印象なとこ
+<ul>
+<li>全体シェアは劣るが、<a href="https://laravel-news.com/state-of-laravel-survey-2024" rel="noopener noreferrer" target="_blank">Laravelとの組み合わせではReactと比べて2倍のシェア</a></li>
+<li>2024年のフロントエンドフレームワーク満足度ではReactが75%に対し、Vueは87%</li>
+<li>Vueは別プロジェクトで使っており、特に大きな不満点はない</li>
+<li>小規模〜中規模におすすめで、開発速度を求めるならこっちなイメージ</li>
+<li>ロゴがネギっぽいのがGood</li>
+</ul>
+</li>
+<li>懸念点
+<ul>
+<li>シェアと将来性。これに尽きる。
+<ul>
+<li>正直、シェアがあって将来性もReactと同じくらいあるならVueを使うかなぁ</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>うーん。<br>
+こうやって文章にまとめると私が取るべき選択は明らかで、Vueだよね。</p>
+<p>私は良いキャリアを積んでいくのが目標ではないし、個人開発だし、Vueに不満を思ったことはないし、Laravelとの相性も悪くない。</p>
+<p>ただ、jsxは結構好きめな開発体験だし、しっかりReactをイジったことがないのでイジイジしたい。<br>
+つまり、興味があって楽しそうと感じているのはReact。だから、一回Reactを採用してみてダメそうならVueにしようかなという結論にする。</p>
+<h2 id="blade--alpinejsからinertiajs--reactjsへ移行する">Blade + Alpine.jsからInertia.js + React.jsへ移行する</h2>
+<p>何を参考に移行するかなんだけど、Laravel12よりInertia.js + Reactのスターターキットが存在するのでこれを参考に環境を作る。</p>
+<h2 id="laravel1112">Laravel11→12</h2>
+<p>参考にするスターターキットは12基準のものなので、流石にバージョン合わせたほうがいいかなと思いLaravelのバージョンを上げる。</p>
+<p>11→12の変更点がそもそも少なく、依存パッケージもすべてv12対応済みだったので問題なく上げられるだろうという算段。</p>
+<p>実際私の場合は<a href="https://github.com/laravel/framework/pull/50822" rel="noopener noreferrer" target="_blank">#54281</a>の変更が既存の実装と競合というか、私も独自に空白文字を検知してバリデーションで弾く実装をしていたのでテストが思い通りに動かなくなったくらいで問題なくバージョン上げられた。</p>
+<h2 id="laravel12のスターターキットの技術構成を見る">Laravel12のスターターキットの技術構成を見る</h2>
+<p>スターターキットInertia.js + React.jsの技術構成を見て、私に何が必要で何が不要なのかを判断していく。</p>
+<p>スターターキットはlaravel/installerのv5.16の<code>laravel new</code>で以下のように選択して生成されたものを参考にする。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#A6E22E"> ┌</span><span style="color:#E6DB74"> Which</span><span style="color:#E6DB74"> starter</span><span style="color:#E6DB74"> kit</span><span style="color:#E6DB74"> would</span><span style="color:#E6DB74"> you</span><span style="color:#E6DB74"> like</span><span style="color:#E6DB74"> to</span><span style="color:#E6DB74"> install?</span><span style="color:#E6DB74"> ────────────────┐</span></span>
+<span class="line"><span style="color:#A6E22E"> │</span><span style="color:#E6DB74"> React</span><span style="color:#E6DB74">                                                        │</span></span>
+<span class="line"><span style="color:#A6E22E"> └──────────────────────────────────────────────────────────────┘</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#A6E22E"> ┌</span><span style="color:#E6DB74"> Which</span><span style="color:#E6DB74"> authentication</span><span style="color:#E6DB74"> provider</span><span style="color:#E6DB74"> do</span><span style="color:#E6DB74"> you</span><span style="color:#E6DB74"> prefer?</span><span style="color:#E6DB74"> ────────────────┐</span></span>
+<span class="line"><span style="color:#A6E22E"> │</span><span style="color:#E6DB74"> Laravel's built-in authentication                            │</span></span>
+<span class="line"><span style="color:#E6DB74"> └──────────────────────────────────────────────────────────────┘</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E6DB74"> ┌ Which testing framework do you prefer? ──────────────────────┐</span></span>
+<span class="line"><span style="color:#E6DB74"> │ PHPUnit                                                      │</span></span>
+<span class="line"><span style="color:#E6DB74"> └──────────────────────────────────────────────────────────────┘</span></span></code></pre>
+<p>見るのはcompose.jsonとpackage.jsonの2つ。</p>
+<h3 id="composerjson">composer.json</h3>
+<p>重要なとこだけ出すと以下のような感じ。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E6DB74">"require"</span><span style="color:#F8F8F2">: {  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "php"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^8.2"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "inertiajs/inertia-laravel"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^2.0"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "laravel/framework"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^12.0"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "laravel/tinker"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^2.10.1"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "tightenco/ziggy"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^2.4"</span><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#F8F8F2">},  </span></span>
+<span class="line"><span style="color:#E6DB74">"require-dev"</span><span style="color:#F8F8F2">: {  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "fakerphp/faker"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^1.23"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "laravel/pail"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^1.2.2"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "laravel/pint"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^1.18"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "laravel/sail"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^1.41"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "mockery/mockery"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^1.6"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "nunomaduro/collision"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^8.6"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "phpunit/phpunit"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^11.5.3"</span><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#F8F8F2">},</span></span></code></pre>
+<p>Inertia + React環境特有で必要そうなのは以下の2つっぽい</p>
+<ol>
+<li><a href="https://github.com/inertiajs/inertia-laravel" rel="noopener noreferrer" target="_blank">inertiajs/inertia-laravel</a>
+<ul>
+<li>inertiajs/inertia-laravelはInertia使うので必要</li>
+</ul>
+</li>
+<li><a href="https://github.com/tighten/ziggy" rel="noopener noreferrer" target="_blank">tightenco/ziggy</a>
+<ul>
+<li>route()関数をjsで使えるようにする。便利だしハードコーディングしたくないので必要</li>
+</ul>
+</li>
+</ol>
+<h3 id="packagejsonの中身">package.jsonの中身</h3>
+<p>フロントの移行なのでこっちが大変なことになってる。<br>
+スターターキットは以下のような感じ</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E6DB74">"devDependencies"</span><span style="color:#F8F8F2">: {  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "eslint"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^9.17.0"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "@eslint/js"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^9.19.0"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "eslint-config-prettier"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^10.0.1"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "eslint-plugin-react"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^7.37.3"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "eslint-plugin-react-hooks"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^5.1.0"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "typescript-eslint"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^8.23.0"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "prettier"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^3.4.2"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "prettier-plugin-organize-imports"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^4.1.0"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "prettier-plugin-tailwindcss"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^0.6.11"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "@types/node"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^22.13.5"</span><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#F8F8F2">},  </span></span>
+<span class="line"><span style="color:#E6DB74">"dependencies"</span><span style="color:#F8F8F2">: {  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "react"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^19.0.0"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "react-dom"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^19.0.0"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "@inertiajs/react"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^2.0.0"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "typescript"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^5.7.2"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "@types/react"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^19.0.3"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "@types/react-dom"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^19.0.2"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "vite"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^7.0.4"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "@vitejs/plugin-react"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^4.6.0"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "laravel-vite-plugin"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^2.0"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "concurrently"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^9.0.1"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "globals"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^15.14.0"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "tailwindcss"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^4.0.0"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "@tailwindcss/vite"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^4.1.11"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "tailwindcss-animate"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^1.0.7"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "tailwind-merge"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^3.0.1"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "clsx"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^2.1.1"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "class-variance-authority"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^0.7.1"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "lucide-react"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^0.475.0"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "@headlessui/react"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^2.2.0"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "@radix-ui/react-avatar"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^1.1.3"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "@radix-ui/react-checkbox"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^1.1.4"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "@radix-ui/react-collapsible"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^1.1.3"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "@radix-ui/react-dialog"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^1.1.6"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "@radix-ui/react-dropdown-menu"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^2.1.6"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "@radix-ui/react-label"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^2.1.2"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "@radix-ui/react-navigation-menu"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^1.2.5"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "@radix-ui/react-select"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^2.1.6"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "@radix-ui/react-separator"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^1.1.2"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "@radix-ui/react-slot"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^1.1.2"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "@radix-ui/react-toggle"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^1.1.2"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "@radix-ui/react-toggle-group"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^1.1.2"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "@radix-ui/react-tooltip"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^1.1.8"</span><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#F8F8F2">},  </span></span>
+<span class="line"><span style="color:#E6DB74">"optionalDependencies"</span><span style="color:#F8F8F2">: {  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "@rollup/rollup-linux-x64-gnu"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"4.9.5"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "@tailwindcss/oxide-linux-x64-gnu"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^4.0.1"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "lightningcss-linux-x64-gnu"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^1.29.1"</span><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<p>とにかく量が多いねぇ。<br>
+とりあえず、全て調べて解説して私にとって必要か不必要かみていく。</p>
+<h3 id="eslint系">eslint系</h3>
+<p>devDependenciesに入っている以下のやつ。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E6DB74">    "eslint"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^9.17.0"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">    "@eslint/js"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^9.19.0"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">    "eslint-config-prettier"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"</span></span>
+<span class="line"><span style="color:#E6DB74">    ^10.0.1"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">    "eslint-plugin-react"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^7.37.3"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">    "eslint-plugin-react-hooks"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^5.1.0"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">    "typescript-eslint"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^8.23.0"</span><span style="color:#F8F8F2">,  </span></span></code></pre>
+<p>eslintはJSの構文チェックをしてくれるやつ。</p>
+<ul>
+<li><a href="https://www.npmjs.com/package/eslint" rel="noopener noreferrer" target="_blank">eslint</a>
+<ul>
+<li>本体</li>
+</ul>
+</li>
+<li><a href="https://www.npmjs.com/package/@eslint/js" rel="noopener noreferrer" target="_blank">@eslint/js</a>
+<ul>
+<li>eslint公式のjs用ルール</li>
+</ul>
+</li>
+<li><a href="https://www.npmjs.com/package/eslint-config-prettier" rel="noopener noreferrer" target="_blank">eslint-config-prettier</a>
+<ul>
+<li>prettier(後述)とルールが競合しないようにするもの</li>
+</ul>
+</li>
+<li><a href="https://www.npmjs.com/package/eslint-plugin-react" rel="noopener noreferrer" target="_blank">eslint-plugin-react</a>
+<ul>
+<li>React用のルール</li>
+</ul>
+</li>
+<li><a href="https://www.npmjs.com/package/eslint-plugin-react-hooks" rel="noopener noreferrer" target="_blank">eslint-plugin-react-hooks</a>
+<ul>
+<li>ReactのHookに関するルール</li>
+</ul>
+</li>
+<li><a href="https://www.npmjs.com/package/typescript-eslint" rel="noopener noreferrer" target="_blank">typescript-eslint</a>
+<ul>
+<li>ESLintでTypeScriptを使用できるようにするもの</li>
+</ul>
+</li>
+</ul>
+<p>ここらへんは全部導入するつもりだったんだけど、ESlint+PrettierではなくBiomeにしたので導入しない。</p>
+<h3 id="prettier系">prettier系</h3>
+<p>devDependenciesに入っている以下のやつ</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E6DB74">"prettier"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^3.4.2"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">"prettier-plugin-organize-imports"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^4.1.0"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">"prettier-plugin-tailwindcss"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^0.6.11"</span><span style="color:#F8F8F2">,</span></span></code></pre>
+<p>さっきのeslintは構文チェックで、こちらのprettierはコードの自動整形。<br>
+こちらもESLintと同様にBiomeでよいので導入しない。</p>
+<ul>
+<li><a href="https://www.npmjs.com/package/prettier" rel="noopener noreferrer" target="_blank">prettier</a>
+<ul>
+<li>本体</li>
+</ul>
+</li>
+<li><a href="https://www.npmjs.com/package/prettier-plugin-organize-imports" rel="noopener noreferrer" target="_blank">prettier-plugin-organize-imports</a>
+<ul>
+<li>import文の自動整形を追加</li>
+</ul>
+</li>
+<li><a href="https://www.npmjs.com/package/prettier-plugin-tailwindcss" rel="noopener noreferrer" target="_blank">prettier-plugin-tailwindcss</a>
+<ul>
+<li>TailwindCSSのクラスを自動で並び替えてくれる。めっちゃいいね</li>
+</ul>
+</li>
+</ul>
+<h3 id="typesnode">@types/node</h3>
+<p>devDependenciesに入っている<a href="https://www.npmjs.com/package/@types/node" rel="noopener noreferrer" target="_blank">@types/node</a>というやつ。</p>
+<p>Node.jsのTS型を提供するもの。<br>
+開発環境でnodeを利用しており、TSも使うので必要。</p>
+<h3 id="react系">React系</h3>
+<p>dependenciesに入っている以下のやつ</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E6DB74">"react"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^19.0.0"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">"react-dom"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^19.0.0"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">"@inertiajs/react"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^2.0.0"</span><span style="color:#F8F8F2">,</span></span></code></pre>
+<p>React採用なのでもちろん入れる。</p>
+<ul>
+<li><a href="https://www.npmjs.com/package/react" rel="noopener noreferrer" target="_blank">react</a>
+<ul>
+<li>導入する</li>
+<li>本体</li>
+</ul>
+</li>
+<li><a href="https://www.npmjs.com/package/react-dom" rel="noopener noreferrer" target="_blank">react-dom</a>
+<ul>
+<li>導入する</li>
+<li>これreactと何が違うの？ と思ったんだけど、ReactはWebブラウザだけでなくモバイルアプリとかでも利用されるので、どこで描画するかによってレンダラーを変える必要があるっぽい。もちろんここではWebブラウザでレンダリングするのでreact-domを導入する。</li>
+</ul>
+</li>
+<li><a href="https://www.npmjs.com/package/@inertiajs/react" rel="noopener noreferrer" target="_blank">@inertiajs/react</a>
+<ul>
+<li>導入する</li>
+<li>inertiaのReact用アダプタ。Inertia × Reactなのでもちろん必要。</li>
+</ul>
+</li>
+</ul>
+<h3 id="typescript系">typescript系</h3>
+<p>dependenciesに入っている以下のやつ</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E6DB74">"typescript"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^5.7.2"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">"@types/react"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^19.0.3"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">"@types/react-dom"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^19.0.2"</span><span style="color:#F8F8F2">,</span></span></code></pre>
+<p>TSをあえて採用せずJSDocで実装という判断もなくはなかったんだけど、LaravelがもうTSデフォなので思い切って採用する。</p>
+<ul>
+<li><a href="https://www.npmjs.com/package/typescript" rel="noopener noreferrer" target="_blank">typescript</a>
+<ul>
+<li>導入する</li>
+<li>本体</li>
+</ul>
+</li>
+<li><a href="https://www.npmjs.com/package/@types/react" rel="noopener noreferrer" target="_blank">@types/react</a>
+<ul>
+<li>導入する</li>
+<li>reactの型定義</li>
+</ul>
+</li>
+<li><a href="https://www.npmjs.com/package/@types/react-dom" rel="noopener noreferrer" target="_blank">@types/react-dom</a>
+<ul>
+<li>導入する</li>
+<li>react-domの型定義</li>
+</ul>
+</li>
+</ul>
+<h3 id="vite系">vite系</h3>
+<p>dependenciesに入っている以下のやつ</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E6DB74">"vite"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^7.0.4"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">"@vitejs/plugin-react"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^4.6.0"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">"laravel-vite-plugin"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^2.0"</span><span style="color:#F8F8F2">,</span></span></code></pre>
+<p>Viteに文句ないのでもちろん採用。</p>
+<ul>
+<li><a href="https://www.npmjs.com/package/vite" rel="noopener noreferrer" target="_blank">vite</a>
+<ul>
+<li>導入する</li>
+<li>本体</li>
+</ul>
+</li>
+<li><a href="https://www.npmjs.com/package/@vitejs/plugin-react" rel="noopener noreferrer" target="_blank">@vitejs/plugin-react</a>
+<ul>
+<li>導入する</li>
+<li>なんでこれ必要なんだろうと思ったんだけど、以下のメリットがあるっぽい
+<ul>
+<li>Reactのホットリロードが早くなる</li>
+<li>jsx利用時にreactをインポートする必要がなくなる</li>
+</ul>
+</li>
+<li>正直よくわかんないけど入れておく</li>
+</ul>
+</li>
+<li><a href="https://www.npmjs.com/package/laravel-vite-plugin" rel="noopener noreferrer" target="_blank">laravel-vite-plugin</a>
+<ul>
+<li>導入する</li>
+<li>LaravelでViteを使えるようにするやつ。入れよう</li>
+</ul>
+</li>
+</ul>
+<h3 id="concurrently">concurrently</h3>
+<p>dependenciesに入っている以下のやつ</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E6DB74">"concurrently"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^9.0.1"</span><span style="color:#F8F8F2">,  </span></span></code></pre>
+<p><a href="https://www.npmjs.com/package/concurrently" rel="noopener noreferrer" target="_blank">concurrently</a>っていうのは同時にコマンドを動かすパッケージらしい。<br>
+これ、なんで入れているんだろうと思ったんだけど、<code>composer.json</code>の</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E6DB74">"dev"</span><span style="color:#F8F8F2">: [  </span></span>
+<span class="line"><span style="color:#E6DB74">    "Composer</span><span style="color:#AE81FF">\\</span><span style="color:#E6DB74">Config::disableProcessTimeout"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">    "npx concurrently -c </span><span style="color:#AE81FF">\"</span><span style="color:#E6DB74">#93c5fd,#c4b5fd,#fb7185,#fdba74</span><span style="color:#AE81FF">\"</span><span style="color:#AE81FF"> \"</span><span style="color:#E6DB74">php artisan serve</span><span style="color:#AE81FF">\"</span><span style="color:#AE81FF"> \"</span><span style="color:#E6DB74">php artisan queue:listen --tries=1</span><span style="color:#AE81FF">\"</span><span style="color:#AE81FF"> \"</span><span style="color:#E6DB74">php artisan pail --timeout=0</span><span style="color:#AE81FF">\"</span><span style="color:#AE81FF"> \"</span><span style="color:#E6DB74">npm run dev</span><span style="color:#AE81FF">\"</span><span style="color:#E6DB74"> --names=server,queue,logs,vite"</span></span>
+<span class="line"><span style="color:#F8F8F2">    ],  </span></span>
+<span class="line"><span style="color:#E6DB74">"dev:ssr"</span><span style="color:#F8F8F2">: [  </span></span>
+<span class="line"><span style="color:#E6DB74">    "npm run build:ssr"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">    "Composer</span><span style="color:#AE81FF">\\</span><span style="color:#E6DB74">Config::disableProcessTimeout"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">    "npx concurrently -c </span><span style="color:#AE81FF">\"</span><span style="color:#E6DB74">#93c5fd,#c4b5fd,#fb7185,#fdba74</span><span style="color:#AE81FF">\"</span><span style="color:#AE81FF"> \"</span><span style="color:#E6DB74">php artisan serve</span><span style="color:#AE81FF">\"</span><span style="color:#AE81FF"> \"</span><span style="color:#E6DB74">php artisan queue:listen --tries=1</span><span style="color:#AE81FF">\"</span><span style="color:#AE81FF"> \"</span><span style="color:#E6DB74">php artisan pail --timeout=0</span><span style="color:#AE81FF">\"</span><span style="color:#AE81FF"> \"</span><span style="color:#E6DB74">php artisan inertia:start-ssr</span><span style="color:#AE81FF">\"</span><span style="color:#E6DB74"> --names=server,queue,logs,ssr"</span></span>
+<span class="line"><span style="color:#F8F8F2">    ],</span></span></code></pre>
+<p>とかに使われているので入っているっぽい。<br>
+個人的に使う予定は無いのでこれは入れなくていいかな。</p>
+<h3 id="globals">globals</h3>
+<p>dependenciesに入っている以下のやつ</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E6DB74">"globals"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^15.14.0"</span><span style="color:#F8F8F2">,  </span></span></code></pre>
+<p><a href="https://www.npmjs.com/package/globals" rel="noopener noreferrer" target="_blank">globals</a>っていうのは、ESLintがブラウザデフォルトで定義されている<code>windows</code>などのグローバル変数を定義してあげるものっぽい。これがないとESLintが検知してくれないとのこと。</p>
+<p>であれば入れる方針で問題なさそう。</p>
+<h3 id="tailwind系">tailwind系</h3>
+<p>dependenciesに入っている以下のやつ</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E6DB74">"tailwindcss"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^4.0.0"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">"@tailwindcss/vite"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^4.1.11"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">"tailwindcss-animate"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^1.0.7"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">"tailwind-merge"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^3.0.1"</span><span style="color:#F8F8F2">,  </span></span></code></pre>
+<p>TailwindCSS自体は採用するけど、自分には必要なさそうなものもありそう</p>
+<ul>
+<li><a href="https://www.npmjs.com/package/tailwindcss" rel="noopener noreferrer" target="_blank">tailwindcss</a>
+<ul>
+<li>導入する</li>
+<li>本体</li>
+</ul>
+</li>
+<li><a href="https://www.npmjs.com/package/@tailwindcss/vite" rel="noopener noreferrer" target="_blank">@tailwindcss/vite</a>
+<ul>
+<li>導入する</li>
+<li>Vite使うので</li>
+</ul>
+</li>
+<li><a href="https://www.npmjs.com/package/tailwindcss-animate" rel="noopener noreferrer" target="_blank">tailwindcss-animate</a>
+<ul>
+<li>導入しない</li>
+<li>これはTailwindCSS公式のアニメーションを作るためのプラグインなんだけど、アニメーション使う予定ないので入れない。使うことになったら導入すればおｋだと思う。</li>
+</ul>
+</li>
+<li><a href="https://www.npmjs.com/package/tailwind-merge" rel="noopener noreferrer" target="_blank"> tailwind-merge</a>
+<ul>
+<li>後から必要だったら導入</li>
+<li>これは、Tailiwindのクラスを競合しないようにマージするやつ。<a href="https://github.com/dcastil/tailwind-merge/blob/40d8feed6aafd389eed0a20acb6d9e174fe2fa24/docs/when-and-how-to-use-it.md" rel="noopener noreferrer" target="_blank">ドキュメント</a>にもある通り、無闇矢鱈に入れればよいというわけでもないっぽい。<br>
+一旦様子見てほしくなったら入れる方針で。</li>
+</ul>
+</li>
+</ul>
+<h3 id="classをいい感じに操作する系">classをいい感じに操作する系</h3>
+<p>dependenciesに入っている以下のやつ</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E6DB74">"clsx"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^2.1.1"</span><span style="color:#F8F8F2">,   </span></span>
+<span class="line"><span style="color:#E6DB74">"class-variance-authority"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^0.7.1"</span><span style="color:#F8F8F2">,  </span></span></code></pre>
+<p>どちらもTailwindCSSのclassの条件とかを書きやすくしてくれるやつ。</p>
+<ul>
+<li><a href="https://www.npmjs.com/package/clsx" rel="noopener noreferrer" target="_blank">clsx</a>
+<ul>
+<li>導入する</li>
+<li>これは、特定の記法をスペース区切りの文字列に変換してくれるユーティリティ。<br>
+<code>falsey</code>な値はすべて破棄されること＆スペース区切りの文字列で出力されることを活かしてCSS Classの条件分岐でいい感じに使えるっぽい。<br>
+わからんけど、入れとこ。</li>
+</ul>
+</li>
+<li><a href="https://www.npmjs.com/package/class-variance-authority" rel="noopener noreferrer" target="_blank">class-variance-authority</a>
+<ul>
+<li>後から必要だったら導入</li>
+<li>通称CVA。これは、classを生成する関数を実装してくれるライブラリ。<br>
+バリエーションを予め定義して、使いたいバリエーションを引数に渡すことでclassを生成してくれる的な。TSにも対応している。<br>
+これあればclsxいらないのでは？　とも思うけど、よほど複雑じゃない限りはcvaでなくclsxで十分みたいなことみたい。</li>
+</ul>
+</li>
+</ul>
+<h3 id="lucide-react">lucide-react</h3>
+<p>dependenciesに入っている以下のやつ</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E6DB74">"lucide-react"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^0.475.0"</span><span style="color:#F8F8F2">,</span></span></code></pre>
+<p><a href="https://www.npmjs.com/package/lucide-react" rel="noopener noreferrer" target="_blank">lucide-react</a>はlucideアイコンライブラリのReact版。<br>
+アイコンがめっちゃ簡単にいっぱい使えるよということ。</p>
+<p><a href="https://lucide.dev/license" rel="noopener noreferrer" target="_blank">ライセンス</a>はISC LicenseとMITの混合っぽい。ISC Licenseにあまり聞き覚えがないんだけど、MITとほぼ同等なので、著作権的なところは安心して使える。</p>
+<p>便利そうなので、もちろん入れる。</p>
+<h3 id="uiライブラリ系">UIライブラリ系</h3>
+<p>dependenciesに入っている以下のやつ</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E6DB74">"@headlessui/react"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^2.2.0"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">"@radix-ui/react-avatar"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^1.1.3"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">"@radix-ui/react-checkbox"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^1.1.4"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">"@radix-ui/react-collapsible"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^1.1.3"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">"@radix-ui/react-dialog"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^1.1.6"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">"@radix-ui/react-dropdown-menu"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^2.1.6"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">"@radix-ui/react-label"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^2.1.2"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">"@radix-ui/react-navigation-menu"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^1.2.5"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">"@radix-ui/react-select"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^2.1.6"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">"@radix-ui/react-separator"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^1.1.2"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">"@radix-ui/react-slot"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^1.1.2"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">"@radix-ui/react-toggle"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^1.1.2"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">"@radix-ui/react-toggle-group"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^1.1.2"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">"@radix-ui/react-tooltip"</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"^1.1.8"</span></span></code></pre>
+<p>スターターキットには大きく分けて</p>
+<ol>
+<li><a href="https://www.npmjs.com/package/@headlessui/react" rel="noopener noreferrer" target="_blank">Headless UI</a></li>
+<li><a href="https://www.npmjs.com/package/radix-ui" rel="noopener noreferrer" target="_blank">Radix UI</a><br>
+の2個のUIライブラリが入っている。</li>
+</ol>
+<p>どちらもヘッドレスUIというジャンルのUIライブラリで、この2つがヘッドレスUIの主要ライブラリっぽい。</p>
+<p>ヘッドレスUIは、UIの機能だけ用意して後の見た目は自由に作ってねというもの。TipTapと一緒だね。</p>
+<p>正直、ここまで低レイヤーにするならネイティブなHTML要素でコンポーネント作成したほうがいいのでは？　と思わなくもないんだけど、使ってみないと文句は言えないのでとりあえず使う。</p>
+<p>Headless UIとTailwindCSSは同じ会社が作ってるらしく、親和性高そうなので基本的にHeadless UIを使い、Headless UIに無いものはRedix UIを探す感じでよいのかな。</p>
+<h3 id="optionaldependencies系">optionalDependencies系</h3>
+<p>optionalDependenciesに入っている以下のやつ</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E6DB74">"optionalDependencies"</span><span style="color:#F8F8F2">: {  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "@rollup/rollup-linux-x64-gnu"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"4.9.5"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "@tailwindcss/oxide-linux-x64-gnu"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^4.0.1"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "lightningcss-linux-x64-gnu"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^1.29.1"</span><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<p>そもそも<a href="https://docs.npmjs.com/cli/v11/configuring-npm/package-json#optionaldependencies" rel="noopener noreferrer" target="_blank">optionalDependencies</a>っていうのは、インストールに失敗してもnpmの処理を続行させたいパッケージを指定するものみたい。</p>
+<p>ここでは<code>〇〇-linux-x64-gnu</code>というのが指定されているけど、これはそれぞれLinux x64 GNU用のバイナリファイルで、もしLinux x64 GNU環境だったらこれらのバイナリファイルを使って環境を作るよと宣言している感じ。</p>
+<p>もし、Winとかの環境ならこれらのインストールには失敗して何もインストールされない。<br>
+ただ、これら3つのパッケージはなにかの依存関係で必要なものなので、Win対応版が自動的にインストールされる感じになるはず。</p>
+<ul>
+<li><a href="https://www.npmjs.com/package/@rollup/rollup-linux-x64-gnu" rel="noopener noreferrer" target="_blank">@rollup/rollup-linux-x64-gnu</a>
+<ul>
+<li>Viteのビルドで利用するモジュールバンドラー。<br>
+前述通り、別環境でもそれにあったものがインストールされるっぽいので記述しておいてもいいのかなという感じ。</li>
+</ul>
+</li>
+<li><a href="https://www.npmjs.com/package/@tailwindcss/oxide-linux-x64-gnu" rel="noopener noreferrer" target="_blank">@tailwindcss/oxide-linux-x64-gnu</a>
+<ul>
+<li>TailwindCSSのlinux-x64-gnu用バイナリ。Tailwind使うから指定しとこ。</li>
+</ul>
+</li>
+<li><a href="https://www.npmjs.com/package/lightningcss-linux-x64-gnu" rel="noopener noreferrer" target="_blank">lightningcss-linux-x64-gnu</a>
+<ul>
+<li>ViteのCSS圧縮で利用するCSSパーサー。Vite使うし入れとこ。</li>
+</ul>
+</li>
+</ul>
+<h3 id="私が導入するパッケージ">私が導入するパッケージ</h3>
+<p>そんな感じでほとんどのパッケージは入れる感じに。</p>
+<p>かなりカオスになりそうで心配である。<br>
+なんかこれ、マイクラのmodをとりあえずいっぱい入れる時と同じ不安を感じる。</p>
+<h2 id="環境のインストールや初期設定やら">環境のインストールや初期設定やら</h2>
+<p>いきなり全部入れるとワケワカメになるので、以下のような段階的な導入を行う。</p>
+<ol>
+<li>React+TSの導入</li>
+<li>Inertia.jsの導入</li>
+<li>ESLint + Prettierの導入</li>
+<li>それ以外の導入</li>
+</ol>
+<h3 id="reacttsの導入">React+TSの導入</h3>
+<p>とりあえず、私のpackage.jsonに足りない以下を追加し、<code>npm install</code>。<br>
+一部のパッケージはdevでもいいのでは説があるんだけど、今回はスターターキットに倣って全部dependenciesで。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E6DB74">"dependencies"</span><span style="color:#F8F8F2">: {  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "react"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^19.0.0"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "react-dom"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^19.0.0"</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "typescript"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^5.7.2"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">	"@types/react"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^19.0.3"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">	"@types/react-dom"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^19.0.2"</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">	"@vitejs/plugin-react"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^4.6.0"</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F44747">	...</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"><span style="color:#F8F8F2">	</span></span></code></pre>
+<h4 id="react導入後の設定">React導入後の設定</h4>
+<p>Laravelのドキュメント<a href="https://readouble.com/laravel/12.x/ja/vite.html" rel="noopener noreferrer" target="_blank">アセットの構築(Vite)</a>を参考にしつつ初期設定を行う。</p>
+<p><code>vite.config.js</code>に以下2行を追加</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="diff"><code><span class="line"><span style="color:#F8F8F2">import {defineConfig} from 'vite';  </span></span>
+<span class="line"><span style="color:#F8F8F2">import laravel from 'laravel-vite-plugin';  </span></span>
+<span class="line"><span style="color:#A6E22E"><span style="user-select: none;">+</span> import react from '@vitejs/plugin-react';</span></span>
+<span class="line"><span style="color:#F8F8F2">...</span></span>
+<span class="line"><span style="color:#F8F8F2">export default defineConfig({  </span></span>
+<span class="line"><span style="color:#F8F8F2">    plugins: [  </span></span>
+<span class="line"><span style="color:#F8F8F2">        laravel({  </span></span>
+<span class="line"><span style="color:#F8F8F2">			...</span></span>
+<span class="line"><span style="color:#F8F8F2">        }),  </span></span>
+<span class="line"><span style="color:#A6E22E"><span style="user-select: none;">+</span>       react(),</span></span>
+<span class="line"><span style="color:#F8F8F2">		...</span></span></code></pre>
+<p>更に、<code>@vite</code>ディレクティブの前に<code>@viteReactRefresh</code>を追加しないといけないっぽい。<br>
+つまり、@viteが使われている場所全てで以下のようにする。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F92672">@</span><span style="color:#AE81FF">viteReactRefresh</span></span>
+<span class="line"><span style="color:#F92672">@</span><span style="color:#A6E22E">vite</span><span style="color:#F8F8F2">([</span><span style="color:#E6DB74">'resources/css/app.css'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'resources/js/app.js'</span><span style="color:#F8F8F2">])</span></span></code></pre>
+<h4 id="tsの設定">TSの設定</h4>
+<p>tsconfig.jsonというTypeScript用の設定ファイルを作る。<br>
+これはスターターキットのものを参考に作るんだけど、理解はしておきたいので1から生成する。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#A6E22E">npx</span><span style="color:#E6DB74"> tsc</span><span style="color:#AE81FF"> --init</span></span></code></pre>
+<p>で生成。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#F8F8F2">{  </span></span>
+<span class="line"><span style="color:#88846F">  // Visit https://aka.ms/tsconfig to read more about this file  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">  "compilerOptions"</span><span style="color:#F8F8F2">: {  </span></span>
+<span class="line"><span style="color:#88846F">    // File Layout  </span></span>
+<span class="line"><span style="color:#88846F">    // "rootDir": "./src",    // "outDir": "./dist",  </span></span>
+<span class="line"><span style="color:#88846F">    // Environment Settings    // See also https://aka.ms/tsconfig/module    "module": "nodenext",  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "target"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"esnext"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "types"</span><span style="color:#F8F8F2">: [],  </span></span>
+<span class="line"><span style="color:#88846F">    // For nodejs:  </span></span>
+<span class="line"><span style="color:#88846F">    // "lib": ["esnext"],    // "types": ["node"],    // and npm install -D @types/node  </span></span>
+<span class="line"><span style="color:#88846F">    // Other Outputs    "sourceMap": true,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "declaration"</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">true</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "declarationMap"</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">true</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#88846F">    // Stricter Typechecking Options  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "noUncheckedIndexedAccess"</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">true</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "exactOptionalPropertyTypes"</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">true</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#88846F">    // Style Options  </span></span>
+<span class="line"><span style="color:#88846F">    // "noImplicitReturns": true,    // "noImplicitOverride": true,    // "noUnusedLocals": true,    // "noUnusedParameters": true,    // "noFallthroughCasesInSwitch": true,    // "noPropertyAccessFromIndexSignature": true,  </span></span>
+<span class="line"><span style="color:#88846F">    // Recommended Options    "strict": true,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "jsx"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"react-jsx"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "verbatimModuleSyntax"</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">true</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "isolatedModules"</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">true</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "noUncheckedSideEffectImports"</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">true</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "moduleDetection"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"force"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "skipLibCheck"</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">true</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#F8F8F2">  }  </span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<p>とりあえず初期で生成されるオプションの理解から行う。<br>
+tsconfigについての公式ドキュメントは「<a href="https://aka.ms/tsconfig" rel="noopener noreferrer" target="_blank">https://aka.ms/tsconfig</a>」みたい。</p>
+<ul>
+<li>compilerOptions
+<ul>
+<li>主にこの部分へ設定を入れていく。コンパイル時の設定。</li>
+</ul>
+</li>
+<li><a href="https://www.typescriptlang.org/ja/tsconfig/#target" rel="noopener noreferrer" target="_blank">target</a>
+<ul>
+<li>出力するjsのバージョン指定。<code>ESNext</code>はTS最新ターゲットバージョンを意味する。<br>
+ブラウザを対象としたjsの出力なので、<code>ESNext</code>でいいね。</li>
+</ul>
+</li>
+<li><a href="https://www.typescriptlang.org/ja/tsconfig/#types" rel="noopener noreferrer" target="_blank">types</a>
+<ul>
+<li>どの@typesのパッケージを利用するか。無指定ですべて利用することになる。必要なものしかnpm installしてないので、無指定でいいね。</li>
+</ul>
+</li>
+<li><a href="https://www.typescriptlang.org/ja/tsconfig/#declaration" rel="noopener noreferrer" target="_blank">declaration</a>
+<ul>
+<li><code>d.ts</code>という型定義ファイルを生成するか否か。trueだとすべての<code>export</code>に対して型定義ファイルをファイルごとに作成する。<br>
+基本的にtsファイル内に型定義もしちゃうので、webアプリ開発用途ではfalseで良さそう。<br>
+逆に、npmでパッケージ配布するときは外部からTSを参照できるようにtrueにするっぽい。</li>
+</ul>
+</li>
+<li><a href="https://www.typescriptlang.org/ja/tsconfig/#declarationMap" rel="noopener noreferrer" target="_blank">declarationMap</a>
+<ul>
+<li><code>.d.ts</code>ファイル用のソースマップを生成する。これがあるとIDEとかで定義元にジャンプする際に型定義ファイルではなくtsファイル自体に飛べるようになる。<br>
+そもそも.d.tsを自動で出力しないので不要っぽい。</li>
+</ul>
+</li>
+<li><a href="https://www.typescriptlang.org/ja/tsconfig/#noUncheckedIndexedAccess" rel="noopener noreferrer" target="_blank">noUncheckedIndexedAccess</a>
+<ul>
+<li>配列やオブジェクトなどの<code>array[1]</code>みたいにインデックスアクセスできる場合、インデックス先が定義されているかをチェックするか否か。<br>
+オフにする理由もなさそうなので、trueでよさげ。</li>
+</ul>
+</li>
+<li><a href="https://www.typescriptlang.org/ja/tsconfig/#exactOptionalPropertyTypes" rel="noopener noreferrer" target="_blank">exactOptionalPropertyTypes</a>
+<ul>
+<li>オプショナルなプロパティにundefinedを代入することを禁止する設定。ただ、明示的にundefinedを型宣言すれば代入できるようになる。<br>
+なぜこれが嬉しいかは私の理解が説明できるほどではないので、公式ドキュメントを参照。<br>
+公式が推奨している設定なのでtrueでいく。</li>
+</ul>
+</li>
+<li><a href="https://www.typescriptlang.org/ja/tsconfig/#jsx" rel="noopener noreferrer" target="_blank">jsx</a>
+<ul>
+<li>tsxをどう処理するかの設定。<br>
+5つくらい処理方法の選択肢があるんだけど、今回は<a href="https://ja.legacy.reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html" rel="noopener noreferrer" target="_blank">React 17以上から対応している</a><code>react-jsx</code>を指定する。どうやらreactのimportが要らなくなるらしい。</li>
+</ul>
+</li>
+<li><a href="https://www.typescriptlang.org/ja/tsconfig/#verbatimModuleSyntax" rel="noopener noreferrer" target="_blank">verbatimModuleSyntax</a>
+<ul>
+<li>型専用のimport/exportと普通のimport/exportの使い分けを厳格にする。<br>
+オンでいいのでは。</li>
+</ul>
+</li>
+<li><a href="https://www.typescriptlang.org/ja/tsconfig/#isolatedModules" rel="noopener noreferrer" target="_blank">isolatedModules</a>
+<ul>
+<li>これは、ファイル単位でのトランスパイル結果が定まるかをチェックするか否かのルール。TSはファイル全体を見るので問題ないらしいんだけど、他のトランスパイラは1ファイルずつ処理することがあるので、その場合に対応するためのルールみたい。<br>
+詳しくはQiitaの「<a href="https://qiita.com/uhyo/items/c33489155e1817479948" rel="noopener noreferrer" target="_blank">TypeScriptを他のツールで取り扱うためのコンパイラオプションについて</a>」がわかりやすかった。</li>
+</ul>
+</li>
+<li><a href="https://www.typescriptlang.org/ja/tsconfig/#noUncheckedSideEffectImports" rel="noopener noreferrer" target="_blank">noUncheckedSideEffectImports</a>
+<ul>
+<li>副作用的に使うimport先のソースファイルがない場合にエラーにするルール。<br>
+「副作用」っていうのは、importした値や関数を使わず、読み込むだけで発揮されるコードの効果だけを得るみたいな利用方法のこと。<br>
+これもオンでいいのでは。</li>
+</ul>
+</li>
+<li><a href="https://www.typescriptlang.org/ja/tsconfig/#moduleDetection" rel="noopener noreferrer" target="_blank">moduleDetection</a>
+<ul>
+<li>TSがファイルをモジュールまたはスクリプトと判断するルールの設定。<br>
+基本的にスクリプトとしてJSは書かないので、<code>force</code>にしてモジュールに強制する感じで良さそう。</li>
+</ul>
+</li>
+<li><a href="https://www.typescriptlang.org/ja/tsconfig/#skipLibCheck" rel="noopener noreferrer" target="_blank">skipLibCheck</a>
+<ul>
+<li>型定義ファイルのチェックをスキップするか否か。<br>
+どうやらこれをtrueにしないとnode_modulesにある型定義ファイルでエラーが出まくるらしい。<a href="https://www.typescriptlang.org/ja/tsconfig/#skipLibCheck:~:text=%E3%81%8C%E3%81%82%E3%82%8A%E3%81%BE%E3%81%99%E3%80%82-,Recommended,-Released%3A" rel="noopener noreferrer" target="_blank">公式的にも推奨している</a>設定なのでオンで良さそう。</li>
+</ul>
+</li>
+</ul>
+<p>続いて、スターターキットもみていく。<br>
+コメントを除外したものが以下</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#F8F8F2">{  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "compilerOptions"</span><span style="color:#F8F8F2">: {  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "target"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"ESNext"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "module"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"ESNext"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "moduleResolution"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"bundler"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "allowJs"</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">true</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "noEmit"</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">true</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "isolatedModules"</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">true</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "esModuleInterop"</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">true</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "forceConsistentCasingInFileNames"</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">true</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "strict"</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">true</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "noImplicitAny"</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">true</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "skipLibCheck"</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">true</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "baseUrl"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"."</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "paths"</span><span style="color:#F8F8F2">: {  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">            "@/*"</span><span style="color:#F8F8F2">: [</span><span style="color:#CFCFC2">"./resources/js/*"</span><span style="color:#F8F8F2">],  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">            "ziggy-js"</span><span style="color:#F8F8F2">: [</span><span style="color:#CFCFC2">"./vendor/tightenco/ziggy"</span><span style="color:#F8F8F2">]  </span></span>
+<span class="line"><span style="color:#F8F8F2">        },  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "jsx"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"react-jsx"</span><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#F8F8F2">    },  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "include"</span><span style="color:#F8F8F2">: [  </span></span>
+<span class="line"><span style="color:#CFCFC2">        "resources/js/**/*.ts"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#CFCFC2">        "resources/js/**/*.d.ts"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#CFCFC2">        "resources/js/**/*.tsx"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#F8F8F2">    ]  </span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<p>ある程度かぶっているところもあるけど、初期設定にはなかったものもあるのでそれだけ見ていく</p>
+<ul>
+<li><a href="https://www.typescriptlang.org/ja/tsconfig/#module" rel="noopener noreferrer" target="_blank">module</a>
+<ul>
+<li>TSがどの形式のモジュールで出力するか。ブラウザが利用するmoduleなので<code>ESNext</code>なんだね</li>
+</ul>
+</li>
+<li><a href="https://www.typescriptlang.org/tsconfig/#moduleResolution" rel="noopener noreferrer" target="_blank">moduleResolution</a>
+<ul>
+<li>モジュールの探索アルゴリズムの指定。Viteを使う場合は<code>bundler</code>を使うみたい。なぜbundlerを利用するのかについては、「<a href="https://blog.s2n.tech/posts/dont-use-moduleresolution-node/" rel="noopener noreferrer" target="_blank">TypeScriptで”moduleResolution”: “Node”は使わないほうがいい</a>」という記事がかなり良い。<br>
+TSConfigの設定むずいね</li>
+</ul>
+</li>
+<li><a href="https://www.typescriptlang.org/tsconfig/#allowJs" rel="noopener noreferrer" target="_blank">allowJs</a>
+<ul>
+<li>jsファイルをインポートできるようにする設定。段階的にJS→TSへ移行する際に使えるね。</li>
+</ul>
+</li>
+<li><a href="https://www.typescriptlang.org/tsconfig/#noEmit" rel="noopener noreferrer" target="_blank">noEmit</a>
+<ul>
+<li>JSファイルをコンパイルして出力しないようにする設定。<br>
+Viteを使っていて、Viteがコンパイルするのでtrueかな。</li>
+</ul>
+</li>
+<li><a href="https://www.typescriptlang.org/tsconfig/#esModuleInterop" rel="noopener noreferrer" target="_blank">esModuleInterop</a>
+<ul>
+<li>これをtrueにするとCommonJSも<code>import example from 'example</code>;みたいにインポートできるようになって、型定義も正確になるみたい。<br>
+つまり、CommonJSを使うパッケージとかを使うならtrueにしたい感じなのかな。<br>
+デメリットはバンドルサイズが若干増えるとかぽい。</li>
+</ul>
+</li>
+<li><a href="https://www.typescriptlang.org/tsconfig/#forceConsistentCasingInFileNames" rel="noopener noreferrer" target="_blank">forceConsistentCasingInFileNames</a>
+<ul>
+<li>ファイル名の大文字小文字を正確に区別するかどうかの設定。オンでいいね。</li>
+</ul>
+</li>
+<li><a href="https://www.typescriptlang.org/tsconfig/#strict" rel="noopener noreferrer" target="_blank">strict</a>
+<ul>
+<li>TSの設定にはいくつかStrict系のルールがあるんだけど、それをすべてオンにするというもの。ストイックだね。</li>
+</ul>
+</li>
+<li><a href="https://www.typescriptlang.org/tsconfig/#noImplicitAny" rel="noopener noreferrer" target="_blank">noImplicitAny</a>
+<ul>
+<li>strict系のルールの1つ。上の<code>strict</code>を有効にするとこれは自動で<code>true</code>になる。そのため、なぜこれだけ明示的に指定しているのかは謎。<br>
+trueにすると、型注釈がない場合にエラーになる。falseだとanyで勝手に推測してくれる。</li>
+</ul>
+</li>
+<li><a href="https://www.typescriptlang.org/tsconfig/#baseUrl" rel="noopener noreferrer" target="_blank">baseUrl</a>
+<ul>
+<li>モジュール解決の基準ディレクトリを指定するもの。</li>
+</ul>
+</li>
+<li><a href="https://www.typescriptlang.org/tsconfig/#paths" rel="noopener noreferrer" target="_blank">paths</a>
+<ul>
+<li>パスのエイリアス的なものを定義できる。<br>
+<code>"@/*": ["./resources/js/*"], </code>とすることで、tsファイル内で<code>import hoge from '@/hoge'</code>とすることで<code>[baseUrl]/resources/js/hoge</code>のパスを指定したのと同じことになる。</li>
+</ul>
+</li>
+</ul>
+<p>とりあえずこんなもんだろうか。</p>
+<p>最終的に以下のようにした</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#F8F8F2">{  </span></span>
+<span class="line"><span style="color:#88846F">    // Visit https://aka.ms/tsconfig to read more about this file  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "compilerOptions"</span><span style="color:#F8F8F2">: {  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "target"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"ESNext"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "module"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"ESNext"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "moduleResolution"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"bundler"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "allowJs"</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">true</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "noEmit"</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">true</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "isolatedModules"</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">true</span><span style="color:#F8F8F2">,    </span><span style="color:#88846F">// ファイル単位でのトランスパイル結果が定まるかをチェックするか,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "esModuleInterop"</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">true</span><span style="color:#F8F8F2">,    </span><span style="color:#88846F">// CommonJSも`import example from 'example`;みたいにインポートできるようになって、型定義も正確になる  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "forceConsistentCasingInFileNames"</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">true</span><span style="color:#F8F8F2">,   </span><span style="color:#88846F">// ファイル名の大文字小文字を正確に区別するかどうか  </span></span>
+<span class="line"><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "strict"</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">true</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "skipLibCheck"</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">true</span><span style="color:#F8F8F2">,   </span><span style="color:#88846F">// 型定義ファイルのチェックをスキップするか,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "noUncheckedIndexedAccess"</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">true</span><span style="color:#F8F8F2">,   </span><span style="color:#88846F">// 配列やオブジェクトなどの`array[1]`みたいにインデックスアクセスできる場合、インデックス先が定義されているかをチェックするか否か。  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "exactOptionalPropertyTypes"</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">true</span><span style="color:#F8F8F2">, </span><span style="color:#88846F">// オプショナルなプロパティにundefinedを代入することを禁止する設定。ただ、明示的にundefinedを型宣言すれば代入できるようになる。  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "verbatimModuleSyntax"</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">true</span><span style="color:#F8F8F2">,   </span><span style="color:#88846F">// 型専用のimport/exportと普通のimport/exportの使い分けを厳格にする。,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "noUncheckedSideEffectImports"</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">true</span><span style="color:#F8F8F2">,   </span><span style="color:#88846F">// 副作用的に使うimport先のソースファイルがない場合にエラーにする,  </span></span>
+<span class="line"><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "baseUrl"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"."</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "paths"</span><span style="color:#F8F8F2">: {  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">            "@/*"</span><span style="color:#F8F8F2">: [</span><span style="color:#CFCFC2">"./resources/js/*"</span><span style="color:#F8F8F2">],  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">            "ziggy-js"</span><span style="color:#F8F8F2">: [</span><span style="color:#CFCFC2">"./vendor/tightenco/ziggy"</span><span style="color:#F8F8F2">]  </span></span>
+<span class="line"><span style="color:#F8F8F2">        },  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "jsx"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"react-jsx"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        "moduleDetection"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"force"</span><span style="color:#88846F">  // TSがファイルをモジュールまたはスクリプトと判断する基準。forceでモジュールに強制  </span></span>
+<span class="line"><span style="color:#F8F8F2">    },  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "include"</span><span style="color:#F8F8F2">: [  </span></span>
+<span class="line"><span style="color:#CFCFC2">        "resources/js/**/*.ts"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#CFCFC2">        "resources/js/**/*.d.ts"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#CFCFC2">        "resources/js/**/*.tsx"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#F8F8F2">    ]  </span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<p>TSの設定がありすぎて疲れる。<br>
+おそらく他にも設定したほうが良いものはあるんだろうけど、ここにあるもの以外は随時必要を感じたら設定する感じでいいかなぁ。</p>
+<h3 id="inertiaの導入">Inertiaの導入</h3>
+<p>ReactとTSの設定が終わったので、Inertiaを入れる。</p>
+<p>やることは以下</p>
+<ul>
+<li>composerでInertiaのインストールと諸設定</li>
+<li>npmでInertiaプラグインのインストールと諸設定</li>
+<li>Ziggyではなく、Wayfinderのインストールと諸設定</li>
+</ul>
+<p>ドキュメントの「<a href="https://inertiajs.com/server-side-setup" rel="noopener noreferrer" target="_blank">サーバーサイド</a>」と「<a href="https://inertiajs.com/client-side-setup" rel="noopener noreferrer" target="_blank">クライアントサイド</a>」を参考に入れる。</p>
+<h4 id="composerインストール">Composerインストール</h4>
+<p>とりあえずcomposerインストール</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#A6E22E">composer</span><span style="color:#E6DB74"> require</span><span style="color:#E6DB74"> inertiajs/inertia-laravel</span></span></code></pre>
+<h4 id="テンプレートレイアウトの作成">テンプレートレイアウトの作成</h4>
+<p>Inertiaは初期設定で<code>resources/views/app.blade.php</code>のレイアウトファイルを見に行くようになってる。<br>
+私はもともとBladeで<code>resources/views/components/layouts/app.blade.php</code>のようなレイアウトファイルを作ってたんだけど、ここはInertiaに合わせに行く。</p>
+<p>新しく<code>resources/views/app.blade.php</code>を作る</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F92672">&#x3C;!</span><span style="color:#AE81FF">DOCTYPE</span><span style="color:#AE81FF"> html</span><span style="color:#F92672">></span><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF">html</span><span style="color:#F92672">></span><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#F92672">    &#x3C;</span><span style="color:#AE81FF">head</span><span style="color:#F92672">></span><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#F92672">        &#x3C;</span><span style="color:#AE81FF">meta</span><span style="color:#AE81FF"> charset</span><span style="color:#F92672">=</span><span style="color:#E6DB74">"utf-8"</span><span style="color:#F92672">/></span><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#F92672">        &#x3C;</span><span style="color:#AE81FF">meta</span><span style="color:#AE81FF"> name</span><span style="color:#F92672">=</span><span style="color:#E6DB74">"viewport"</span><span style="color:#AE81FF"> content</span><span style="color:#F92672">=</span><span style="color:#E6DB74">"width=device-width, initial-scale=1"</span><span style="color:#F92672">></span><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#F92672">        @</span><span style="color:#AE81FF">viteReactRefresh</span><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#F92672">        @</span><span style="color:#A6E22E">vite</span><span style="color:#F8F8F2">([</span><span style="color:#E6DB74">'resources/css/app.css'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'resources/js/app.js'</span><span style="color:#F8F8F2">])  </span></span>
+<span class="line"><span style="color:#F92672">        @</span><span style="color:#AE81FF">inertiaHead</span></span>
+<span class="line"><span style="color:#F92672">    &#x3C;/</span><span style="color:#AE81FF">head</span><span style="color:#F92672">></span><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#F92672">    &#x3C;</span><span style="color:#AE81FF">body</span><span style="color:#F92672">></span><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#F92672">        @</span><span style="color:#AE81FF">inertia</span><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#F92672">    &#x3C;/</span><span style="color:#AE81FF">body</span><span style="color:#F92672">></span><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#F92672">&#x3C;/</span><span style="color:#AE81FF">html</span><span style="color:#F92672">></span></span></code></pre>
+<p>一応こんな感じが最小構成でないだろうか</p>
+<ul>
+<li>viteReactRefresh
+<ul>
+<li>これを<code>@vite()</code>の前に入れないとReactがホットリロードでしっかり読み込まれない。<a href="https://readouble.com/laravel/12.x/ja/vite.html#:~:text=%E6%9B%B4%E3%81%AB%E3%80%81%E6%97%A2%E5%AD%98%E3%81%AE%40vite%E3%83%87%E3%82%A3%E3%83%AC%E3%82%AF%E3%83%86%E3%82%A3%E3%83%96%E3%81%A8%E4%B8%80%E7%B7%92%E3%81%AB%E3%80%81%E8%BF%BD%E5%8A%A0%E3%81%A7%40viteReactRefresh%20Blade%E3%83%87%E3%82%A3%E3%83%AC%E3%82%AF%E3%83%86%E3%82%A3%E3%83%96%E3%82%92%E3%82%A4%E3%83%B3%E3%82%AF%E3%83%AB%E3%83%BC%E3%83%89%E3%81%99%E3%82%8B%E5%BF%85%E8%A6%81%E3%81%8C%E3%81%82%E3%82%8A%E3%81%BE%E3%81%99%E3%80%82" rel="noopener noreferrer" target="_blank">日本語ドキュメント</a>でも入れといてねくらいしか書いてないので、魔法ってことで。</li>
+</ul>
+</li>
+<li>@inertiaHead
+<ul>
+<li>この部分にReactから<code>&#x3C;head></code>データを送れる</li>
+</ul>
+</li>
+<li>@inertia
+<ul>
+<li>この部分にReactのページが生成される</li>
+</ul>
+</li>
+</ul>
+<h4 id="ミドルウェアの作成">ミドルウェアの作成</h4>
+<p><code>HandleInertiaRequests</code>というInertia用のミドルウェアを作成する。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#A6E22E">php</span><span style="color:#E6DB74"> artisan</span><span style="color:#E6DB74"> inertia:middleware</span></span></code></pre>
+<p>初期でできるのが以下</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F92672">&#x3C;?</span><span style="color:#AE81FF">php</span><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#F92672">namespace</span><span> </span><span style="color:#A6E22E;text-decoration:underline">App\Http\Middleware</span><span style="color:#F8F8F2">;  </span></span>
+<span class="line"><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#F92672">use</span><span style="color:#F8F8F2"> Illuminate\Http\</span><span style="color:#66D9EF;font-style:italic">Request</span><span style="color:#F8F8F2">;  </span></span>
+<span class="line"><span style="color:#F92672">use</span><span style="color:#F8F8F2"> Inertia\</span><span style="color:#66D9EF;font-style:italic">Middleware</span><span style="color:#F8F8F2">;  </span></span>
+<span class="line"><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">class</span><span> </span><span style="color:#A6E22E;text-decoration:underline">HandleInertiaRequests</span><span style="color:#F92672"> extends</span><span> </span><span style="color:#A6E22E;font-style:italic;text-decoration:underline">Middleware</span><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#F8F8F2">{  </span></span>
+<span class="line"><span style="color:#88846F">    /**  </span></span>
+<span class="line"><span style="color:#88846F">     * The root template that's loaded on the first page visit.     *     * </span><span style="color:#F92672">@see</span><span style="color:#88846F"> https://inertiajs.com/server-side-setup#root-template  </span></span>
+<span class="line"><span style="color:#88846F">     *     * </span><span style="color:#F92672">@var</span><span style="color:#F92672"> string</span><span style="color:#88846F">  </span></span>
+<span class="line"><span style="color:#88846F">     */</span><span style="color:#F92672">    protected</span><span style="color:#F8F8F2"> $rootView </span><span style="color:#F92672">=</span><span style="color:#E6DB74"> 'app'</span><span style="color:#F8F8F2">;  </span></span>
+<span class="line"><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#88846F">    /**  </span></span>
+<span class="line"><span style="color:#88846F">     * Determines the current asset version.     *     * </span><span style="color:#F92672">@see</span><span style="color:#88846F"> https://inertiajs.com/asset-versioning  </span></span>
+<span class="line"><span style="color:#88846F">     */</span><span style="color:#F92672">    public</span><span style="color:#66D9EF;font-style:italic"> function</span><span style="color:#A6E22E"> version</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">Request</span><span style="color:#F8F8F2"> $request)</span><span style="color:#F92672">:</span><span style="color:#F92672"> ?string</span><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#F8F8F2">    {  </span></span>
+<span class="line"><span style="color:#F92672">        return</span><span style="color:#66D9EF;font-style:italic"> parent</span><span style="color:#F92672">::</span><span style="color:#A6E22E">version</span><span style="color:#F8F8F2">($request);  </span></span>
+<span class="line"><span style="color:#F8F8F2">    }  </span></span>
+<span class="line"><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#88846F">    /**  </span></span>
+<span class="line"><span style="color:#88846F">     * Define the props that are shared by default.     *     * </span><span style="color:#F92672">@see</span><span style="color:#88846F"> https://inertiajs.com/shared-data  </span></span>
+<span class="line"><span style="color:#88846F">     *     * </span><span style="color:#F92672">@return</span><span style="color:#F92672"> array</span><span style="color:#88846F">&#x3C;</span><span style="color:#F92672">string</span><span style="color:#88846F">, mixed>  </span></span>
+<span class="line"><span style="color:#88846F">     */</span><span style="color:#F92672">    public</span><span style="color:#66D9EF;font-style:italic"> function</span><span style="color:#A6E22E"> share</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">Request</span><span style="color:#F8F8F2"> $request)</span><span style="color:#F92672">:</span><span style="color:#F92672"> array</span><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#F8F8F2">    {  </span></span>
+<span class="line"><span style="color:#F92672">        return</span><span style="color:#F8F8F2"> [  </span></span>
+<span class="line"><span style="color:#F92672">            ...</span><span style="color:#66D9EF;font-style:italic">parent</span><span style="color:#F92672">::</span><span style="color:#A6E22E">share</span><span style="color:#F8F8F2">($request),  </span></span>
+<span class="line"><span style="color:#88846F">            //  </span></span>
+<span class="line"><span style="color:#F8F8F2">        ];  </span></span>
+<span class="line"><span style="color:#F8F8F2">    }  </span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<p>これをwebミドルウェアグループに追加する。<br>
+Laravel10の方法なので<br>
+<code>app/Http/Kernel.php</code>に</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="diff"><code><span class="line"><span style="color:#F8F8F2">protected $middlewareGroups = [  </span></span>
+<span class="line"><span style="color:#F8F8F2">    'web' => [  </span></span>
+<span class="line"><span style="color:#F8F8F2">        ...        </span></span>
+<span class="line"><span style="color:#A6E22E"><span style="user-select: none;">+</span>		\App\Http\Middleware\HandleInertiaRequests::class,  </span></span>
+<span class="line"><span style="color:#F8F8F2">    ],</span></span></code></pre>
+<p>のように追加。</p>
+<h4 id="テスト用のレスポンスを作成する">テスト用のレスポンスを作成する</h4>
+<p>しっかりReactなどがInertia経由で表示されるか心配なので、テスト用の某を作る。</p>
+<p>とりあえず<code>web.php</code>に</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#88846F">// Inertia React テスト用ルート</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">Route</span><span style="color:#F92672">::</span><span style="color:#A6E22E">get</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'/test-react'</span><span style="color:#F8F8F2">, </span><span style="color:#66D9EF;font-style:italic">function</span><span style="color:#F8F8F2"> () {</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> \Inertia\</span><span style="color:#66D9EF;font-style:italic">Inertia</span><span style="color:#F92672">::</span><span style="color:#A6E22E">render</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'Welcome'</span><span style="color:#F8F8F2">, [</span><span style="color:#E6DB74">"title"</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> "テスト"</span><span style="color:#F8F8F2">]);</span></span>
+<span class="line"><span style="color:#F8F8F2">})</span><span style="color:#F92672">-></span><span style="color:#A6E22E">name</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'test.react'</span><span style="color:#F8F8F2">)</span><span style="color:#F92672">-></span><span style="color:#A6E22E">middleware</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'auth'</span><span style="color:#F8F8F2">);</span></span></code></pre>
+<p>とか作って<br>
+<code>resources/js/Pages/Welcome.tsx</code>に</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="tsx"><code><span class="line"><span style="color:#F92672">import</span><span style="color:#F8F8F2"> {Head} </span><span style="color:#F92672">from</span><span style="color:#E6DB74"> '@inertiajs/react'</span><span style="color:#F8F8F2">;  </span></span>
+<span class="line"><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">interface</span><span> </span><span style="color:#A6E22E;text-decoration:underline">Props</span><span style="color:#F8F8F2"> {  </span></span>
+<span class="line"><span style="color:#F8F8F2">    title</span><span style="color:#F92672">:</span><span style="color:#66D9EF;font-style:italic"> string</span><span style="color:#F8F8F2">;  </span></span>
+<span class="line"><span style="color:#F8F8F2">}  </span></span>
+<span class="line"><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#F92672">export</span><span style="color:#F92672"> default</span><span style="color:#66D9EF;font-style:italic"> function</span><span style="color:#A6E22E"> Welcome</span><span style="color:#F8F8F2">({</span><span style="color:#FD971F;font-style:italic">title</span><span style="color:#F8F8F2">}</span><span style="color:#F92672">:</span><span> </span><span style="color:#A6E22E;text-decoration:underline">Props</span><span style="color:#F8F8F2">) {  </span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> (  </span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;>  </span></span>
+<span class="line"><span style="color:#F8F8F2">            &#x3C;</span><span style="color:#F92672">div</span><span style="color:#A6E22E"> className</span><span style="color:#F92672">=</span><span style="color:#E6DB74">"p-8 text-center"</span><span style="color:#F8F8F2">>  </span></span>
+<span class="line"><span style="color:#F8F8F2">                &#x3C;</span><span style="color:#66D9EF;font-style:italic">Head</span><span style="color:#A6E22E"> title</span><span style="color:#F92672">={</span><span style="color:#F8F8F2">title</span><span style="color:#F92672">}</span><span style="color:#F8F8F2">/>  </span></span>
+<span class="line"><span style="color:#F8F8F2">                &#x3C;</span><span style="color:#F92672">p</span><span style="color:#A6E22E"> className</span><span style="color:#F92672">=</span><span style="color:#E6DB74">"text-xl text-gray-600"</span><span style="color:#F8F8F2">>  </span></span>
+<span class="line"><span style="color:#F92672">                    {</span><span style="color:#F8F8F2">title</span><span style="color:#F92672">}</span><span style="color:#F8F8F2"> - React移行テストページです  </span></span>
+<span class="line"><span style="color:#F8F8F2">                &#x3C;/</span><span style="color:#F92672">p</span><span style="color:#F8F8F2">>  </span></span>
+<span class="line"><span style="color:#F8F8F2">            &#x3C;/</span><span style="color:#F92672">div</span><span style="color:#F8F8F2">>  </span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;/>  </span></span>
+<span class="line"><span style="color:#F8F8F2">    );  </span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<p>とかを作ればいいんじゃないかな。</p>
+<ul>
+<li><code>&#x3C;Head title={title}></code>
+<ul>
+<li>本来は<code>&#x3C;Head></code>タグに囲まれた部分がテンプレートファイルの<code>@inertiaHead</code>の部分へ行くんだけど、<code>title</code>だけはHeadコンポーネントへ渡すことで省略できる</li>
+</ul>
+</li>
+</ul>
+<p>ちなみに、まだフロント側をいじってないのでこれで<code>/test-react</code>へアクセスしても表示はされない。</p>
+<h4 id="npmインストール">npmインストール</h4>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#A6E22E">npm</span><span style="color:#E6DB74"> install</span><span style="color:#E6DB74"> @inertiajs/react</span></span></code></pre>
+<p>でInertiaのReact用アダプターを入れる。</p>
+<h4 id="apptsxを作成する">app.tsxを作成する</h4>
+<p>Inertiaを動かすため、app.tsxを作る。</p>
+<p>app.tsxで<code>createInertiaApp()</code>という関数を実行し、Inertiaの初期化を行う。</p>
+<p>中身は以下のような感じ</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="tsx"><code><span class="line"><span style="color:#F92672">import</span><span style="color:#F8F8F2"> { createInertiaApp } </span><span style="color:#F92672">from</span><span style="color:#E6DB74"> '@inertiajs/react'</span><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#F92672">import</span><span style="color:#F8F8F2"> { resolvePageComponent } </span><span style="color:#F92672">from</span><span style="color:#E6DB74"> 'laravel-vite-plugin/inertia-helpers'</span><span style="color:#F8F8F2">;  </span></span>
+<span class="line"><span style="color:#F92672">import</span><span style="color:#F8F8F2"> { createRoot } </span><span style="color:#F92672">from</span><span style="color:#E6DB74"> 'react-dom/client'</span><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#A6E22E">createInertiaApp</span><span style="color:#F8F8F2">({  </span></span>
+<span class="line"><span style="color:#A6E22E">    resolve</span><span style="color:#F8F8F2">: (</span><span style="color:#FD971F;font-style:italic">name</span><span style="color:#F8F8F2">) </span><span style="color:#66D9EF;font-style:italic">=></span><span style="color:#A6E22E"> resolvePageComponent</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">`./Pages/</span><span style="color:#F92672">${</span><span style="color:#F8F8F2">name</span><span style="color:#F92672">}</span><span style="color:#E6DB74">.tsx`</span><span style="color:#F8F8F2">, </span><span style="color:#F92672">import</span><span style="color:#F8F8F2">.meta.</span><span style="color:#A6E22E">glob</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'./Pages/**/*.tsx'</span><span style="color:#F8F8F2">)),  </span></span>
+<span class="line"><span style="color:#A6E22E">    setup</span><span style="color:#F8F8F2">({ </span><span style="color:#FD971F;font-style:italic">el</span><span style="color:#F8F8F2">, </span><span style="color:#FD971F;font-style:italic">App</span><span style="color:#F8F8F2">, </span><span style="color:#FD971F;font-style:italic">props</span><span style="color:#F8F8F2"> }) {  </span></span>
+<span class="line"><span style="color:#A6E22E">        createRoot</span><span style="color:#F8F8F2">(el).</span><span style="color:#A6E22E">render</span><span style="color:#F8F8F2">(&#x3C;</span><span style="color:#66D9EF;font-style:italic">App</span><span style="color:#F92672"> {...</span><span style="color:#F8F8F2">props</span><span style="color:#F92672">}</span><span style="color:#F8F8F2"> />)  </span></span>
+<span class="line"><span style="color:#F8F8F2">    },  </span></span>
+<span class="line"><span style="color:#F8F8F2">})</span></span></code></pre>
+<p>なんとなく、resloveはコンポーネントの取得、setupはInertiaの起動を行っている感じっぽい。<br>
+詳しい挙動は<code>@inertiajs/react/dist/index.esm.js</code>を見るのが良き。</p>
+<p>作ったら、テンプレートのJS読み込む部分を修正する</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="diff"><code><span class="line"><span style="color:#F92672"><span style="user-select: none;">-</span> @vite(['resources/css/app.css', 'resources/js/app.js'])</span></span>
+<span class="line"><span style="color:#A6E22E"><span style="user-select: none;">+</span> @vite(['resources/css/app.css', 'resources/js/app.tsx'])</span></span></code></pre>
+<p>これで、<code>test-react</code>ページでReactが動いたはず。</p>
+<p>動くのを確認したら、vite.config.jsの</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="diff"><code><span class="line"><span style="color:#F8F8F2">export default defineConfig({  </span></span>
+<span class="line"><span style="color:#F8F8F2">    plugins: [  </span></span>
+<span class="line"><span style="color:#F8F8F2">        laravel({  </span></span>
+<span class="line"><span style="color:#F8F8F2">            input: [  </span></span>
+<span class="line"><span style="color:#F92672"><span style="user-select: none;">-</span>                'resources/js/app.js',</span></span>
+<span class="line"><span style="color:#A6E22E"><span style="user-select: none;">+</span>                'resources/js/app.tsx',</span></span></code></pre>
+<p>にする。</p>
+<h3 id="ziggyではなくwayfinderを利用できるようにする">ZiggyではなくWayfinderを利用できるようにする</h3>
+<p>この記事を書き始めた頃はLaravelのルート解決をJSで行うためのツールに<a href="https://github.com/tighten/ziggy?tab=readme-ov-file" rel="noopener noreferrer" target="_blank">Ziggy</a>を使ってたんだけど、この文章を書いているころには<a href="https://github.com/laravel/wayfinder" rel="noopener noreferrer" target="_blank">Wayfinder</a>なるものが台頭してきた。</p>
+<p>どうやらこのWayfinderはLaravel公式開発で、スターターキットも<a href="https://laravel.com/docs/changelog#:~:text=Replace%20Ziggy%20With%20Wayfinder" rel="noopener noreferrer" target="_blank">Ziggy→Wayfinderへ移行</a>されているということで、この記事でもWayfinderを利用する。</p>
+<p>とりあえず以下でComposerからインストール</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#A6E22E">composer</span><span style="color:#E6DB74"> require</span><span style="color:#E6DB74"> laravel/wayfinder</span></span></code></pre>
+<p>つづいて、以下でVite用プラグインのインストール</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#A6E22E">npm</span><span style="color:#E6DB74"> i</span><span style="color:#AE81FF"> -D</span><span style="color:#E6DB74"> @laravel/vite-plugin-wayfinder</span></span></code></pre>
+<p>つづいて、<code>vite.config.js</code>にwayfinder()を追加する。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="js"><code><span class="line"><span style="color:#F92672">import</span><span style="color:#F8F8F2"> { wayfinder } </span><span style="color:#F92672">from</span><span style="color:#E6DB74"> "@laravel/vite-plugin-wayfinder"</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">export</span><span style="color:#F92672"> default</span><span style="color:#A6E22E"> defineConfig</span><span style="color:#F8F8F2">({</span></span>
+<span class="line"><span style="color:#F8F8F2">    plugins: [</span></span>
+<span class="line"><span style="color:#A6E22E">        wayfinder</span><span style="color:#F8F8F2">(),</span></span></code></pre>
+<p>つづいて、型定義ファイルを生成する</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#A6E22E">php</span><span style="color:#E6DB74"> artisan</span><span style="color:#E6DB74"> wayfinder:generate</span></span></code></pre>
+<p>このコマンドを実行すると<code>resources/js/</code>へ<code>wayfinder</code>, <code>actions</code>, <code>routes</code>というフォルダができる。</p>
+<ul>
+<li><code>wayfinder</code>フォルダにwayfinderに関する型定義を</li>
+<li><code>actions</code>フォルダにコントローラーメソッドに関する型定義を</li>
+<li><code>routes</code>フォルダにルートに関する型定義を</li>
+</ul>
+<p>勝手に実装してくれる。<br>
+これらのフォルダはビルドごとに再生成されるので、git管理しなくて良いっぽい。<br>
+そのため.gitignoreへ以下を追加。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>/resources/js/actions</span></span>
+<span class="line"><span>/resources/js/routes</span></span>
+<span class="line"><span>/resources/js/wayfinder</span></span></code></pre>
+<h4 id="wayfinderの理解">Wayfinderの理解</h4>
+<p>これ、<code>wayfinder</code>と<code>routes</code>はわかるけど<code>actions</code>ってどういうこと？　ってなるよね。<br>
+これは、従来まで利用されていたziggy.jsとwayfinderのコンセプトの違いだと思っている。</p>
+<p>ziggyはあくまでも<code>route()</code>関数をJSで利用できるようにするもので、wayfinderはLaravelエンドポイントをJSから利用できるするもの。</p>
+<p>だから、名前付きルートは利用せず、以下のようなArticleコントローラーとルート定義があれば</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#88846F">// app/Http/Controllers/ArticleController.php</span></span>
+<span class="line"><span style="color:#F92672">namespace</span><span> </span><span style="color:#A6E22E;text-decoration:underline">App\Http\Controllers</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">use</span><span style="color:#F8F8F2"> App\Models\</span><span style="color:#66D9EF;font-style:italic">Article</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">class</span><span> </span><span style="color:#A6E22E;text-decoration:underline">ArticleController</span><span style="color:#F92672"> extends</span><span> </span><span style="color:#A6E22E;font-style:italic;text-decoration:underline">Controller</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    public</span><span style="color:#66D9EF;font-style:italic"> function</span><span style="color:#A6E22E"> show</span><span style="color:#F8F8F2">($id)</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F8F8F2">        $article </span><span style="color:#F92672">=</span><span style="color:#66D9EF;font-style:italic"> Article</span><span style="color:#F92672">::</span><span style="color:#A6E22E">find</span><span style="color:#F8F8F2">($id);</span></span>
+<span class="line"><span style="color:#F92672">        return</span><span style="color:#A6E22E"> view</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'detail'</span><span style="color:#F8F8F2">, </span><span style="color:#66D9EF">compact</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'article'</span><span style="color:#F8F8F2">));</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#88846F">// routes/web.php</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">Route</span><span style="color:#F92672">::</span><span style="color:#A6E22E">get</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'/articles/{id}'</span><span style="color:#F8F8F2">, [</span><span style="color:#66D9EF;font-style:italic">ArticleController</span><span style="color:#F92672">::class</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'show'</span><span style="color:#F8F8F2">])</span><span style="color:#F92672">-></span><span style="color:#A6E22E">name</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'article.show'</span><span style="color:#F8F8F2">);</span></span></code></pre>
+<p>以下のようにjsから呼び出せる</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="js"><code><span class="line"><span style="color:#F92672">import</span><span style="color:#F8F8F2"> { show } </span><span style="color:#F92672">from</span><span style="color:#E6DB74"> "@/actions/App/Http/Controllers/ArticleController"</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#A6E22E">show</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">1</span><span style="color:#F8F8F2">); </span><span style="color:#88846F">// { url: "/articles/1", method: "get" }</span></span></code></pre>
+<p>つまり、コントローラーベースでルートを呼び出せるという感じっぽい。</p>
+<p>こうすることで、必要なルート情報だけをビルドすればよくなってパフォーマンスも良くなるし、予期しないルート漏洩も減らせるとのこと。</p>
+<p>また、<code>route()</code>とは違う形式だけど、以下のように名前付きルートにも対応している。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="js"><code><span class="line"><span style="color:#F92672">import</span><span style="color:#F8F8F2"> { show } </span><span style="color:#F92672">from</span><span style="color:#E6DB74"> "@/routes/article"</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// Named route is `article.show`...</span></span>
+<span class="line"><span style="color:#A6E22E">show</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">1</span><span style="color:#F8F8F2">); </span><span style="color:#88846F">// { url: "/articles/1", method: "get" }</span></span></code></pre>
+<h4 id="wayfinder--dockerを使ってる場合">Wayfinder + Dockerを使ってる場合</h4>
+<p>わたしはDockerを使ってLaravel環境作ってるんだけど、この場合npmでインストールした<a href="https://github.com/laravel/vite-plugin-wayfinder" rel="noopener noreferrer" target="_blank">@laravel/vite-plugin-wayfinder</a>は必要なかった。</p>
+<p>いや、必要ないというより使えないという感じ。</p>
+<p>このviteプラグインはコード変更に応じて勝手に</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#A6E22E">php</span><span style="color:#E6DB74"> artisan</span><span style="color:#E6DB74"> wayfinder:generate</span></span></code></pre>
+<p>をやってくれるというものなんだけど、これViteプラグインなのでわたしのDocker環境だとNodeコンテナでPHPコマンド実行しちゃうんだよね。</p>
+<p>そのため、全く使えないので</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#A6E22E">npm</span><span style="color:#E6DB74"> uninstall</span><span style="color:#E6DB74"> @laravel/vite-plugin-wayfinder</span></span></code></pre>
+<p>して、php-fpmコンテナに</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#F92672">command</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">sh -c "php artisan wayfinder:generate &#x26;&#x26; php-fpm"</span></span></code></pre>
+<p>とか書いておくのが最低限できることなのかな。</p>
+<p>後は手作業でコマンドやっていく感じで。</p>
+<h3 id="eslint--prettierではなくbiomeを導入する">ESLint + PrettierではなくBiomeを導入する</h3>
+<p>やっとReactやらInertiaやらを使えるようになったので、このESLintとPrettierを入れていこう…と思ったんだけど、ESLint+PrettierではなくBiomeにする。</p>
+<p>まず、ESLintとPrettierについてなんだけど、ESLintが文法チェックツールで、Prettierがコード整形ツール。よくこの2つがコンビで使われているイメージ。<br>
+ただ、ESLintとPrettierは競合する部分があって調整必要だし、設定とか面倒なイメージも正直あった。</p>
+<p>そんなとき、Youtubeの<a href="https://www.youtube.com/watch?v=MXSN6wZTo4M" rel="noopener noreferrer" target="_blank">2025年版「Webアプリ作るなら技術どれにする？」</a>というのでBiomeが紹介されていて、これでええやん！　となったのでBiomeで。</p>
+<p>Biomeの何が良さそうかというと</p>
+<ol>
+<li>Linterとフォーマッターを兼ねている</li>
+<li>あんまり設定ファイルいじんなくて良さそう！</li>
+<li>いっぱいプラグイン入れなくて良さそう！</li>
+</ol>
+<p>というところ。<br>
+もちろん依存関係が無いやら、スピードが早いやら、もあると思うんだけど、個人的には以上の３つがアツい。</p>
+<p>以下で導入</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#A6E22E">npm</span><span style="color:#E6DB74"> install</span><span style="color:#AE81FF"> --save-dev</span><span style="color:#AE81FF"> --save-exact</span><span style="color:#E6DB74"> @biomejs/biome</span></span></code></pre>
+<p>そんで、設定をいじりたい場合は</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#A6E22E">npx</span><span style="color:#E6DB74"> @biomejs/biome</span><span style="color:#E6DB74"> init</span></span></code></pre>
+<p>を実行する。</p>
+<p>そのまま初期設定でも使えるとあったのでとりあえずは生成されたファイルをそのまま使う。</p>
+<h3 id="phpstormと連携させる">PhpStormと連携させる</h3>
+<p>これ、保存時に自動でBiomeのリンター&#x26;フォーマッタを実行してほしい。</p>
+<p>わたしはPhpStorm使ってるので連携させる方法残しとく。</p>
+<p>※<code>biome.json</code>が無いとPhpStormのプラグインが反応してくれないので注意</p>
+<p>簡単に言えば、</p>
+<ol>
+<li><a href="https://plugins.jetbrains.com/plugin/22761-biome" rel="noopener noreferrer" target="_blank">Biomeのプラグイン</a>を入れて</li>
+<li>Biomeの設定で以下を有効にする
+<ul>
+<li>Run format on save</li>
+<li>Run safe fixes on save</li>
+<li>Sort import on save</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li>そんで、PhpStormが実行されている環境で<code>npm install</code>を実行する</li>
+</ul>
+<p>これで、セーブしたときに実行されるようになったはず。</p>
+<p>わたしはDockerでNode.js動かしてそこでVite動かしてるので、そっち側でnpm installしてたんだけど、そうするとNodeイメージのOSに合ったバイナリパッケージのみがインストールされちゃって、PhpStorm側のOSにあったものがインストールされなくなる。</p>
+<p>そのせいで実行時エラーになるので、PhpStormを動かしているOS側でもnpm installをしとこう。</p>
+<h3 id="lucide-reactを入れる">Lucide Reactを入れる</h3>
+<p>アイコンを使えるようになるやつだね。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#A6E22E">npm</span><span style="color:#E6DB74"> install</span><span style="color:#E6DB74"> lucide-react</span></span></code></pre>
+<p>これでおｋ。</p>
+<p>使い方的には<a href="https://lucide.dev/icons/" rel="noopener noreferrer" target="_blank">Lucide Icons</a>でアイコンを選んで、カスタマイズして、jsxをコピーする。<br>
+そんで、テスト用のReactページに以下のようなペーストすればおｋ。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="tsx"><code><span class="line"><span style="color:#F92672">import</span><span style="color:#F8F8F2"> { Heart } </span><span style="color:#F92672">from</span><span style="color:#E6DB74"> "lucide-react"</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">&#x3C;</span><span style="color:#66D9EF;font-style:italic">Heart</span><span style="color:#A6E22E"> size</span><span style="color:#F92672">={</span><span style="color:#AE81FF">112</span><span style="color:#F92672">}</span><span style="color:#A6E22E"> color</span><span style="color:#F92672">=</span><span style="color:#E6DB74">"#ff0000"</span><span style="color:#A6E22E"> strokeWidth</span><span style="color:#F92672">={</span><span style="color:#AE81FF">2.5</span><span style="color:#F92672">}</span><span style="color:#F8F8F2"> /></span></span></code></pre>
+<p>シンプルで素晴らしいね。</p>
+<h3 id="clsxを入れる">clsxを入れる</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#A6E22E">npm</span><span style="color:#E6DB74"> install</span><span style="color:#E6DB74"> clsx</span></span></code></pre>
+<p>clsxを入れることで</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="tsx"><code><span class="line"><span style="color:#F8F8F2">className</span><span style="color:#F92672">=</span><span style="color:#F8F8F2">{</span><span style="color:#A6E22E">clsx</span><span style="color:#F8F8F2">(  </span></span>
+<span class="line"><span style="color:#E6DB74">    "mt-4 rounded transition-all"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#FD971F;font-style:italic">    isActive</span><span style="color:#F92672"> ?</span><span style="color:#E6DB74"> "bg-black text-white"</span><span style="color:#F92672"> :</span><span style="color:#E6DB74"> "bg-white text-black"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#FD971F;font-style:italic">    isLarge</span><span style="color:#F92672"> ?</span><span style="color:#E6DB74"> "px-8 py-4 text-lg"</span><span style="color:#F92672"> :</span><span style="color:#E6DB74"> "px-4 py-2 text-base"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#F8F8F2">)}</span></span></code></pre>
+<p>みたいにわかりやすくて、見易い動的CSSの管理ができる…と思って入れたんだけどLaravelスターターキットだと1,2箇所でしか使ってなかった。</p>
+<p>まあ見易いし軽いので入れていいかなという判断で。</p>
+<h3 id="headless-uiを入れる">Headless UIを入れる</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#A6E22E">npm</span><span style="color:#E6DB74"> install</span><span style="color:#E6DB74"> @headlessui/react</span></span></code></pre>
+<p>ヘッドレスUIのheaddlessuiというパッケージだけとりあえず入れる。<br>
+個人的に、ヘッドレスUIくらい低レイヤーにするなら1から自分でコンポーネント作れば良さそうだなぁと思っているんだけど、使ってみないとわからないのでとりあえずこれだけ入れる感じ。</p>
+<p>radixではなく、Headless UIを選んだ理由はTailwindCSS公式のパッケージだから。とりあえずこっちだけ使ってみて、ヘッドレスUIの素晴らしさを理解できたらradixにも手を出してみる。</p>
+<p>Headless UIを入れることで</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="tsx"><code><span class="line"><span style="color:#F92672">import</span><span style="color:#F8F8F2"> { Switch } </span><span style="color:#F92672">from</span><span style="color:#E6DB74"> "@headlessui/react"</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">&#x3C;</span><span style="color:#66D9EF;font-style:italic">Switch</span><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#A6E22E">    checked</span><span style="color:#F92672">={</span><span style="color:#F8F8F2">isActive</span><span style="color:#F92672">}</span><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#A6E22E">    onChange</span><span style="color:#F92672">={</span><span style="color:#F8F8F2">() </span><span style="color:#66D9EF;font-style:italic">=></span><span style="color:#A6E22E"> setIsActive</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">!</span><span style="color:#F8F8F2">isActive)</span><span style="color:#F92672">}</span><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#A6E22E">    className</span><span style="color:#F92672">=</span><span style="color:#E6DB74">"group inline-flex h-6 w-11 items-center rounded-full bg-gray-200 transition data-checked:bg-blue-600"</span><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#F8F8F2">>  </span></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;</span><span style="color:#F92672">span</span><span style="color:#A6E22E"> className</span><span style="color:#F92672">=</span><span style="color:#E6DB74">"size-4 translate-x-1 rounded-full bg-white transition group-data-checked:translate-x-6"</span><span style="color:#F8F8F2"> />  </span></span>
+<span class="line"><span style="color:#F8F8F2">&#x3C;/</span><span style="color:#66D9EF;font-style:italic">Switch</span><span style="color:#F8F8F2">></span></span></code></pre>
+<p>のように扱えるようになった。</p>
+<p>悪くなさそう。</p>
+<h3 id="optionaldependencies系を入れる">optionalDependencies系を入れる</h3>
+<p>スターターキットにある</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E6DB74">"optionalDependencies"</span><span style="color:#F8F8F2">: {  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "@rollup/rollup-linux-x64-gnu"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"4.9.5"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "@tailwindcss/oxide-linux-x64-gnu"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^4.0.1"</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    "lightningcss-linux-x64-gnu"</span><span style="color:#F8F8F2">: </span><span style="color:#CFCFC2">"^1.29.1"</span><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<p>の3つをとりあえず入れる。</p>
+<p>入れる理由は、入れても損がなさそうだから。<br>
+意図が弱いけど、そんくらいでいく。</p>
+<h2 id="移行する">移行する</h2>
+<p>やっっっっっと。本当にやっっっっっっと環境が整ったので移行に移る。</p>
+<p>とりあえず、以下のような順で進めていくことになるのかなぁと思ったりしている。</p>
+<ol>
+<li>テンプレートを整える</li>
+<li>GET系リクエストの処理と画面をInertia + Reactにする</li>
+<li>GET系以外のリクエストの処理と画面をInertia + Reactにする</li>
+</ol>
+<p>こう聞くとそれなりにシンプルなんだけど、量えげつないし、完全に違う言語になるので作業量もすごいし、テストとかも変わるし、コンポーネントどう分けるかとかの課題もある。</p>
+<p>えっぐいぞこれ。</p>
+<p>プロジェクトの規模感的には、120弱のルート数と500弱のテストって感じ。ここから始めてどんくらいで終わるかなぁ。</p>
+<p>InertiaとBladeは共存できるのである程度の妥協も必要かなとも思いつつの感じでやってく。</p></section><aside class="w-[300px] hidden lg:block shrink-0" data-astro-cid-e2rqhpi3><nav class="sticky top-16 h-fit  bg-white py-24 pl-24 rounded-md" data-astro-cid-tqqy2vud><section data-astro-cid-tqqy2vud><header data-astro-cid-tqqy2vud><h2 class="font-bold text-lg" data-astro-cid-tqqy2vud>目次</h2></header></section><div class="article-toc scroll-smooth mt-4 py-16 pr-24 overflow-y-auto max-h-[90svh]" data-astro-cid-tqqy2vud></div></nav><script type="module" src="/_astro/ArticleTOC.astro_astro_type_script_index_0_lang.mX9zJvT_.js"></script></aside></div><div class="mt-40 mb-64" data-pagefind-ignore data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a><svg viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16 mx-4 mt-[2px]" data-astro-cid-e2rqhpi3="true">
+  <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+</svg><a href="/blog#%E4%BD%9C%E6%9B%B2%E7%9F%A5%E8%AD%98%E5%85%B1%E6%9C%89%E3%82%B5%E3%82%A4%E3%83%88%E3%82%92%E6%94%B9%E5%96%84%E3%81%99%E3%82%8B%E6%97%A5%E8%A8%98" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">作曲知識共有サイトを改善する日記</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Laravel"># Laravel</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=React"># React</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Inertia"># Inertia</a></div></div></article></main></div><footer class="pb-40 px-24 md:px-0 bg-white"><hr class="mx-auto w-2/3 md:w-1/2 my-24 h-[1px] border-0 bg-slate-400"><div class="mx-8 md:mx-64"><a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" target="_blank" rel="noopener noreferrer"><img src="/_astro/by-nc.DpMeGFcJ_ZF0RGK.svg" alt="クリエイティブコモンズ 表示-非営利 4.0 ライセンス" loading="lazy" decoding="async" width="125" height="44"></a><p class="text-xs md:text-sm">本サイト「<a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">tamakoma.com</a>」から提供されるブログ内の文章、プログラミングコードは、<a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">クリエイティブ・コモンズ 表示-非営利 4.0 ライセンス</a>の下に提供されます。</p><p class="text-xs md:text-sm">音楽や画像などのメディアコンテンツにはこのライセンスは適用されません。</p></div><p class="text-center text-sm"><a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Top</a> / <a href="/contact" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Contact</a> / <a href="/feed.xml" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">RSS Feed</a></p><p class="mt-24 text-center">&copy; tamakoma 2018-2026</p></footer></div></body></html>

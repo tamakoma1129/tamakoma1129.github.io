@@ -1,0 +1,320 @@
+<!DOCTYPE html><html lang="ja" class="text-slate-700"><head><meta charset="utf-8"><title>【15日目】一からSwiftでアプリを制作する | tamakoma.com</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v7.0.3"><meta name="twitter:card" content="summary"><meta property="og:title" content="【15日目】一からSwiftでアプリを制作する"><meta property="og:type" content="website"><meta property="og:url" content="https://tamakoma.com/blog/python-music-ai-15/"><meta property="og:image" content="/_astro/mikuteto-OGP.DYQebPDj.png"><meta property="og:description" content="学んだことを残すブログ"><meta property="og:site_name" content="tamakoma.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.0.1/dist/css/yakuhanjp_s.css"><link rel="sitemap" href="/sitemap-index.xml"><link rel="stylesheet" href="/_astro/BaseLayout.Ddu7R_5r.css"><style>/*! tailwindcss v4.2.2 | MIT License | https://tailwindcss.com */
+.article-toc[data-astro-cid-tqqy2vud] .toc-link{font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));display:block}@media (hover:hover){.article-toc[data-astro-cid-tqqy2vud] .toc-link:hover{color:var(--color-slate-600,oklch(44.6% .043 257.281));text-decoration-line:underline}}.article-toc[data-astro-cid-tqqy2vud] .toc-link.to-link-active{color:var(--color-miku-500,oklch(63.7% .1071 185.34))}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H2){margin-left:var(--spacing-24,24px)}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H3){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:10px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H4){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:20px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H5){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:30px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H6){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:40px}.article-toc[data-astro-cid-tqqy2vud] .toc-list{list-style-type:decimal;list-style-position:outside}@layer properties{@supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))){*,:before,:after,::backdrop{--tw-font-weight:initial;--tw-border-style:solid}}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a{--tw-font-weight:var(--font-weight-semibold,600);font-weight:var(--font-weight-semibold,600);color:var(--color-miku-500,oklch(63.7% .1071 185.34));text-underline-offset:2px;text-decoration-line:underline}@media (hover:hover){article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a:hover{color:var(--color-miku-700,oklch(50.5% .0901 187.01))}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] code:not(pre>code){margin-inline:var(--spacing-4,4px);border-radius:var(--radius-md,.375rem);border-style:var(--tw-border-style);background-color:var(--color-sumi-100,oklch(97% 0 0));padding-inline:var(--spacing-4,4px);--tw-font-weight:var(--font-weight-normal,400);font-weight:var(--font-weight-normal,400);color:var(--color-black,#000);border-width:0;padding-block:2px}@property --tw-font-weight{syntax:"*";inherits:false}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid}
+</style><script type="module" src="/_astro/page.DCEeCLip.js"></script><script>!(function(w,p,f,c){if(!window.crossOriginIsolated && !navigator.serviceWorker) return;c=w[p]=Object.assign(w[p]||{},{"lib":"/~partytown/","debug":false});c[f]=(c[f]||[])})(window,'partytown','forward');/* Partytown 0.13.2 - MIT QwikDev */
+const t={preserveBehavior:!1},e=e=>{if("string"==typeof e)return[e,t];const[n,r=t]=e;return[n,{...t,...r}]},n=Object.freeze((t=>{const e=new Set;let n=[];do{Object.getOwnPropertyNames(n).forEach((t=>{"function"==typeof n[t]&&e.add(t)}))}while((n=Object.getPrototypeOf(n))!==Object.prototype);return Array.from(e)})());!function(t,r,o,i,a,s,c,l,d,p,u=t,f){function h(){f||(f=1,"/"==(c=(s.lib||"/~partytown/")+(s.debug?"debug/":""))[0]&&(d=r.querySelectorAll('script[type="text/partytown"]'),i!=t?i.dispatchEvent(new CustomEvent("pt1",{detail:t})):(l=setTimeout(v,(null==s?void 0:s.fallbackTimeout)||1e4),r.addEventListener("pt0",w),a?y(1):o.serviceWorker?o.serviceWorker.register(c+(s.swPath||"partytown-sw.js"),{scope:c}).then((function(t){t.active?y():t.installing&&t.installing.addEventListener("statechange",(function(t){"activated"==t.target.state&&y()}))}),console.error):v())))}function y(e){p=r.createElement(e?"script":"iframe"),t._pttab=Date.now(),e||(p.style.display="block",p.style.width="0",p.style.height="0",p.style.border="0",p.style.visibility="hidden",p.setAttribute("aria-hidden",!0)),p.src=c+"partytown-"+(e?"atomics.js?v=0.13.2":"sandbox-sw.html?"+t._pttab),r.querySelector(s.sandboxParent||"body").appendChild(p)}function v(n,o){for(w(),i==t&&(s.forward||[]).map((function(n){const[r]=e(n);delete t[r.split(".")[0]]})),n=0;n<d.length;n++)(o=r.createElement("script")).innerHTML=d[n].innerHTML,o.nonce=s.nonce,r.head.appendChild(o);p&&p.parentNode.removeChild(p)}function w(){clearTimeout(l)}s=t.partytown||{},i==t&&(s.forward||[]).map((function(r){const[o,{preserveBehavior:i}]=e(r);u=t,o.split(".").map((function(e,r,o){var a;u=u[o[r]]=r+1<o.length?u[o[r]]||(a=o[r+1],n.includes(a)?[]:{}):(()=>{let e=null;if(i){const{methodOrProperty:n,thisObject:r}=((t,e)=>{let n=t;for(let t=0;t<e.length-1;t+=1)n=n[e[t]];return{thisObject:n,methodOrProperty:e.length>0?n[e[e.length-1]]:void 0}})(t,o);"function"==typeof n&&(e=(...t)=>n.apply(r,...t))}return function(){let n;return e&&(n=e(arguments)),(t._ptf=t._ptf||[]).push(o,arguments),n}})()}))})),"complete"==r.readyState?h():(t.addEventListener("DOMContentLoaded",h),t.addEventListener("load",h))}(window,document,navigator,top,window.crossOriginIsolated);;(e=>{e.addEventListener("astro:before-swap",e=>{let r=document.body.querySelector("iframe[src*='/~partytown/']");if(r)e.newDocument.body.append(r)})})(document);</script></head><body class="bg-repeat bg-white anywhere" style="background-image: url(/_astro/mikuteto-gray.Dix8k1Tp.gif)"><div class="min-h-screen flex flex-col justify-between" id="container"><div><header><nav class="flex flex-col items-center pt-40 pb-24"><a href="/blog" class="text-3xl md:text-5xl font-bold mb-40 text-slate-400 drop-shadow-2xl">tamakoma.com</a><div class="w-full flex justify-center [&amp;&gt;a]:bg-white [&amp;&gt;a]:border-slate-400"><a href="/" class="block py-8 px-16 text-sumi-600 rounded-l border-l border-y">home</a><a href="/blog/" class="block py-8 px-16 text-sumi-600 border">blog</a><a href="/about/" class="block py-8 px-16 text-sumi-600 rounded-r border-r border-y">about</a></div></nav></header><main class="bg-slate-100 w-full flex justify-end" data-astro-cid-e2rqhpi3><article class="grow" data-pagefind-body data-astro-cid-e2rqhpi3><header class="mt-24 w-11/12 max-w-[700px] mx-auto" data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-pagefind-weight="6.7" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a><svg viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16 mx-4 mt-[2px]" data-astro-cid-e2rqhpi3="true">
+  <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+</svg><a href="/blog#python%E3%81%A7%E9%9F%B3%E6%A5%BD%E7%B3%BB%E4%BA%BA%E5%B7%A5%E7%9F%A5%E8%83%BD%E3%82%92%E4%BD%9C%E3%82%8B%E3%81%BE%E3%81%A7%E3%81%AE%E6%97%A5%E8%A8%98" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">pythonで音楽系人工知能を作るまでの日記</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-pagefind-weight="6.5" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=SwiftUI"># SwiftUI</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%97%A5%E8%A8%98"># 日記</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E5%AE%8C%E6%88%90"># 完成</a></div><h1 class="text-center text-xl md:text-3xl font-bold px-24 mt-40" data-astro-cid-e2rqhpi3>【15日目】一からSwiftでアプリを制作する</h1><div class="text-slate-400 text-sm gap-16 flex justify-center mt-24" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>投稿日 <time datetime="2023-06-07T00:00:00.000Z">2023/06/07</time></span><span data-astro-cid-e2rqhpi3>最終更新日 <time datetime="2024-10-12T00:00:00.000Z">2024/10/12</time></span></div></header><hr class="bg-slate-200 rounded-full mx-auto h-4 my-40 w-40 border-0"><div class="flex mx-auto justify-center gap-40" data-astro-cid-e2rqhpi3><section id="article-body" class="
+                            prose prose-neutral
+                            prose-blockquote:border-miku-400 prose-blockquote:font-normal
+                            w-0 grow
+                            max-w-[650px] bg-white box-content px-16 md:px-40 py-24 rounded-md
+                            " data-astro-cid-e2rqhpi3><h2 id="はじめに"><strong>はじめに</strong></h2>
+<p>Mac購入からアプリリリースまでに思ったこと、気づいたことを記録しています。Pythonなどの他言語が出ますが、知ってなくてもできるだけわかるようにしました。</p>
+<p>SwiftUIとRealmというデータベースを使っておよそ一カ月弱で開発からリリースまで持っていきました。<br>
+Macの購入からはおよそ2カ月半程です。<br>
+完全個人開発で、完全独学です。なので、偏った知識の可能性が高いですが、思ったことを書いてます。</p>
+<p>また、<a href="https://github.com/tamakoma1129/BenMiru-App" rel="noopener noreferrer" target="_blank">ソースコードと動画をGithubで公開しています</a>。</p>
+<p>よかったら使ってみてください。</p>
+<h2 id="近況日記的な部分なので飛ばしていい"><strong>近況</strong>(日記的な部分なので飛ばしていい)</h2>
+<p>Pythonで人工知能を作らずに、SwiftUIでアプリを作りました。←いやなんでや</p>
+<p>理由は色々あるんだけど、Pythonでの音楽系人工知能制作が思ったよりハードルが大きい&#x26;個人製作というより、アカデミックな感じでモチベーションが下がってしまったというのがある。</p>
+<p>ちょっとネガティブな話になるけど、自分でも理解するためにモチベが下がった理由を挙げていく</p>
+<ul>
+<li>
+<p>いや、まあ当たり前っちゃ当たり前なんだけど、人工知能をアカデミックな感じで学ぶと、やはり機械学習は理系がメイン。だからしっかりしたことしようとすると、文系に先は無いような印象を受けてしまってモチベが下がった<br>
+要するに、努力に対する成果の期待が低くなってしまった。</p>
+</li>
+<li>
+<p>目標を作るのが難しかった。<br>
+音楽というちょっと抽象的で、データの扱いも難しいものになると個人の学生がやれる範囲は限られてくる。理想はSerumのシンセを自動で弄ってくれるAIとか、音楽に合わせて歌詞を作ってくれるAIとか、マッシュアップを自動で作るAIとか、色々案はあるんだけど、そもそもデータが集まらないし、そもそもデータの形式が難しい。波形を食わせるのか、midiデータを食わせるのか、それとも別の形式に変換して食わせるのか。<br>
+なんかこうやって文章にするとやっぱ面白そうと思うんだけど、やっぱり難しいし、”適度な目標”を作るのが難しい。やりたいことをやろうとすると難しすぎる、というか道が見えな過ぎて進み方がわからない……という感じ。</p>
+</li>
+<li>
+<p>あと、ここ最近のAIラッシュで膨大な情報を受けて疲れてしまった。マジで毎日情報が更新されていってて大変。</p>
+</li>
+</ul>
+<p>あと、アプリを作った理由の中に就活をすることになったというのもある。<br>
+今まで就活は視野に入れてなかったし、ブログで大学や就活の話は出来るだけ避けてたんだけど、自分の記録を残す上で避けられなくなってきたので。</p>
+<p>就活する上で色んなIT企業のインターンシップに参加して、色んな企業を知りたいと感じたんだけどそれの為に”成果物”が欲しかった。<br>
+私は去年の11月からプログラミングを始めたから、成果がAtCoder茶色とPythonのDiscordBotくらいしかなくて、これだとちょっと弱いと感じてた。</p>
+<p>そこで、丁度趣味程度で始めてたアプリ作りを本気でやったという感じ。だから、初めのアプリ作りは趣味のつもりだったけど、途中から就活の為の成果物という位置づけが大きくなっていった。<br>
+正直、成果物を作るぞ！　って言う気持ちで物を作るのはあまりいい気持ちじゃないんだけど、結果としてめっちゃくちゃ頑張れたからよかったのかな。</p>
+<p>作ってる間に色々感じたことメモしたので、ここから先は時系列順に作るまでの過程を残そうと思う。</p>
+<h2 id="0結論"><strong>0.結論</strong></h2>
+<p>結論から話すのが大好きなので、箇条書きで気づいたこと一覧から。（目次ではない）</p>
+<ol>
+<li>
+<p>iOSアプリを作るならMacが必須。</p>
+</li>
+<li>
+<p>Macは一番安いノートで良いと思う。</p>
+</li>
+<li>
+<p>私はiOSのみで作ったけど、FlutterでアンドロイドとiOSどちらでも使えるアプリを作るのも悪くない選択だと思う。</p>
+</li>
+<li>
+<p>アプリ開発は情報が極端に少ない。</p>
+</li>
+<li>
+<p>AppStoreにアプリを出すには毎年99$かかる。</p>
+</li>
+<li>
+<p>ChatGPTが生成したコードを理解せずにコピペは絶対しない。</p>
+</li>
+<li>
+<p>あくまでもChatGPTはCopilotである。</p>
+</li>
+<li>
+<p>出来たと思っても出来てない(アイコン制作やら、プライバシーポリシーやら)</p>
+</li>
+<li>
+<p>リリース後でも保守をしていく必要がある</p>
+</li>
+</ol>
+<h2 id="1アプリを作ろうと思ったきっかけ"><strong>1.アプリを作ろうと思ったきっかけ</strong></h2>
+<p>こんなのどうでもいいと思うので、簡潔に</p>
+<ol>
+<li>
+<p>競プロとかの部分的なコードだけじゃなく、何かアプリとか”一つの物”を作りたかった。</p>
+</li>
+<li>
+<p>友達がiOSのアプリを作ってたので、その影響を受けた。</p>
+</li>
+<li>
+<p>勉強時間を記録するアプリが欲しかったが、AppStoreに欲しい物が無かった。</p>
+</li>
+</ol>
+<h2 id="2どうやってアプリを作るか"><strong>2.どうやってアプリを作るか</strong></h2>
+<p>アプリを作ろうとした時、AndroidとiPhoneの問題が出てきた。</p>
+<p>Androidのみでアプリを配信するのか、iPhoneのみでアプリを配信するのか、どちらでも使えるアプリを配信するのかという問題。<br>
+私はiPhoneユーザーなので、どちらでも使えるアプリか、iOSのみで使えるアプリかの2択だった。ここで<strong>第1の壁</strong>なんだけど、<strong>iOSアプリを作るならMacが必須ということ</strong>。</p>
+<p>厳密に言えば、iOSで自分でアプリを配信したい場合は自分のMacが必須。作るだけならMacじゃ無くても可能。<br>
+これは、どちらでも使えるアプリを作成した場合でも一緒で、iOS上でアプリを配信するなら必ず自分のMacが必要だった。</p>
+<p>私は根っからのWindowsユーザーなので結構悩んだけど、他のOSも使ってみたかったのでMacを買うことに。<br>
+そして、開発方法はiOSのみで使えるアプリを選択した。<br>
+理由は、私が欲しいアプリを作るのが目標なので、私が使えれば良いから。<br>
+それと、Flutterというどちらのアプリも作れるフレームワークをちょっと弄ったんだけど、初心者向けの情報が少なくて出来る気がしないと感じたから。結果的には、iOSで使うSwiftUIというフレームワークの情報量も大差なかった。</p>
+<p>だから、どっちでもいいと思うけどAppleらしいアプリを作るならSwiftUIがおすすめ。Swiftっていう言語はPythonに似てるってのもいいね。逆に、アンドロイドとiOSどちらも作りたい人はFlutterとかでも問題ないと思う。</p>
+<h2 id="3macを購入する"><strong>3.Macを購入する</strong></h2>
+<p>とにかく、macOSが入ってればアプリを配信できる。だから新品で理論上一番安いのはMac miniの税込8万5千円なのかな？</p>
+<p>でも、個人的にはMacBook Airとかのノートパソコンがおすすめ。理由は、持ち運べて手軽だから。Mac miniでも勿論作成可能だけど、マウス・キーボード・モニターを用意する必要性とか、外で使えないとなると微妙なのかなという感じ。</p>
+<p>私はMacBook Airの一番安いやつを買った。以下の画像のやつ。</p>
+<p><img alt="" loading="lazy" decoding="async" width="1701" height="1024" src="/_astro/image-6-1701x1024.NcJUO2sd_2w4REl.webp" srcset=""></p>
+<p>学割で12万だった。2万Appleポイントも付いてきたから実質10万ってやつ。<br>
+<strong>※このAppleポイントはアプリ配信に必要な年99$に使えないので注意。</strong></p>
+<p>これ、Windowsのパソコンにちょっと詳しい人だとメモリ8GBっていうのが引っかかると思うんだけど、Macのメモリは優秀らしくて、実質16GB以上の働きをしてくれるらしいので安心してほしい。</p>
+<p>でも、メモリが明らかに足りなかったことが1回だけあって、SwiftPlaygroundsっていう機能を使う時は明らかに足りない。でも、アプリ開発をする上で必須機能じゃないので、使いたい機能のメモリの食い具合を調べて、よほどじゃない限りは8GBでもいいのかな〜という感じ。</p>
+<h2 id="4根っからのwindowsユーザーがmacを使ってみた感想"><strong>4.根っからのWindowsユーザーがMacを使ってみた感想</strong></h2>
+<p>結論から言えば、別に聞いてたほど悪くはないなという感じ。</p>
+<p>Macの一番の弱点は、Macに対応してないアプリが使えないことだと思うんだけど、私は既にWindowsパソコンを持ってるので困らなかった。とにかく、2番目のパソコンとしてのMacは悪くないと思う。<br>
+1番目のパソコンはアプリとか自由度の意味でWindowsがいいけどね。</p>
+<p><strong>Macの良いところ</strong></p>
+<ol>
+<li>
+<p><strong>Airpodsが気軽に使える</strong><br>
+勿論、互換性があるので一々設定とか弄んなくてもワンタップで使える。気軽さは大事。</p>
+</li>
+<li>
+<p><strong>カッコいい</strong><br>
+正直、なんだかんだカッコいい。見た目は大事。</p>
+</li>
+<li>
+<p><strong>画面録画が気軽にできる</strong><br>
+windowsってまともに使える画面録画機能、標準装備してないよね？　11ならあるのかな。とにかく、気軽に画面録画ができるのが嬉しかった。拡張子は.movだけどね。</p>
+</li>
+<li>
+<p><strong>軽い（物理的にも動作的にも）</strong><br>
+私は2年前に買ったHPの10万のWindwosノートも持ってるんだけど、それより100gくらい軽いし、動作も軽い。まあ、12万するから当然っちゃ当然。</p>
+</li>
+<li>
+<p><strong>充電めっちゃ持つ（新品だからかも）</strong><br>
+2年使ってるHPのノートPCより充電は持つ。大体、1日3時間程度なら3日か4日は持つんじゃないかな。使い方にも勿論よってくるので、参考程度に。</p>
+</li>
+<li>
+<p><strong>画面が綺麗（小並感）</strong><br>
+単純に解像度が2,560 x 1,600らしいので、まあ、綺麗。私は言われないとわからん。でも、色のコントラストはスゴイ綺麗。</p>
+</li>
+<li>
+<p><strong>プログラミングやシミュレーターを動かした程度では熱くならない</strong><br>
+マジでうちのMacちゃんは全然熱くならない。スゴイ。HPちゃんはGoogleChrome起動しただけで人肌くらいになるんだけど？</p>
+</li>
+<li>
+<p><strong>指紋認証めっっっちゃ優秀</strong><br>
+HPちゃんの指紋認証成功率は20％くらいなのに対して、Macちゃんは95％くらい。速度も速い。マジで優秀。</p>
+<p>【ここから使用4ヶ月後の追記】</p>
+</li>
+<li>
+<p><strong>カメラがめっちゃ綺麗</strong><br>
+Zoomをやる機会があってmacのカメラを使用したんだけど、めちゃくちゃ綺麗やねこれ。解像度、FPS共に私のHPノートより断然綺麗。<br>
+2年前の10万のHPと、今の12万のMacを比較するのも違う気はするが。</p>
+</li>
+<li>
+<p><strong>キーボード音が小さい</strong><br>
+個人的には、人がいる環境でキーボード音を激しく出すのは好みでないので、静音寄りなこのキーボードは好き。</p>
+</li>
+<li>
+<p><strong>Apple製品との連携が強い</strong><br>
+macでメモ帳を開くとiPhoneメモ帳と連動してたり、カレンダーを開くとiPhoneと連動してたり。結構これ便利。<br>
+やっぱり連携という意味でiPhoneを使っているひとはMacを買うと少し幸せになれる。</p>
+</li>
+</ol>
+<p><strong>Macの悪いところ</strong></p>
+<ol>
+<li>
+<p><strong>MacBook airの場合だけど、パソコンの下にゴムがついてないから滑る</strong><br>
+画面を開こうとしたとき、奥に動いちゃって落ちそうで怖い。<br>
+劣化しないという点ではいいかもしれない。</p>
+</li>
+<li>
+<p><strong>操作が違う</strong><br>
+キーボード操作、トラックパッド操作の微妙なところがWindowsと違う。というか、そもそもキー配列が違う。FnとCtrlと半角キーの位置そこ！？<br>
+出来るだけwindowsに寄せた設定にしたけど、それでも違うところはある。イライラとまではいかないけど、小さな不満にはなる。</p>
+</li>
+<li>
+<p><strong>仕様が違う</strong><br>
+OSが違うから当たり前ではあるんだけど、Windowsと仕様が微妙に違うところが多い。ディレクトリの操作とか、なんかそういうの色々。</p>
+</li>
+<li>
+<p><strong>usb-cしかない（macbook airのみかな？）</strong><br>
+私の持っているMacbook Airにはusb-cが2口しかない。マジで不便。<br>
+だから、SSD256GBでも外付け買えばいいかと思ってる人は注意。対応してるやつじゃないと使えない。</p>
+</li>
+<li>
+<p><strong>画面の配分むずすぎ</strong><br>
+いつもwindowsキー+矢印キーで画面の分割したりするんだけど、macはそもそも画面配分の仕様、というか仕組みが根本から違うっぽくてむずい。上手く画面分割できない。むずい。というか、画面半分にしたときのあのアニメーションいる？</p>
+</li>
+</ol>
+<p><strong>良くも悪くも聞いてた話と違ったところ</strong></p>
+<ol>
+<li>
+<p><strong>トラックパッドの操作性が神</strong><br>
+どんだけ操作しやすいんだろうと思ってたけど、私のHPのノートパソコンと大差なかった。恐らく、Macのトラックパッドを推している人はWindowsのトラックパッドを使ったことが無いんだと思う。Windowsでも2本指、3本指、4本指操作はできる。</p>
+</li>
+<li>
+<p><strong>割高</strong><br>
+割高と言われがちなMacだけど、これで12万と考えたら別に悪くないくらいだと思う。安くはないけど、めっちゃ高い訳でもないかなぁ。学割が効かなくて14万だと、やっぱり高いかなぁ。</p>
+</li>
+</ol>
+<h2 id="5swiftを学ぶ"><strong>5.Swiftを学ぶ</strong></h2>
+<p>2023年の3月16日に実はMacが既に届いてて、そこからSwiftを学び始めていた。</p>
+<p>iOS用のアプリはXcodeという統合開発環境でしか作れない。だから、VSCodeとかは使わない。<br>
+作る際に使う言語は昔からあるObjective-Cという言語か、Swiftという言語。</p>
+<p><strong>Objective-Cは</strong>昔からAppleで使われてた言語で、Cと付くだけあってC言語をベースとしてる。昔からあるだけ、ライブラリとかは充実してるけど色々古い。私はSwiftを選んだので、ここでは紹介だけ。</p>
+<p><strong>Swiftは</strong>2014年に発表された新しめの言語。色んな言語のいいとこどりをしたような言語らしく、Pythonに似ていると私は思う。もしfor文で1から10までを出力したかったら</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="swift"><code><span class="line"><span style="color:#F92672">for</span><span style="color:#F8F8F2"> i </span><span style="color:#F92672">in</span><span style="color:#AE81FF"> 1</span><span style="color:#F92672">..&#x3C;</span><span style="color:#AE81FF">11</span><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#66D9EF">  print</span><span style="color:#F8F8F2">(i)</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<p>でいける。違いはrangeの表現がrange(1,11)じゃなく1..&#x3C;11という表現になっているのと、インデントじゃなく{}で区切りを示すくらいじゃない？<br>
+if文とかも大体似てて、所々違うけどPythonが分かってれば習得は速いと思う。</p>
+<p>今新しいアプリを作るとなるとSwiftがメインなので、「C言語を学んでいました」とかじゃない限りはSwiftで良いと思う。</p>
+<h2 id="6swiftstoryboardとswiftui"><strong>6.SwiftStoryboardとSwiftUI</strong></h2>
+<p>Swiftでアプリを作る際に、SwiftStoryboardとSwiftUIという2つの選択肢がある。<br>
+SwiftStoryboardっていうのは下の画像みたいに実際にスマホ上に表示されるものをマウスで直接弄れる作り方。パワポ作成みたいにアプリを作れる感じ。（そんな簡単じゃないけど）</p>
+<p><img alt="" loading="lazy" decoding="async" width="1497" height="671" src="/_astro/image-7.6vTyiZFj_1VoHEz.webp" srcset=""></p>
+<p>それに対してSwiftUIは完全にコードのみでレイアウトとか機能を追加していく形。下の画像みたいな感じ。</p>
+<p><img alt="" loading="lazy" decoding="async" width="1195" height="737" src="/_astro/image-8.BIodEwKY_2sKEFk.webp" srcset=""></p>
+<p>なんかSwiftUIの方が古そうに見えるんだけど、実はStoryboardの方が古くて、SwiftUIは2019年からの新しいフレームワークなんだよね。<br>
+しかも、Apple的には将来的にSwiftUIに乗り換えようとしている。だから、極端ではあるけどStoryboardは将来性が無くて、SwiftUIには将来性があると言える。</p>
+<p>でも、Storyboardの方が古いから情報は多いし、直感的ではあるので初心者向けと言われてるんだよね。</p>
+<p>私の場合は、3月中旬から1カ月半Storyboardを触って5月からは完全にSwiftUIに乗り換えた感じ。今回作った「べんミル」もSwiftUIで作ったよ。</p>
+<p>正直、私的にはSwiftUIの方が使いやすいと思ってるし、Pythonに慣れている人なら尚更コードだけで作るSwiftUIをお勧めする。<br>
+コードという面ではStoryboardよりSwiftUIの方が圧倒的にコードが簡潔でわかりやすいよ。<br>
+でも、私みたいに一回Storyboardで何となくアプリ制作に慣れてからSwiftUIでも良いとは思う。ここら辺は好みの問題かもしれない。でも、最終的にはSwiftUIにならざるを得ない日が来るので早めに慣れてた方がいいとは思う。</p>
+<h2 id="7どうやって学ぶか"><strong>7.どうやって学ぶか</strong></h2>
+<p>ここが<strong>第2の壁</strong>。</p>
+<p>SwiftUIは2019年からのフレームワークなので、情報が少ない。<br>
+また、Appleの公式ドキュメントは英語だしこちらも情報が少ないことがある。<br>
+だから、エラーが起きたときとか、○○みたいな機能を追加したいっていう時にほんっとに困る。</p>
+<p>恐らく、正しい学び方としては<br>
+Swiftの基本文法を学ぶ→SwiftUIフレームワークを学ぶ→外部フレームワークを学ぶ<br>
+という方法が教科書的だし、段階的だと思う。</p>
+<p>でも、今回は成果物の為にリリース速度を最優先にしていたので、作りながら学んだ。<br>
+具体的には、SwiftUIのVStackとかText()などの基本事項だけ本で学んで、あとはChatGPTに聞きながら作った。</p>
+<p>私は2023年5月25日から6月6日の12日間でこのアプリを制作した。<br>
+空いた時間は本当に全部Macを開いてた。たぶん、12日で70時間くらいはSwiftUIを弄ったと思う。<br>
+……と言っても実は5月中旬から実は一回作ろうと試みて、挫折しているので、実際は20日くらいで作っている。</p>
+<p>それでも恐らく個人の開発期間としては短いと思うので、何があって何をどう学んだのかをChatGPT主題に話していく。</p>
+<h2 id="8chatgptを使う"><strong>8.ChatGPTを使う</strong></h2>
+<p>2023年6月7日現在、ChatGPTはGPT-3とGPT-4があるけど1ヵ月3000円払ってでもGPT-4を使うのが圧倒的におすすめ。<br>
+理由は色々あるけど、プラグインを入れればウェブURLを貼ってそこから学んでくれるのが大きい。あと、私はGPT-4をずっと使っているので、GPT-3では参考にならないところもある。詳しくは後述。</p>
+<h3 id="1コピペのみでchatgptを使う非推奨"><strong>1.コピペのみでChatGPTを使う（非推奨）</strong></h3>
+<p>私が一番最初に行った使い方が、<br>
+機能の提案→ChatGPTが出力→それを完全に理解せずにコピペ<br>
+というもの。</p>
+<p>これでも、1週間くらいでメイン画面とデータを記録するところまでは出来た。<br>
+しかし、絶対におすすめしない。</p>
+<p>何故なら、<strong>コードが大きくなると現状のChatGPTだけではバグ修正が出来ないし、自分が成長しないから</strong>。</p>
+<p>私はコピペで作っている途中でバグを見つけたんだけど、コードを完全に理解していないから、なぜそのバグが起きていて、どうやってそのバグを修正するのかが全く分かんなかった。ChatGPTに聞くにも、既にコードが数百～千数行になっていてChatGPTも理解してくれない。一部だけ抜粋して聞いても一部だけなので的確なアドバイスを貰えないし、分割して与えても理解してくれなかった。</p>
+<p>もしかしたらChatGPTでも直せたのかもしれないけど、いずれ無理は出てくるだろうし、何より自分があんまり成長していないと感じた。<br>
+ここで心改め、そのプロジェクトを完全に捨てて一から作り直した。</p>
+<p>それが5月25日の出来事。</p>
+<h3 id="2chatgptはプログラミングとの相性が恐ろしく良い"><strong>2.ChatGPTはプログラミングとの相性が恐ろしく良い</strong></h3>
+<p>ChatGPTとプログラミングの相性は恐ろしく良いと思う。何故なら、プログラミングは言語で、正解か不正解しかないから。</p>
+<p>音楽とChatGPTの相性は普通に悪いと思う。何故なら、音は波で、正解不正解がないから。</p>
+<p>音の本質は振動の波らしい。それをデジタル信号に変えて私たちはデジタルで扱っている。もし、それが言語に出来たらと思うけど、出来たとしても波を抽象化した記号にしかならない。だから、ChatGPTには記号化された質問しかできない。例えば、コード進行やメロディの提案等、波を音階にしている時点で様々な情報が抜け落ちているということ。本来は他の楽器がどう鳴っているか、今までがどんな流れだったのか等、様々な情報から音楽を作るけど、どうしても記号化するとそれらの情報が抜け落ちてしまう。しかも、答えが無いからそれが正解かわからない（自分が良いと思えば正解かもしれないけど）。</p>
+<p>それに代わってプログラミングは元から言語であるため、ChatGPTに聞く際に情報が殆ど抜け落ちない。しかも、間違っていたらエラーや予期しない挙動が、正解であれば予測通りの挙動をするので初心者でも合ってるか否かが明確に分かる。勿論、例外処理をしてなかったり、わざわざ重い処理を行っていたり、可読性、保守性が悪かったりする可能性はある。しかし、完全でなくとも正解のコードから我々初心者は”学ぶ”ことができる。</p>
+<p>つまり、何を言いたいかというとSwiftUIを学ぶ上でChatGPT-4はめちゃくちゃ相性がいい。しかも、正解か不正解かがわかるからそこからいろいろなことが学べる。</p>
+<p>例えば、使っている機種によってレイアウトが崩れてしまった時、崩れている部分のコードをChatGPTに貼って「以下のコードのレイアウトが機種によって崩れてしまうのですが、何か解決方法はありませんか？」と聞くと解説と共に改善されたコードが出てくる。そのコードがしっかりと機能していれば解説をしっかり見て理解する。もし、その解説が本当か気になるならネットでダブルチェックする。そうすればホントに素早く沢山のことを学べる。</p>
+<p>私は情報が少ない中こうやって学んで作った。ここでも大切なのは理解すること。理解するとChatGPTに的確な指示、質問ができるから更に勉強効率があがる。</p>
+<h3 id="3pythonで処理を書きswiftに変換する"><strong>3.Pythonで処理を書き、Swiftに変換する</strong></h3>
+<p>ChatGPTでも複雑で大きいコードを作るのは難しい。また、指示も難しくなる。<br>
+そこで使った方法が、一番慣れているPythonでコードを作ってそれをChatGPTでSwiftに変換してもらうというもの。</p>
+<p>この方法はある程度Swiftに慣れてしまったら必要ないと思うんだけど、まだSwiftの文法もままならない頃にこれをやってSwiftの文法をめちゃくちゃ学べた。<br>
+この方法で型宣言とか配列とかタプルのインデックスによる指定方法を学べたと思う。あくまでも作りながら学びたい人向け。</p>
+<h3 id="4新しい情報をchatgpt-4に教えてもらう"><strong>4.新しい情報をChatGPT-4に教えてもらう</strong></h3>
+<p>元から情報量が少ないのに、新しい情報になればなるほど本当に日本語の情報が少なくなる。</p>
+<p>例えば、今回私が使ったiOS16から使えるChartsフレームワークの私の欲しかった情報は日本に恐らく無い。<br>
+しかし、海外のサイトにはあった。ChatGPT-4では、プラグインで任意のURLを送るとそれを読んで解説してくれるみたいな機能があるのでそれを使って最新の情報も得た。</p>
+<p>ChatGPTは2021年までのデータしか得てないので、最新のデータを得るときはプラグインを使う必要がある。</p>
+<h2 id="9pythonと競プロしかやってなかった私が苦労したところ"><strong>9.Pythonと競プロしかやってなかった私が苦労したところ</strong></h2>
+<p>需要が限定的だけど、困ったところ、躓いたところを挙げていく……その前に、そもそもの話をする。</p>
+<p>そもそも、今のところSwiftはアプリ等の開発でしか使われていない。そのため、Python等と比べ、アプリ起動中に極力エラーを出さないような仕組みになっているし、私達開発者もそれを意識しなきゃいけない。</p>
+<p>この言語にはそんな特徴がある。</p>
+<h3 id="1型宣言って要る"><strong>1.型宣言……って要る？</strong></h3>
+<p><strong>A.最初は面倒くさかったけど、あった方が後々助かるし、パフォーマンスも上がる。</strong></p>
+<p>そう。Pythonしか学んでないと型宣言という文化を知らない。</p>
+<p>普通に変数nに整数10を宣言するとき、Pythonだと</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F8F8F2">n </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 10</span></span></code></pre>
+<p>ってやるよね？</p>
+<p>でも，これってnが変数で10がInt型っていうのを宣言してないよね？　それでもPythonは勝手にnは変数として整数型の10を代入してくれる。<br>
+これはPythonが動的型付け言語だからである。要するに、入れられた値から型を推論するということ。これがn = “10”ならStringだし、n = [10]ならリストだと推論してくれる。</p>
+<p>宣言するとき一々これはIntですよ！　Stringですよ！って宣言しなくていいからめちゃくちゃ楽なんだけど、大規模なコードになって関数とかクラスを沢山使うとわけわかんなくなる。<br>
+わざとDate型の日付をString型で扱ってたりすることがあるので、そういうところでエラーが出るし、可読性が下がって何やってんのか分かんなくなる。<br>
+だから、Swiftにも型推論機能はあるけどSwiftでアプリを作るときは出来るだけ型宣言をした方がいい。エラーを出さない為にも。</p>
+<p>因みに、Swiftで宣言するときは定数でなく変数であれば</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="swift"><code><span class="line"><span style="color:#F92672">var</span><span style="color:#F8F8F2"> n : </span><span style="color:#66D9EF;font-style:italic">Int</span><span style="color:#F92672"> =</span><span style="color:#AE81FF"> 10</span></span></code></pre>
+<p>となる。</p>
+<p>ここら辺は慣れるしかない。</p>
+<p>あと、型推論に頼りすぎて1回アプリが起動しなかったことがある。これは、そもそも型推論がある程度重いって言うのと、型を宣言してあげた方が最適化できるかららしい。</p>
+<p>だから、パフォーマンス的にも型宣言はした方がいい。</p>
+<h3 id="2オプショナルってなんやねん"><strong>2.オプショナルってなんやねん</strong></h3>
+<p>先ほども言った通り、Swiftは起動中出来るだけエラーを出さないような仕組みになってる。エラーを出さない為に、変数の値がnilの可能性があるときは変数がオプショナルという状態になる。というより、しなきゃいけない。<br>
+nilっていうのは一般的に言うnull、pythonで言うNoneみたいなもんで、何もない的な意味。オプショナルっていうのはnilが入る為に必要な型。</p>
+<p>逆に言えばオプショナル状態じゃないってことはその変数には絶対にnilが入ってないし、nilは入らないし、入れようとした時点でエラーになる。</p>
+<p>何も値が無いってnilいうのは本来エラーに繋がりやすい。この文字の色をnil色にしてください！　って命令したら機械は困ってエラーを吐いちゃう感じ。だから、nilが入っている可能性があるときは変数をオプショナルという状態にしなきゃいけない。例えば、関数からの戻り値とかユーザーに入力してもらう時とかはnilが入ってる可能性があるからオプショナルになる。</p>
+<p>それで、オプショナル状態の変数を使う場合、nilの場合の例外を作ったり、絶対にnilじゃない状況を作ってから、オプショナルを外してその変数を使う。そうすれば、値がnilなことによるエラーを防げる。</p>
+<p>Pythonとは違い、こうやってオプショナルを挟むことでnilによるエラーを防ぐ仕組みがある。しかし、マジで最初は意味が分かんなかった。</p>
+<p>実践的な使い方は<a href="https://qiita.com/maiki055/items/b24378a3707bd35a31a8" rel="noopener noreferrer" target="_blank">この記事</a>がおすすめ。私は3回目くらいでしっかり理解できた気がする。</p>
+<h2 id="10リリースする"><strong>10.リリースする</strong></h2>
+<p>理想のアプリが出来たらリリースする……のだが、ここで<strong>第3の壁</strong>。</p>
+<p>リリースするのに、毎年99＄のApple Developer Programに登録して、タイトル、アイコン、スクショ、プライバシーポリシー、案内サイトやら何やらを作成、設定してAppleの審査を通過しないといけない。</p>
+<p>ここに関しては、既にアプリリリースをしたことのある友達に助けられたので、私から言えることはあんまり無いのよね。</p>
+<p>時期にもよって必要なことが変わってくるので、適宜調べて欲しいんだけど、本当に心臓をずっと掴まれてる感じがした。<br>
+というか、たった今、審査を通過しましたという通知が届きました……まじで。。。よかった。。。</p>
+<p>寝よう。</p>
+<h2 id="11保守"><strong>11.保守</strong></h2>
+<p>おはようございます。</p>
+<p>なんだかんだ朝AppStoreを確認したら無事アプリリリースできてた。<br>
+審査提出からリリースまで2日くらいかな？<br>
+リジェクトはmacOSの新しいバージョンでも開けるようにしてくれっていう機械的なやつが提出後すぐに来ただけで、あとはなかった。</p>
+<p><img alt="" loading="lazy" decoding="async" width="452" height="993" src="/_astro/image-9.YTMbUGMU_7vrOp.webp" srcset=""></p>
+<p>これで終わりかと思いきや、ここからもアプリには保守が必要なのでアップデートを重ねていくつもりだし、2年に一回はアップデートしないとアプリ消されるんじゃなかったかな。</p>
+<p>アジャイル開発ってほど上等なものではないけど、そんな感じで小さなアップデートを増やして機能を増やしていくつもり。</p>
+<p>というか、既に小さなバグを2つ見つけてて、片方はSwiftUI固有のバグ、もう片方は理由不明のバグだから本当に困ってる。<br>
+コード的には問題ないと思うから、iOSのバージョン的な問題な気がするのよね。どっちもどうしろっちゅうねん。</p>
+<h2 id="おわりに"><strong>おわりに</strong></h2>
+<p>とりあえず、自分のためにも、成果物の為にもChatGPTと協力しながらアプリを開発しましたという話でした。</p>
+<p>今後は、このアプリに自分の欲しい機能を追加しつつ、今度こそ音楽系の機械学習の何かしらを作ります。</p>
+<p>正直、機械学習に拘らなくても作曲が楽になる物ならなんでも良いというのが本音なので、もしかしたら機械学習しないかもしれない。</p></section><aside class="w-[300px] hidden lg:block shrink-0" data-astro-cid-e2rqhpi3><nav class="sticky top-16 h-fit  bg-white py-24 pl-24 rounded-md" data-astro-cid-tqqy2vud><section data-astro-cid-tqqy2vud><header data-astro-cid-tqqy2vud><h2 class="font-bold text-lg" data-astro-cid-tqqy2vud>目次</h2></header></section><div class="article-toc scroll-smooth mt-4 py-16 pr-24 overflow-y-auto max-h-[90svh]" data-astro-cid-tqqy2vud></div></nav><script type="module" src="/_astro/ArticleTOC.astro_astro_type_script_index_0_lang.mX9zJvT_.js"></script></aside></div><div class="mt-40 mb-64" data-pagefind-ignore data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a><svg viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16 mx-4 mt-[2px]" data-astro-cid-e2rqhpi3="true">
+  <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+</svg><a href="/blog#python%E3%81%A7%E9%9F%B3%E6%A5%BD%E7%B3%BB%E4%BA%BA%E5%B7%A5%E7%9F%A5%E8%83%BD%E3%82%92%E4%BD%9C%E3%82%8B%E3%81%BE%E3%81%A7%E3%81%AE%E6%97%A5%E8%A8%98" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">pythonで音楽系人工知能を作るまでの日記</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=SwiftUI"># SwiftUI</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%97%A5%E8%A8%98"># 日記</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E5%AE%8C%E6%88%90"># 完成</a></div></div></article></main></div><footer class="pb-40 px-24 md:px-0 bg-white"><hr class="mx-auto w-2/3 md:w-1/2 my-24 h-[1px] border-0 bg-slate-400"><div class="mx-8 md:mx-64"><a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" target="_blank" rel="noopener noreferrer"><img src="/_astro/by-nc.DpMeGFcJ_ZF0RGK.svg" alt="クリエイティブコモンズ 表示-非営利 4.0 ライセンス" loading="lazy" decoding="async" width="125" height="44"></a><p class="text-xs md:text-sm">本サイト「<a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">tamakoma.com</a>」から提供されるブログ内の文章、プログラミングコードは、<a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">クリエイティブ・コモンズ 表示-非営利 4.0 ライセンス</a>の下に提供されます。</p><p class="text-xs md:text-sm">音楽や画像などのメディアコンテンツにはこのライセンスは適用されません。</p></div><p class="text-center text-sm"><a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Top</a> / <a href="/contact" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Contact</a> / <a href="/feed.xml" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">RSS Feed</a></p><p class="mt-24 text-center">&copy; tamakoma 2018-2026</p></footer></div></body></html>

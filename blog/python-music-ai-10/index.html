@@ -1,0 +1,146 @@
+<!DOCTYPE html><html lang="ja" class="text-slate-700"><head><meta charset="utf-8"><title>【10日目】Pythonを始めて約4ヶ月、AtCoderの茶色になる | tamakoma.com</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v7.0.3"><meta name="twitter:card" content="summary"><meta property="og:title" content="【10日目】Pythonを始めて約4ヶ月、AtCoderの茶色になる"><meta property="og:type" content="website"><meta property="og:url" content="https://tamakoma.com/blog/python-music-ai-10/"><meta property="og:image" content="/_astro/mikuteto-OGP.DYQebPDj.png"><meta property="og:description" content="学んだことを残すブログ"><meta property="og:site_name" content="tamakoma.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.0.1/dist/css/yakuhanjp_s.css"><link rel="sitemap" href="/sitemap-index.xml"><link rel="stylesheet" href="/_astro/BaseLayout.Ddu7R_5r.css"><style>/*! tailwindcss v4.2.2 | MIT License | https://tailwindcss.com */
+.article-toc[data-astro-cid-tqqy2vud] .toc-link{font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));display:block}@media (hover:hover){.article-toc[data-astro-cid-tqqy2vud] .toc-link:hover{color:var(--color-slate-600,oklch(44.6% .043 257.281));text-decoration-line:underline}}.article-toc[data-astro-cid-tqqy2vud] .toc-link.to-link-active{color:var(--color-miku-500,oklch(63.7% .1071 185.34))}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H2){margin-left:var(--spacing-24,24px)}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H3){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:10px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H4){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:20px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H5){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:30px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H6){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:40px}.article-toc[data-astro-cid-tqqy2vud] .toc-list{list-style-type:decimal;list-style-position:outside}@layer properties{@supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))){*,:before,:after,::backdrop{--tw-font-weight:initial;--tw-border-style:solid}}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a{--tw-font-weight:var(--font-weight-semibold,600);font-weight:var(--font-weight-semibold,600);color:var(--color-miku-500,oklch(63.7% .1071 185.34));text-underline-offset:2px;text-decoration-line:underline}@media (hover:hover){article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a:hover{color:var(--color-miku-700,oklch(50.5% .0901 187.01))}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] code:not(pre>code){margin-inline:var(--spacing-4,4px);border-radius:var(--radius-md,.375rem);border-style:var(--tw-border-style);background-color:var(--color-sumi-100,oklch(97% 0 0));padding-inline:var(--spacing-4,4px);--tw-font-weight:var(--font-weight-normal,400);font-weight:var(--font-weight-normal,400);color:var(--color-black,#000);border-width:0;padding-block:2px}@property --tw-font-weight{syntax:"*";inherits:false}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid}
+</style><script type="module" src="/_astro/page.DCEeCLip.js"></script><script>!(function(w,p,f,c){if(!window.crossOriginIsolated && !navigator.serviceWorker) return;c=w[p]=Object.assign(w[p]||{},{"lib":"/~partytown/","debug":false});c[f]=(c[f]||[])})(window,'partytown','forward');/* Partytown 0.13.2 - MIT QwikDev */
+const t={preserveBehavior:!1},e=e=>{if("string"==typeof e)return[e,t];const[n,r=t]=e;return[n,{...t,...r}]},n=Object.freeze((t=>{const e=new Set;let n=[];do{Object.getOwnPropertyNames(n).forEach((t=>{"function"==typeof n[t]&&e.add(t)}))}while((n=Object.getPrototypeOf(n))!==Object.prototype);return Array.from(e)})());!function(t,r,o,i,a,s,c,l,d,p,u=t,f){function h(){f||(f=1,"/"==(c=(s.lib||"/~partytown/")+(s.debug?"debug/":""))[0]&&(d=r.querySelectorAll('script[type="text/partytown"]'),i!=t?i.dispatchEvent(new CustomEvent("pt1",{detail:t})):(l=setTimeout(v,(null==s?void 0:s.fallbackTimeout)||1e4),r.addEventListener("pt0",w),a?y(1):o.serviceWorker?o.serviceWorker.register(c+(s.swPath||"partytown-sw.js"),{scope:c}).then((function(t){t.active?y():t.installing&&t.installing.addEventListener("statechange",(function(t){"activated"==t.target.state&&y()}))}),console.error):v())))}function y(e){p=r.createElement(e?"script":"iframe"),t._pttab=Date.now(),e||(p.style.display="block",p.style.width="0",p.style.height="0",p.style.border="0",p.style.visibility="hidden",p.setAttribute("aria-hidden",!0)),p.src=c+"partytown-"+(e?"atomics.js?v=0.13.2":"sandbox-sw.html?"+t._pttab),r.querySelector(s.sandboxParent||"body").appendChild(p)}function v(n,o){for(w(),i==t&&(s.forward||[]).map((function(n){const[r]=e(n);delete t[r.split(".")[0]]})),n=0;n<d.length;n++)(o=r.createElement("script")).innerHTML=d[n].innerHTML,o.nonce=s.nonce,r.head.appendChild(o);p&&p.parentNode.removeChild(p)}function w(){clearTimeout(l)}s=t.partytown||{},i==t&&(s.forward||[]).map((function(r){const[o,{preserveBehavior:i}]=e(r);u=t,o.split(".").map((function(e,r,o){var a;u=u[o[r]]=r+1<o.length?u[o[r]]||(a=o[r+1],n.includes(a)?[]:{}):(()=>{let e=null;if(i){const{methodOrProperty:n,thisObject:r}=((t,e)=>{let n=t;for(let t=0;t<e.length-1;t+=1)n=n[e[t]];return{thisObject:n,methodOrProperty:e.length>0?n[e[e.length-1]]:void 0}})(t,o);"function"==typeof n&&(e=(...t)=>n.apply(r,...t))}return function(){let n;return e&&(n=e(arguments)),(t._ptf=t._ptf||[]).push(o,arguments),n}})()}))})),"complete"==r.readyState?h():(t.addEventListener("DOMContentLoaded",h),t.addEventListener("load",h))}(window,document,navigator,top,window.crossOriginIsolated);;(e=>{e.addEventListener("astro:before-swap",e=>{let r=document.body.querySelector("iframe[src*='/~partytown/']");if(r)e.newDocument.body.append(r)})})(document);</script></head><body class="bg-repeat bg-white anywhere" style="background-image: url(/_astro/mikuteto-gray.Dix8k1Tp.gif)"><div class="min-h-screen flex flex-col justify-between" id="container"><div><header><nav class="flex flex-col items-center pt-40 pb-24"><a href="/blog" class="text-3xl md:text-5xl font-bold mb-40 text-slate-400 drop-shadow-2xl">tamakoma.com</a><div class="w-full flex justify-center [&amp;&gt;a]:bg-white [&amp;&gt;a]:border-slate-400"><a href="/" class="block py-8 px-16 text-sumi-600 rounded-l border-l border-y">home</a><a href="/blog/" class="block py-8 px-16 text-sumi-600 border">blog</a><a href="/about/" class="block py-8 px-16 text-sumi-600 rounded-r border-r border-y">about</a></div></nav></header><main class="bg-slate-100 w-full flex justify-end" data-astro-cid-e2rqhpi3><article class="grow" data-pagefind-body data-astro-cid-e2rqhpi3><header class="mt-24 w-11/12 max-w-[700px] mx-auto" data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-pagefind-weight="6.7" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a><svg viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16 mx-4 mt-[2px]" data-astro-cid-e2rqhpi3="true">
+  <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+</svg><a href="/blog#python%E3%81%A7%E9%9F%B3%E6%A5%BD%E7%B3%BB%E4%BA%BA%E5%B7%A5%E7%9F%A5%E8%83%BD%E3%82%92%E4%BD%9C%E3%82%8B%E3%81%BE%E3%81%A7%E3%81%AE%E6%97%A5%E8%A8%98" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">pythonで音楽系人工知能を作るまでの日記</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-pagefind-weight="6.5" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Python"># Python</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%97%A5%E8%A8%98"># 日記</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=AtCoder"># AtCoder</a></div><h1 class="text-center text-xl md:text-3xl font-bold px-24 mt-40" data-astro-cid-e2rqhpi3>【10日目】Pythonを始めて約4ヶ月、AtCoderの茶色になる</h1><div class="text-slate-400 text-sm gap-16 flex justify-center mt-24" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>投稿日 <time datetime="2023-02-27T00:00:00.000Z">2023/02/27</time></span><span data-astro-cid-e2rqhpi3>最終更新日 <time datetime="2023-02-27T00:00:00.000Z">2023/02/27</time></span></div></header><hr class="bg-slate-200 rounded-full mx-auto h-4 my-40 w-40 border-0"><div class="flex mx-auto justify-center gap-40" data-astro-cid-e2rqhpi3><section id="article-body" class="
+                            prose prose-neutral
+                            prose-blockquote:border-miku-400 prose-blockquote:font-normal
+                            w-0 grow
+                            max-w-[650px] bg-white box-content px-16 md:px-40 py-24 rounded-md
+                            " data-astro-cid-e2rqhpi3><p>2023年2月27日</p>
+<p>昨日のABC291でABC-E---の4完をかまし、念願の着色。レートは421。<br>
+一応節目なので、ブログを更新しようかなと思い書きます。python基準です。</p>
+<p>記事内でのdif400などのdifはAtCoder problemの現在基準です。</p>
+<h2 id="茶色に関する感想"><strong>茶色に関する感想</strong></h2>
+<p>正直、何か強みがあれば茶色にはすぐなれるのではないだろうかと思う。<br>
+例えば、ARCの考察系問題を解くことが出来るとか、ABCのABを超早く解くことができるとか、検索能力が高い・ChatGPTを上手く使うことができるとか、dif300後半くらいまでなら速度は遅くても安定して解くことができるとか、元々数学めっちゃ強いとか。</p>
+<p>必須なのはpythonの基礎力で、それに加えて何か”強み”を持っていると茶色にはなれるというのが今のところの感想。<br>
+正直pythonの基礎力もその場でググって解決する程度で良いとは思う。<br>
+私は未だにリストの要素の削除方法を毎回ググってるし、英小文字を大文字にする方法とかもググったりする。<br>
+そういう方法があったっていうのを認識してるのが大事だと思う。勿論覚えておくに越したことはない。</p>
+<p>私は、ABCのAB問題の早解きと、dif300くらいまでなら安定して解けることを武器に茶色になれた。<br>
+AB問題が早く解けるとC問題がdif400以上の時C問題解けなくても大体パフォーマンス300以上出るし、C問題がdif300くらいであればだいたい解けるから超安定して毎回レート+30前後盛ってた。<br>
+レートの推移を見てもらうと分かると思う。</p>
+<p><img alt="" loading="lazy" decoding="async" width="812" height="707" src="/_astro/da5af9f8ebadced1fb34acb154d55ffb.Cny3Co61_Z7bBWY.webp" srcset=""></p>
+<p>その代わり爆発的にレートが伸びることは無かったし、劇的にレートが下がることも無かった。</p>
+<p>※茶色に到達したコンテストではABC問題を安定して解いた+ChatGPTと検索力でE問題を解いたからレートが+117くらいに爆発した感じ。<br>
+※その一個前のコンテストでは問題をめっちゃ読み間違えててdif200くらいのC問題に1時間くらいかけた。それがなければいつも通り+30くらい盛れてると思うので、AB早解きとdif300までは安定して解けるっていうのは灰色の内はかなり相性の良い武器だと思う。</p>
+<h2 id="灰色の人がレートを稼ぐなら"><strong>灰色の人がレートを稼ぐなら</strong></h2>
+<p>裏技ではないんだけど、あまり知られてない？　こと。<br>
+もし、灰色の人がレートを稼ぐならARCに積極的に参加すると良いと思う。</p>
+<p>ARCはABCより全然難しくて1問目からdif1500の問題とかの場合もあるんだけど、もしARCのA問題がdif1500で何も解けなかったとしてもレート1500以下の人は半分以上が自分と同じ状況だから結果的にレートは上がることが多い。<br>
+レートは絶対スコアじゃなくて相対スコアで変化するからだと思う。</p>
+<p>しかも、A問題がdif300～500くらいで考察が大事な問題だった時は、アルゴリズム力じゃなく考察力が問われるからその問題が偶然解けることがあって、解く速度にもよるけどだいたいパフォーマンス500～1300くらい出る。</p>
+<p>その代わり、A問題がdif300以下で解けなかったときはだいたいパフォーマンス200以下だから自分のレートが200以下だったらレートは下がっちゃう。みたいなリスクはある。</p>
+<p>私の友達は間違ってA問題がdif340のARCに出て1問も解けなかったんだけどパフォーマンスは200くらい出てレート上がってたし、私はunratedだったけどARCで偶然早めに1問解けたことが2回あってパフォーマンス900と1300を出したことがある。unratedだったのを本当に後悔した。</p>
+<p>別に何も解けなくてレートが下がっても灰色ならそんなに痛くないし、灰色でかつレートを直ぐにでも上げたかったらARCは出た方がお得だと個人的には思った。</p>
+<h2 id="学んだことやったこと"><strong>学んだこと・やったこと</strong></h2>
+<p>以下大体時系列順</p>
+<ul>
+<li>
+<p>Pythonを<a href="https://www.python.jp/train/index.html" rel="noopener noreferrer" target="_blank">ゼロからのPython入門講座</a>で学んだ</p>
+</li>
+<li>
+<p>色々精進の方法を学んだ</p>
+</li>
+<li>
+<p><a href="https://paiza.jp/challenges" rel="noopener noreferrer" target="_blank">paiza</a>のD,C問題で競プロに慣れた</p>
+</li>
+<li>
+<p>毎週ABCに出た</p>
+</li>
+<li>
+<p><a href="https://onlinejudge.u-aizu.ac.jp/courses/lesson/2/ITP1/1" rel="noopener noreferrer" target="_blank">AOJのプログラミング入門</a>を大体やった</p>
+</li>
+<li>
+<p>Google colabからVSCodeに移行した</p>
+</li>
+<li>
+<p>Google colabにチートシートを置いた</p>
+</li>
+<li>
+<p>ChatGPTを使い始めた</p>
+</li>
+<li>
+<p><a href="https://algo-method.com/tasks" rel="noopener noreferrer" target="_blank">アルゴ式</a>をちょっとだけやった</p>
+</li>
+<li>
+<p><a href="https://kenkoooo.com/atcoder/#/table" rel="noopener noreferrer" target="_blank">Atcoder Problems</a>でABCのA問題を100問、B問題を50問くらい解いた</p>
+</li>
+<li>
+<p>「問題解決のための「アルゴリズム×数学」が基礎からしっかり身につく本」をだいたい読んだ</p>
+</li>
+<li>
+<p>バーチャルコンテストの「あさかつ」に参加するようになった</p>
+</li>
+</ul>
+<h3 id="pythonをゼロからのpython入門講座で学んだ"><strong>PythonをゼロからのPython入門講座で学んだ</strong></h3>
+<p>私はゼミの関係でプログラミングを始めることになったので全くプログラミングの知識がない状況からPythonを<a href="https://www.python.jp/train/index.html" rel="noopener noreferrer" target="_blank">ゼロからのPython入門講座</a>というので学んだ。<br>
+東大のPythonの資料とかudemyとか本とかいろんな教材はあるけど別にこのサイトで十分だと思う。一週間くらいはかかったと思う。</p>
+<h3 id="色々精進の方法を学んだ"><strong>色々精進の方法を学んだ</strong></h3>
+<p>そもそも競プロの為じゃなく、機械学習の為にプログラミングを始めたという前提がある。<br>
+その上でプログラミング力をある程度培う為に競プロという存在を知り、そこから時々機械学習という目的と競プロという手段がswapしながら競プロを進めた。モチベの為にも色変記事とかめっちゃ見てたし精進の方法を色々学んだし、今も学んでる。主にQiitaとyoutubeを使う。</p>
+<h3 id="paizaのdc問題で競プロに慣れた"><strong>paizaのD,C問題で競プロに慣れた</strong></h3>
+<p>当時まだPythonの基礎力を学んだだけでAtCoderに参加するには早いと思いpaizaのスキルチェックのD問題、C問題で標準入力と標準出力の仕組み、空白区切りの標準入力の受け取り方とかを学んだ。</p>
+<h3 id="毎週abcに出た"><strong>毎週ABCに出た</strong></h3>
+<p>paizaで標準入力・標準出力に慣れたら早速AtCoderのABCに参加した。<br>
+初めて参加したABC280はC問題がdif60とかで一応ABC3完できた。解けるとやっぱりモチベにつながる。<br>
+ここから全部のABCにratedで参加している。</p>
+<h3 id="aojのプログラミング入門を大体やった"><strong>AOJのプログラミング入門を大体やった</strong></h3>
+<p>精進の方法を学んでいるとAOJをやると良いという情報を得たのでAOJのプログラミング入門を数学の部分と最後のdiceの部分以外やった。<br>
+完璧主義じゃなく、中途半端に学ぶことも大事だと思う。基本辛かったり、今必要ないなと思ったことはやらずに他の方法を探してる。</p>
+<h3 id="google-colabからvscodeに移行した"><strong>Google colabからVSCodeに移行した</strong></h3>
+<p>今までgoogle colabという環境構築しなくても良い環境でやっていたが、書いたコードをテストするとき一行ずつコピペしてenterを押す必要があったのでVSCodeという環境に移行した。</p>
+<p>VSCodeにした理由はKaggleを知ったきっかけである「<a href="https://www.youtube.com/@user-ri4nv7di2o" rel="noopener noreferrer" target="_blank">あずぱん動画</a>」さんがVSCodeを使っていたから。</p>
+<p>VSCodeで</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F92672">import</span><span style="color:#F8F8F2"> io</span></span>
+<span class="line"><span style="color:#F92672">import</span><span style="color:#F8F8F2"> sys</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#AE81FF">_INPUT</span><span style="color:#F92672"> =</span><span style="color:#E6DB74"> """</span><span style="color:#AE81FF">\</span></span>
+<span class="line"><span style="color:#E6DB74">この”””の中に与えたい標準入力を入れる</span></span>
+<span class="line"><span style="color:#E6DB74">"""</span></span>
+<span class="line"><span style="color:#F8F8F2">sys.stdin </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> io.StringIO(</span><span style="color:#AE81FF">_INPUT</span><span style="color:#F8F8F2">)</span></span></code></pre>
+<p>という魔法のコードを一番上に入れておくと標準入力をわざわざ入れる必要が無くなるのでおすすめ。恐らくデバッグモードという方法でもできるし、他の方法もあるけどとりあえずこれで困ってない。仕組みは未だに分からない。</p>
+<h3 id="google-colabにチートシートを置いた"><strong>Google colabにチートシートを置いた</strong></h3>
+<p>深さ優先探索のコードとか、二次配列を転置するコードとか、約数を列挙するコードとかの使えそうだなと思った自分で書いたコードとか、忘れやすい事とかをまとめたものをGoogle colabにチートシート的な感じでまとめ始めた。</p>
+<p>未だに実践で使ったことはないけど、バーチャルコンテストで使ったことは何回かある。<br>
+自分で書いたコードじゃないとしっかり理解してなかったりするから自分で書いたコードがおすすめ。</p>
+<h3 id="chatgptを使い始めた"><strong>ChatGPTを使い始めた</strong></h3>
+<p>競プロを始めた理由はPythonの地力を高める為なのでChatGPTに問題を直接投げたりは昨日以外してないんだけど、なんか分かんないことがあったら聞いたりはしてた。昨日は茶色になりた過ぎてChatGPTと検索力の総力戦を仕掛けてしまった。後悔はしてないがばつは悪い。</p>
+<p>今のところ禁止されていないのでレートを上げたい人はどんどん使っていけばよいと思う。<br>
+今のところAIを使う能力も検索能力も競プロ力の一つ。</p>
+<p>いずれChatGPT等のAIを使うことが禁止になる可能性は全然あるので注意して使ってください。</p>
+<h3 id="アルゴ式をちょっとだけやった"><strong>アルゴ式をちょっとだけやった</strong></h3>
+<p><a href="https://algo-method.com/tasks" rel="noopener noreferrer" target="_blank">アルゴ式</a>が精進にお勧めと聞いて全探索と計算量の部分だけやった。<br>
+私は使いこなせてないけど、確かに良い教材だと思うので紹介。</p>
+<h3 id="atcoder-problemsでabcのa問題を100問b問題を50問くらい解いた"><strong>Atcoder ProblemsでABCのA問題を100問、B問題を50問くらい解いた</strong></h3>
+<p>暇だったらAとB問題を解くっていうのを1週間やった。<br>
+新しい問題順で解いて、解けても解けなくても他の人の回答を見ていろんなpythonの使い方を学んだ。</p>
+<p>別に100問と50問っていうのは解こうと思って解いたんじゃなくて結果的に解いてた。<br>
+大体これくらい解けばAB問題の早解きはできるんじゃないかなと思う。<br>
+簡単なものであればAB合わせて5分程度で解けるようになった。長くても10分くらいでABは終わるようになった。</p>
+<p>正直これ以上ABの簡単な問題を解いてもあまり効果ないと思ったので、AとBのdif100以下とかはもう解いてない。</p>
+<p><a href="https://kenkoooo.com/atcoder/#/table" rel="noopener noreferrer" target="_blank">Atcoder Problems</a>は必須レベルだと思う。</p>
+<h3 id="問題解決のためのアルゴリズム数学が基礎からしっかり身につく本をだいたい読んだ"><strong>「問題解決のための「アルゴリズム×数学」が基礎からしっかり身につく本」をだいたい読んだ</strong></h3>
+<p>図書カードを2000円分もらったので前から気になっていたこの本を買って大体終わらせた。<br>
+最終問題とかあまりにも数学なとこはやってないけど、それ以外は大体やった。ここで深さ・幅優先探索とかDP、累積和、計算量の考え方とかをちゃんと学んだ。bit全探索に感動した。</p>
+<p>タイトルにある通り数学がまあまあ出てくるので苦手な人にはお勧めできない。</p>
+<p>別に本での学習は必須ではないと思うけど、情報をまとめてくれてるので楽に学習はできる。</p>
+<h3 id="バーチャルコンテストのあさかつに参加するようになった"><strong>バーチャルコンテストの「あさかつ」に参加するようになった</strong></h3>
+<p>いつも通り色変記事を見てると「<a href="https://qiita.com/mayocorn/items/4edff486428240864808" rel="noopener noreferrer" target="_blank">中卒の主婦が青コーダーになったおはなし</a>」という記事の中でバーチャルコンテストという存在を知った。それから無理をしない程度に「あさかつ」という朝7時半から1時間行われるABC方式のバーチャルコンテストに参加している。</p>
+<p>夜は友達とゲームしたいという気持ちと、春休み中生活リズムを整えたいという気持ちにかなりハマるので良かった。</p>
+<p>一応中卒の主婦が青コーダーになったおはなしを書いた人が「まよこん」という夜9時からABC方式のバーチャルコンテストを開いてるので夜に参加したい人はそちらがおすすめ。</p>
+<p><a href="https://kenkoooo.com/atcoder/#/contest/recent" rel="noopener noreferrer" target="_blank">AtcoderProblemsのコンテスト</a>で開催してるよ。</p>
+<h2 id="これからの学習"><strong>これからの学習</strong></h2>
+<p>もちろん緑とか水色とかにもなれたらかっこいいと思うんだけど、競プロをする目的は機械学習の為にPython力を上げることなのでここからは機械学習に比重を増やそうと思う。</p>
+<p>普通に競プロは娯楽として面白いのであさかつとABCは今まで通り参加して、あとはKaggleやら機械学習の学習に時間を使おうかなと。</p>
+<p>楽しいコンテンツを提供してくれるAtCoderさんに感謝を。</p>
+<h3 id="以下はここまでの精進履歴"><strong>以下はここまでの精進履歴</strong></h3>
+<p><img alt="" loading="lazy" decoding="async" width="1600" height="421" src="/_astro/2ff079ebcf167b44b65ce47d0cb07c8f.D5ipIfxs_10tRve.webp" srcset=""></p>
+<p><img alt="" loading="lazy" decoding="async" width="1600" height="524" src="/_astro/d5922d0c9a7514237f3a5aae5bae4bce.BHQWZga4_Z14AjOY.webp" srcset=""></p>
+<p><img alt="" loading="lazy" decoding="async" width="1600" height="526" src="/_astro/7e3053fa59a605417464aa5fefca49b1.BeuvNlJD_17mEWT.webp" srcset=""></p>
+<p><img alt="" loading="lazy" decoding="async" width="1600" height="527" src="/_astro/77b3a6180ee9b32483ebe897fbfb78d6.DAEVNY4F_Z2kjyWs.webp" srcset=""></p>
+<p><img alt="" loading="lazy" decoding="async" width="1600" height="476" src="/_astro/3ef33c75ada99d18d6f907f138837569.0sK__YXX_1AMo5q.webp" srcset=""></p></section><aside class="w-[300px] hidden lg:block shrink-0" data-astro-cid-e2rqhpi3><nav class="sticky top-16 h-fit  bg-white py-24 pl-24 rounded-md" data-astro-cid-tqqy2vud><section data-astro-cid-tqqy2vud><header data-astro-cid-tqqy2vud><h2 class="font-bold text-lg" data-astro-cid-tqqy2vud>目次</h2></header></section><div class="article-toc scroll-smooth mt-4 py-16 pr-24 overflow-y-auto max-h-[90svh]" data-astro-cid-tqqy2vud></div></nav><script type="module" src="/_astro/ArticleTOC.astro_astro_type_script_index_0_lang.mX9zJvT_.js"></script></aside></div><div class="mt-40 mb-64" data-pagefind-ignore data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a><svg viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16 mx-4 mt-[2px]" data-astro-cid-e2rqhpi3="true">
+  <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+</svg><a href="/blog#python%E3%81%A7%E9%9F%B3%E6%A5%BD%E7%B3%BB%E4%BA%BA%E5%B7%A5%E7%9F%A5%E8%83%BD%E3%82%92%E4%BD%9C%E3%82%8B%E3%81%BE%E3%81%A7%E3%81%AE%E6%97%A5%E8%A8%98" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">pythonで音楽系人工知能を作るまでの日記</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Python"># Python</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%97%A5%E8%A8%98"># 日記</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=AtCoder"># AtCoder</a></div></div></article></main></div><footer class="pb-40 px-24 md:px-0 bg-white"><hr class="mx-auto w-2/3 md:w-1/2 my-24 h-[1px] border-0 bg-slate-400"><div class="mx-8 md:mx-64"><a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" target="_blank" rel="noopener noreferrer"><img src="/_astro/by-nc.DpMeGFcJ_ZF0RGK.svg" alt="クリエイティブコモンズ 表示-非営利 4.0 ライセンス" loading="lazy" decoding="async" width="125" height="44"></a><p class="text-xs md:text-sm">本サイト「<a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">tamakoma.com</a>」から提供されるブログ内の文章、プログラミングコードは、<a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">クリエイティブ・コモンズ 表示-非営利 4.0 ライセンス</a>の下に提供されます。</p><p class="text-xs md:text-sm">音楽や画像などのメディアコンテンツにはこのライセンスは適用されません。</p></div><p class="text-center text-sm"><a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Top</a> / <a href="/contact" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Contact</a> / <a href="/feed.xml" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">RSS Feed</a></p><p class="mt-24 text-center">&copy; tamakoma 2018-2026</p></footer></div></body></html>

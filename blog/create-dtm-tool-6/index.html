@@ -1,0 +1,358 @@
+<!DOCTYPE html><html lang="ja" class="text-slate-700"><head><meta charset="utf-8"><title>【6日目】VirtualBoxとAlmaLinix9を利用してローカルサーバー構築 | tamakoma.com</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v7.0.3"><meta name="twitter:card" content="summary"><meta property="og:title" content="【6日目】VirtualBoxとAlmaLinix9を利用してローカルサーバー構築"><meta property="og:type" content="website"><meta property="og:url" content="https://tamakoma.com/blog/create-dtm-tool-6/"><meta property="og:image" content="/_astro/mikuteto-OGP.DYQebPDj.png"><meta property="og:description" content="学んだことを残すブログ"><meta property="og:site_name" content="tamakoma.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.0.1/dist/css/yakuhanjp_s.css"><link rel="sitemap" href="/sitemap-index.xml"><link rel="stylesheet" href="/_astro/BaseLayout.Ddu7R_5r.css"><style>/*! tailwindcss v4.2.2 | MIT License | https://tailwindcss.com */
+.article-toc[data-astro-cid-tqqy2vud] .toc-link{font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));display:block}@media (hover:hover){.article-toc[data-astro-cid-tqqy2vud] .toc-link:hover{color:var(--color-slate-600,oklch(44.6% .043 257.281));text-decoration-line:underline}}.article-toc[data-astro-cid-tqqy2vud] .toc-link.to-link-active{color:var(--color-miku-500,oklch(63.7% .1071 185.34))}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H2){margin-left:var(--spacing-24,24px)}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H3){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:10px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H4){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:20px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H5){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:30px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H6){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:40px}.article-toc[data-astro-cid-tqqy2vud] .toc-list{list-style-type:decimal;list-style-position:outside}@layer properties{@supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))){*,:before,:after,::backdrop{--tw-font-weight:initial;--tw-border-style:solid}}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a{--tw-font-weight:var(--font-weight-semibold,600);font-weight:var(--font-weight-semibold,600);color:var(--color-miku-500,oklch(63.7% .1071 185.34));text-underline-offset:2px;text-decoration-line:underline}@media (hover:hover){article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a:hover{color:var(--color-miku-700,oklch(50.5% .0901 187.01))}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] code:not(pre>code){margin-inline:var(--spacing-4,4px);border-radius:var(--radius-md,.375rem);border-style:var(--tw-border-style);background-color:var(--color-sumi-100,oklch(97% 0 0));padding-inline:var(--spacing-4,4px);--tw-font-weight:var(--font-weight-normal,400);font-weight:var(--font-weight-normal,400);color:var(--color-black,#000);border-width:0;padding-block:2px}@property --tw-font-weight{syntax:"*";inherits:false}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid}
+</style><script type="module" src="/_astro/page.DCEeCLip.js"></script><script>!(function(w,p,f,c){if(!window.crossOriginIsolated && !navigator.serviceWorker) return;c=w[p]=Object.assign(w[p]||{},{"lib":"/~partytown/","debug":false});c[f]=(c[f]||[])})(window,'partytown','forward');/* Partytown 0.13.2 - MIT QwikDev */
+const t={preserveBehavior:!1},e=e=>{if("string"==typeof e)return[e,t];const[n,r=t]=e;return[n,{...t,...r}]},n=Object.freeze((t=>{const e=new Set;let n=[];do{Object.getOwnPropertyNames(n).forEach((t=>{"function"==typeof n[t]&&e.add(t)}))}while((n=Object.getPrototypeOf(n))!==Object.prototype);return Array.from(e)})());!function(t,r,o,i,a,s,c,l,d,p,u=t,f){function h(){f||(f=1,"/"==(c=(s.lib||"/~partytown/")+(s.debug?"debug/":""))[0]&&(d=r.querySelectorAll('script[type="text/partytown"]'),i!=t?i.dispatchEvent(new CustomEvent("pt1",{detail:t})):(l=setTimeout(v,(null==s?void 0:s.fallbackTimeout)||1e4),r.addEventListener("pt0",w),a?y(1):o.serviceWorker?o.serviceWorker.register(c+(s.swPath||"partytown-sw.js"),{scope:c}).then((function(t){t.active?y():t.installing&&t.installing.addEventListener("statechange",(function(t){"activated"==t.target.state&&y()}))}),console.error):v())))}function y(e){p=r.createElement(e?"script":"iframe"),t._pttab=Date.now(),e||(p.style.display="block",p.style.width="0",p.style.height="0",p.style.border="0",p.style.visibility="hidden",p.setAttribute("aria-hidden",!0)),p.src=c+"partytown-"+(e?"atomics.js?v=0.13.2":"sandbox-sw.html?"+t._pttab),r.querySelector(s.sandboxParent||"body").appendChild(p)}function v(n,o){for(w(),i==t&&(s.forward||[]).map((function(n){const[r]=e(n);delete t[r.split(".")[0]]})),n=0;n<d.length;n++)(o=r.createElement("script")).innerHTML=d[n].innerHTML,o.nonce=s.nonce,r.head.appendChild(o);p&&p.parentNode.removeChild(p)}function w(){clearTimeout(l)}s=t.partytown||{},i==t&&(s.forward||[]).map((function(r){const[o,{preserveBehavior:i}]=e(r);u=t,o.split(".").map((function(e,r,o){var a;u=u[o[r]]=r+1<o.length?u[o[r]]||(a=o[r+1],n.includes(a)?[]:{}):(()=>{let e=null;if(i){const{methodOrProperty:n,thisObject:r}=((t,e)=>{let n=t;for(let t=0;t<e.length-1;t+=1)n=n[e[t]];return{thisObject:n,methodOrProperty:e.length>0?n[e[e.length-1]]:void 0}})(t,o);"function"==typeof n&&(e=(...t)=>n.apply(r,...t))}return function(){let n;return e&&(n=e(arguments)),(t._ptf=t._ptf||[]).push(o,arguments),n}})()}))})),"complete"==r.readyState?h():(t.addEventListener("DOMContentLoaded",h),t.addEventListener("load",h))}(window,document,navigator,top,window.crossOriginIsolated);;(e=>{e.addEventListener("astro:before-swap",e=>{let r=document.body.querySelector("iframe[src*='/~partytown/']");if(r)e.newDocument.body.append(r)})})(document);</script></head><body class="bg-repeat bg-white anywhere" style="background-image: url(/_astro/mikuteto-gray.Dix8k1Tp.gif)"><div class="min-h-screen flex flex-col justify-between" id="container"><div><header><nav class="flex flex-col items-center pt-40 pb-24"><a href="/blog" class="text-3xl md:text-5xl font-bold mb-40 text-slate-400 drop-shadow-2xl">tamakoma.com</a><div class="w-full flex justify-center [&amp;&gt;a]:bg-white [&amp;&gt;a]:border-slate-400"><a href="/" class="block py-8 px-16 text-sumi-600 rounded-l border-l border-y">home</a><a href="/blog/" class="block py-8 px-16 text-sumi-600 border">blog</a><a href="/about/" class="block py-8 px-16 text-sumi-600 rounded-r border-r border-y">about</a></div></nav></header><main class="bg-slate-100 w-full flex justify-end" data-astro-cid-e2rqhpi3><article class="grow" data-pagefind-body data-astro-cid-e2rqhpi3><header class="mt-24 w-11/12 max-w-[700px] mx-auto" data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-pagefind-weight="6.7" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a><svg viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16 mx-4 mt-[2px]" data-astro-cid-e2rqhpi3="true">
+  <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+</svg><a href="/blog#%E4%BD%9C%E6%9B%B2%E3%81%AE%E8%A3%9C%E5%8A%A9%E3%83%84%E3%83%BC%E3%83%AB%E3%82%92%E4%BD%9C%E3%82%8B%E3%81%BE%E3%81%A7%E3%81%AE%E6%97%A5%E8%A8%98" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">作曲の補助ツールを作るまでの日記</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-pagefind-weight="6.5" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=PHP"># PHP</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%97%A5%E8%A8%98"># 日記</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Linux"># Linux</a></div><h1 class="text-center text-xl md:text-3xl font-bold px-24 mt-40" data-astro-cid-e2rqhpi3>【6日目】VirtualBoxとAlmaLinix9を利用してローカルサーバー構築</h1><div class="text-slate-400 text-sm gap-16 flex justify-center mt-24" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>投稿日 <time datetime="2023-07-15T00:00:00.000Z">2023/07/15</time></span><span data-astro-cid-e2rqhpi3>最終更新日 <time datetime="2023-07-15T00:00:00.000Z">2023/07/15</time></span></div></header><hr class="bg-slate-200 rounded-full mx-auto h-4 my-40 w-40 border-0"><div class="flex mx-auto justify-center gap-40" data-astro-cid-e2rqhpi3><section id="article-body" class="
+                            prose prose-neutral
+                            prose-blockquote:border-miku-400 prose-blockquote:font-normal
+                            w-0 grow
+                            max-w-[650px] bg-white box-content px-16 md:px-40 py-24 rounded-md
+                            " data-astro-cid-e2rqhpi3><p>2023年7月14日～15日</p>
+<p>色々調べてたら、YouTubeに virtual boxにCentOSを入れるところからサーバー構築まで<a href="https://youtu.be/IcGNJVmRPo0" rel="noopener noreferrer" target="_blank">教えてくれている方</a>がいたので、これやpaiza、また<a href="https://linuc.org/study/column/3362/" rel="noopener noreferrer" target="_blank">こちらの記事</a>や他の情報を参考にサーバー構築をしていく。</p>
+<p>動画はとりあえず一通り見た。</p>
+<p>この動画の通りやれば恐らく問題ないんだけど、理解して説明できたほうが良いよね。それなら</p>
+<ul>
+<li>
+<p>VMとは</p>
+</li>
+<li>
+<p>Linuxディストリビューションとは</p>
+</li>
+<li>
+<p>Bashでの基本操作</p>
+</li>
+<li>
+<p>Vimの基本操作</p>
+</li>
+<li>
+<p>ユーザー権限</p>
+</li>
+<li>
+<p>パッケージのYum</p>
+</li>
+<li>
+<p>SSHとは</p>
+</li>
+<li>
+<p>IPアドレス</p>
+</li>
+<li>
+<p>ポートとは</p>
+</li>
+<li>
+<p>ファイアウォールとは</p>
+</li>
+<li>
+<p>Apacheの仕組み</p>
+</li>
+<li>
+<p>HTTP</p>
+</li>
+</ul>
+<p>らへんの知識が必要になるのかなと思う。</p>
+<p>幸いにも、昨日まででLinux関連はほとんど触ったり学んだりしているので、サーバー関係の知識を入れればできそうだと甘く見ている。</p>
+<p>とりあえず色々調べて思ったのは、<strong>私のAlmaLinuxってなんかGUIじゃね？</strong></p>
+<p>恐らく、インストールするときにGUIの方でインストールしてしまった。悪くはないんだけど、実践的じゃないので一回完全CUIでインストールし直す。あと、VirtualBoxにはセーブ機能（スナップショット）というのがあって便利そうなので、それも使っていこう。</p>
+<p>VirtualBoxから仮想環境を削除するのは驚くほど簡単だった。ただ該当のものを右クリックして<strong>除去</strong>を押すだけ。</p>
+<p><img alt="" loading="lazy" decoding="async" width="509" height="443" src="/_astro/faa791960fe881198a5c90e1bfa62feb.DyJPjBi2_ZQafE6.webp" srcset=""></p>
+<p>とりあえず、もう一回インストールからやっていこう。</p>
+<h2 id="virtualboxでの環境作成からalmalinuxインストール完了まで"><strong>VirtualBoxでの環境作成からAlmaLinuxインストール完了まで</strong></h2>
+<p>とりあえず、名前はAlmaLinux_testにする。</p>
+<p><img alt="" loading="lazy" decoding="async" width="940" height="524" src="/_astro/634e9f7703e9a325875b5fc62640f91b.CJ3m2llV_2tK7Mp.webp" srcset=""></p>
+<p>それ以外は昨日と同じ設定で。</p>
+<p>設定し終わったら設定→ディスプレイのグラフィックスコントローラーを「VBoxSVGA」にしておくと、画面が見切れない。</p>
+<p><img alt="" loading="lazy" decoding="async" width="991" height="582" src="/_astro/66da685a6af8ff911960c70a0fa9f65d.DwZb0Tci_1RNntl.webp" srcset=""></p>
+<p>昨日はなんかEnterキーとかを適当に押してたら通過できたけど、ここでは「Test thi media &#x26; install AlmaLinux」を矢印キーで選択してEnter。</p>
+<p><img alt="" loading="lazy" decoding="async" width="574" height="318" src="/_astro/fdd9008d91862dacf67c9be2c0a07f69.P8ROa_LP_1dh57.webp" srcset=""></p>
+<p>ここで、GUIの設定画面にならずCUIでの設定を求められた場合は、GUIでやりたければまた除去→インストール。で恐らくGUIでの設定起動になる。</p>
+<p>設定は大体昨日と同じだけど、今回はソフトウェアをサーバー(GUI使用)からサーバーに。</p>
+<p><img alt="" loading="lazy" decoding="async" width="798" height="609" src="/_astro/01e4d4af944843328c09611124ca685d.Cof0tyNx_Z1xIAuI.webp" srcset=""></p>
+<p>一通り必須事項を設定したらインストール</p>
+<p><img alt="" loading="lazy" decoding="async" width="786" height="587" src="/_astro/e314152fe0bb50120111702af5dc7b29.CXio2C7J_1TDVA5.webp" srcset=""></p>
+<p>インストール後に再起動。</p>
+<p>そんで、再起動すると</p>
+<p><img alt="" loading="lazy" decoding="async" width="775" height="160" src="/_astro/726896b98da5408bfbbcaa8de16f4dc8.DpUtioWd_1bSeJr.webp" srcset=""></p>
+<p>これが完全なCUIってこと？</p>
+<h2 id="インストールからスナップショットまで"><strong>インストールからスナップショットまで</strong></h2>
+<p>コマンドは分からん事多いけど、とりあえず慣れる為にもCUIでやっていく。まずは管理者権限のrootでログイン。</p>
+<p><img alt="" loading="lazy" decoding="async" width="659" height="194" src="/_astro/c2143c91f38a88cd1ac463b737b62ee9.BtwkSowX_1IUeyc.webp" srcset=""></p>
+<p>1回pwミスった。pwは打ち込んでも表示されないので気を付けて。</p>
+<p>ここからは一般ユーザーの追加とグループの追加、一般ユーザーの権限の追加を行う。<br>
+現在のユーザー一覧はcat /etc/passwd | lessで、グループ一覧はcat /etc/group | lessで見る。</p>
+<p>これは、/etc/passwdや/etc/groupのファイルがテキスト形式の情報を持ったファイルということ。なんか.txtが無いと気持ち悪いんだけど、拡張子は要らないらしい。<br>
+実際に、fileコマンドでファイルの内容を見ると</p>
+<p><img alt="" loading="lazy" decoding="async" width="314" height="54" src="/_astro/ea37a463768b4c8cc5871a259549c8d4.CNHPx8KU_1bPsey.webp" srcset=""></p>
+<p>のようにASCⅡ textと出てくる。</p>
+<h3 id="一般ユーザーの追加"><strong>一般ユーザーの追加</strong></h3>
+<p>ログインしたらadduser usernameでユーザー追加とpasswd usernameでパスワード設定。</p>
+<p>これで一般ユーザーの追加。usernameはお好きな名前を。</p>
+<p>一般ユーザーが管理者権限を発動させるには、suコマンドでrootに切り替えるか、sudoコマンドで実行するかの2択らしい。</p>
+<p>ここら辺は理由が分からないんだけど、rootユーザーに直接ログインするのではなく、一般ユーザーにrootユーザーに切り替えられる権限を与えて、あくまでも一般ユーザーで作業するのが良いらしい。どちらにしろrootに切り替えられるならどっちでもよくないかと思ってしまうが、何か理由はあるはず。恐らく、履歴が残るとか意図しない管理者権限を発動させない為だと思われる。</p>
+<p>その上で、全てのユーザーがrootに切り替えられると良くないので、「wheel」というグループを作ってその中に入ってる一般ユーザーだけがsuコマンドでrootに切り替えられるようにする。</p>
+<p>sudoコマンドも同じ要領でwheelに所属しているユーザーだけ使えるようにする。<br>
+とにかく、rootに直接ログインはやめた方がいい。</p>
+<h3 id="グループへの追加"><strong>グループへの追加</strong></h3>
+<p>次に、usermod -aG wheel usernameでグループに追加。</p>
+<p>usermodはユーザーの属性を変化させるコマンドで、aが追加、Gでグループを意味する。<br>
+追加したらgroups usernameでそのユーザーが所属するグループを確認できる。</p>
+<p><img alt="" loading="lazy" decoding="async" width="390" height="69" src="/_astro/0ce545f36474bd446d702aadcc92cffd.DXXa7JQM_tr0cm.webp" srcset=""></p>
+<h3 id="su権限の追加"><strong>su権限の追加</strong></h3>
+<p>wheelグループに属する人であればsuでrootになれるように、設定ファイルを書き換える。</p>
+<p>設定ファイルを書き換えるにはviというテキストエディタを使うのがいいのかな。vimはviの後継版らしいが、大体のLinuxディストリビューションの場合、viでもvimでも起動するテキストエディタは同じらしいので、vi≒vimと考えていい。</p>
+<p>ここにきて恥ずかしながらvimの操作が分からないので、paizaで学習してくる。<br>
+入門編3にvimの使い方講座があるんだよね。素晴らしいね。<br>
+<img alt="" loading="lazy" decoding="async" width="1600" height="773" src="/_astro/81cc964bf6b1ed3f115f87bc2618b1e0.BgBpSU_p_Z6wb7I.webp" srcset=""></p>
+<h3 id="以下はvimメモ"><strong>以下はvimメモ</strong></h3>
+<ul>
+<li>
+<p><strong>viは昔からあるテキストエディタ</strong><br>
+マウスが無いころからあるらしい。だから、ターミナル上で動作するし、キーボードしか使わない。その後継であるvimも同じくキーボードのみ。</p>
+</li>
+<li>
+<p><strong>vimのモード</strong><br>
+vimはノーマルモード、インサートモード、コマンドモード、ビジュアルモードがある。<br>
+インサート、コマンド、ビジュアルモードはノーマルモードからしか移れないので、escキーで毎回ノーマルモードに移る必要あり。</p>
+</li>
+<li>
+<p><strong>超基本的な操作</strong><br>
+vimで新規でvimの起動。<br>
+vim filenameで指定したファイルの編集。<br>
+iでインサートモード。<br>
+:でコマンドモード。<br>
+escでノーマルモードに移る。<br>
+ノーマルモードでdwと打つとカーソルで選択している単語を1個消す。これは、deleteコマンドのdと次の単語に移動するコマンドwを組み合わせている。<br>
+:wで保存(write)。<br>
+:qでvimの終了。<br>
+:wqを合わせて保存して終了。<br>
+:w hello.txtみたいにすることで名前を指定して終了。<br>
+:q!とすることで、保存せずに終了。</p>
+</li>
+<li>
+<p><strong>vimのカーソル移動</strong>癖が強すぎてびっくりなカーソル移動。<br>
+とりあえず、:set numberで行番号の表示。</p>
+<p>矢印キーでもいいけど、ホームポジションとかを崩したくなければ[←:h],[↑:k],[↓:j],[→,l]にようにh,k,j,lが対応しているので、これで移動。</p>
+<p>wで次の単語の先頭に、bで前の単語の先頭に。<br>
+$で行の末尾に、^で行の先頭に。<br>
+ggでテキスト全体の先頭に。Gでテキスト全体の末尾に。<br>
+(number)Gで好きな行数の先頭に。例えば10Gで10行目の先頭に。</p>
+<p>％で対応する括弧に移動。恐らくプログラミング言語で書かれたものとかを弄るときに使う。</p>
+<p>それで、移動系は(number)移動系コマンドと打つことで、繰り返しができる。<br>
+例えば、10jとやれば10回jを押したことになる。</p>
+</li>
+<li>
+<p><strong>単語の削除と操作の取り消し</strong><br>
+ノーマルモードではxでdelete的な消し方、Xでbackspace的な消し方が出来る。x=ば<br>
+つ＝消すみたいなイメージらしい。</p>
+<p>そして、uキーで前の動作を取り消せる。undo。<br>
+Uで行全体の動作の取り消し<br>
+ctrl+rで取り消しの取り消し<br>
+さっきも紹介したdwで次の単語の前まで消す。ddで行全体の削除。</p>
+<p>dwのように、コマンドは組み合わせられるので、gg→dGで全ての文章を削除みたいのもできる。</p>
+</li>
+<li>
+<p><strong>コピーと貼り付け</strong><br>
+そもそも、xとかで削除すると削除したものがコピーされる。<br>
+ywで一単語コピー、yyで一行コピー</p>
+<p>pでカーソルの右に貼り付け、Pでカーソルの左に貼り付け。</p>
+<p>また、範囲を選択してコピーしたかったら範囲の始点または終点に移動してvでビジュアルモード。そこから範囲を指定してyでコピー。</p>
+</li>
+<li>
+<p><strong>テキストの検索</strong><br>
+なんか色々あるんだけど、簡易的な実用性を考えると以下の物だけで問題ないと思う。<br>
+・[/(keyword)] 下方向に検索<br>
+・[?(keyword)] 上方向に検索<br>
+・[n] 次の候補に移動<br>
+・[N] 前の候補に戻る<br>
+enterで検索した場所に移動。</p>
+</li>
+</ul>
+<p>とりあえずこんなもんで普通の操作はできるようになったかなぁ。</p>
+<h3 id="設定ファイルの書き換え"><strong>設定ファイルの書き換え</strong></h3>
+<p>PAMというものの設定ファイルを書き換えてwheelに入っている場合suコマンドでrootになれるようにする。</p>
+<p>/etc/pam.d/suにあるので、vim /etc/pam.d/suで編集。</p>
+<p>そして’auth required pam_wheel.so use_uid’というのを追加したいが、以下の私の場合のようにコメントアウトされてることが大体らしいので、ノーマルモードのままxキーで#だけ消して:wqで保存。</p>
+<p><img alt="" loading="lazy" decoding="async" width="660" height="291" src="/_astro/74140cde5bf866d5bef06eaed0a2a89b.Dc-6ROLb_mlqvL.webp" srcset=""></p>
+<p>これでwheelに入っていればsuコマンドでrootになれるようになったはず。<br>
+申し訳ないけど、「auth required pam_wheel.so use_uid」の意味を知るにはPAMの知識が必要になりそうなので、とりあえず今はスルーで。PAMが何なのかも分かってない。</p>
+<h3 id="wheelに入っていればsudoを出来るようにする"><strong>wheelに入っていればsudoを出来るようにする</strong></h3>
+<p>こちらも同じく設定ファイルを弄る。</p>
+<p>次は「/etc/sudoers」の設定ファイル。こちらは<strong>vimじゃなくvisudo</strong>というので弄るのがいいらしい。<br>
+visudoはsudoファイルを弄る為だけのコマンド。色んな安全性の確保をしてくれるっぽい。それくらいsudoコマンドは大事ってことか。</p>
+<p>‘visudo’と打つだけでおｋ。<br>
+‘%wheel ALL=(ALL) ALL’を追加したいんだけど、見た感じ私の場合は最初から追加されていた。なのでこのままでいいのかな。<br>
+<img alt="" loading="lazy" decoding="async" width="763" height="309" src="/_astro/88779f9ba90482d0407dcee55caf61e6.DfebCsv2_ZOjrFl.webp" srcset=""></p>
+<h3 id="sshの制限"><strong>SSHの制限</strong></h3>
+<p>サーバーはSSHというツールでリモート操作をすることが多いらしい。ここで、SSHでのlootログインは許可しないようにする。理由は、攻撃者はrootを狙ってくるから。rootって名前はデフォルトだからパスワードの総当たり攻撃で破られてしまうらしい。</p>
+<p>なので、SSHではrootにログインできない設定にする。<br>
+今回の私の場合はローカル環境のつもりなので正直要らないのだけど、実践を想定してやっておく。</p>
+<p>これは’/etc/ssh/sshd_config’のファイルの’PermitRootLogin yes’という記述を’PermitRootLogin no’にすればおｋ。これはvimでいいかな。</p>
+<p>私の場合はそもそもPermitRootLoginの記述が無かったから足しておいたんだけど、大丈夫かこれ。</p>
+<p>設定し終わったら’systemctl restart sshd’でデーモンの再起動。<br>
+デーモンというのはメモリ上で待機しているソフトウェアみたいな感じだったはず。ファイル名の最後にdが付いてたらデーモンの可能性が高い。</p>
+<h3 id="スナップショットを取る"><strong>スナップショットを取る</strong></h3>
+<p>ここまで来たら初期設定みたいなのは完了したのでスナップショットで一旦保存しておく。</p>
+<p>一回’sudo shutdown -h now’で仮想環境の電源を落とす。</p>
+<p>三本線（ハンバーガーともいうらしい）からスナップショット→作成で作る。</p>
+<p><img alt="" loading="lazy" decoding="async" width="923" height="523" src="/_astro/57fa65981241e584780d5fcd90776824.DPpCci0m_ZRSoBk.webp" srcset=""></p>
+<p><img alt="" loading="lazy" decoding="async" width="935" height="297" src="/_astro/554333e3adc024d2f5376373be4269ab.Dy2Fs_0F_1p8JxQ.webp" srcset=""></p>
+<h2 id="ssh接続を行う"><strong>SSH接続を行う</strong></h2>
+<p>SSHは「Secure Shell」の略で、コンピュータを遠隔操作するためのツール。正直、VirtualBoxを使って1台のPCでローカル環境を作るなら要らないんだけど、実務になるとSSHでの操作になるっぽい。利便性の問題？　なので、今のうちに慣れておこうみたいな。</p>
+<p>telentというのもあるんだけど、そちらは通信が暗号化されない。SSHは暗号化されるのでセキュアだよねということらしい。</p>
+<p>ここからはサーバーっぽい知識が必要になってくるので、ちょっと厳しいけど色々調べながらやっていく。</p>
+<h3 id="teratermを入れてみる"><strong>TeraTermを入れてみる</strong></h3>
+<p>正直、よくわかんないんだけど、WinユーザーはTeraTermを使うと良さげなので、インストールしてみる。</p>
+<p>インストール完了。ダウンロードはOSDNからできなかったので、窓の社からやった。</p>
+<p><img alt="" loading="lazy" decoding="async" width="800" height="577" src="/_astro/77bade6d55b913d4ba526324b5c94ec0.u3NUTpKL_Z16r4dL.webp" srcset=""></p>
+<p>このホストにゲストOSのローカルIPアドレスを入れてOKを押せばいいのか？</p>
+<p>色々調べたら、ローカル環境であれば<a href="https://restypi.hatenablog.com/entry/2018/05/15/_VirtualBox_%E4%B8%8A%E3%81%AE_CentOS_%E3%81%AB_ssh_%E6%8E%A5%E7%B6%9A%E3%81%99%E3%82%8B_%5B_Windows_%E7%B7%A8%5D" rel="noopener noreferrer" target="_blank">この人の方法</a>でいけそうなので、これでやってみる。</p>
+<p>まず、ホストOS(私はwindows)の方でcmdを開いてipconfigと打つ。<br>
+wifiを利用しているので「Wireless Lan adapter Wi-Fi 」の項目のIPv4のアドレスをメモ。</p>
+<p>次はAlmaLinuxで「ip a」と打ち込み、項目 enp0s3 の inetの行を確認。10.0.2.15みたいなのをメモ。</p>
+<p>次にVirtualBoxのAlmaLinuxのネットワーク設定を開く。</p>
+<p><img alt="" loading="lazy" decoding="async" width="924" height="458" src="/_astro/19d1c30fa2f5e9fb539e02c18bf87c7f.Dsv5Pt6i_Z19Yq9v.webp" srcset=""></p>
+<p>Advancedを押し→ポートフォワーディング</p>
+<p>右上のプラスを押して、色々設定する。</p>
+<ul>
+<li>
+<p>名前:好きなので</p>
+</li>
+<li>
+<p>プロトコル:TCP</p>
+</li>
+<li>
+<p>ホストIP:cmdでゲットしたホストOSの方</p>
+</li>
+<li>
+<p>ホストポート:1024~65535の間で好きなの</p>
+</li>
+<li>
+<p>ゲストIP:AlmaLinuxでゲットした方</p>
+</li>
+<li>
+<p>ゲストポート:22</p>
+</li>
+</ul>
+<p><img alt="" loading="lazy" decoding="async" width="734" height="428" src="/_astro/b77a81f099cfb7faa02b6c1e23355c63.BK8ZKIuo_ZWyxPr.webp" srcset=""></p>
+<p>で、おｋ。</p>
+<p>次に、suコマンドでrootになってから’systemctl status sshd’と打ち込む。sshdが動作しているかの確認。</p>
+<p><img alt="" loading="lazy" decoding="async" width="794" height="343" src="/_astro/130c9f20de16d8accecac7fa865c9774.U_53Engk_mnPRj.webp" srcset=""></p>
+<p>activeならおｋ。違ったら’systemctl start sshd’で起動。<br>
+最後に’systemctl restart NetworkManager’と‘systemctl restart network’でネットワークの再起動をしておくらしいが、networkの方は見つかりませんと言われた。</p>
+<p>次に、TeraTermの起動。</p>
+<p>ホスト(T)はLinuxの方の一般ユーザー名@ホストOSのIPアドレス<br>
+TCPはさっき設定したお好みのやつ。</p>
+<p><img alt="" loading="lazy" decoding="async" width="757" height="478" src="/_astro/4c9337cd44afcc4559b07d7c9f0fc5bf.CN1447nf_TRbt8.webp" srcset=""></p>
+<p>OKを押す。</p>
+<p>そのまま続行をクリック。</p>
+<p>パスワードを入れてクリック。</p>
+<p><img alt="" loading="lazy" decoding="async" width="792" height="233" src="/_astro/3409e86e2b4483804260e9498ec1fe8e.CUDIzneI_Z1hKP0U.webp" srcset=""></p>
+<p>よし、同一LANのローカル環境でしか意味をなさないとは思うんだけど、とりあえずSSH接続が出来た。</p>
+<p>一応利点もあって、コピペが可能になった。</p>
+<p>しかし、色々調べるとポートの設定とかファイアウォールの設定とかセキュアにするための設定が色々あるらしい……ね、今日はローカル環境だからね……ね？</p>
+<h2 id="apacheを入れてみる"><strong>Apacheを入れてみる</strong></h2>
+<p>本命に行こう。というか、5日くらいかけてようやく本命ですか。</p>
+<p>ここからはTera Termで操作する。</p>
+<p>前、<strong>AlmaLinuxはyumコマンドでパッケージ管理をするといったんだけど、今はそうでもないらしい</strong>。<br>
+yumの後継でdnfというのが出ていて、一応それが推奨されてんのかなぁ？　わかんない。</p>
+<p>でも、新しいものを使っておくべき感はあるので、今回はdefでApacheを入れるとこまでやってみる。</p>
+<h3 id="apacheのインストール">Apacheのインストール</h3>
+<p>まず、’sudo dnf update’でパッケージ情報をアップデートする。<br>
+これはディストリビューションが用意しているパッケージリポジトリサーバーにアクセスして最新の情報を得る→差分のアップデートをするコマンドらしい。</p>
+<p>Tera Termが日本産なこともあってか、日本語なのがありがたい。<br>
+分かりやすいとかじゃなく、精神的な安心感がすごい。留学先の日本人みたいな感じ？　しらんけど。</p>
+<p>私の場合、515Mのアップデートがあったらしいので、yで全部アップデート。</p>
+<p><img alt="" loading="lazy" decoding="async" width="659" height="160" src="/_astro/2b305bb0c6b7b8666011ece988008bd3.DOvcAYxb_Zwu0Ia.webp" srcset=""></p>
+<p>アップデートが完了したら、’sudo dnf install httpd’でapacheのインストール。httpdがapacheらしい。</p>
+<p><img alt="" loading="lazy" decoding="async" width="874" height="339" src="/_astro/26351b599431d30f4e4dfd58dfef115b.Bvw-FoBs_Z16fdiv.webp" srcset=""></p>
+<p>こちらは5.9Mくらい。</p>
+<p><img alt="" loading="lazy" decoding="async" width="1090" height="238" src="/_astro/d6a2bc7a939bb70e52836d698506261d.CY6MnGGk_Zju20A.webp" srcset=""></p>
+<p>完了！</p>
+<p>Complete!じゃなくて、完了しました！　なのがイイ！</p>
+<h3 id="次はapacheを起動してみる">次はApacheを起動してみる。</h3>
+<p>起動するときはsystemctlを使う。systemctlはサービスの開始、停止、無効化をするときに使うコマンドっぽい。</p>
+<p>一応’man コマンド名’とやるとマニュアルが見れるんだけど、英語すぎだし、975行あるんだが。</p>
+<p><img alt="" loading="lazy" decoding="async" width="1171" height="546" src="/_astro/8a8585c2be2113f2f1eeefbd048f255d.Da9ELAC4_Z13CRI9.webp" srcset=""></p>
+<p>うん。とにかく、習うより慣れろ精神で’sudo systemctl start httpd’を実行。</p>
+<p>実行できたかよくわからないので、’sudo systemctl status httpd’で状態確認。</p>
+<p><img alt="" loading="lazy" decoding="async" width="923" height="145" src="/_astro/8cbe8cd5787fc55a476eeee8fefe18a0.BljHH8M7_Z1GVpvy.webp" srcset=""></p>
+<p>いや～できてますね～。</p>
+<p>時間を見ると、後20分くらいでAtCoderが始まるのでまぁまぁ焦っている。</p>
+<p>次に、自動起動の設定。<br>
+‘sudo systemctl enable httpd’とすればAlamLinuxを起動するたびにApacheを自動起動してくれる。</p>
+<p>apacheは/var/www/html下にあるファイルをサーブしてくれる。だから、ここになんか適当にファイルを作ろう。<br>
+とりあえず、vimを開いて前作ったDTMガチャのコードをコピペ。因みにペーストは右クリック。</p>
+<p>‘sudo vim /var/www/html/test.phpで、test.phpを作り書き込んだ。<br>
+これで、10.0.2.15にアクセスすればいいのか？　うーん、できない。</p>
+<p>設定を間違っているのか、根本的なところ間違っているのかわかんないけど、とりあえずAtCoderやってくる。</p>
+<p>よし、やってきた。恐らくレートちょいsageくらい。B問題で手こずってしまった。</p>
+<p>今はとりあえず、Apacheを起動してphpファイルも置いたけどブラウザで見れないっていう状況か。ブログ書いてると数時間後に帰ってきても何やってるかすぐ把握できるからいいね。</p>
+<p>色々調べた感じ、ファイアウォールとSELinuxが原因かなという感じ。<br>
+ここら辺は本当に自己責任でって感じだと思うんだけど、外部にサーバーを公開しないのであれば、ファイアウォールは80番ポートを開放して、SELinuxは無効化してっていう感じで大丈夫なのかな。</p>
+<p>ファイアウォールやSELinuxはちょっと下手なこと言えないのでとりあえずやったことだけ書く。</p>
+<p>‘sudo firewall-cmd —permanent —add-service=http’でファイアウォールの80番ポートの開放。<br>
+’sudo firewall-cmd —reload’で再起動。</p>
+<p>‘sudo vim /etc/selinux/config’でコンフィグを開いてSELinuxの無効化。<br>
+SELINUX=disabledにすればおｋ。</p>
+<p><img alt="" loading="lazy" decoding="async" width="712" height="403" src="/_astro/9a05578c3d847b189d543d9a721e2acd.BpIdjgfO_dB7AY.webp" srcset=""></p>
+<p>一回設定し終わったら再起動。</p>
+<p>うん。できない。</p>
+<p>VirtualBoxのネット接続がNATなのが原因な可能性があるので、ブリッジモードにしてみる。</p>
+<p><img alt="" loading="lazy" decoding="async" width="890" height="372" src="/_astro/cf5a347536396f04804c3f05c7263630.Dabg_wp__Z2pPNkX.webp" srcset=""></p>
+<p>これにより、IPアドレスが変更されたのでSSHも新しく設定を直す。</p>
+<p>具体的には、AlmaLinuxのIPをusername@IPにして、ポートを22にすればいい。</p>
+<p>IPはip aで見れる。</p>
+<p>それで新しいIPで接続してみると……<br>
+きたぁ…</p>
+<p><img alt="" loading="lazy" decoding="async" width="1600" height="692" src="/_astro/f5fe72c9e373255e186de75bff932df0.CzsPI-0B_1mduX8.webp" srcset=""></p>
+<p>正直、なんでさっきいけて今いけないのかがよくわかってないので、あんまり良くない。</p>
+<p>ちなみに、test.phpはこんな感じで表示された。</p>
+<p><img alt="" loading="lazy" decoding="async" width="1600" height="908" src="/_astro/f5b36c94a08f270ef6ba7c54fe536f67.Bbs9Y6-k_h4BdA.webp" srcset=""></p>
+<p>これ、恐らくPHP入ってないから？</p>
+<h2 id="sshを公開鍵認証にする"><strong>SSHを公開鍵認証にする</strong></h2>
+<p>PHPを見れるようにする前に、SSHの接続方法を公開鍵認証にしておく。<br>
+恐らくプライベートネットワークに接続している人じゃないとSSH接続できないと思うからやんなくてもいいけど、怖いからやっておこう。</p>
+<p>公開鍵とかって学校で習うけど、どこで使うねんって思うよね。<br>
+今のところ私の経験では、AppleDeveloper認証とSSH接続で使うよ。</p>
+<p>方法は<a href="https://webkaru.net/linux/tera-term-ssh-login-public-key/" rel="noopener noreferrer" target="_blank">この方の記事</a>を参考にする。</p>
+<p>うーん。なんかいろいろやってるけど成功しない。<br>
+色々調べると、Tera Term5.0betaだったらいけるみたいな情報を得たので、アップデートしてみる。<br>
+OSDNのサーバーが重いのか7Mbなのに滅茶苦茶時間かかった。</p>
+<p>お、Tera Term5.0betaだったらいけた。</p>
+<p><img alt="" loading="lazy" decoding="async" width="807" height="320" src="/_astro/c5f81da2ada3526c2d2029c0fc3565a0.B3Pah5Bb_OYk4M.webp" srcset=""></p>
+<p>これで、公開鍵認証でログインできるようになったので通常ログインを出来なくする。<br>
+‘sudo vim /etc/ssh/sshd_config’でsshdコンフィグを弄る。</p>
+<p>このPasswordAuthentication yesをPasswordAuthentication noにする。コメントアウトされてるので、そこも消す。</p>
+<p><img alt="" loading="lazy" decoding="async" width="700" height="176" src="/_astro/1.BveUT7Ij_Z1c1KFn.webp" srcset=""></p>
+<p>これで再起動してみようか。</p>
+<p>よし、パスワード方式でログインできないようになった。完了！</p>
+<p><img alt="" loading="lazy" decoding="async" width="586" height="221" src="/_astro/80295afede44e7432c387b66e7b1c0b1.BViAB5U8_1dPzG9.webp" srcset=""></p>
+<h2 id="phpを見れるようにする"><strong>PHPを見れるようにする</strong></h2>
+<p>PHPが見れないと意味ないよね。やっていこう。</p>
+<p>‘sudo dnf install php’でインストール。</p>
+<p>php -vでバージョン確認。</p>
+<p><img alt="" loading="lazy" decoding="async" width="760" height="120" src="/_astro/157ed92bfc891632f001e9633ec25e9c.C3XHgPFN_q5KC5.webp" srcset=""></p>
+<p>今回はPHP8を使う。</p>
+<p>次はApacheの設定ファイルをいじる。<br>
+‘sudo vim /etc/httpd/conf/httpd.conf’</p>
+<p>一番最後らへんに’AddType application/x-httpd-php .php</p>
+<p>AddType application/x-httpd-php-source .phps’を追加。</p>
+<p><img alt="" loading="lazy" decoding="async" width="667" height="157" src="/_astro/005add12f7b7b72bbf53740008693b1b.Cf01h4Vk_1oDddY.webp" srcset=""></p>
+<p>そして、表示させてみると！</p>
+<p><img alt="" loading="lazy" decoding="async" width="1600" height="810" src="/_astro/225d7f78ed947dbb0a79eb092333230b.BpLLyuMj_2vYOtp.webp" srcset=""></p>
+<p>よし、ようやく。マジでようやく自分でサーバーを建ててPHP表示までできた。</p>
+<p>流石に疲れた。</p>
+<h2 id="最後にセーブ"><strong>最後にセーブ</strong></h2>
+<p>セーブしよう。絶対にしよう。<br>
+スナップショット→作成</p>
+<p><img alt="" loading="lazy" decoding="async" width="950" height="258" src="/_astro/caeee9e66693a400e780bed9f8b9844c.AKua1Bgl_LVaOf.webp" srcset=""></p>
+<h2 id="おわりに"><strong>おわりに</strong></h2>
+<p>恐らく、セキュアやら公開サーバーやらを考えるとまだまだ考慮したり設定しなきゃいけない所がいっぱいあると思うんだけど、とりあえずXAMPPとかを使わずにVMでローカルサーバー構築完了。</p>
+<p>これでようやくGithubの草も生やせる。サーバー構築やってても草は生えない。</p>
+<p>とりあえず明日からPHPとかlaravel、DBらへんを弄っていきたいんだけど、サーバーのことを学んでいくうちに、DBにもサーバーがあることを知ってしまった。</p>
+<p>恐らくだけど、VM使ってWebサーバーとDBサーバーを別に立ててそこを連携させるみたいなことやるよねこれたぶん。</p>
+<p>それを考えると、とりあえずPHPとlaravelかなぁ。</p>
+<p>PaizaにAWS講座があったのでそちらでAWSの事を学んでしまうのもありなんだけど、流石にそろそろPHPとかlaravelとか弄りたいかなぁ。</p>
+<p>とりあえず今日は終わり！　やりたいところまで行けて良かった！　おやすみなさい。</p></section><aside class="w-[300px] hidden lg:block shrink-0" data-astro-cid-e2rqhpi3><nav class="sticky top-16 h-fit  bg-white py-24 pl-24 rounded-md" data-astro-cid-tqqy2vud><section data-astro-cid-tqqy2vud><header data-astro-cid-tqqy2vud><h2 class="font-bold text-lg" data-astro-cid-tqqy2vud>目次</h2></header></section><div class="article-toc scroll-smooth mt-4 py-16 pr-24 overflow-y-auto max-h-[90svh]" data-astro-cid-tqqy2vud></div></nav><script type="module" src="/_astro/ArticleTOC.astro_astro_type_script_index_0_lang.mX9zJvT_.js"></script></aside></div><div class="mt-40 mb-64" data-pagefind-ignore data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a><svg viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16 mx-4 mt-[2px]" data-astro-cid-e2rqhpi3="true">
+  <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+</svg><a href="/blog#%E4%BD%9C%E6%9B%B2%E3%81%AE%E8%A3%9C%E5%8A%A9%E3%83%84%E3%83%BC%E3%83%AB%E3%82%92%E4%BD%9C%E3%82%8B%E3%81%BE%E3%81%A7%E3%81%AE%E6%97%A5%E8%A8%98" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">作曲の補助ツールを作るまでの日記</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=PHP"># PHP</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%97%A5%E8%A8%98"># 日記</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Linux"># Linux</a></div></div></article></main></div><footer class="pb-40 px-24 md:px-0 bg-white"><hr class="mx-auto w-2/3 md:w-1/2 my-24 h-[1px] border-0 bg-slate-400"><div class="mx-8 md:mx-64"><a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" target="_blank" rel="noopener noreferrer"><img src="/_astro/by-nc.DpMeGFcJ_ZF0RGK.svg" alt="クリエイティブコモンズ 表示-非営利 4.0 ライセンス" loading="lazy" decoding="async" width="125" height="44"></a><p class="text-xs md:text-sm">本サイト「<a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">tamakoma.com</a>」から提供されるブログ内の文章、プログラミングコードは、<a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">クリエイティブ・コモンズ 表示-非営利 4.0 ライセンス</a>の下に提供されます。</p><p class="text-xs md:text-sm">音楽や画像などのメディアコンテンツにはこのライセンスは適用されません。</p></div><p class="text-center text-sm"><a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Top</a> / <a href="/contact" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Contact</a> / <a href="/feed.xml" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">RSS Feed</a></p><p class="mt-24 text-center">&copy; tamakoma 2018-2026</p></footer></div></body></html>

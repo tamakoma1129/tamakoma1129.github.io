@@ -1,0 +1,195 @@
+<!DOCTYPE html><html lang="ja" class="text-slate-700"><head><meta charset="utf-8"><title>laravel-cspでLaravelでCSPを設定する | tamakoma.com</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v7.0.3"><meta name="twitter:card" content="summary"><meta property="og:title" content="laravel-cspでLaravelでCSPを設定する"><meta property="og:type" content="website"><meta property="og:url" content="https://tamakoma.com/blog/laravel-csp/"><meta property="og:image" content="/_astro/mikuteto-OGP.DYQebPDj.png"><meta property="og:description" content="学んだことを残すブログ"><meta property="og:site_name" content="tamakoma.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.0.1/dist/css/yakuhanjp_s.css"><link rel="sitemap" href="/sitemap-index.xml"><link rel="stylesheet" href="/_astro/BaseLayout.Ddu7R_5r.css"><style>/*! tailwindcss v4.2.2 | MIT License | https://tailwindcss.com */
+.article-toc[data-astro-cid-tqqy2vud] .toc-link{font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));display:block}@media (hover:hover){.article-toc[data-astro-cid-tqqy2vud] .toc-link:hover{color:var(--color-slate-600,oklch(44.6% .043 257.281));text-decoration-line:underline}}.article-toc[data-astro-cid-tqqy2vud] .toc-link.to-link-active{color:var(--color-miku-500,oklch(63.7% .1071 185.34))}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H2){margin-left:var(--spacing-24,24px)}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H3){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:10px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H4){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:20px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H5){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:30px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H6){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:40px}.article-toc[data-astro-cid-tqqy2vud] .toc-list{list-style-type:decimal;list-style-position:outside}@layer properties{@supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))){*,:before,:after,::backdrop{--tw-font-weight:initial;--tw-border-style:solid}}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a{--tw-font-weight:var(--font-weight-semibold,600);font-weight:var(--font-weight-semibold,600);color:var(--color-miku-500,oklch(63.7% .1071 185.34));text-underline-offset:2px;text-decoration-line:underline}@media (hover:hover){article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a:hover{color:var(--color-miku-700,oklch(50.5% .0901 187.01))}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] code:not(pre>code){margin-inline:var(--spacing-4,4px);border-radius:var(--radius-md,.375rem);border-style:var(--tw-border-style);background-color:var(--color-sumi-100,oklch(97% 0 0));padding-inline:var(--spacing-4,4px);--tw-font-weight:var(--font-weight-normal,400);font-weight:var(--font-weight-normal,400);color:var(--color-black,#000);border-width:0;padding-block:2px}@property --tw-font-weight{syntax:"*";inherits:false}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid}
+</style><script type="module" src="/_astro/page.DCEeCLip.js"></script><script>!(function(w,p,f,c){if(!window.crossOriginIsolated && !navigator.serviceWorker) return;c=w[p]=Object.assign(w[p]||{},{"lib":"/~partytown/","debug":false});c[f]=(c[f]||[])})(window,'partytown','forward');/* Partytown 0.13.2 - MIT QwikDev */
+const t={preserveBehavior:!1},e=e=>{if("string"==typeof e)return[e,t];const[n,r=t]=e;return[n,{...t,...r}]},n=Object.freeze((t=>{const e=new Set;let n=[];do{Object.getOwnPropertyNames(n).forEach((t=>{"function"==typeof n[t]&&e.add(t)}))}while((n=Object.getPrototypeOf(n))!==Object.prototype);return Array.from(e)})());!function(t,r,o,i,a,s,c,l,d,p,u=t,f){function h(){f||(f=1,"/"==(c=(s.lib||"/~partytown/")+(s.debug?"debug/":""))[0]&&(d=r.querySelectorAll('script[type="text/partytown"]'),i!=t?i.dispatchEvent(new CustomEvent("pt1",{detail:t})):(l=setTimeout(v,(null==s?void 0:s.fallbackTimeout)||1e4),r.addEventListener("pt0",w),a?y(1):o.serviceWorker?o.serviceWorker.register(c+(s.swPath||"partytown-sw.js"),{scope:c}).then((function(t){t.active?y():t.installing&&t.installing.addEventListener("statechange",(function(t){"activated"==t.target.state&&y()}))}),console.error):v())))}function y(e){p=r.createElement(e?"script":"iframe"),t._pttab=Date.now(),e||(p.style.display="block",p.style.width="0",p.style.height="0",p.style.border="0",p.style.visibility="hidden",p.setAttribute("aria-hidden",!0)),p.src=c+"partytown-"+(e?"atomics.js?v=0.13.2":"sandbox-sw.html?"+t._pttab),r.querySelector(s.sandboxParent||"body").appendChild(p)}function v(n,o){for(w(),i==t&&(s.forward||[]).map((function(n){const[r]=e(n);delete t[r.split(".")[0]]})),n=0;n<d.length;n++)(o=r.createElement("script")).innerHTML=d[n].innerHTML,o.nonce=s.nonce,r.head.appendChild(o);p&&p.parentNode.removeChild(p)}function w(){clearTimeout(l)}s=t.partytown||{},i==t&&(s.forward||[]).map((function(r){const[o,{preserveBehavior:i}]=e(r);u=t,o.split(".").map((function(e,r,o){var a;u=u[o[r]]=r+1<o.length?u[o[r]]||(a=o[r+1],n.includes(a)?[]:{}):(()=>{let e=null;if(i){const{methodOrProperty:n,thisObject:r}=((t,e)=>{let n=t;for(let t=0;t<e.length-1;t+=1)n=n[e[t]];return{thisObject:n,methodOrProperty:e.length>0?n[e[e.length-1]]:void 0}})(t,o);"function"==typeof n&&(e=(...t)=>n.apply(r,...t))}return function(){let n;return e&&(n=e(arguments)),(t._ptf=t._ptf||[]).push(o,arguments),n}})()}))})),"complete"==r.readyState?h():(t.addEventListener("DOMContentLoaded",h),t.addEventListener("load",h))}(window,document,navigator,top,window.crossOriginIsolated);;(e=>{e.addEventListener("astro:before-swap",e=>{let r=document.body.querySelector("iframe[src*='/~partytown/']");if(r)e.newDocument.body.append(r)})})(document);</script></head><body class="bg-repeat bg-white anywhere" style="background-image: url(/_astro/mikuteto-gray.Dix8k1Tp.gif)"><div class="min-h-screen flex flex-col justify-between" id="container"><div><header><nav class="flex flex-col items-center pt-40 pb-24"><a href="/blog" class="text-3xl md:text-5xl font-bold mb-40 text-slate-400 drop-shadow-2xl">tamakoma.com</a><div class="w-full flex justify-center [&amp;&gt;a]:bg-white [&amp;&gt;a]:border-slate-400"><a href="/" class="block py-8 px-16 text-sumi-600 rounded-l border-l border-y">home</a><a href="/blog/" class="block py-8 px-16 text-sumi-600 border">blog</a><a href="/about/" class="block py-8 px-16 text-sumi-600 rounded-r border-r border-y">about</a></div></nav></header><main class="bg-slate-100 w-full flex justify-end" data-astro-cid-e2rqhpi3><article class="grow" data-pagefind-body data-astro-cid-e2rqhpi3><header class="mt-24 w-11/12 max-w-[700px] mx-auto" data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-pagefind-weight="6.7" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-pagefind-weight="6.5" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Laravel"># Laravel</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=CSP"># CSP</a></div><h1 class="text-center text-xl md:text-3xl font-bold px-24 mt-40" data-astro-cid-e2rqhpi3>laravel-cspでLaravelでCSPを設定する</h1><div class="text-slate-400 text-sm gap-16 flex justify-center mt-24" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>投稿日 <time datetime="2024-12-17T00:00:00.000Z">2024/12/17</time></span><span data-astro-cid-e2rqhpi3>最終更新日 <time datetime="2024-12-17T00:00:00.000Z">2024/12/17</time></span></div></header><hr class="bg-slate-200 rounded-full mx-auto h-4 my-40 w-40 border-0"><div class="flex mx-auto justify-center gap-40" data-astro-cid-e2rqhpi3><section id="article-body" class="
+                            prose prose-neutral
+                            prose-blockquote:border-miku-400 prose-blockquote:font-normal
+                            w-0 grow
+                            max-w-[650px] bg-white box-content px-16 md:px-40 py-24 rounded-md
+                            " data-astro-cid-e2rqhpi3><p>2024年12月17日</p>
+<p>LaravelでCSP(Content-Security-Policy)を設定しようと思ったので、その備忘録。</p>
+<h2 id="cspcontent-security-policyとはなにか">CSP(Content-Security-Policy)とはなにか</h2>
+<p>詳しくはMDNの<a href="https://developer.mozilla.org/ja/docs/Web/HTTP/CSP" rel="noopener noreferrer" target="_blank">コンテンツセキュリティポリシー</a>を参照。</p>
+<p>現時点での私の理解は</p>
+<ul>
+<li>JS、CSS、画像、フォントなどの読み込み元や実行ルールを指定することで、XSSなどを防ぎセキュアにすることを目的としている</li>
+<li>HTTPヘッダーまたは<code>&#x3C;meta></code>で指定可能</li>
+<li>W3Cによって定義されおり、現在では新しいもので<a href="https://www.w3.org/TR/CSP3/" rel="noopener noreferrer" target="_blank">Level3</a>が草案として存在している</li>
+<li><a href="https://developer.mozilla.org/ja/docs/Web/HTTP/Headers/Content-Security-Policy#%E3%83%96%E3%83%A9%E3%82%A6%E3%82%B6%E3%83%BC%E3%81%AE%E4%BA%92%E6%8F%9B%E6%80%A7" rel="noopener noreferrer" target="_blank">ブラウザの互換性</a>を見る限り、主要なブラウザであればLevel3の仕様に対応している。逆に言えばブラウザによっては対応していなかったりするものもあるので<strong>セーフティネット程度</strong>に使うのが良さそう</li>
+</ul>
+<h2 id="spatielaravel-cspを使ってみる">spatie/laravel-cspを使ってみる</h2>
+<p>なんと、LaravelでCSPを設定するための<a href="https://github.com/spatie/laravel-csp" rel="noopener noreferrer" target="_blank">spatie/laravel-csp</a>というライブラリがあるのでこれを使ってみる。</p>
+<p>以下でインストール</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#A6E22E">composer</span><span style="color:#E6DB74"> require</span><span style="color:#E6DB74"> spatie/laravel-csp</span></span></code></pre>
+<p>以下で設定を公開</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#A6E22E">php</span><span style="color:#E6DB74"> artisan</span><span style="color:#E6DB74"> vendor:publish</span><span style="color:#AE81FF"> --tag=csp-config</span></span></code></pre>
+<p>初期の中身は以下のような感じ。<br>
+コメントは機械和訳した。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F92672">&#x3C;?</span><span style="color:#AE81FF">php</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">return</span><span style="color:#F8F8F2"> [</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">    /*</span></span>
+<span class="line"><span style="color:#88846F">     * どの CSP ヘッダーが設定されるかはポリシーによって決まります。</span></span>
+<span class="line"><span style="color:#88846F">     * 有効な CSP ポリシーは、「Spatie\Csp\Policies\Policy」 を拡張するクラスです。</span></span>
+<span class="line"><span style="color:#88846F">     */</span></span>
+<span class="line"><span style="color:#E6DB74">    'policy'</span><span style="color:#F92672"> =></span><span style="color:#F8F8F2"> Spatie\Csp\Policies\</span><span style="color:#66D9EF;font-style:italic">Basic</span><span style="color:#F92672">::class</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">    /*</span></span>
+<span class="line"><span style="color:#88846F">     * このポリシーはレポート専用モードになります。これはテストに最適です</span></span>
+<span class="line"><span style="color:#88846F">     * 新しいポリシー、または何も壊すことなく既存の CSP ポリシーを変更します。</span></span>
+<span class="line"><span style="color:#88846F">     */</span></span>
+<span class="line"><span style="color:#E6DB74">    'report_only_policy'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> ''</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">    /*</span></span>
+<span class="line"><span style="color:#88846F">     * ポリシーに対するすべての違反は、この URL に報告されます。</span></span>
+<span class="line"><span style="color:#88846F">     * これに使用できる優れたサービスは https:report-uri.com です。</span></span>
+<span class="line"><span style="color:#88846F">     *</span></span>
+<span class="line"><span style="color:#88846F">     * ポリシーで「reportTo」を呼び出すことで、この設定をオーバーライドできます。</span></span>
+<span class="line"><span style="color:#88846F">     */</span></span>
+<span class="line"><span style="color:#E6DB74">    'report_uri'</span><span style="color:#F92672"> =></span><span style="color:#A6E22E"> env</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'CSP_REPORT_URI'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">''</span><span style="color:#F8F8F2">),</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">    /*</span></span>
+<span class="line"><span style="color:#88846F">     * ヘッダーは、この設定が true に設定されている場合にのみ追加されます。</span></span>
+<span class="line"><span style="color:#88846F">     */</span></span>
+<span class="line"><span style="color:#E6DB74">    'enabled'</span><span style="color:#F92672"> =></span><span style="color:#A6E22E"> env</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'CSP_ENABLED'</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">true</span><span style="color:#F8F8F2">),</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">    /*</span></span>
+<span class="line"><span style="color:#88846F">     * インラインタグとヘッダーで使用されるnoncesの生成を担当するクラス。</span></span>
+<span class="line"><span style="color:#88846F">     */</span></span>
+<span class="line"><span style="color:#E6DB74">    'nonce_generator'</span><span style="color:#F92672"> =></span><span style="color:#F8F8F2"> Spatie\Csp\Nonce\</span><span style="color:#66D9EF;font-style:italic">RandomString</span><span style="color:#F92672">::class</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">];</span></span></code></pre>
+<p>とりあえず設定はそのままで<code>app/Kernel.php</code>にミドルウェア登録をしてみる</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F92672">protected</span><span style="color:#F8F8F2"> $middlewareGroups </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> [</span></span>
+<span class="line"><span style="color:#E6DB74">   'web'</span><span style="color:#F92672"> =></span><span style="color:#F8F8F2"> [</span></span>
+<span class="line"><span style="color:#F92672">       ...</span></span>
+<span class="line"><span style="color:#F8F8F2">       \Spatie\Csp\</span><span style="color:#66D9EF;font-style:italic">AddCspHeaders</span><span style="color:#F92672">::class</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">   ],</span></span></code></pre>
+<p>この状態でサイトにアクセスするとHTTPヘッダーに</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="http"><code><span class="line"><span style="color:#F92672">content-security-policy:</span><span style="color:#E6DB74">base-uri 'self';connect-src 'self';default-src 'self';form-action 'self';img-src 'self';media-src 'self';object-src 'none';script-src 'self' 'nonce-Kh3YeOsH2KaiGZvoVF1yDmxN2hmUNL3W';style-src 'self' 'nonce-Kh3YeOsH2KaiGZvoVF1yDmxN2hmUNL3W'</span></span></code></pre>
+<p>のようにデフォのCSPが設定される。</p>
+<p>これは、configの<code>'policy' => Spatie\Csp\Policies\Basic::class,</code>でBasicPolicyが設定されているから。</p>
+<h2 id="cspをカスタマイズする">CSPをカスタマイズする</h2>
+<p>laravel-cspのPolicyクラスを自作して独自のルールを適用する。</p>
+<p>公式ドキュメントでは<code>app/Support</code>でPolicyを作成しているので、同じように作る。</p>
+<p>つまり、<code>app/Support/CustomCspPolicy.php</code>を作りお試しで以下のようにしてみる。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F92672">&#x3C;?</span><span style="color:#AE81FF">php</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">namespace</span><span> </span><span style="color:#A6E22E;text-decoration:underline">App\Support</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">use</span><span style="color:#F8F8F2"> Spatie\Csp\</span><span style="color:#66D9EF;font-style:italic">Directive</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">use</span><span style="color:#F8F8F2"> Spatie\Csp\</span><span style="color:#66D9EF;font-style:italic">Keyword</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">use</span><span style="color:#F8F8F2"> Spatie\Csp\Policies\</span><span style="color:#66D9EF;font-style:italic">Policy</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">class</span><span> </span><span style="color:#A6E22E;text-decoration:underline">CustomCspPolicy</span><span style="color:#F92672"> extends</span><span> </span><span style="color:#A6E22E;font-style:italic;text-decoration:underline">Policy</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">    public</span><span style="color:#66D9EF;font-style:italic"> function</span><span style="color:#A6E22E"> configure</span><span style="color:#F8F8F2">()</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#FD971F">        $this</span></span>
+<span class="line"><span style="color:#F92672">            -></span><span style="color:#A6E22E">addDirective</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">Directive</span><span style="color:#F92672">::</span><span style="color:#AE81FF">SCRIPT</span><span style="color:#F8F8F2">, </span><span style="color:#66D9EF;font-style:italic">Keyword</span><span style="color:#F92672">::</span><span style="color:#AE81FF">SELF</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span></code></pre>
+<p>そして、configでこのクラスを指定し、ヘッダーをみてみると</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="http"><code><span class="line"><span style="color:#F92672">content-security-policy:</span><span style="color:#E6DB74">script-src 'self'</span></span></code></pre>
+<p>のように好きにCSPが付けられるようになった。</p>
+<h2 id="viteとlaravel-cspをnonceで連携させる">Viteとlaravel-cspをnonceで連携させる</h2>
+<p>Viteで生成したCSSやJSをnonceという仕組みで連携させる。</p>
+<p>nonceっていうのはブラウザが使うCSRFトークンみたいなもん。<br>
+以下のような処理で認証が実行される</p>
+<ul>
+<li><strong>サーバー側</strong>
+<ol>
+<li>リクエストごとにランダムな<code>nonce</code>を生成</li>
+<li>CSPヘッダーに<code>nonce</code>を設定</li>
+<li>HTMLの<code>&#x3C;script></code>や<code>&#x3C;style></code>タグにも同じ<code>nonce</code>を追加</li>
+</ol>
+</li>
+<li><strong>ブラウザ側</strong>
+<ol>
+<li>CSPヘッダーとHTMLタグの<code>nonce</code>を比較</li>
+<li>一致すれば実行許可、不一致なら拒否</li>
+</ol>
+</li>
+</ul>
+<p>また、なぜドメインのホワイトリスト形式でなくnonceを使うのかは<a href="https://inside.pixiv.blog/kobo/5137" rel="noopener noreferrer" target="_blank">Content Security Policy Level 3におけるXSS対策</a>などを参照してもらえばと思う。</p>
+<p>まず、Viteが生成する<code>&#x3C;script></code>などにnonceを自動付与してもらうために、カスタムミドルウェアを作り<code>useCspNonce</code>メソッドを利用する。</p>
+<p>以下でミドルウェアを作成し</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#A6E22E">php</span><span style="color:#E6DB74"> artisan</span><span style="color:#E6DB74"> make:middleware</span><span style="color:#E6DB74"> AddViteUseContentSecurityPolicy</span></span></code></pre>
+<p>中身は以下のようにした</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F92672">&#x3C;?</span><span style="color:#AE81FF">php</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">namespace</span><span> </span><span style="color:#A6E22E;text-decoration:underline">App\Http\Middleware</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">use</span><span style="color:#66D9EF;font-style:italic"> Closure</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">use</span><span style="color:#F8F8F2"> Illuminate\Http\</span><span style="color:#66D9EF;font-style:italic">Request</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">use</span><span style="color:#F8F8F2"> Illuminate\Support\Facades\</span><span style="color:#66D9EF;font-style:italic">Vite</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">use</span><span style="color:#F8F8F2"> Symfony\Component\HttpFoundation\</span><span style="color:#66D9EF;font-style:italic">Response</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">class</span><span> </span><span style="color:#A6E22E;text-decoration:underline">AddViteUseContentSecurityPolicy</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    public</span><span style="color:#66D9EF;font-style:italic"> function</span><span style="color:#A6E22E"> handle</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">Request</span><span style="color:#F8F8F2"> $request, </span><span style="color:#66D9EF;font-style:italic">Closure</span><span style="color:#F8F8F2"> $next)</span><span style="color:#F92672">:</span><span style="color:#66D9EF;font-style:italic"> Response</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        Vite</span><span style="color:#F92672">::</span><span style="color:#A6E22E">useCspNonce</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">        return</span><span style="color:#F8F8F2"> $next($request);</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<p>これでViteが自動的にnonceを付与してくれるようになったので、laravel-cspにそのnonceを使うよう指示する</p>
+<p><code>app/Support/LaravelViteNonceGenerator.php</code>を作成し以下のようにする。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F92672">&#x3C;?</span><span style="color:#AE81FF">php</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">namespace</span><span> </span><span style="color:#A6E22E;text-decoration:underline">App\Support</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">use</span><span style="color:#F8F8F2"> Illuminate\Support\Facades\</span><span style="color:#66D9EF;font-style:italic">Vite</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">use</span><span style="color:#F8F8F2"> Spatie\Csp\Nonce\</span><span style="color:#66D9EF;font-style:italic">NonceGenerator</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">class</span><span> </span><span style="color:#A6E22E;text-decoration:underline">LaravelViteNonceGenerator</span><span style="color:#F92672"> implements</span><span> </span><span style="color:#A6E22E;font-style:italic;text-decoration:underline">NonceGenerator</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    public</span><span style="color:#66D9EF;font-style:italic"> function</span><span style="color:#A6E22E"> generate</span><span style="color:#F8F8F2">()</span><span style="color:#F92672">:</span><span style="color:#F92672"> string</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F92672">        return</span><span style="color:#66D9EF;font-style:italic"> Vite</span><span style="color:#F92672">::</span><span style="color:#A6E22E">cspNonce</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<p>そしてこのクラスをlaravel-cspのconfigのnonce_generatorに適用することで、Viteが生成したScriptやStyleにnonceが自動で付き、CSPヘッダーにも同じnonceの値が設定されていることがわかると思う。</p>
+<h2 id="インラインスクリプトをnonceで許可する">インラインスクリプトをnonceで許可する</h2>
+<p>「Viteとlaravel-cspをnonceで連携させる」で行った通り、カスタムミドルウェアを作り<code>useCspNonce</code>メソッドを適用までは終わっている前提で。</p>
+<p>ここまでしていれば後は</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="blade"><code><span class="line"><span style="color:#F8F8F2">&#x3C;</span><span style="color:#F92672">script</span><span style="color:#A6E22E"> nonce</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"</span><span style="color:#66D9EF">{{</span><span style="color:#A6E22E"> csp_nonce</span><span style="color:#E6DB74">() </span><span style="color:#66D9EF">}}</span><span style="color:#E6DB74">"</span><span style="color:#F8F8F2">></span></span></code></pre>
+<p>のようにタグ内にnonceを指定することでおｋ。</p>
+<h2 id="telescopeを許可する">Telescopeを許可する</h2>
+<p>CSPでnonceの設定をしているとTelescopeが全然見えない。</p>
+<p>私は一応以下のように回避</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F92672">    public</span><span style="color:#66D9EF;font-style:italic"> function</span><span style="color:#A6E22E"> configure</span><span style="color:#F8F8F2">()</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F92672">        if</span><span style="color:#F8F8F2"> (</span><span style="color:#A6E22E">config</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'app.debug'</span><span style="color:#F8F8F2">) </span><span style="color:#F92672">&#x26;&#x26;</span><span style="color:#66D9EF;font-style:italic"> Request</span><span style="color:#F92672">::</span><span style="color:#A6E22E">is</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"telescope*"</span><span style="color:#F8F8F2">)) {</span></span>
+<span class="line"><span style="color:#F92672">            return</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">        }</span></span>
+<span class="line"><span style="color:#F92672">        ...</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span></code></pre>
+<p>本番環境でもTelescopeを使う予定の人は他の方法を推奨。</p>
+<h2 id="エラー表示ignitionを許可する">エラー表示(Ignition)を許可する</h2>
+<p>Telescopeに続き、デバッグのエラー画面を生成する<a href="https://github.com/spatie/laravel-ignition" rel="noopener noreferrer" target="_blank">Ignition</a>もCSPを設定していると表示できない。</p>
+<p>解決策は<a href="https://github.com/spatie/ignition/issues/186#issuecomment-1448586451" rel="noopener noreferrer" target="_blank">GitHubのIssue</a>からの受け売りなんだけど、Policyクラスの<code>shouldBeApplied</code>メソッドをオーバーライドする形で回避</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#66D9EF;font-style:italic">class</span><span> </span><span style="color:#A6E22E;text-decoration:underline">CustomCspPolicy</span><span style="color:#F92672"> extends</span><span> </span><span style="color:#A6E22E;font-style:italic;text-decoration:underline">Policy</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    public</span><span style="color:#66D9EF;font-style:italic"> function</span><span style="color:#A6E22E"> shouldBeApplied</span><span style="color:#F8F8F2">(\Illuminate\Http\</span><span style="color:#66D9EF;font-style:italic">Request</span><span style="color:#F8F8F2"> $request, \Symfony\Component\HttpFoundation\</span><span style="color:#66D9EF;font-style:italic">Response</span><span style="color:#F8F8F2"> $response)</span><span style="color:#F92672">:</span><span style="color:#F92672"> bool</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F92672">        if</span><span style="color:#F8F8F2"> (</span><span style="color:#A6E22E">config</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'app.debug'</span><span style="color:#F8F8F2">) </span><span style="color:#F92672">&#x26;&#x26;</span><span style="color:#F8F8F2"> (</span></span>
+<span class="line"><span style="color:#F8F8F2">                $response</span><span style="color:#F92672">-></span><span style="color:#A6E22E">isClientError</span><span style="color:#F8F8F2">() </span><span style="color:#F92672">||</span><span style="color:#88846F"> // Ignition</span></span>
+<span class="line"><span style="color:#F8F8F2">                $response</span><span style="color:#F92672">-></span><span style="color:#A6E22E">isServerError</span><span style="color:#F8F8F2">() </span><span style="color:#88846F">// Ignition</span></span>
+<span class="line"><span style="color:#F8F8F2">            )) {</span></span>
+<span class="line"><span style="color:#F92672">            return</span><span style="color:#AE81FF"> false</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">        return</span><span style="color:#66D9EF;font-style:italic"> parent</span><span style="color:#F92672">::</span><span style="color:#A6E22E">shouldBeApplied</span><span style="color:#F8F8F2">($request, $response);</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">    public</span><span style="color:#66D9EF;font-style:italic"> function</span><span style="color:#A6E22E"> configure</span><span style="color:#F8F8F2">()</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F92672">        ...</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span></code></pre>
+<p>以上です。</p></section><aside class="w-[300px] hidden lg:block shrink-0" data-astro-cid-e2rqhpi3><nav class="sticky top-16 h-fit  bg-white py-24 pl-24 rounded-md" data-astro-cid-tqqy2vud><section data-astro-cid-tqqy2vud><header data-astro-cid-tqqy2vud><h2 class="font-bold text-lg" data-astro-cid-tqqy2vud>目次</h2></header></section><div class="article-toc scroll-smooth mt-4 py-16 pr-24 overflow-y-auto max-h-[90svh]" data-astro-cid-tqqy2vud></div></nav><script type="module" src="/_astro/ArticleTOC.astro_astro_type_script_index_0_lang.mX9zJvT_.js"></script></aside></div><div class="mt-40 mb-64" data-pagefind-ignore data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Laravel"># Laravel</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=CSP"># CSP</a></div></div></article></main></div><footer class="pb-40 px-24 md:px-0 bg-white"><hr class="mx-auto w-2/3 md:w-1/2 my-24 h-[1px] border-0 bg-slate-400"><div class="mx-8 md:mx-64"><a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" target="_blank" rel="noopener noreferrer"><img src="/_astro/by-nc.DpMeGFcJ_ZF0RGK.svg" alt="クリエイティブコモンズ 表示-非営利 4.0 ライセンス" loading="lazy" decoding="async" width="125" height="44"></a><p class="text-xs md:text-sm">本サイト「<a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">tamakoma.com</a>」から提供されるブログ内の文章、プログラミングコードは、<a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">クリエイティブ・コモンズ 表示-非営利 4.0 ライセンス</a>の下に提供されます。</p><p class="text-xs md:text-sm">音楽や画像などのメディアコンテンツにはこのライセンスは適用されません。</p></div><p class="text-center text-sm"><a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Top</a> / <a href="/contact" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Contact</a> / <a href="/feed.xml" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">RSS Feed</a></p><p class="mt-24 text-center">&copy; tamakoma 2018-2026</p></footer></div></body></html>

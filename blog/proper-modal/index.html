@@ -1,0 +1,227 @@
+<!DOCTYPE html><html lang="ja" class="text-slate-700"><head><meta charset="utf-8"><title>ちゃんとしたモーダルをLaravel+Alpine.js+TailwindCSSで作成する | tamakoma.com</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v7.0.3"><meta name="twitter:card" content="summary"><meta property="og:title" content="ちゃんとしたモーダルをLaravel+Alpine.js+TailwindCSSで作成する"><meta property="og:type" content="website"><meta property="og:url" content="https://tamakoma.com/blog/proper-modal/"><meta property="og:image" content="/_astro/mikuteto-OGP.DYQebPDj.png"><meta property="og:description" content="学んだことを残すブログ"><meta property="og:site_name" content="tamakoma.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.0.1/dist/css/yakuhanjp_s.css"><link rel="sitemap" href="/sitemap-index.xml"><link rel="stylesheet" href="/_astro/BaseLayout.Ddu7R_5r.css"><style>/*! tailwindcss v4.2.2 | MIT License | https://tailwindcss.com */
+.article-toc[data-astro-cid-tqqy2vud] .toc-link{font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));display:block}@media (hover:hover){.article-toc[data-astro-cid-tqqy2vud] .toc-link:hover{color:var(--color-slate-600,oklch(44.6% .043 257.281));text-decoration-line:underline}}.article-toc[data-astro-cid-tqqy2vud] .toc-link.to-link-active{color:var(--color-miku-500,oklch(63.7% .1071 185.34))}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H2){margin-left:var(--spacing-24,24px)}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H3){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:10px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H4){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:20px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H5){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:30px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H6){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:40px}.article-toc[data-astro-cid-tqqy2vud] .toc-list{list-style-type:decimal;list-style-position:outside}@layer properties{@supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))){*,:before,:after,::backdrop{--tw-font-weight:initial;--tw-border-style:solid}}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a{--tw-font-weight:var(--font-weight-semibold,600);font-weight:var(--font-weight-semibold,600);color:var(--color-miku-500,oklch(63.7% .1071 185.34));text-underline-offset:2px;text-decoration-line:underline}@media (hover:hover){article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a:hover{color:var(--color-miku-700,oklch(50.5% .0901 187.01))}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] code:not(pre>code){margin-inline:var(--spacing-4,4px);border-radius:var(--radius-md,.375rem);border-style:var(--tw-border-style);background-color:var(--color-sumi-100,oklch(97% 0 0));padding-inline:var(--spacing-4,4px);--tw-font-weight:var(--font-weight-normal,400);font-weight:var(--font-weight-normal,400);color:var(--color-black,#000);border-width:0;padding-block:2px}@property --tw-font-weight{syntax:"*";inherits:false}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid}
+</style><script type="module" src="/_astro/page.DCEeCLip.js"></script><script>!(function(w,p,f,c){if(!window.crossOriginIsolated && !navigator.serviceWorker) return;c=w[p]=Object.assign(w[p]||{},{"lib":"/~partytown/","debug":false});c[f]=(c[f]||[])})(window,'partytown','forward');/* Partytown 0.13.2 - MIT QwikDev */
+const t={preserveBehavior:!1},e=e=>{if("string"==typeof e)return[e,t];const[n,r=t]=e;return[n,{...t,...r}]},n=Object.freeze((t=>{const e=new Set;let n=[];do{Object.getOwnPropertyNames(n).forEach((t=>{"function"==typeof n[t]&&e.add(t)}))}while((n=Object.getPrototypeOf(n))!==Object.prototype);return Array.from(e)})());!function(t,r,o,i,a,s,c,l,d,p,u=t,f){function h(){f||(f=1,"/"==(c=(s.lib||"/~partytown/")+(s.debug?"debug/":""))[0]&&(d=r.querySelectorAll('script[type="text/partytown"]'),i!=t?i.dispatchEvent(new CustomEvent("pt1",{detail:t})):(l=setTimeout(v,(null==s?void 0:s.fallbackTimeout)||1e4),r.addEventListener("pt0",w),a?y(1):o.serviceWorker?o.serviceWorker.register(c+(s.swPath||"partytown-sw.js"),{scope:c}).then((function(t){t.active?y():t.installing&&t.installing.addEventListener("statechange",(function(t){"activated"==t.target.state&&y()}))}),console.error):v())))}function y(e){p=r.createElement(e?"script":"iframe"),t._pttab=Date.now(),e||(p.style.display="block",p.style.width="0",p.style.height="0",p.style.border="0",p.style.visibility="hidden",p.setAttribute("aria-hidden",!0)),p.src=c+"partytown-"+(e?"atomics.js?v=0.13.2":"sandbox-sw.html?"+t._pttab),r.querySelector(s.sandboxParent||"body").appendChild(p)}function v(n,o){for(w(),i==t&&(s.forward||[]).map((function(n){const[r]=e(n);delete t[r.split(".")[0]]})),n=0;n<d.length;n++)(o=r.createElement("script")).innerHTML=d[n].innerHTML,o.nonce=s.nonce,r.head.appendChild(o);p&&p.parentNode.removeChild(p)}function w(){clearTimeout(l)}s=t.partytown||{},i==t&&(s.forward||[]).map((function(r){const[o,{preserveBehavior:i}]=e(r);u=t,o.split(".").map((function(e,r,o){var a;u=u[o[r]]=r+1<o.length?u[o[r]]||(a=o[r+1],n.includes(a)?[]:{}):(()=>{let e=null;if(i){const{methodOrProperty:n,thisObject:r}=((t,e)=>{let n=t;for(let t=0;t<e.length-1;t+=1)n=n[e[t]];return{thisObject:n,methodOrProperty:e.length>0?n[e[e.length-1]]:void 0}})(t,o);"function"==typeof n&&(e=(...t)=>n.apply(r,...t))}return function(){let n;return e&&(n=e(arguments)),(t._ptf=t._ptf||[]).push(o,arguments),n}})()}))})),"complete"==r.readyState?h():(t.addEventListener("DOMContentLoaded",h),t.addEventListener("load",h))}(window,document,navigator,top,window.crossOriginIsolated);;(e=>{e.addEventListener("astro:before-swap",e=>{let r=document.body.querySelector("iframe[src*='/~partytown/']");if(r)e.newDocument.body.append(r)})})(document);</script></head><body class="bg-repeat bg-white anywhere" style="background-image: url(/_astro/mikuteto-gray.Dix8k1Tp.gif)"><div class="min-h-screen flex flex-col justify-between" id="container"><div><header><nav class="flex flex-col items-center pt-40 pb-24"><a href="/blog" class="text-3xl md:text-5xl font-bold mb-40 text-slate-400 drop-shadow-2xl">tamakoma.com</a><div class="w-full flex justify-center [&amp;&gt;a]:bg-white [&amp;&gt;a]:border-slate-400"><a href="/" class="block py-8 px-16 text-sumi-600 rounded-l border-l border-y">home</a><a href="/blog/" class="block py-8 px-16 text-sumi-600 border">blog</a><a href="/about/" class="block py-8 px-16 text-sumi-600 rounded-r border-r border-y">about</a></div></nav></header><main class="bg-slate-100 w-full flex justify-end" data-astro-cid-e2rqhpi3><article class="grow" data-pagefind-body data-astro-cid-e2rqhpi3><header class="mt-24 w-11/12 max-w-[700px] mx-auto" data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-pagefind-weight="6.7" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-pagefind-weight="6.5" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Laravel"># Laravel</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Web"># Web</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Alpine.js"># Alpine.js</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Tailwlind%20CSS"># Tailwlind CSS</a></div><h1 class="text-center text-xl md:text-3xl font-bold px-24 mt-40" data-astro-cid-e2rqhpi3>ちゃんとしたモーダルをLaravel+Alpine.js+TailwindCSSで作成する</h1><div class="text-slate-400 text-sm gap-16 flex justify-center mt-24" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>投稿日 <time datetime="2024-09-24T00:00:00.000Z">2024/09/24</time></span><span data-astro-cid-e2rqhpi3>最終更新日 <time datetime="2026-06-27T00:00:00.000Z">2026/06/27</time></span></div></header><hr class="bg-slate-200 rounded-full mx-auto h-4 my-40 w-40 border-0"><div class="flex mx-auto justify-center gap-40" data-astro-cid-e2rqhpi3><section id="article-body" class="
+                            prose prose-neutral
+                            prose-blockquote:border-miku-400 prose-blockquote:font-normal
+                            w-0 grow
+                            max-w-[650px] bg-white box-content px-16 md:px-40 py-24 rounded-md
+                            " data-astro-cid-e2rqhpi3><p>2024年9月24日</p>
+<p>【追記】2024年10月15日:モーダルの見本をgifから、実際のモーダルに変更しました。</p>
+<p>Webのモーダルって、それっぽいものであればかなりいい加減に作成できちゃう。<br>
+私自身Alpine.jsのx-showとかでかなりいい加減に作ってしまう人なので、ここにモーダルについてまとめておく。</p>
+<p>Alpine.js、TailwindCSSを使うので注意。</p>
+<h2 id="参考元">参考元</h2>
+<ul>
+<li>
+<p>Gaji-Laboブログ:<a href="https://www.gaji.jp/blog/2023/12/12/17924/" rel="noopener noreferrer" target="_blank">モーダルダイアログの未来はdialog要素で幸せになるか</a></p>
+</li>
+<li>
+<p>YAMADA ORIGINAL:<a href="https://yamada-original.com/2448/" rel="noopener noreferrer" target="_blank">oveflow: hidden; した際のスクロールバーの有無によるガタツキをなくす方法。</a></p>
+</li>
+<li>
+<p>MDN:<a href="https://developer.mozilla.org/ja/docs/Web/HTML/Element/dialog" rel="noopener noreferrer" target="_blank">&#x3C;dialog>: ダイアログ要素</a></p>
+</li>
+<li>
+<p>WHATWG:<a href="https://html.spec.whatwg.org/multipage/interactive-elements.html#the-dialog-element" rel="noopener noreferrer" target="_blank">4.11.4 The dialog element</a></p>
+</li>
+</ul>
+<h2 id="モーダルの要件">モーダルの要件</h2>
+<p>そもそも、モーダルに求めるものは何か。</p>
+<p>ここでは以下を満たすものをモーダルとする</p>
+<ol>
+<li>
+<p>背景とダイアログで構成される</p>
+</li>
+<li>
+<p>最前面にダイアログが表示される</p>
+</li>
+<li>
+<p>キーボードとマウスのどちらでも閉じられる</p>
+</li>
+<li>
+<p>背景ドキュメントへのアクセスをブロックする（クリック・選択・フォーカスはバックドロップを貫通しない）</p>
+</li>
+<li>
+<p>背景ドキュメントのスクロールをブロックする</p>
+</li>
+</ol>
+<p>Alpine.jsのx-showとか、CSSのz-indexとかで雑に作ると2,4,5番らへんが満たされないがち。</p>
+<h2 id="完成形">完成形</h2>
+<h3 id="見た目">見た目</h3>
+<p>今回できるものは以下のような感じ</p>
+<div class="w-11/12 max-w-[650px] mx-auto mb-24" x-data="">
+    <button class="px-4 bg-white border border-zinc-500 rounded hover:bg-zinc-200" @click.stop="$refs.modal.showModal()">
+        モーダル表示
+    </button>
+    <dialog x-ref="modal" class="w-2/3 h-2/3 mx-auto mt-10 rounded backdrop:bg-zinc-800/50">
+        <div class="bg-red-100 w-full h-full" @click.outside="$refs.modal.close()">
+            <button class="px-4 bg-white border border-zinc-500 rounded hover:bg-zinc-200" @click="$refs.modal.close()">閉じる</button>
+            <p>モーダルの中身</p>
+        </div>
+    </dialog>
+</div>
+<style>
+    /* モーダル時に背景のスクロールを防ぐ & モーダル表示時にscrollbar-gutterを適用*/
+    body:has(dialog[open]) {
+        overflow: hidden;
+    }
+    body:has(dialog[open]) div#container{
+        overflow: hidden;
+        scrollbar-gutter: stable;
+    }
+</style>
+<p>これは、以下の要件をクリアしている。</p>
+<ol>
+<li>
+<p>背景とダイアログで構成される</p>
+</li>
+<li>
+<p>最前面にダイアログが表示される</p>
+</li>
+<li>
+<p>キーボードとマウスのどちらでも閉じられる</p>
+</li>
+<li>
+<p>背景ドキュメントへのアクセスをブロックする（クリック・選択・フォーカスはバックドロップを貫通しない）</p>
+</li>
+<li>
+<p>背景ドキュメントのスクロールをブロックする</p>
+</li>
+</ol>
+<p>また、背景をクリックして閉じれるのと、スクロールバーによるカクツキ防止も追加している。</p>
+<h3 id="コード">コード</h3>
+<p>コードは以下。<br>
+Astroで読みこんでるので<code>&#x3C;style></code>を利用。普通はヘッダー以外に使えないはず。<br>
+Laravel環境なら<code>app.css</code>とかに書くことになる。</p>
+<p>利用技術はTailwindCSS(ちょっとカスタマイズしている)とAlpine.js</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="astro"><code><span class="line"><span style="color:#F8F8F2">&#x3C;</span><span style="color:#F92672">div</span><span style="color:#A6E22E"> class</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"w-11/12 max-w-[650px] mx-auto mb-24"</span><span style="color:#A6E22E"> x-data</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;</span><span style="color:#F92672">button</span><span style="color:#A6E22E"> class</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"px-4 bg-white border border-zinc-500 rounded hover:bg-zinc-200"</span><span style="color:#A6E22E"> @click.stop</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"$refs.modal.showModal()"</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        モーダル表示</span></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;/</span><span style="color:#F92672">button</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;</span><span style="color:#F92672">dialog</span><span style="color:#A6E22E"> x-ref</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"modal"</span><span style="color:#A6E22E"> class</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"w-2/3 h-2/3 mx-auto mt-10 rounded backdrop:bg-zinc-800/50"</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;</span><span style="color:#F92672">div</span><span style="color:#A6E22E"> class</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"bg-red-100 w-full h-full"</span><span style="color:#A6E22E"> @click.outside</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"$refs.modal.close()"</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">            &#x3C;</span><span style="color:#F92672">button</span><span style="color:#A6E22E"> class</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"px-4 bg-white border border-zinc-500 rounded hover:bg-zinc-200"</span><span style="color:#A6E22E"> @click</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"$refs.modal.close()"</span><span style="color:#F8F8F2">>閉じる&#x3C;/</span><span style="color:#F92672">button</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">            &#x3C;</span><span style="color:#F92672">p</span><span style="color:#F8F8F2">>モーダルの中身&#x3C;/</span><span style="color:#F92672">p</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;/</span><span style="color:#F92672">div</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;/</span><span style="color:#F92672">dialog</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">&#x3C;/</span><span style="color:#F92672">div</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">&#x3C;</span><span style="color:#F92672">style</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#88846F">    /* モーダル時に背景のスクロールを防ぐ &#x26; モーダル表示時にscrollbar-gutterを適用*/</span></span>
+<span class="line"><span style="color:#F92672">    body</span><span style="color:#A6E22E">:has</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">dialog</span><span style="color:#F8F8F2">[</span><span style="color:#A6E22E">open</span><span style="color:#F8F8F2">]) {</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        overflow</span><span style="color:#F8F8F2">: </span><span style="color:#66D9EF">hidden</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F92672">    body</span><span style="color:#A6E22E">:has</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">dialog</span><span style="color:#F8F8F2">[</span><span style="color:#A6E22E">open</span><span style="color:#F8F8F2">]) </span><span style="color:#F92672">div</span><span style="color:#A6E22E">#container</span><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        overflow</span><span style="color:#F8F8F2">: </span><span style="color:#66D9EF">hidden</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        scrollbar-gutter</span><span style="color:#F8F8F2">: stable;</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">&#x3C;/</span><span style="color:#F92672">style</span><span style="color:#F8F8F2">></span></span></code></pre>
+<p>また、body直下のdivにid=containerを付けてCSSを適用させてる。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="astro"><code><span class="line"><span style="color:#F8F8F2">&#x3C;</span><span style="color:#F92672">body</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">	&#x3C;</span><span style="color:#F92672">div</span><span style="color:#A6E22E"> id</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"container"</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        ...</span></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;/</span><span style="color:#F92672">div</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">&#x3C;/</span><span style="color:#F92672">body</span><span style="color:#F8F8F2">></span></span></code></pre>
+<p>それぞれ見ていく。</p>
+<h2 id="dialog要素">dialog要素</h2>
+<p>dialog要素はまぁまぁ新しめの要素。<br>
+<a href="https://developer.mozilla.org/ja/docs/Web/HTML/Element/dialog" rel="noopener noreferrer" target="_blank">mdn:&#x3C;dialog>: ダイアログ要素</a></p>
+<p>これを上手く使うことで</p>
+<ul>
+<li>
+<p>背景とダイアログで構成される</p>
+</li>
+<li>
+<p>最前面にダイアログが表示される</p>
+</li>
+<li>
+<p>背景ドキュメントへのアクセスをブロックする</p>
+</li>
+</ul>
+<p>を満たせる。</p>
+<h2 id="dialog要素のopen属性">dialog要素のopen属性</h2>
+<p>このdialog要素はopen属性がtrueかfalseかで表示されるか否かが決まる。<br>
+初期はfalseっぽいので何もしなければ最初はdialogが表示されない。</p>
+<p>open属性を直接付け替えることもできるんだけど、基本このopen属性の操作は<a href="https://html.spec.whatwg.org/multipage/interactive-elements.html#the-dialog-element:~:text=The%20showModal()%20method%20steps%20are%3A" rel="noopener noreferrer" target="_blank">showModal()</a>と<a href="https://html.spec.whatwg.org/multipage/interactive-elements.html#the-dialog-element:~:text=The%20close(returnValue)%20method%20steps%20are%3A" rel="noopener noreferrer" target="_blank">close()</a>メソッドを使うべき。</p>
+<p>理由は、これらのメソッドにopen属性付け替え以外の大きな役割があり、それがモーダルの要件を満たすのに重要だから。</p>
+<h2 id="背景とダイアログで構成されるを満たす">「背景とダイアログで構成される」を満たす</h2>
+<p>dialog要素は、<a href="https://html.spec.whatwg.org/multipage/interactive-elements.html#the-dialog-element:~:text=If%20this%27s%20node%20document%27s%20top%20layer%20does%20not%20already%20contain%20this%2C%20then%20add%20an%20element%20to%20the%20top%20layer%20given%20this." rel="noopener noreferrer" target="_blank">showModal()を使うことでTop Layerで表示される</a>。</p>
+<p><a href="https://drafts.csswg.org/css-position-4/#document-top-layer" rel="noopener noreferrer" target="_blank">Top Layer</a>には何個か特徴があって、その中に<a href="https://drafts.csswg.org/css-position-4/#backdrop" rel="noopener noreferrer" target="_blank">::backdrop疑似要素</a>がある。</p>
+<p>この::backdropは最上位レイヤーの背景として扱うことができて、<a href="https://drafts.csswg.org/css-position-4/#top-styling:~:text=User%20agents%20should%20contain%20the%20following%20rules%20in%20a%20UA%2Dlevel%20style%20sheet%3A" rel="noopener noreferrer" target="_blank">user agentで以下のCSSを付けることが義務付けられている</a>。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="css"><code><span class="line"><span style="color:#A6E22E">::backdrop</span><span style="color:#F8F8F2"> {</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">  position</span><span style="color:#F8F8F2">: </span><span style="color:#66D9EF">fixed</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">  inset</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">0</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<p>そのため、この::backdropに半透明の黒とかの背景色を付ければ背景の完成。<br>
+先のコード例でいう</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="html"><code><span class="line"><span style="color:#F8F8F2">&#x3C;</span><span style="color:#F92672">dialog</span><span style="color:#A6E22E"> x-ref</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"modal"</span><span style="color:#A6E22E"> class</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"w-2/3 h-2/3 rounded backdrop:bg-zinc-800/50"</span><span style="color:#F8F8F2">></span></span></code></pre>
+<p>の「backdrop:bg-zinc-800/50」部分が該当する。</p>
+<p>これで背景とダイアログで構成されるを満たした。</p>
+<h2 id="最前面にダイアログが表示されるを満たす">「最前面にダイアログが表示される」を満たす</h2>
+<p>先の通り、dialogをshowModal()で開くことによってdialogは最上位レイヤーになる。</p>
+<p>最上位レイヤーはその名の通り、<a href="https://developer.mozilla.org/ja/docs/Glossary/Top_layer#:~:text=%E3%81%99%E3%81%B9%E3%81%A6%E3%81%AE%E3%83%AC%E3%82%A4%E3%83%A4%E3%83%BC%E3%81%AE%E6%9C%80%E4%B8%8A%E4%BD%8D%E3%81%AB%E4%BD%8D%E7%BD%AE%E3%81%99%E3%82%8B%E5%9B%BA%E6%9C%89%E3%81%AE%E3%83%AC%E3%82%A4%E3%83%A4%E3%83%BC" rel="noopener noreferrer" target="_blank">全てのレイヤーの中で一番上に存在する</a>もの。<br>
+そのため、showModal()でdialogを開けば「最前面にダイアログが表示される」を満たす。</p>
+<h2 id="背景ドキュメントへのアクセスをブロックするを満たす">「背景ドキュメントへのアクセスをブロックする」を満たす</h2>
+<p>つまり、フォーカスとかがダイアログ以外に選択されないようにするということ。</p>
+<p>これは、<a href="https://developer.mozilla.org/ja/docs/Web/HTML/Element/dialog#:~:text=%E3%83%A2%E3%83%BC%E3%83%80%E3%83%AB%E3%83%80%E3%82%A4%E3%82%A2%E3%83%AD%E3%82%B0%E3%82%92%E5%AE%9F%E8%A3%85%E3%81%99%E3%82%8B%E9%9A%9B%E3%81%AB%E3%81%AF%E3%80%81%3Cdialog%3E%20%E3%81%A8%E3%81%9D%E3%81%AE%E3%82%B3%E3%83%B3%E3%83%86%E3%83%B3%E3%83%84%E4%BB%A5%E5%A4%96%E3%81%AF%20inert%20%E5%B1%9E%E6%80%A7%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E4%B8%8D%E6%B4%BB%E6%80%A7%E5%8C%96%E3%81%99%E3%82%8B%E5%BF%85%E8%A6%81%E3%81%8C%E3%81%82%E3%82%8A%E3%81%BE%E3%81%99%E3%80%82%3Cdialog%3E%20%E3%82%92%20HTMLDialogElement.showModal()%20%E3%83%A1%E3%82%BD%E3%83%83%E3%83%89%E3%81%A7%E4%BD%BF%E7%94%A8%E3%81%97%E3%81%9F%E5%A0%B4%E5%90%88%E3%80%81%E3%81%93%E3%81%AE%E5%8B%95%E4%BD%9C%E3%81%AF%E3%83%96%E3%83%A9%E3%82%A6%E3%82%B6%E3%83%BC%E3%81%8C%E6%8F%90%E4%BE%9B%E3%81%97%E3%81%BE%E3%81%99%E3%80%82" rel="noopener noreferrer" target="_blank">mdnのdialogドキュメント</a>を引用すると</p>
+<blockquote>
+<p><strong>モーダルダイアログを実装する際には、&#x3C;dialog> とそのコンテンツ以外は inert 属性を使って不活性化する必要があります。&#x3C;dialog> を HTMLDialogElement.showModal() メソッドで使用した場合、この動作はブラウザーが提供します。</strong></p>
+</blockquote>
+<p>とのこと。</p>
+<p>つまり、showModal()メソッドで開けばdialogとそのコンテンツ以外にinert属性を自動で付けてくれるので背景ドキュメントへのアクセスをブロックしてくれる。</p>
+<h2 id="キーボードとマウスのどちらでも閉じられるを満たす">「キーボードとマウスのどちらでも閉じられる」を満たす</h2>
+<p>dialog要素をshowModal()で開けばescキーで閉じられるようになるので、キーボードで閉じられるは自動で満たす。</p>
+<p>マウスでどう閉じるかなんだけど、</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="html"><code><span class="line"><span style="color:#F8F8F2">&#x3C;</span><span style="color:#F92672">dialog</span><span style="color:#A6E22E"> x-ref</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"modal"</span></span></code></pre>
+<p>のようにdialogにalpine.jsのx-refを付けてあげ、</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="js"><code><span class="line"><span style="color:#F8F8F2">@click</span><span style="color:#F92672">=</span><span style="color:#E6DB74">"$refs.modal.close(</span><span style="color:#F44747">)</span></span></code></pre>
+<p>を適当なボタンとかに付けてあげればおｋ。</p>
+<h2 id="背景ドキュメントのスクロールをブロックするを満たしスクロールバーのかくつきを防止する">「背景ドキュメントのスクロールをブロックする」を満たし、スクロールバーのかくつきを防止する</h2>
+<p>背景のスクロールを防止するのはbodyとかにoverflow: hidden;を付けてあげることで解決。</p>
+<p>ここではhas(dialog[open])を付けることで、bodyがopen属性がtrueのdialogを持つときだけ適用されるようにしている。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="css"><code><span class="line"><span style="color:#F92672">body</span><span style="color:#A6E22E">:has</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">dialog</span><span style="color:#F8F8F2">[</span><span style="color:#A6E22E">open</span><span style="color:#F8F8F2">]) {</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">   overflow</span><span style="color:#F8F8F2">: </span><span style="color:#66D9EF">hidden</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<p>また、スクロールバーのかくつきも防止する。</p>
+<p>スクロールバーのかくつきとは、以下gifのようなこと。</p>
+<p><img alt="" loading="lazy" decoding="async" width="1724" height="364" src="/_astro/a4c7ff3b2691bb47794c37f58f720ba3.Dy7uF0lj_ZceA8e.webp" srcset=""></p>
+<p>overflow: hiddenを付けたことでdialogを開いたときbodyのスクロールバーが無くなってしまい、その分bodyの要素が右に寄ってかくつく現象。</p>
+<p>これは<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/scrollbar-gutter" rel="noopener noreferrer" target="_blank">scrollbar-gutter</a>というCSSで対策が可能。<br>
+scrollbar-gutterという名前通り、ボウリングのガターのようなスクロールバーのガター部分を操作できる。<br>
+scrollbar-gutter: stableを付けることで、スクロールバーが無くてもガター部分だけ表示できる。<br>
+また、<a href="https://developer.mozilla.org/ja/docs/Web/CSS/scrollbar-gutter#:~:text=%E3%82%B9%E3%82%AF%E3%83%AD%E3%83%BC%E3%83%AB%E3%83%90%E3%83%BC%E3%81%8C%E3%81%AA%E3%81%84%E5%A0%B4%E5%90%88%E3%80%81%E3%82%AC%E3%82%BF%E3%83%BC%E3%81%AF%E3%83%91%E3%83%87%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AE%E5%BB%B6%E9%95%B7%E3%81%A8%E3%81%97%E3%81%A6%E6%8F%8F%E3%81%8B%E3%82%8C%E3%81%BE%E3%81%99" rel="noopener noreferrer" target="_blank">スクロールバーが無い状態でのガターはパディングとして扱われる</a>。</p>
+<p>ただし、このCSSには現時点で注意点が2つある。</p>
+<p>1つ目は、safariで使えないということ。<br>
+対応してないならしょうがないね。</p>
+<p>2つ目が、htmlやbodyに対するscrollbar-gutter: stableは無効化されるということ。</p>
+<h3 id="htmlやbodyに対するscrollbar-gutter-stableは思った通り動かない">htmlやbodyに対するscrollbar-gutter: stableは思った通り動かない</h3>
+<p>W3Cのドキュメントを一部引用すると</p>
+<blockquote>
+<p>As for the overflow property, when scrollbar-gutter is set on the root element, the user agent must apply it to the viewport instead, and the used value on the root element itself is scrollbar-gutter: auto. However, unlike the overflow property, the user agent must not propagate scrollbar-gutter from the HTML body element.</p>
+<p><a href="https://drafts.csswg.org/css-overflow/#scrollbar-gutter-property" rel="noopener noreferrer" target="_blank">https://drafts.csswg.org/css-overflow/#scrollbar-gutter-property</a></p>
+</blockquote>
+<p>とのこと。</p>
+<p>正直、あまりCSSに詳しくないのでよくわかんないんだけど、html要素(root element)にscrollbar-gutterが付いている場合、代わりにuser agentはviewportにscrollbar-gutter: autoを付けなきゃいけないみたい。</p>
+<p>だから、html要素に付けたらダメっぽい？</p>
+<p>また、body要素に付けた場合は伝播禁止らしくscrollbar-gutter: stableをbodyに付けても何も起きない。</p>
+<p>私があまりCSSを好かない理由がこういうところにあると思う。</p>
+<h3 id="どう回避するか">どう回避するか</h3>
+<p>じゃあどうするかなんだけど、私は以下のようにした。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="css"><code><span class="line"><span style="color:#F92672">body</span><span style="color:#A6E22E">:has</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">dialog</span><span style="color:#F8F8F2">[</span><span style="color:#A6E22E">open</span><span style="color:#F8F8F2">]) {</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    overflow</span><span style="color:#F8F8F2">: </span><span style="color:#66D9EF">hidden</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"><span style="color:#F92672">body</span><span style="color:#A6E22E">:has</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">dialog</span><span style="color:#F8F8F2">[</span><span style="color:#A6E22E">open</span><span style="color:#F8F8F2">]) </span><span style="color:#F92672">div</span><span style="color:#A6E22E">#container</span><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    overflow</span><span style="color:#F8F8F2">: </span><span style="color:#66D9EF">hidden</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    scrollbar-gutter</span><span style="color:#F8F8F2">: stable;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<p>divであればstableが効くので、テンプレートのメイン要素divを</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="html"><code><span class="line"><span style="color:#F8F8F2">&#x3C;</span><span style="color:#F92672">div</span><span style="color:#A6E22E"> id</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"container"</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">    ...</span></span>
+<span class="line"><span style="color:#F8F8F2">&#x3C;/</span><span style="color:#F92672">div</span><span style="color:#F8F8F2">></span></span></code></pre>
+<p>のようにして、無理やり適応している感じ。</p>
+<p>scrollbar-gutter: stableは<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/scrollbar-gutter#stable" rel="noopener noreferrer" target="_blank">その要素のoverflowがhidden,auto,scrollじゃないと機能してくれないっぽい</a>のでhiddenも付けてる。</p>
+<p>とりあえずこんな感じで全ての要件を満たした。</p>
+<h2 id="背景をクリックするとモーダルを閉じる">背景をクリックするとモーダルを閉じる</h2>
+<p>背景をクリックすることでモーダルを閉じるのをどう実装したかなんだけど、alpine.jsのoutsideを利用している。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="html"><code><span class="line"><span style="color:#F8F8F2">&#x3C;</span><span style="color:#F92672">div</span><span style="color:#A6E22E"> class</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"bg-red-100 p-4"</span><span style="color:#A6E22E"> @click.outside</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"$refs.modal.close()"</span><span style="color:#F8F8F2">></span></span></code></pre>
+<p>かなり便利。ありがとうalpine.js。</p></section><aside class="w-[300px] hidden lg:block shrink-0" data-astro-cid-e2rqhpi3><nav class="sticky top-16 h-fit  bg-white py-24 pl-24 rounded-md" data-astro-cid-tqqy2vud><section data-astro-cid-tqqy2vud><header data-astro-cid-tqqy2vud><h2 class="font-bold text-lg" data-astro-cid-tqqy2vud>目次</h2></header></section><div class="article-toc scroll-smooth mt-4 py-16 pr-24 overflow-y-auto max-h-[90svh]" data-astro-cid-tqqy2vud></div></nav><script type="module" src="/_astro/ArticleTOC.astro_astro_type_script_index_0_lang.mX9zJvT_.js"></script></aside></div><div class="mt-40 mb-64" data-pagefind-ignore data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Laravel"># Laravel</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Web"># Web</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Alpine.js"># Alpine.js</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Tailwlind%20CSS"># Tailwlind CSS</a></div></div></article></main></div><footer class="pb-40 px-24 md:px-0 bg-white"><hr class="mx-auto w-2/3 md:w-1/2 my-24 h-[1px] border-0 bg-slate-400"><div class="mx-8 md:mx-64"><a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" target="_blank" rel="noopener noreferrer"><img src="/_astro/by-nc.DpMeGFcJ_ZF0RGK.svg" alt="クリエイティブコモンズ 表示-非営利 4.0 ライセンス" loading="lazy" decoding="async" width="125" height="44"></a><p class="text-xs md:text-sm">本サイト「<a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">tamakoma.com</a>」から提供されるブログ内の文章、プログラミングコードは、<a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">クリエイティブ・コモンズ 表示-非営利 4.0 ライセンス</a>の下に提供されます。</p><p class="text-xs md:text-sm">音楽や画像などのメディアコンテンツにはこのライセンスは適用されません。</p></div><p class="text-center text-sm"><a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Top</a> / <a href="/contact" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Contact</a> / <a href="/feed.xml" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">RSS Feed</a></p><p class="mt-24 text-center">&copy; tamakoma 2018-2026</p></footer></div></body></html>

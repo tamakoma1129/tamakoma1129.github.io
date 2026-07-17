@@ -1,0 +1,412 @@
+<!DOCTYPE html><html lang="ja" class="text-slate-700"><head><meta charset="utf-8"><title>【8日目】HTTPとLaravelについて | tamakoma.com</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v7.0.3"><meta name="twitter:card" content="summary"><meta property="og:title" content="【8日目】HTTPとLaravelについて"><meta property="og:type" content="website"><meta property="og:url" content="https://tamakoma.com/blog/create-dtm-tool-8/"><meta property="og:image" content="/_astro/mikuteto-OGP.DYQebPDj.png"><meta property="og:description" content="学んだことを残すブログ"><meta property="og:site_name" content="tamakoma.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.0.1/dist/css/yakuhanjp_s.css"><link rel="sitemap" href="/sitemap-index.xml"><link rel="stylesheet" href="/_astro/BaseLayout.Ddu7R_5r.css"><style>/*! tailwindcss v4.2.2 | MIT License | https://tailwindcss.com */
+.article-toc[data-astro-cid-tqqy2vud] .toc-link{font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));display:block}@media (hover:hover){.article-toc[data-astro-cid-tqqy2vud] .toc-link:hover{color:var(--color-slate-600,oklch(44.6% .043 257.281));text-decoration-line:underline}}.article-toc[data-astro-cid-tqqy2vud] .toc-link.to-link-active{color:var(--color-miku-500,oklch(63.7% .1071 185.34))}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H2){margin-left:var(--spacing-24,24px)}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H3){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:10px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H4){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:20px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H5){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:30px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H6){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:40px}.article-toc[data-astro-cid-tqqy2vud] .toc-list{list-style-type:decimal;list-style-position:outside}@layer properties{@supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))){*,:before,:after,::backdrop{--tw-font-weight:initial;--tw-border-style:solid}}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a{--tw-font-weight:var(--font-weight-semibold,600);font-weight:var(--font-weight-semibold,600);color:var(--color-miku-500,oklch(63.7% .1071 185.34));text-underline-offset:2px;text-decoration-line:underline}@media (hover:hover){article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a:hover{color:var(--color-miku-700,oklch(50.5% .0901 187.01))}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] code:not(pre>code){margin-inline:var(--spacing-4,4px);border-radius:var(--radius-md,.375rem);border-style:var(--tw-border-style);background-color:var(--color-sumi-100,oklch(97% 0 0));padding-inline:var(--spacing-4,4px);--tw-font-weight:var(--font-weight-normal,400);font-weight:var(--font-weight-normal,400);color:var(--color-black,#000);border-width:0;padding-block:2px}@property --tw-font-weight{syntax:"*";inherits:false}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid}
+</style><script type="module" src="/_astro/page.DCEeCLip.js"></script><script>!(function(w,p,f,c){if(!window.crossOriginIsolated && !navigator.serviceWorker) return;c=w[p]=Object.assign(w[p]||{},{"lib":"/~partytown/","debug":false});c[f]=(c[f]||[])})(window,'partytown','forward');/* Partytown 0.13.2 - MIT QwikDev */
+const t={preserveBehavior:!1},e=e=>{if("string"==typeof e)return[e,t];const[n,r=t]=e;return[n,{...t,...r}]},n=Object.freeze((t=>{const e=new Set;let n=[];do{Object.getOwnPropertyNames(n).forEach((t=>{"function"==typeof n[t]&&e.add(t)}))}while((n=Object.getPrototypeOf(n))!==Object.prototype);return Array.from(e)})());!function(t,r,o,i,a,s,c,l,d,p,u=t,f){function h(){f||(f=1,"/"==(c=(s.lib||"/~partytown/")+(s.debug?"debug/":""))[0]&&(d=r.querySelectorAll('script[type="text/partytown"]'),i!=t?i.dispatchEvent(new CustomEvent("pt1",{detail:t})):(l=setTimeout(v,(null==s?void 0:s.fallbackTimeout)||1e4),r.addEventListener("pt0",w),a?y(1):o.serviceWorker?o.serviceWorker.register(c+(s.swPath||"partytown-sw.js"),{scope:c}).then((function(t){t.active?y():t.installing&&t.installing.addEventListener("statechange",(function(t){"activated"==t.target.state&&y()}))}),console.error):v())))}function y(e){p=r.createElement(e?"script":"iframe"),t._pttab=Date.now(),e||(p.style.display="block",p.style.width="0",p.style.height="0",p.style.border="0",p.style.visibility="hidden",p.setAttribute("aria-hidden",!0)),p.src=c+"partytown-"+(e?"atomics.js?v=0.13.2":"sandbox-sw.html?"+t._pttab),r.querySelector(s.sandboxParent||"body").appendChild(p)}function v(n,o){for(w(),i==t&&(s.forward||[]).map((function(n){const[r]=e(n);delete t[r.split(".")[0]]})),n=0;n<d.length;n++)(o=r.createElement("script")).innerHTML=d[n].innerHTML,o.nonce=s.nonce,r.head.appendChild(o);p&&p.parentNode.removeChild(p)}function w(){clearTimeout(l)}s=t.partytown||{},i==t&&(s.forward||[]).map((function(r){const[o,{preserveBehavior:i}]=e(r);u=t,o.split(".").map((function(e,r,o){var a;u=u[o[r]]=r+1<o.length?u[o[r]]||(a=o[r+1],n.includes(a)?[]:{}):(()=>{let e=null;if(i){const{methodOrProperty:n,thisObject:r}=((t,e)=>{let n=t;for(let t=0;t<e.length-1;t+=1)n=n[e[t]];return{thisObject:n,methodOrProperty:e.length>0?n[e[e.length-1]]:void 0}})(t,o);"function"==typeof n&&(e=(...t)=>n.apply(r,...t))}return function(){let n;return e&&(n=e(arguments)),(t._ptf=t._ptf||[]).push(o,arguments),n}})()}))})),"complete"==r.readyState?h():(t.addEventListener("DOMContentLoaded",h),t.addEventListener("load",h))}(window,document,navigator,top,window.crossOriginIsolated);;(e=>{e.addEventListener("astro:before-swap",e=>{let r=document.body.querySelector("iframe[src*='/~partytown/']");if(r)e.newDocument.body.append(r)})})(document);</script></head><body class="bg-repeat bg-white anywhere" style="background-image: url(/_astro/mikuteto-gray.Dix8k1Tp.gif)"><div class="min-h-screen flex flex-col justify-between" id="container"><div><header><nav class="flex flex-col items-center pt-40 pb-24"><a href="/blog" class="text-3xl md:text-5xl font-bold mb-40 text-slate-400 drop-shadow-2xl">tamakoma.com</a><div class="w-full flex justify-center [&amp;&gt;a]:bg-white [&amp;&gt;a]:border-slate-400"><a href="/" class="block py-8 px-16 text-sumi-600 rounded-l border-l border-y">home</a><a href="/blog/" class="block py-8 px-16 text-sumi-600 border">blog</a><a href="/about/" class="block py-8 px-16 text-sumi-600 rounded-r border-r border-y">about</a></div></nav></header><main class="bg-slate-100 w-full flex justify-end" data-astro-cid-e2rqhpi3><article class="grow" data-pagefind-body data-astro-cid-e2rqhpi3><header class="mt-24 w-11/12 max-w-[700px] mx-auto" data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-pagefind-weight="6.7" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a><svg viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16 mx-4 mt-[2px]" data-astro-cid-e2rqhpi3="true">
+  <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+</svg><a href="/blog#%E4%BD%9C%E6%9B%B2%E3%81%AE%E8%A3%9C%E5%8A%A9%E3%83%84%E3%83%BC%E3%83%AB%E3%82%92%E4%BD%9C%E3%82%8B%E3%81%BE%E3%81%A7%E3%81%AE%E6%97%A5%E8%A8%98" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">作曲の補助ツールを作るまでの日記</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-pagefind-weight="6.5" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=PHP"># PHP</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%97%A5%E8%A8%98"># 日記</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Laravel"># Laravel</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Linux"># Linux</a></div><h1 class="text-center text-xl md:text-3xl font-bold px-24 mt-40" data-astro-cid-e2rqhpi3>【8日目】HTTPとLaravelについて</h1><div class="text-slate-400 text-sm gap-16 flex justify-center mt-24" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>投稿日 <time datetime="2023-07-19T00:00:00.000Z">2023/07/19</time></span><span data-astro-cid-e2rqhpi3>最終更新日 <time datetime="2023-07-19T00:00:00.000Z">2023/07/19</time></span></div></header><hr class="bg-slate-200 rounded-full mx-auto h-4 my-40 w-40 border-0"><div class="flex mx-auto justify-center gap-40" data-astro-cid-e2rqhpi3><section id="article-body" class="
+                            prose prose-neutral
+                            prose-blockquote:border-miku-400 prose-blockquote:font-normal
+                            w-0 grow
+                            max-w-[650px] bg-white box-content px-16 md:px-40 py-24 rounded-md
+                            " data-astro-cid-e2rqhpi3><p>2023年7月17日～2023年7月19日</p>
+<p>今度こそLaravelをやろう。</p>
+<p>昨日まででVirtualBoxにAlmaLinuxを入れて、そこにPHP,Apache,Laravelの環境構築をしたわけだけど、これってgitかなんかでリポジトリ作って、ホストPCで編集するのがいいよね？</p>
+<h2 id="gitと連携する"><strong>gitと連携する</strong></h2>
+<h3 id="gitのインストールと初期設定"><strong>gitのインストールと初期設定</strong></h3>
+<p>まず、AlmaLinuxのgitのインストールと設定から。</p>
+<p>‘sudo dnf install git -y’<br>
+-yは全ての選択をYesで答えるという意味。</p>
+<p>‘git -v’でインストールされてるか一応確認。</p>
+<p><img alt="" loading="lazy" decoding="async" width="484" height="88" src="/_astro/a8f41f8364cfc6823579d4c116ea63a7.BNpPbvfu_Z1meIOu.webp" srcset=""></p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#A6E22E">git</span><span style="color:#E6DB74"> config</span><span style="color:#AE81FF"> --global</span><span style="color:#E6DB74"> user.name</span><span style="color:#E6DB74"> "ユーザー名"</span></span>
+<span class="line"><span style="color:#A6E22E">git</span><span style="color:#E6DB74"> config</span><span style="color:#AE81FF"> --global</span><span style="color:#E6DB74"> user.email</span><span style="color:#E6DB74"> "ユーザー名@example.com"</span></span></code></pre>
+<p>で名前とメールアドレスを登録しとく。<br>
+確か、この設定をしないとgit使えない。ユーザー名とかはメールはcommitした時に載る情報でログインとかではないはず。</p>
+<p>今回は—globalで全てに適応だけど、プロジェクト毎に分けたかったらその設定もある。</p>
+<p>一応、master表記が気になる人は<br>
+‘git config —global init.defaultBranch main’<br>
+でデフォルトがブランチ名がmainになる。</p>
+<h3 id="githubのssh設定"><strong>githubのSSH設定</strong></h3>
+<p>アカウント認証はSSH認証が推奨されてるし、後々を考えるとこちらの方が楽なのでやっておく。<br>
+やり方は<a href="https://docs.github.com/ja/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent?platform=linux" rel="noopener noreferrer" target="_blank">Github公式</a>や<a href="https://inno-tech-life.com/dev/infra/git_ssh_github/" rel="noopener noreferrer" target="_blank">こちらの方</a>を見るとよいかなと思う。※どちらも同じことをやってるが、Github公式の方は分かり難いが最新情報を取り扱ってる。</p>
+<h3 id="リポジトリの作成"><strong>リポジトリの作成</strong></h3>
+<p>私は/home/user/Laravel/test_appにアプリフォルダを作ったので、test_appごとgitリポジトリにする。</p>
+<p>‘cd /home/user/Laravel/test_app’</p>
+<p>git initをする前に、gitignoreの確認。<br>
+一応説明すると、gitにアップしないで無視するフォルダやディレクトリを設定できる。機密情報ファイルとかはアップロードするとまずいから設定しとかなきゃいけない。</p>
+<p><img alt="" loading="lazy" decoding="async" width="790" height="140" src="/_astro/f6d57669563b40e0d39a1abb333f8146.8IwXUfpF_Z296nGT.webp" srcset=""></p>
+<p>‘cat .gitignore’</p>
+<p><img alt="" loading="lazy" decoding="async" width="409" height="387" src="/_astro/ac5eb5add08724ca8646e3a00993eb89.DGDSjntL_rYmap.webp" srcset=""></p>
+<p>うーん。正直全然分かんないんだけど、最初から用意されてはいるのでこのままでとりあえずは大丈夫だと思い進める。</p>
+<p>ってことで<br>
+’git init’</p>
+<p><img alt="" loading="lazy" decoding="async" width="783" height="44" src="/_astro/059d3edb910d20894f02b47ab904343c.DRoC1qJG_1i1wCT.webp" srcset=""></p>
+<p>このディレクトリ以下の全ファイルを対象にしたいので、<br>
+’git add -A’</p>
+<p>とりあえずcommit<br>
+‘git commit -m “Hello Laravel”’</p>
+<p>ここまで来たら、一回Githubへ</p>
+<p>readmeとかgitignoreは作らずに、privateで新しいリポジトリ作成。</p>
+<p>‘git remote add origin githubリポジトリのURL’<br>
+でgithubリポジトリと連携。SSH接続の設定をした人はそっちのURL。<br>
+これは、originというリモートリポジトリをgithubにホストしてもらってるみたいな感じ。</p>
+<p>‘git push -u origin main’<br>
+でpush。<br>
+これは、originというリモートリポジトリのブランチ名mainにpushするという感じ。-uを付けることで、以降のgit pushとかgit pullがmainブランチに固定される。</p>
+<p>そうすると……</p>
+<p><img alt="" loading="lazy" decoding="async" width="1227" height="764" src="/_astro/d1722ea8c4b5df0a209d48f655186f64.Bj0jU0FK_Z1anYzT.webp" srcset=""></p>
+<p>できた！</p>
+<p>これ、readme.mdも初期からあったのね。</p>
+<p><img alt="" loading="lazy" decoding="async" width="1206" height="451" src="/_astro/f38334df17bb10dfec0952c19c3d98e5.BF1-p4S__Z2j8XKb.webp" srcset=""></p>
+<h3 id="ホストpcでcloneする"><strong>ホストPCでcloneする</strong></h3>
+<p>とりあえず、githubに上げることはできたのでホストPC側でクローンしてホストPCで作業を進めよう。</p>
+<p>私の場合はデスクトップにAlmaLinuxというフォルダを作ってそこにクローンした。</p>
+<p><img alt="" loading="lazy" decoding="async" width="949" height="284" src="/_astro/16dce4b1c9ee8d58d24a4242954976da.DjQzJNq-_YyUoX.webp" srcset=""></p>
+<p>恐らくwindowsの方はgithubの認証を既にやっていたので何事も無く完了した。</p>
+<p><strong>最後に、スナップショットを忘れず取っとこう。</strong></p>
+<h2 id="今度こそlaravelを弄ろう"><strong>今度こそLaravelを弄ろう</strong></h2>
+<p>なんだかんだgitやらgithubにまあまあ時間を取られてしまった。</p>
+<p>ここからは<a href="https://amzn.asia/d/4vXHZ7n" rel="noopener noreferrer" target="_blank">書籍</a>を頼りにVSCodeを使って進めていく。</p>
+<h3 id="httpリクエストやhttpレスポンスとはなにか"><strong>HTTPリクエストやHTTPレスポンスとはなにか</strong></h3>
+<p>色々調べているうちにここら辺の基礎知識がしっかりしていないと感じたので、ここから。</p>
+<h4 id="httpとは"><strong>HTTPとは</strong></h4>
+<p>HTTPはHypertext Transfer Protocolの略。<br>
+ハイパーテキストの送受信をする際のルールみたいな感じ。<br>
+ここではハイパーテキストとあるけど、Web通信を行う際のルールみたいな感じでいいと思う。</p>
+<h4 id="なぜhttpが必要なのか"><strong>なぜHTTPが必要なのか</strong></h4>
+<p>もし、各国、各デバイス、各ブラウザが独自にWeb通信のルールを持っていると「Aのルールでサーバーに話しかけたらよくわからんルールで返答されたんですけど～。マジわけワカメ」みたいな事が起きちゃう。ましてや処理をするのはプログラムなので、形式が少しでも違うとエラーを吐いちゃう。</p>
+<p>そこで、全世界、全デバイス、全ブラウザで共通のHTTPというルールを使えば、どの世界のサーバーとも、どのデバイスとも、どのブラウザともWeb通信が出来るということ。</p>
+<h4 id="httpリクエストレスポンスとはなにか"><strong>HTTPリクエスト・レスポンスとはなにか</strong></h4>
+<p>恐らく例外もあるけど、<br>
+HTTPリクエストはクライアント側がサーバーに行う行為。<br>
+HTTPレスポンスはHTTPリクエストに応じてサーバー側がクライアントに行う行為。</p>
+<p>また、基本的にクライアントから処理が始まる。だから、いきなりサーバーがレスポンスを送ることはない。</p>
+<p>因みに、HTTPリクエストは</p>
+<ol>
+<li>
+<p>リクエストライン</p>
+</li>
+<li>
+<p>ヘッダーフィールド</p>
+</li>
+<li>
+<p>ボディ</p>
+</li>
+</ol>
+<p>で構成されていて</p>
+<p>HTTPレスポンスは</p>
+<ol>
+<li>
+<p>ステータスライン</p>
+</li>
+<li>
+<p>ヘッダーフィールド</p>
+</li>
+<li>
+<p>ボディ</p>
+</li>
+</ol>
+<p>で構成されている。</p>
+<h4 id="httpの例"><strong>HTTPの例</strong></h4>
+<p>正直、例を見ずに何やってんのか聞いてもわけわかんないよね。</p>
+<p>ChatGPTに例を出力してもらったので、それを見ながら理解していく。</p>
+<p><strong>リクエストの例</strong></p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>GET /index.html HTTP/1.1</span></span>
+<span class="line"><span>Host: www.example.com</span></span>
+<span class="line"><span>Accept: text/html, application/xhtml+xml, application/xml;q=0.9, */*;q=0.8</span></span>
+<span class="line"><span>Accept-Language: en-US,en;q=0.5</span></span>
+<span class="line"><span>Accept-Encoding: gzip, deflate, br</span></span>
+<span class="line"><span>User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3</span></span>
+<span class="line"><span>DNT: 1</span></span>
+<span class="line"><span>Connection: keep-alive</span></span>
+<span class="line"><span>Upgrade-Insecure-Requests: 1</span></span></code></pre>
+<p>これがHTTPリクエストの例。<br>
+1行目の<br>
+「GET /index.html HTTP/1.1」が<strong>リクエストライン</strong>と言われるところで、<br>
+「<strong>メソッド URI HTTPのバージョン</strong>」を空白区切りで指定する。</p>
+<p>それ以降の行は全て<strong>ヘッダーフィールド</strong>というもので、「<strong>フィールド名:内容</strong>」で記述される。</p>
+<p>今回出力してくれた例はメソッドがGETなのでwww.example.comの/index.htmlを要求していることになる。だから、リクエストラインとヘッダーフィールドしかないんだけど、もしサーバーに情報を送るとき（ログインする際のID・PWとか）はヘッダーフィールドより下の行に<strong>ボディ</strong>で入力したIDとかPWとかの情報を載せて送る。</p>
+<p><strong>レスポンスの例</strong></p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>HTTP/1.1 200 OK</span></span>
+<span class="line"><span>Date: Mon, 23 May 2023 22:38:34 GMT</span></span>
+<span class="line"><span>Server: Apache/2.4.1 (Unix)</span></span>
+<span class="line"><span>Last-Modified: Sat, 20 May 2023 18:56:51 GMT</span></span>
+<span class="line"><span>ETag: "1003-54a-41c9-4692"</span></span>
+<span class="line"><span>Accept-Ranges: bytes</span></span>
+<span class="line"><span>Content-Length: 51</span></span>
+<span class="line"><span>Connection: close</span></span>
+<span class="line"><span>Content-Type: text/html; charset=UTF-8</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>&#x3C;html></span></span>
+<span class="line"><span>&#x3C;body></span></span>
+<span class="line"><span>&#x3C;h1>Hello, World!&#x3C;/h1></span></span>
+<span class="line"><span>&#x3C;/body></span></span>
+<span class="line"><span>&#x3C;/html></span></span></code></pre>
+<p>こちらがHTTPレスポンスの例。一応、リクエストに対応したレスポンスになっている。</p>
+<p>1行目が<strong>ステータスライン</strong>でリクエストの結果を載せている。よく見る404はクライアントエラーの番号で今回の200は成功を意味する。<br>
+2行目から空白行までが<strong>ヘッダーフィールド</strong>になっている。内容はHTTPリクエストと同じ？<br>
+空白行から最後までが<strong>ボディ</strong>になっている。今回はクライアントにwww.example.comの/index.htmlを要求されていたので、HTMLをレスポンスしている。</p>
+<h4 id="リクエストの繰り返し"><strong>リクエストの繰り返し</strong></h4>
+<p>因みに、今回の例はHTMLだけだけど、実際は何回もHTTPリクエストとレスポンスを繰り返してWebページを作っている。<br>
+例えば、HTMLの中に<code>&#x3C;img src="images/example.jpg"></code>という行があったらクライアントはimages/example.jpgを更にリクエストして、サーバーはそれを返す。</p>
+<p>これが正確かはわかんないけど、デベロッパーモードでYoutubeを実際に開いてみると<br>
+9秒間ぐらいの間に63回のリクエストを行っている。</p>
+<p><img alt="" loading="lazy" decoding="async" width="592" height="31" src="/_astro/79c285be889a124cad90824ef490ee70.CXO2OLf1_Z1ByBYW.webp" srcset=""></p>
+<p>その中にはHTMLだけじゃなく、画像ファイルやCSSやJavaScriptとか色々含まれてた。</p>
+<h4 id="実際にhttpを見てみたい"><strong>実際にHTTPを見てみたい！</strong></h4>
+<p>やっぱりHTTPを実際に見てみたいよね。</p>
+<p>実際に、好きなWebサイトでf12を押してデベロッパーツール→ネットワークに行くことでHTTPを見ることが出来る。<br>
+HTTPは通信内容を暗号化するHTTPSがあるくらいで、知識がない私にはちょっとどこまで見せていいのか分からないので各自で見てほしい。</p>
+<h4 id="クライアントとサーバーはどのような動作をするのか"><strong>クライアントとサーバーはどのような動作をするのか</strong></h4>
+<p>実際にクライアントとサーバーはどのような動作をしてんのかもある程度知っておいた方が良いように感じたので、最後に大まかな処理を。</p>
+<p>内容は大体「<a href="https://amzn.asia/d/5Z0iVkp" rel="noopener noreferrer" target="_blank">Webを支える技術</a>」から。</p>
+<p><strong>クライアントが行うこと</strong></p>
+<ol>
+<li>
+<p>リクエストメッセージの作成</p>
+</li>
+<li>
+<p>リクエストメッセージの送信</p>
+</li>
+<li>
+<p>(レスポンスの待機)</p>
+</li>
+<li>
+<p>レスポンスの受信</p>
+</li>
+<li>
+<p>レスポンスメッセージの解析</p>
+</li>
+<li>
+<p>クライアントの目的を達成するための処理</p>
+</li>
+</ol>
+<p><strong>サーバーが行うこと</strong></p>
+<ol>
+<li>
+<p>(リクエストの待機)</p>
+</li>
+<li>
+<p>リクエストの受信</p>
+</li>
+<li>
+<p>リクエストメッセージの解析</p>
+</li>
+<li>
+<p>適切なアプリケーションに処理を委譲</p>
+</li>
+<li>
+<p>アプリケーションからの処理結果を取得</p>
+</li>
+<li>
+<p>レスポンスメッセージの作成</p>
+</li>
+<li>
+<p>レスポンスメッセージの送信</p>
+</li>
+</ol>
+<p>HTTPリクエストとHTTPレスポンスがどんなものかを知りたかっただけなのに、結構書いちゃった。全てが正確に合ってるわけではないと思うけど、大まかには合ってるはず。</p>
+<h3 id="書籍メモ"><strong>書籍メモ</strong></h3>
+<p>書籍の通りに進める過程を残してもいいんだけど、色々面倒なのでメモだけ残していく。</p>
+<ul>
+<li>
+<p><strong>エントリポイント</strong><br>
+HTTPリクエストは最初にpublic/index.phpに来る。要するに、アプリケーションの委譲がindex.phpに来るってこと！？</p>
+<p>これは、たとえ<a href="https://example.com/test/%E3%81%AB%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B9%E3%81%97%E3%81%9F%E3%81%A8%E3%81%97%E3%81%A6%E3%82%82%E3%80%81/public/index.php%E3%81%AB%E3%83%AA%E3%83%80%E3%82%A4%E3%83%AC%E3%82%AF%E3%83%88%E3%81%99%E3%82%8B%E3%81%A8%E3%81%84%E3%81%86%E8%A9%B1%E3%82%89%E3%81%97%E3%81%84%E3%80%82" rel="noopener noreferrer" target="_blank">https://example.com/test/にアクセスしたとしても、/public/index.phpにリダイレクトするという話らしい。</a><br>
+実際に.htaccessファイルを見ると、index.phpの記述を確認できる。<br>
+<img alt="" loading="lazy" decoding="async" width="355" height="64" src="/_astro/784c9505d35ed27a2a59ef81d70552a1.BmX1ytOy_Z1WCM4N.webp" srcset=""></p>
+<p>要するに、Laravelで作ったアプリ内のどのURIにアクセスしても、先ずはindex.phpに行ってそこから処理が始まるということ。<br>
+index.phpを<a href="https://qiita.com/minato-naka/items/f05b023950ce544a8bec#indexphp%E3%81%AE%E4%B8%AD" rel="noopener noreferrer" target="_blank">ある程度詳しく解説してくれている人</a>もいるのだけど、マジでチンプンカンプンなのでいったんそういうもんだと思ってスルー。</p>
+</li>
+<li>
+<p><strong>ルーティング</strong><br>
+ルーティングとは「○○のURLにアクセスがあったら××の処理を呼び出す」ということらしい。<br>
+ルーティングを定義するファイルはroutesフォルダにあって、Webアプリケーションの処理はweb.phpが行っているらしい。<br>
+<img alt="" loading="lazy" decoding="async" width="262" height="136" src="/_astro/f9f5c0323daaf78a4411d2912915a28c.BVxmvevE_1W5oYq.webp" srcset=""><br>
+実際にweb.phpを見てみると以下のようになっている。<br>
+<img alt="" loading="lazy" decoding="async" width="380" height="135" src="/_astro/6c3fe5104087839f0b2f60297d02bc41.j1IIPkaQ_2uoPF3.webp" srcset=""><br>
+つまり、Webサイトのトップページの「/」にアクセスした場合、welcomeという名前のviewを出すよう処理されている。</p>
+</li>
+<li>
+<p><strong>ビュー</strong><br>
+じゃあ、そのviewってなんやねんと。<br>
+viewはresources/viewsに入っている。<br>
+実際に見てみるとwelcome.blade.phpというのがある。<br>
+<img alt="" loading="lazy" decoding="async" width="277" height="131" src="/_astro/a259a684ab0d64eb74023c51bf221b3d.DUCTn79z_1pW3RS.webp" srcset=""></p>
+<p>これを先ず見ると、.blade.phpというのが気になると思うんだけど「.blade.php」というのが拡張子で、Laravelが提供するBladeというテンプレートエンジンを利用する際に付ける拡張子らしい。</p>
+<p>実際にwelcome.blade.phpを見てみると、htmlの中に＠if等の見慣れない処理が入っている。<br>
+<img alt="" loading="lazy" decoding="async" width="604" height="154" src="/_astro/c4905f653b984b2978bd71b59e5ee09b.DN3PJRDx_Z1SSCf9.webp" srcset=""></p>
+<p>これがBladeを使った処理の書き方で、ifやforの処理とか色んな処理の補助をしてくれるみたい。</p>
+<p>Bladeは最終的にhtmlを出力する。<br>
+つまり、さっきのルーティングはview(“welcome”)だったので、トップページにアクセスすると、welcome.blade.phpで出力されたhtmlを取得し、HTTPレスポンスで返信するということになる？</p>
+</li>
+<li>
+<p><strong>新しく作ったルーティングをApacheが読み込んでくれない問題</strong><br>
+解決方法　/etc/httpd/conf.d/test_app.confの記述に「AllowOverride All」を追加した。<br>
+具体的には以下のようになった。<br>
+&#x3C;VirtualHost *:80><br>
+    DocumentRoot /home/toppakou/Laravel/test_app/public<br>
+    ServerName laravel.test<br>
+    &#x3C;Directory /home/toppakou/Laravel/test_app/public><br>
+        Require ip 192.168<br>
+        AllowOverride All<br>
+    <br>
+</p>
+<p><strong>どういうことか？</strong><br>
+AllowOverride Allはそのディレクトリ以下の.htaccessの指示を全て受け入れるという設定。<br>
+Laravelはルーティングにこの.htaccessを使うらしく、初期の何も設定していない状態だとApacheがこの.htaccessを無視していたので正しくルーティングできなかったっぽい。</p>
+<p>ChatGPTありがとう。</p>
+</li>
+<li>
+<p><strong>テストコードってなんだ？</strong> 書籍ではなんかいきなりテストコードの話に入った。<br>
+そもそもテストコードって何を指すのかよくわからんので、テストコードについて調べる。</p>
+<p><strong>そもそもテストコードとは</strong><br>
+テストコードとは、書いたコードが正しく動作するかを確かめる為のコード。<br>
+競プロやってる人は、自分で自分のコードのジャッジシステムを作るみたいなイメージしてくれればいいと思う。</p>
+<p>現時点ではWebページをindex.phpとhomeの2つしか作ってないわけだけど、これが増えてくると全部のページが正しく動作しているか毎回検証するのって面倒。<br>
+そこで、ルーティングに登録されてるURLに全てに飛んでステータスコード200が返ってくるかを確認するコードがあったら便利そうじゃない？　他にもセキュリティとかパフォーマンスとかそういう様々な検証をしてくれるコードをテストコードと言うらしい。</p>
+<p><strong>テストコードのメリット</strong><br>
+1.コードさえ書けば、繰り返し何回も気軽にテストできる。バグの早期検知に繋がる。<br>
+2.テストの条件さえ間違えてなければ、最低限要件を保証できる<br>
+3.リファクタリングの促進<br>
+4.一貫性<br>
+1と2は何となくわかると思う。<br>
+3は、リファクタリングして意図せぬバグが発生したとしてもテストコードがあれば発見しやすいので気軽にできるよね的な意味っぽい。<br>
+4は使ってみて思ったんだけど、!と！の区別とか、型が文字列なのかDateなのかみたいな細かいところに一貫性を求められると感じた。</p>
+<p>一応テスト駆動（テストファースト）という先にテストを作ってしまう開発手法もあるらしいんだけど、結構賛否両論だったので紹介だけ。</p>
+<p><strong>Laravelのテストコード</strong><br>
+Laravelではこのテストコードを簡単に書けるようPHPUnitやLaravel Duskといったツールが入っていて、テストコード記述の支援をしてくれるみたい。</p>
+<p>実際、テストコードを書いたら「php artisan test」で全部のテストコードを実行して正誤を判定してくれるので、かなり楽だし気軽にできる。</p>
+</li>
+<li>
+<p><strong>マイグレーションとは</strong>マイグレーション（migration）の意味自体は”移行”と言う意味。<br>
+Laravelでのマイグレーションは、PHPでDBのテーブルの定義を行うこと。<br>
+DBを作るわけではなく、あくまでもDBの設計図を書くみたいな感じ。その設計図を元にMySQLなどのDBに反映させるイメージ。</p>
+<p>そもそも本来、例えばMySQLというDBの場合、MySQLサーバーの方でDBを設計してLaravelと連携させるという作業が必要。このとき、複数人で作業するときとかにDBを連携させたくてもDBそのものはデータ量やセキュリティの面からgitには挙げるべきじゃない。だからDBそのものをgitで連携させるのが困難なので、設計図だけ共有しようというのがマイグレーションの意味。</p>
+<p>DBの設計図を作ることで、変更があった時とかにも簡単に連携が可能になるし、マイグレーションには変更履歴機能があるので過去に遡れたりもする。ちょっとしたgitみたいなもん？</p>
+</li>
+<li>
+<p><strong>MySQLをインストールして使えるようにしよう</strong>MySQLとか使うの結構後の方だと思ったけど、もう使う必要があるっぽい。</p>
+<p>まず、mysqlが入ってないかの確認。<br>
+<img alt="" loading="lazy" decoding="async" width="414" height="46" src="/_astro/9a10e6af92419ff9bf105628993dd960.DoaOZDbz_ZPyMj7.webp" srcset=""><br>
+そりゃあ入れてないんだからないよね。</p>
+<p>mysqlのバージョンを確認<br>
+‘dnf info mysql’<br>
+<img alt="" loading="lazy" decoding="async" width="438" height="139" src="/_astro/a1adfdb83e75ecb126bf1e509afbeb07.D8PK3yXQ_Z1d9vRj.webp" srcset=""></p>
+<p>‘sudo dnf install -y mysql-server’<br>
+でインストール。</p>
+<p>MySQLを起動しないとコマンド類は使えないっぽいので、とりあえず起動。<br>
+‘sudo systemctl status mysqld’<br>
+mysqldのdはデーモンのd。</p>
+<p>‘sudo systemctl status mysqld’<br>
+で起動確認。<br>
+<img alt="" loading="lazy" decoding="async" width="458" height="67" src="/_astro/80cc85005b7d6b276569a65332618533.BdIaE49V_1OzsIJ.webp" srcset=""></p>
+<p>インストールしたばかりではセキュリティ面に不安があるそうなので、<br>
+‘sudo mysql_secure_installation’<br>
+でセキュリティ初期設定。</p>
+<p>最初にパスワードの条件を付けるかどうかを聞いてくる。<br>
+<img alt="" loading="lazy" decoding="async" width="689" height="206" src="/_astro/637c852dfc4389f1f732c723fa47b67f.DeJq_CNx_1kxsFo.webp" srcset=""><br>
+MySQLもサーバーなのでrootやパスワードの概念がある。そのパスワード。<br>
+今回はローカル環境なので必要ないっちゃないと思うんだけど、本番を想定してパスワードを付けていく。<br>
+だからy。</p>
+<p>LOWは8文字以上。MEDIUMはそれに加えて数字・大小文字の混在・記号を含む。STRONGはそれに加えて辞書に登録された単語を含まない。<br>
+辞書って何？　→　’apple’とか’password’とかのよくある単語を登録されたもの。ここに登録されたものとパスワードの一部が被るとNGっぽい。<br>
+<img alt="" loading="lazy" decoding="async" width="764" height="99" src="/_astro/ecba9caf2932be4162828c6e22e987ff.vNqwmN7l_ZKSiCu.webp" srcset=""><br>
+お好きなものを選択し、パスワードを入力。</p>
+<p>次に、匿名ユーザーを削除するか聞かれた。<br>
+PWなしでログインできて、一部読み書きができるユーザーっぽい。<br>
+本番環境を想定すると要らないので、削除のy。<br>
+<img alt="" loading="lazy" decoding="async" width="713" height="161" src="/_astro/676f23b1e84acbffa6790a94798f739d.Iv701lpb_Z28xz64.webp" srcset=""></p>
+<p>次に、リモートrootログインを許可するか否かを聞かれた。<br>
+もしリモートでrootにログインする場合は専用のユーザーを作成し許可させるらしいので、今回は許可しないのy。<br>
+<img alt="" loading="lazy" decoding="async" width="774" height="112" src="/_astro/61a1a653e7a403a039337cd987f147e0.DNtV0j7m_Z1bUG5A.webp" srcset=""></p>
+<p>次に、テストデータベースを削除するかの問。別に要らないと思うのでy。<br>
+<img alt="" loading="lazy" decoding="async" width="801" height="42" src="/_astro/9d03ca44ecfc3f5c48ccc7173f08518b.CEN-oGYr_1xM24W.webp" srcset=""></p>
+<p>最後に変更した権限などを考慮した上でテーブルリロードをするか聞かれたのでy。<br>
+<img alt="" loading="lazy" decoding="async" width="775" height="24" src="/_astro/d9b721efa394efd354edb71dd975235d.C21KxE_7_k6Ca7.webp" srcset=""></p>
+<p>よし、最後にLinux開いた時に自動でMySQLが開くようにして<br>
+‘sudo systemctl enable mysqld’<br>
+これでMySQLの初期設定は完了。</p>
+<p>次に、Laravelと連携させるために.envファイルを弄る。<br>
+.envファイルはLaravelアプリディレクトリ/.envにあるのと、gitignoreに入ってるのでLinux側で弄る。</p>
+<p>この、DBの欄を弄る。<br>
+vimとかで弄ってもらえれば。<br>
+<img alt="" loading="lazy" decoding="async" width="224" height="124" src="/_astro/3b5cc871ddf9550160b2ee49b8fc4377.BHudDZZ8_Z1T8YEL.webp" srcset=""></p>
+<p>MySQLであれば恐らく、DB_PASSWORDのところにさっき設定したパスワードを入れるだけで後は初期で良いと思われる。<br>
+DB_DATABASEはお好きな名前を。</p>
+</li>
+<li>
+<p><strong>MySQLをつかってみよう</strong><br>
+設定を終えたばかりであれば、<br>
+systemctl restart mysqld<br>
+php artisan config:cache<br>
+でMySQLの再起動と.envのキャッシュの削除を行っといたほうがいいかも。</p>
+<p>‘systemctl status mysqld’でアクティブなのを確認したら、<br>
+‘mysql -u root -p’でrootにログイン。「-u ユーザー名」でユーザ―の指定で、-pはパスワードを設定している時だけつける。</p>
+<p>‘show databases;’でデータベース一覧が見れる。<br>
+<img alt="" loading="lazy" decoding="async" width="260" height="219" src="/_astro/ea1e3a53380ecab19d5f153e853923ca.B0ENPjOC_18T6t0.webp" srcset=""><br>
+既に何個かある？</p>
+<p>前述した通り、 <strong>マイグレーションはDBを作成する訳ではないので、ここで作っておく必要がある。</strong> DB_DATABASEで設定した名前でDBを新規作成する。<br>
+‘create database DB名;’で作成。<br>
+<img alt="" loading="lazy" decoding="async" width="380" height="73" src="/_astro/ab2cd30300573fbbfba0fe7d2d697dea.CnI2336-_Z1RQzJK.webp" srcset=""></p>
+<p>‘show databases;’で確認<br>
+<img alt="" loading="lazy" decoding="async" width="246" height="230" src="/_astro/36c933687f72648742a6ebbe895eabe9.BFc27cPX_ZY92oU.webp" srcset=""></p>
+<p>‘exit’や’quit’でログアウトできる。</p>
+<p>Laravelで作成したアプリディレクトリに移り、<br>
+‘php artisan migrate’<br>
+でマイグレーションの実行。</p>
+<p>……ん？<br>
+<img alt="" loading="lazy" decoding="async" width="788" height="89" src="/_astro/808b2ab41efc4d8ef1a1fbb04ad4db7a.BMM5oeJQ_Z1oyERq.webp" srcset=""><br>
+なんかドライバが無いと言われた。</p>
+<p>‘sudo dnf install -y php-pdo php-mysqlnd’でドライバをインストールしてみる。</p>
+<p>もっかいマイグレーション実行！<br>
+<img alt="" loading="lazy" decoding="async" width="793" height="280" src="/_astro/45a31db79b0e07ea707ccfa0f1aad78a.Brn2MJSU_Z1OihGg.webp" srcset=""><br>
+おｋ！</p>
+<p>mysqlにログインしてDBの確認。<br>
+‘use DB名;’でDBにアクセスして、’show tables;’で確認。<br>
+<img alt="" loading="lazy" decoding="async" width="278" height="223" src="/_astro/54de9d4bdf3915fa49ac0bbd3dfaca4b.i2lNKMey_124XH0.webp" srcset=""></p>
+<p>よし、完了。</p>
+<p>最後に絶対スナップショットを取っておこう。</p>
+</li>
+<li>
+<p><strong>メールサーバーを建てよう</strong><br>
+マジかよ。メール送信機能の確認で使うっぽい。<br>
+MailHogというSMTPサーバーのツールを利用してメールサーバーを構築する。</p>
+<p>そもそも、MailHogはGo言語で出来ているのでGoの環境構築から行う。<br>
+ここ1週間、環境構築しかしてない。</p>
+<p><strong>Goの環境構築</strong><br>
+<a href="https://go.dev/dl/" rel="noopener noreferrer" target="_blank">ここから</a>現在のGoの最新バージョンを確認する。<br>
+今は1.20.6が最新っぽいね。<br>
+1.20.6の場合は<br>
+‘wget <a href="https://dl.google.com/go/go1.20.6.linux-amd64.tar.gz%E2%80%99%E3%81%A7%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89%E3%80%82" rel="noopener noreferrer" target="_blank">https://dl.google.com/go/go1.20.6.linux-amd64.tar.gz’でダウンロード。</a><br>
+‘sudo tar -C /usr/local -xvf go1.20.6.linux-amd64.tar.gz’で解凍して/user/localに移動。</p>
+<p>‘vim ~/.bash_profile’で編集して、’PATH=$PATH:$HOME/bin:/usr/local/go/bin’を記述。<br>
+<img alt="" loading="lazy" decoding="async" width="491" height="98" src="/_astro/89215638964bcbec2cf6ebed53097dd7.BlmNmOZw_1q1y4J.webp" srcset=""></p>
+<p>‘source ~/.bash_profile’で反映。</p>
+<p>‘go version’でバージョン確認ができればパスは通ってる。</p>
+<p><strong>MailHogの導入</strong><br>
+‘go install github.com/mailhog/MailHog@latest’で最新版のMailHogをダウンロード。</p>
+<p>パスを通す為、’vim ~/.bashrc’で’export PATH=$PATH:$HOME/go/bin/’を追加。<br>
+‘source ~/.bashrc’で更新。</p>
+<p><strong>.envの編集</strong><br>
+次に.envの編集。<br>
+<img alt="" loading="lazy" decoding="async" width="414" height="171" src="/_astro/eb2937dd5745468f793f6579b72e838f.COJbf4TT_Z17UHn7.webp" srcset=""><br>
+私と同じようにVirtualBoxでブリッジ接続ならこんな感じで。<br>
+VirtualBoxからブリッジ接続じゃないならMAIL_HOSTが人によって違うかも。</p>
+<p><strong>ファイアウォールの設定</strong><br>
+8025番ポートを開放する。<br>
+‘sudo firewall-cmd —add-port=8025/tcp —zone=public —permanent’<br>
+で再起動後も永遠に開放<br>
+‘sudo firewall-cmd —reload’でリロード。</p>
+<p>これで’MailHog’とやると<br>
+<img alt="" loading="lazy" decoding="async" width="614" height="146" src="/_astro/705238e0d2d0861c4afa76b0c9c97b3a.DqQlWqtE_JKOAz.webp" srcset=""><br>
+8025番ポートで開いたよ！　と言われるので、私と同じようにVirtualBoxでブリッジ接続の人は「<a href="http://%E3%82%B2%E3%82%B9%E3%83%88PC%E3%81%AEIP:8025%E3%80%8D%E3%81%A7%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B9%E3%81%99%E3%82%8B%E3%81%A8%E3%83%9B%E3%82%B9%E3%83%88PC%E3%81%A7MailHog%E3%81%8C%E3%83%96%E3%83%A9%E3%82%A6%E3%82%B6%E3%81%A7%E5%88%A9%E7%94%A8%E3%81%A7%E3%81%8D%E3%82%8B%E3%80%82" rel="noopener noreferrer" target="_blank">http://ゲストPCのIP:8025」でアクセスするとホストPCでMailHogがブラウザで利用できる。</a><br>
+<img alt="" loading="lazy" decoding="async" width="1600" height="374" src="/_astro/9e7dbf7ae741fb55102244bad5b983f6.B-Ua7VVe_ZOkF1R.webp" srcset=""></p>
+</li>
+</ul>
+<h2 id="おわりに"><strong>おわりに</strong></h2>
+<p>なんか3日くらいに渡ってしまった。<br>
+外を見るともう人が働き始めている時間になっている。</p>
+<p>まだ論理的にというより、まず動かしてみて何となく理解しているレベルだと思うので、これからも学び続けて自由自在になんか面白いサイトをつくりたい。</p></section><aside class="w-[300px] hidden lg:block shrink-0" data-astro-cid-e2rqhpi3><nav class="sticky top-16 h-fit  bg-white py-24 pl-24 rounded-md" data-astro-cid-tqqy2vud><section data-astro-cid-tqqy2vud><header data-astro-cid-tqqy2vud><h2 class="font-bold text-lg" data-astro-cid-tqqy2vud>目次</h2></header></section><div class="article-toc scroll-smooth mt-4 py-16 pr-24 overflow-y-auto max-h-[90svh]" data-astro-cid-tqqy2vud></div></nav><script type="module" src="/_astro/ArticleTOC.astro_astro_type_script_index_0_lang.mX9zJvT_.js"></script></aside></div><div class="mt-40 mb-64" data-pagefind-ignore data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a><svg viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16 mx-4 mt-[2px]" data-astro-cid-e2rqhpi3="true">
+  <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+</svg><a href="/blog#%E4%BD%9C%E6%9B%B2%E3%81%AE%E8%A3%9C%E5%8A%A9%E3%83%84%E3%83%BC%E3%83%AB%E3%82%92%E4%BD%9C%E3%82%8B%E3%81%BE%E3%81%A7%E3%81%AE%E6%97%A5%E8%A8%98" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">作曲の補助ツールを作るまでの日記</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=PHP"># PHP</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%97%A5%E8%A8%98"># 日記</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Laravel"># Laravel</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Linux"># Linux</a></div></div></article></main></div><footer class="pb-40 px-24 md:px-0 bg-white"><hr class="mx-auto w-2/3 md:w-1/2 my-24 h-[1px] border-0 bg-slate-400"><div class="mx-8 md:mx-64"><a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" target="_blank" rel="noopener noreferrer"><img src="/_astro/by-nc.DpMeGFcJ_ZF0RGK.svg" alt="クリエイティブコモンズ 表示-非営利 4.0 ライセンス" loading="lazy" decoding="async" width="125" height="44"></a><p class="text-xs md:text-sm">本サイト「<a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">tamakoma.com</a>」から提供されるブログ内の文章、プログラミングコードは、<a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">クリエイティブ・コモンズ 表示-非営利 4.0 ライセンス</a>の下に提供されます。</p><p class="text-xs md:text-sm">音楽や画像などのメディアコンテンツにはこのライセンスは適用されません。</p></div><p class="text-center text-sm"><a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Top</a> / <a href="/contact" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Contact</a> / <a href="/feed.xml" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">RSS Feed</a></p><p class="mt-24 text-center">&copy; tamakoma 2018-2026</p></footer></div></body></html>

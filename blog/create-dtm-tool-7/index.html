@@ -1,0 +1,204 @@
+<!DOCTYPE html><html lang="ja" class="text-slate-700"><head><meta charset="utf-8"><title>【7日目】Laravelの環境構築 | tamakoma.com</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v7.0.3"><meta name="twitter:card" content="summary"><meta property="og:title" content="【7日目】Laravelの環境構築"><meta property="og:type" content="website"><meta property="og:url" content="https://tamakoma.com/blog/create-dtm-tool-7/"><meta property="og:image" content="/_astro/mikuteto-OGP.DYQebPDj.png"><meta property="og:description" content="学んだことを残すブログ"><meta property="og:site_name" content="tamakoma.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.0.1/dist/css/yakuhanjp_s.css"><link rel="sitemap" href="/sitemap-index.xml"><link rel="stylesheet" href="/_astro/BaseLayout.Ddu7R_5r.css"><style>/*! tailwindcss v4.2.2 | MIT License | https://tailwindcss.com */
+.article-toc[data-astro-cid-tqqy2vud] .toc-link{font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));display:block}@media (hover:hover){.article-toc[data-astro-cid-tqqy2vud] .toc-link:hover{color:var(--color-slate-600,oklch(44.6% .043 257.281));text-decoration-line:underline}}.article-toc[data-astro-cid-tqqy2vud] .toc-link.to-link-active{color:var(--color-miku-500,oklch(63.7% .1071 185.34))}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H2){margin-left:var(--spacing-24,24px)}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H3){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:10px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H4){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:20px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H5){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:30px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H6){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:40px}.article-toc[data-astro-cid-tqqy2vud] .toc-list{list-style-type:decimal;list-style-position:outside}@layer properties{@supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))){*,:before,:after,::backdrop{--tw-font-weight:initial;--tw-border-style:solid}}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a{--tw-font-weight:var(--font-weight-semibold,600);font-weight:var(--font-weight-semibold,600);color:var(--color-miku-500,oklch(63.7% .1071 185.34));text-underline-offset:2px;text-decoration-line:underline}@media (hover:hover){article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a:hover{color:var(--color-miku-700,oklch(50.5% .0901 187.01))}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] code:not(pre>code){margin-inline:var(--spacing-4,4px);border-radius:var(--radius-md,.375rem);border-style:var(--tw-border-style);background-color:var(--color-sumi-100,oklch(97% 0 0));padding-inline:var(--spacing-4,4px);--tw-font-weight:var(--font-weight-normal,400);font-weight:var(--font-weight-normal,400);color:var(--color-black,#000);border-width:0;padding-block:2px}@property --tw-font-weight{syntax:"*";inherits:false}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid}
+</style><script type="module" src="/_astro/page.DCEeCLip.js"></script><script>!(function(w,p,f,c){if(!window.crossOriginIsolated && !navigator.serviceWorker) return;c=w[p]=Object.assign(w[p]||{},{"lib":"/~partytown/","debug":false});c[f]=(c[f]||[])})(window,'partytown','forward');/* Partytown 0.13.2 - MIT QwikDev */
+const t={preserveBehavior:!1},e=e=>{if("string"==typeof e)return[e,t];const[n,r=t]=e;return[n,{...t,...r}]},n=Object.freeze((t=>{const e=new Set;let n=[];do{Object.getOwnPropertyNames(n).forEach((t=>{"function"==typeof n[t]&&e.add(t)}))}while((n=Object.getPrototypeOf(n))!==Object.prototype);return Array.from(e)})());!function(t,r,o,i,a,s,c,l,d,p,u=t,f){function h(){f||(f=1,"/"==(c=(s.lib||"/~partytown/")+(s.debug?"debug/":""))[0]&&(d=r.querySelectorAll('script[type="text/partytown"]'),i!=t?i.dispatchEvent(new CustomEvent("pt1",{detail:t})):(l=setTimeout(v,(null==s?void 0:s.fallbackTimeout)||1e4),r.addEventListener("pt0",w),a?y(1):o.serviceWorker?o.serviceWorker.register(c+(s.swPath||"partytown-sw.js"),{scope:c}).then((function(t){t.active?y():t.installing&&t.installing.addEventListener("statechange",(function(t){"activated"==t.target.state&&y()}))}),console.error):v())))}function y(e){p=r.createElement(e?"script":"iframe"),t._pttab=Date.now(),e||(p.style.display="block",p.style.width="0",p.style.height="0",p.style.border="0",p.style.visibility="hidden",p.setAttribute("aria-hidden",!0)),p.src=c+"partytown-"+(e?"atomics.js?v=0.13.2":"sandbox-sw.html?"+t._pttab),r.querySelector(s.sandboxParent||"body").appendChild(p)}function v(n,o){for(w(),i==t&&(s.forward||[]).map((function(n){const[r]=e(n);delete t[r.split(".")[0]]})),n=0;n<d.length;n++)(o=r.createElement("script")).innerHTML=d[n].innerHTML,o.nonce=s.nonce,r.head.appendChild(o);p&&p.parentNode.removeChild(p)}function w(){clearTimeout(l)}s=t.partytown||{},i==t&&(s.forward||[]).map((function(r){const[o,{preserveBehavior:i}]=e(r);u=t,o.split(".").map((function(e,r,o){var a;u=u[o[r]]=r+1<o.length?u[o[r]]||(a=o[r+1],n.includes(a)?[]:{}):(()=>{let e=null;if(i){const{methodOrProperty:n,thisObject:r}=((t,e)=>{let n=t;for(let t=0;t<e.length-1;t+=1)n=n[e[t]];return{thisObject:n,methodOrProperty:e.length>0?n[e[e.length-1]]:void 0}})(t,o);"function"==typeof n&&(e=(...t)=>n.apply(r,...t))}return function(){let n;return e&&(n=e(arguments)),(t._ptf=t._ptf||[]).push(o,arguments),n}})()}))})),"complete"==r.readyState?h():(t.addEventListener("DOMContentLoaded",h),t.addEventListener("load",h))}(window,document,navigator,top,window.crossOriginIsolated);;(e=>{e.addEventListener("astro:before-swap",e=>{let r=document.body.querySelector("iframe[src*='/~partytown/']");if(r)e.newDocument.body.append(r)})})(document);</script></head><body class="bg-repeat bg-white anywhere" style="background-image: url(/_astro/mikuteto-gray.Dix8k1Tp.gif)"><div class="min-h-screen flex flex-col justify-between" id="container"><div><header><nav class="flex flex-col items-center pt-40 pb-24"><a href="/blog" class="text-3xl md:text-5xl font-bold mb-40 text-slate-400 drop-shadow-2xl">tamakoma.com</a><div class="w-full flex justify-center [&amp;&gt;a]:bg-white [&amp;&gt;a]:border-slate-400"><a href="/" class="block py-8 px-16 text-sumi-600 rounded-l border-l border-y">home</a><a href="/blog/" class="block py-8 px-16 text-sumi-600 border">blog</a><a href="/about/" class="block py-8 px-16 text-sumi-600 rounded-r border-r border-y">about</a></div></nav></header><main class="bg-slate-100 w-full flex justify-end" data-astro-cid-e2rqhpi3><article class="grow" data-pagefind-body data-astro-cid-e2rqhpi3><header class="mt-24 w-11/12 max-w-[700px] mx-auto" data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-pagefind-weight="6.7" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a><svg viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16 mx-4 mt-[2px]" data-astro-cid-e2rqhpi3="true">
+  <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+</svg><a href="/blog#%E4%BD%9C%E6%9B%B2%E3%81%AE%E8%A3%9C%E5%8A%A9%E3%83%84%E3%83%BC%E3%83%AB%E3%82%92%E4%BD%9C%E3%82%8B%E3%81%BE%E3%81%A7%E3%81%AE%E6%97%A5%E8%A8%98" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">作曲の補助ツールを作るまでの日記</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-pagefind-weight="6.5" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=PHP"># PHP</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%97%A5%E8%A8%98"># 日記</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Laravel"># Laravel</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Linux"># Linux</a></div><h1 class="text-center text-xl md:text-3xl font-bold px-24 mt-40" data-astro-cid-e2rqhpi3>【7日目】Laravelの環境構築</h1><div class="text-slate-400 text-sm gap-16 flex justify-center mt-24" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>投稿日 <time datetime="2023-07-16T00:00:00.000Z">2023/07/16</time></span><span data-astro-cid-e2rqhpi3>最終更新日 <time datetime="2023-07-16T00:00:00.000Z">2023/07/16</time></span></div></header><hr class="bg-slate-200 rounded-full mx-auto h-4 my-40 w-40 border-0"><div class="flex mx-auto justify-center gap-40" data-astro-cid-e2rqhpi3><section id="article-body" class="
+                            prose prose-neutral
+                            prose-blockquote:border-miku-400 prose-blockquote:font-normal
+                            w-0 grow
+                            max-w-[650px] bg-white box-content px-16 md:px-40 py-24 rounded-md
+                            " data-astro-cid-e2rqhpi3><p>2023年7月16日</p>
+<p>今日は、とりあえずLaravelなるものを弄ってみよう。</p>
+<h2 id="はじめに"><strong>はじめに</strong></h2>
+<p>弄ってみるにあたって、一応Laravelだけ<a href="https://amzn.asia/d/f8HfKWA" rel="noopener noreferrer" target="_blank">参考書籍</a>の提示を貰っていたのでkindle版を購入。なんか運が良くて1900円の時に買えた。</p>
+<p><img alt="" loading="lazy" decoding="async" width="1173" height="377" src="/_astro/9de359506bda878728476922b6d44bbd.CdOPn7Tq_1num7P.webp" srcset=""></p>
+<p>しかし、なんとこの本、<strong>550ページ弱</strong>もある。本の’はじめに’にも「Laravel初学者の方には少々敷居が高く感じられ」とあり、恐らく敷居が高い。</p>
+<p>私の場合PHPの基礎も微妙なので、難易度次第ではPaizaの講座を使ったりもう少し易しい本に撤退するかもしれない。</p>
+<p>やっていこう。</p>
+<h2 id="環境構築をはじめる"><strong>環境構築</strong>をはじめる</h2>
+<p>昨日まであんなに環境構築やってたのにまた環境構築かよ！　みたいな気持ちは正直あるよね。</p>
+<p>もし、AlmaLinux9やVirtualBoxにこだわらない人はLaravel SailやHomesteadを利用した環境構築の方が簡単で良いと思われる。<br>
+今回はこだわるので、普通にAlmaLinuxにLaravelを追加する。</p>
+<p>昨日から引き続き、以下の状態から環境構築を行う</p>
+<ul>
+<li>
+<p>VirtualBox 7.0.8</p>
+</li>
+<li>
+<p>AlmaLinux 9.2</p>
+</li>
+<li>
+<p>Apache 2.4.53</p>
+</li>
+<li>
+<p>PHP 8.0.27</p>
+</li>
+</ul>
+<p>入れたいのはLaravel9だけど、今はLaravel10が出てるらしいのでそっちでもいいのかなとは思う。</p>
+<p>Laravel単体のインストールは書籍の方に説明がないので、手探りで進める。</p>
+<h2 id="laravelのイメージ"><strong>Laravelのイメージ</strong></h2>
+<p>私はプログラミングをPythonから学んだ民なので、何となくコード内にimportを書いてライブラリを読み込むイメージがあったんだけど、全然そんな感じじゃない。</p>
+<p>超大雑把にイメージすると、新しくLaravelディレクトリを作ってその中にアプリ毎にLaravelをインストールするイメージ。だから、アプリ毎に独立していて干渉することがない。</p>
+<p>じゃあ、Apacheにどうやって読み込ませるのかというと、アプリ毎にpublicというディレクトリが作られて、そこに出力されるのでそこをApacheに読み込ませるというイメージ。</p>
+<p>下は何となくで作った構成イメージ</p>
+<p>/Laravel<br>
+  /アプリ1<br>
+    /Laravelの構成要素1<br>
+    /Laravelの構成要素2<br>
+    /Laravelの構成要素3<br>
+    /…<br>
+    /public<br>
+  /アプリ2<br>
+    /Laravelの構成要素1<br>
+    /Laravelの構成要素2<br>
+    /Laravelの構成要素3<br>
+    /…<br>
+    /public</p>
+<p>だから、Pythonみたいに.pyファイルだけで完結しない。</p>
+<h2 id="composerを使う"><strong>Composer</strong>を使う</h2>
+<p>LaravelをComposerを使ってインストールする。</p>
+<p>ComposerはPHP関連のパッケージ管理ツールみたいなイメージ。<br>
+Laravelを使いたいときはLaravelだけじゃなくて、前提で必要とされるライブラリみたいなのがあるので、その依存関係とかを考慮して全部自動でインストールしてくれる。</p>
+<p>その為にまずComposerをインストールする。</p>
+<p><a href="https://getcomposer.org/download/" rel="noopener noreferrer" target="_blank">公式ページ</a>のコマンドインストール方法がいいっぽいのでこれでインストールする。</p>
+<p>ここにコマンドを貼ってしまうと古いバージョンの物になってしまう可能性があるので、公式ページからどうぞ。</p>
+<p>コマンドを打ち終えたらPathを通す。</p>
+<p>といってもcomposer.pharを/usr/local/bin/composerに移すだけでいいっぽい。<br>
+‘sudo mv composer.phar /usr/local/bin/composer’</p>
+<p><img alt="" loading="lazy" decoding="async" width="737" height="87" src="/_astro/07d38c93d665ca09f388b73a53cef62b.BeI-FTs1_mbU3p.webp" srcset=""></p>
+<p>次にcomposerのアップデートをする。</p>
+<p>‘composer self-update’</p>
+<p><img alt="" loading="lazy" decoding="async" width="803" height="81" src="/_astro/b19f713db2e8c7f06b0ec283f87611c2.BjvjvetA_21Czuc.webp" srcset=""></p>
+<p>このコマンドが通るってことはPathを通せたっていう認識でいいよね？</p>
+<h2 id="laravelのインストール"><strong>Laravelのインストール</strong></h2>
+<p>さっき説明した通り、LaravelはpublicディレクトリをApacheに読み込ませればいい。</p>
+<p>だから、極論Apacheが読み込む/var/www/htmlにインストールしてしまえば問題ないけど、ちょっとごり押し感があるので、今回はApacheにpublicディレクトリを認知させる方針にする。</p>
+<p>‘composer global require laravel/installer’でとりあえずLaravelのインストール。</p>
+<h2 id="laravelのpathを通す"><strong>LaravelのPathを通す</strong></h2>
+<p>Pathが通ってなかったので、こちらもPathを通す。</p>
+<p>私の場合、laravelは/home/toppakou/.config/composer/vendor/binにあるので、ここにPathを通す。</p>
+<p><img alt="" loading="lazy" decoding="async" width="608" height="59" src="/_astro/a7a89d9698cf6b8aefc8e1f02d9c3d7f.BNnAJnmX_1EA8a8.webp" srcset=""></p>
+<p>toppakouのとこは自分のユーザー名で。</p>
+<p>‘echo ‘export PATH=“$PATH:/home/toppakou/.config/composer/vendor/bin”’ >> ~/.bashrc’<br>
+と<br>
+‘source ~/.bashrc’<br>
+でパスを通す</p>
+<p>一回パスが通ってるか確認で、’laravel -v’でバージョン確認してみる。</p>
+<p><img alt="" loading="lazy" decoding="async" width="640" height="52" src="/_astro/4deeabb801ec6eb0fb6375b91b78938a.D-4j3RVO_JCskJ.webp" srcset=""></p>
+<p>おｋ。</p>
+<p>次に一般ユーザーのホームディレクトリにLaravelフォルダを作ってそこにlaravelをインストールする。</p>
+<p><img alt="" loading="lazy" decoding="async" width="568" height="220" src="/_astro/41e2cdd46f8d105ec3339d735b971f39.B9C-_0Gu_Z1AbkRT.webp" srcset=""></p>
+<p><img alt="" loading="lazy" decoding="async" width="398" height="75" src="/_astro/96c8741b85b495600edf3bd6ea319532.BILiVcBZ_Z2l47jX.webp" srcset=""></p>
+<p>よし。</p>
+<h2 id="laravelのバージョン確認"><strong>Laravelのバージョン確認</strong></h2>
+<p>次に、インストールしたアプリのLaravelのバージョンを確認。</p>
+<p>‘php artisan —version’</p>
+<p><img alt="" loading="lazy" decoding="async" width="561" height="80" src="/_astro/e74abb87bd43d91f95cc49aed51bc236.CkvnXc-C_Z1DvdDB.webp" srcset=""></p>
+<p>今回は9.52.10らしい。</p>
+<h2 id="バーチャルホストの設定"><strong>バーチャルホストの設定</strong></h2>
+<p>主に<a href="https://qiita.com/erik_t/items/63f079826a60aaa642d3" rel="noopener noreferrer" target="_blank">この方の記事</a>を参考。</p>
+<p>まず、バーチャルホストとは？<br>
+→1つのWebサーバーでexample1.comとexample2.com等の複数のウェブサイトを動かすこと。</p>
+<p>とりあえず、/etc/httpd/conf.d/test_app.confをvimで弄って<strong>ホスト側</strong>のC:\Windows\System32\drivers\etc\hostsを弄る。習うより慣れろ（便利な言葉）精神でやってみよう。</p>
+<p>まず、ホスト側を弄る。普通にメモ帳とかでいじればいいとおもう。</p>
+<p><strong>左下の検索→cmd→右クリックで管理者権限で実行→’notepad C:\Windows\System32\drivers\etc\hosts’でメモ帳で開く→追記して保存。</strong></p>
+<p>今回の私の場合は</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>192.168.1.35 php.test</span></span>
+<span class="line"><span>192.168.1.35 laravel.test</span></span></code></pre>
+<p>にした。左側はIPアドレス。右側はお好きな名前で。</p>
+<p><img alt="" loading="lazy" decoding="async" width="702" height="522" src="/_astro/2316d70ba4e23dfbc47ec8de01b68ae5.Bxd0vx_C_Z1n7Bqa.webp" srcset=""></p>
+<p>次に、/etc/httpd/conf.d/test_app.confを弄る。</p>
+<p>‘sudo vim /etc/httpd/conf.d/test_app.conf’</p>
+<p>でvim起動して。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>&#x3C;VirtualHost *:80></span></span>
+<span class="line"><span>    DocumentRoot /var/www/html</span></span>
+<span class="line"><span>    ServerName php.test</span></span>
+<span class="line"><span>&#x3C;/VirtualHost></span></span>
+<span class="line"><span>&#x3C;VirtualHost *:80></span></span>
+<span class="line"><span>    DocumentRoot /home/toppakou/Laravel/test_app/public</span></span>
+<span class="line"><span>    ServerName laravel.test</span></span>
+<span class="line"><span>    &#x3C;Directory /home/toppakou/Laravel/test_app/public></span></span>
+<span class="line"><span>        Require ip 192.168</span></span>
+<span class="line"><span>    &#x3C;/Directory></span></span>
+<span class="line"><span>&#x3C;/VirtualHost></span></span></code></pre>
+<p>を書き込む。</p>
+<p><directory>にあるRequire ip 192.168は、192.168から始まるipの人を許可するという意味。これでダメな人は自分のローカルipアドレス調べて入れるか’Require all granted’にすると行けると思う。<strong>※ここら辺は脆弱性につながる繊細な設定なので、これがセキュアである保証は全くない。ローカル環境なら問題ないと思われるが自己責任で。</strong></directory></p>
+<p>詳しくは<a href="https://go-journey.club/archives/14030" rel="noopener noreferrer" target="_blank">このサイト</a>が分かりやすいかなぁと思う。</p>
+<p>とにかくこうすることで、今まで開いてた方をphp.testとして、Laravelの方をlaravel.testで開けるようになるはず。</p>
+<p>‘apachectl configtest’で文法に問題がないかチェックするらしい。</p>
+<p>Syntax OKでおｋ。</p>
+<p>‘sudo systemctl restart httpd’でapache再起動。</p>
+<h2 id="動作確認"><strong>動作確認</strong></h2>
+<p><code>http://</code>と<code>ServerName</code>をくっつけて閲覧する。<br>
+例えば、私の場合は<code>http://laravel.test</code>で、index.phpを開きたいので「<code>http://laravel.test/index.php</code>」</p>
+<p>さあ、いけたかな？</p>
+<p><img alt="" loading="lazy" decoding="async" width="757" height="212" src="/_astro/5a3ebfb0d7783741676f87c2eb79f02c.DGYWAqBH_z5ujH.webp" srcset=""></p>
+<p>無理だった。</p>
+<h2 id="エラーログを見れるようにしよう"><strong>エラーログを見れるようにしよう</strong></h2>
+<p>Apacheのエラーログをみて、何が起きているかを見よう。</p>
+<p>私の場合error_logは/var/log/httpdにあったので、catコマンドで閲覧してみる。</p>
+<p>‘sudo cat /var/log/httpd/error_log’</p>
+<p><img alt="" loading="lazy" decoding="async" width="702" height="57" src="/_astro/8dca7c265f4de80a0d1d540b10188520.2xDCUrfp_Z11uVxv.webp" srcset=""></p>
+<p>エラーメッセージのどこまで見せれるのかわからんので、重要なとこだけ抜粋すると「because search permissions are missing on a component of the path」ということで、恐らくファイルへのパーミッション（権限）の設定が良くない。</p>
+<p>php.testは行けたので、laravel.testの権限設定が良く無いっぽいね。</p>
+<h2 id="パーミッションの設定を弄る"><strong>パーミッションの設定を弄る</strong></h2>
+<p>主に<a href="https://qiita.com/shisama/items/5f4c4fa768642aad9e06" rel="noopener noreferrer" target="_blank">こちらの方の記事</a>を参考に。</p>
+<p>まず、/home/toppakou/とLaravelの権限設定を見てみる。</p>
+<p>‘ls -l /home/toppakou’,‘ls -l /home/toppakou/Laravel’</p>
+<p>どちらもdrwxr-xr-xだった。</p>
+<p><img alt="" loading="lazy" decoding="async" width="597" height="142" src="/_astro/90307009c3d182d32460ea4a87f6e723.CFMwHU4v_8kHxk.webp" srcset=""></p>
+<h3 id="drwxr-xr-x等の読み方">drwxr-xr-x等の読み方</h3>
+<p>drwxr-xr-xは先頭がdなので、ディレクトリという意味。<br>
+2文字目～4文字目が所有者の権限。現在は左から3単語目のtoppakouが所有者なので、toppakouの権限。<br>
+5文字目～7文字目がグループの権限。現在は左から4単語目のtoppakouがグループなので、toppakouグループの権限。<br>
+8文字目～10文字目がその他の権限。</p>
+<p>それぞれ、読み取り,書き込み,実行の権限の順で決まる。-はその権限がないことを指す。<br>
+もし、ディレクトリで全てに全ての権限を与えてたら→drwxrwxrwxってことか。</p>
+<p>apacheがどこのグループに入っているかを’groups apache’で確認する。</p>
+<p><img alt="" loading="lazy" decoding="async" width="371" height="42" src="/_astro/d45fdb2f1f3e0ecc5acaa36aa630a3fc.1vS55tH1_Jr3ay.webp" srcset=""></p>
+<p>あんたapacheにしか入ってないのね。</p>
+<p>今回、drwxr-xr-xなので、その他の人は読み取りと実行が出来る……問題なくないか？<br>
+いや、更にその先のtest_app/publicの権限が必要なのか。</p>
+<p><img alt="" loading="lazy" decoding="async" width="728" height="105" src="/_astro/43a2b1bb5004918e9a23cccddd1060f7.CX6gQjaw_Z2fgWUY.webp" srcset=""></p>
+<p>そうだね、ここがダメなのかな？</p>
+<p>選択肢としては、その他ユーザーの実行を許可するか、toppakouグループにapacheを入れてグループの実行を許可するか？　って感じ？</p>
+<p>今回は別にその他に許可を与えても良さそうだけどより、安全そうなtoppakouグループにapacheを入れる方法にしてみる。</p>
+<h3 id="グループにapacheを入れ権限設定を変更する"><strong>グループにapacheを入れ、権限設定を変更する</strong></h3>
+<p>‘sudo usermod -a -G toppakou apache’<br>
+でtoppakouグループにapacheを入れる。</p>
+<p><img alt="" loading="lazy" decoding="async" width="632" height="79" src="/_astro/7237c4f11659ab1a93338c0e57d81b60.BMb-bYhd_FPhqF.webp" srcset=""></p>
+<p>usermodがアカウントの設定コマンドで、-aがappend、-Gがグループという意味。</p>
+<p>次に、test_appの権限を変更する。<br>
+‘sudo chmod -R 770 /home/toppakou/Laravel’</p>
+<p>うん、わけわからんよね。</p>
+<ul>
+<li>
+<p>chmodがパーミッションを変更するコマンド。</p>
+</li>
+<li>
+<p>-Rがそれ以下のサブディレクトリにも適用という意味</p>
+</li>
+<li>
+<p>770というのが、左から所有者,グループ,その他の権限を数字だけで弄れるようになってる。</p>
+<p>4が読み取り、2が書き込み、1が実行権限でそれぞれを足したものを入れる。<br>
+どの組み合わせで足しても一意の数字になるからってことだよね。AtCoderの問題に出てきそう。</p>
+<p>だから、今回は所有者=全部許可、グループ=全部許可、その他＝全部拒否<br>
+という感じ。</p>
+</li>
+<li>
+<p>最後に権限を弄りたいところを指定</p>
+</li>
+</ul>
+<p>という感じ。</p>
+<p>変更完了</p>
+<p><img alt="" loading="lazy" decoding="async" width="632" height="121" src="/_astro/7581bafc353441bbf976dad4a2930757.lX74UCUK_1N78Kz.webp" srcset=""></p>
+<p><img alt="" loading="lazy" decoding="async" width="421" height="40" src="/_astro/815500813e15cd4e465784ec89843d6c.t4lrePYY_Z1g2ynj.webp" srcset=""></p>
+<h2 id="実行"><strong>実行</strong></h2>
+<p>「<code>http://laravel.test/index.php</code>」で実行！</p>
+<p><img alt="" loading="lazy" decoding="async" width="1600" height="723" src="/_astro/b7c78099b53fe0bc0dacd9cf25a6228e.zpjvzZvB_1exJie.webp" srcset=""></p>
+<p>ようやくできた……</p>
+<p>今日はLaravelバリバリやろうと思ってたのに、環境構築だけでもう外が明るくなってきているのでちょっと今日はここまで。起きたらやる。</p>
+<p>おやすみなさい。</p></section><aside class="w-[300px] hidden lg:block shrink-0" data-astro-cid-e2rqhpi3><nav class="sticky top-16 h-fit  bg-white py-24 pl-24 rounded-md" data-astro-cid-tqqy2vud><section data-astro-cid-tqqy2vud><header data-astro-cid-tqqy2vud><h2 class="font-bold text-lg" data-astro-cid-tqqy2vud>目次</h2></header></section><div class="article-toc scroll-smooth mt-4 py-16 pr-24 overflow-y-auto max-h-[90svh]" data-astro-cid-tqqy2vud></div></nav><script type="module" src="/_astro/ArticleTOC.astro_astro_type_script_index_0_lang.mX9zJvT_.js"></script></aside></div><div class="mt-40 mb-64" data-pagefind-ignore data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a><svg viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16 mx-4 mt-[2px]" data-astro-cid-e2rqhpi3="true">
+  <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+</svg><a href="/blog#%E4%BD%9C%E6%9B%B2%E3%81%AE%E8%A3%9C%E5%8A%A9%E3%83%84%E3%83%BC%E3%83%AB%E3%82%92%E4%BD%9C%E3%82%8B%E3%81%BE%E3%81%A7%E3%81%AE%E6%97%A5%E8%A8%98" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">作曲の補助ツールを作るまでの日記</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=PHP"># PHP</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%97%A5%E8%A8%98"># 日記</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Laravel"># Laravel</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Linux"># Linux</a></div></div></article></main></div><footer class="pb-40 px-24 md:px-0 bg-white"><hr class="mx-auto w-2/3 md:w-1/2 my-24 h-[1px] border-0 bg-slate-400"><div class="mx-8 md:mx-64"><a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" target="_blank" rel="noopener noreferrer"><img src="/_astro/by-nc.DpMeGFcJ_ZF0RGK.svg" alt="クリエイティブコモンズ 表示-非営利 4.0 ライセンス" loading="lazy" decoding="async" width="125" height="44"></a><p class="text-xs md:text-sm">本サイト「<a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">tamakoma.com</a>」から提供されるブログ内の文章、プログラミングコードは、<a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">クリエイティブ・コモンズ 表示-非営利 4.0 ライセンス</a>の下に提供されます。</p><p class="text-xs md:text-sm">音楽や画像などのメディアコンテンツにはこのライセンスは適用されません。</p></div><p class="text-center text-sm"><a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Top</a> / <a href="/contact" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Contact</a> / <a href="/feed.xml" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">RSS Feed</a></p><p class="mt-24 text-center">&copy; tamakoma 2018-2026</p></footer></div></body></html>

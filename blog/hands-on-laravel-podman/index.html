@@ -1,0 +1,1170 @@
+<!DOCTYPE html><html lang="ja" class="text-slate-700"><head><meta charset="utf-8"><title>ルートレスなPodmanでLaravel環境を構築するハンズオン | tamakoma.com</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v7.0.3"><meta name="twitter:card" content="summary"><meta property="og:title" content="ルートレスなPodmanでLaravel環境を構築するハンズオン"><meta property="og:type" content="website"><meta property="og:url" content="https://tamakoma.com/blog/hands-on-laravel-podman/"><meta property="og:image" content="/_astro/mikuteto-OGP.DYQebPDj.png"><meta property="og:description" content="学んだことを残すブログ"><meta property="og:site_name" content="tamakoma.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.0.1/dist/css/yakuhanjp_s.css"><link rel="sitemap" href="/sitemap-index.xml"><link rel="stylesheet" href="/_astro/BaseLayout.Ddu7R_5r.css"><style>/*! tailwindcss v4.2.2 | MIT License | https://tailwindcss.com */
+.article-toc[data-astro-cid-tqqy2vud] .toc-link{font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));display:block}@media (hover:hover){.article-toc[data-astro-cid-tqqy2vud] .toc-link:hover{color:var(--color-slate-600,oklch(44.6% .043 257.281));text-decoration-line:underline}}.article-toc[data-astro-cid-tqqy2vud] .toc-link.to-link-active{color:var(--color-miku-500,oklch(63.7% .1071 185.34))}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H2){margin-left:var(--spacing-24,24px)}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H3){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:10px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H4){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:20px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H5){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:30px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H6){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:40px}.article-toc[data-astro-cid-tqqy2vud] .toc-list{list-style-type:decimal;list-style-position:outside}@layer properties{@supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))){*,:before,:after,::backdrop{--tw-font-weight:initial;--tw-border-style:solid}}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a{--tw-font-weight:var(--font-weight-semibold,600);font-weight:var(--font-weight-semibold,600);color:var(--color-miku-500,oklch(63.7% .1071 185.34));text-underline-offset:2px;text-decoration-line:underline}@media (hover:hover){article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a:hover{color:var(--color-miku-700,oklch(50.5% .0901 187.01))}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] code:not(pre>code){margin-inline:var(--spacing-4,4px);border-radius:var(--radius-md,.375rem);border-style:var(--tw-border-style);background-color:var(--color-sumi-100,oklch(97% 0 0));padding-inline:var(--spacing-4,4px);--tw-font-weight:var(--font-weight-normal,400);font-weight:var(--font-weight-normal,400);color:var(--color-black,#000);border-width:0;padding-block:2px}@property --tw-font-weight{syntax:"*";inherits:false}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid}
+</style><script type="module" src="/_astro/page.DCEeCLip.js"></script><script>!(function(w,p,f,c){if(!window.crossOriginIsolated && !navigator.serviceWorker) return;c=w[p]=Object.assign(w[p]||{},{"lib":"/~partytown/","debug":false});c[f]=(c[f]||[])})(window,'partytown','forward');/* Partytown 0.13.2 - MIT QwikDev */
+const t={preserveBehavior:!1},e=e=>{if("string"==typeof e)return[e,t];const[n,r=t]=e;return[n,{...t,...r}]},n=Object.freeze((t=>{const e=new Set;let n=[];do{Object.getOwnPropertyNames(n).forEach((t=>{"function"==typeof n[t]&&e.add(t)}))}while((n=Object.getPrototypeOf(n))!==Object.prototype);return Array.from(e)})());!function(t,r,o,i,a,s,c,l,d,p,u=t,f){function h(){f||(f=1,"/"==(c=(s.lib||"/~partytown/")+(s.debug?"debug/":""))[0]&&(d=r.querySelectorAll('script[type="text/partytown"]'),i!=t?i.dispatchEvent(new CustomEvent("pt1",{detail:t})):(l=setTimeout(v,(null==s?void 0:s.fallbackTimeout)||1e4),r.addEventListener("pt0",w),a?y(1):o.serviceWorker?o.serviceWorker.register(c+(s.swPath||"partytown-sw.js"),{scope:c}).then((function(t){t.active?y():t.installing&&t.installing.addEventListener("statechange",(function(t){"activated"==t.target.state&&y()}))}),console.error):v())))}function y(e){p=r.createElement(e?"script":"iframe"),t._pttab=Date.now(),e||(p.style.display="block",p.style.width="0",p.style.height="0",p.style.border="0",p.style.visibility="hidden",p.setAttribute("aria-hidden",!0)),p.src=c+"partytown-"+(e?"atomics.js?v=0.13.2":"sandbox-sw.html?"+t._pttab),r.querySelector(s.sandboxParent||"body").appendChild(p)}function v(n,o){for(w(),i==t&&(s.forward||[]).map((function(n){const[r]=e(n);delete t[r.split(".")[0]]})),n=0;n<d.length;n++)(o=r.createElement("script")).innerHTML=d[n].innerHTML,o.nonce=s.nonce,r.head.appendChild(o);p&&p.parentNode.removeChild(p)}function w(){clearTimeout(l)}s=t.partytown||{},i==t&&(s.forward||[]).map((function(r){const[o,{preserveBehavior:i}]=e(r);u=t,o.split(".").map((function(e,r,o){var a;u=u[o[r]]=r+1<o.length?u[o[r]]||(a=o[r+1],n.includes(a)?[]:{}):(()=>{let e=null;if(i){const{methodOrProperty:n,thisObject:r}=((t,e)=>{let n=t;for(let t=0;t<e.length-1;t+=1)n=n[e[t]];return{thisObject:n,methodOrProperty:e.length>0?n[e[e.length-1]]:void 0}})(t,o);"function"==typeof n&&(e=(...t)=>n.apply(r,...t))}return function(){let n;return e&&(n=e(arguments)),(t._ptf=t._ptf||[]).push(o,arguments),n}})()}))})),"complete"==r.readyState?h():(t.addEventListener("DOMContentLoaded",h),t.addEventListener("load",h))}(window,document,navigator,top,window.crossOriginIsolated);;(e=>{e.addEventListener("astro:before-swap",e=>{let r=document.body.querySelector("iframe[src*='/~partytown/']");if(r)e.newDocument.body.append(r)})})(document);</script></head><body class="bg-repeat bg-white anywhere" style="background-image: url(/_astro/mikuteto-gray.Dix8k1Tp.gif)"><div class="min-h-screen flex flex-col justify-between" id="container"><div><header><nav class="flex flex-col items-center pt-40 pb-24"><a href="/blog" class="text-3xl md:text-5xl font-bold mb-40 text-slate-400 drop-shadow-2xl">tamakoma.com</a><div class="w-full flex justify-center [&amp;&gt;a]:bg-white [&amp;&gt;a]:border-slate-400"><a href="/" class="block py-8 px-16 text-sumi-600 rounded-l border-l border-y">home</a><a href="/blog/" class="block py-8 px-16 text-sumi-600 border">blog</a><a href="/about/" class="block py-8 px-16 text-sumi-600 rounded-r border-r border-y">about</a></div></nav></header><main class="bg-slate-100 w-full flex justify-end" data-astro-cid-e2rqhpi3><article class="grow" data-pagefind-body data-astro-cid-e2rqhpi3><header class="mt-24 w-11/12 max-w-[700px] mx-auto" data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-pagefind-weight="6.7" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-pagefind-weight="6.5" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Laravel"># Laravel</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Podman"># Podman</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Linux"># Linux</a></div><h1 class="text-center text-xl md:text-3xl font-bold px-24 mt-40" data-astro-cid-e2rqhpi3>ルートレスなPodmanでLaravel環境を構築するハンズオン</h1><div class="text-slate-400 text-sm gap-16 flex justify-center mt-24" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>投稿日 <time datetime="2024-08-15T00:00:00.000Z">2024/08/15</time></span><span data-astro-cid-e2rqhpi3>最終更新日 <time datetime="2024-08-15T00:00:00.000Z">2024/08/15</time></span></div></header><hr class="bg-slate-200 rounded-full mx-auto h-4 my-40 w-40 border-0"><div class="flex mx-auto justify-center gap-40" data-astro-cid-e2rqhpi3><section id="article-body" class="
+                            prose prose-neutral
+                            prose-blockquote:border-miku-400 prose-blockquote:font-normal
+                            w-0 grow
+                            max-w-[650px] bg-white box-content px-16 md:px-40 py-24 rounded-md
+                            " data-astro-cid-e2rqhpi3><p>2024年8月12日～2024年8月15日</p>
+<p>ここではルートレスのPodmanを使いLaravel、Apache、MySQL、PHP-FPMの環境を素早く構築する手段を共有します。</p>
+<p>ハンズオンっていうやつを目指した記事です。</p>
+<p>記事の構成は「<a href="https://qiita.com/ucan-lab/items/56c9dc3cf2e6762672f4" rel="noopener noreferrer" target="_blank">【超入門】20分でLaravel開発環境を爆速構築するDockerハンズオン</a>」を大変参考にさせていただいております。</p>
+<h2 id="対象読者">対象読者</h2>
+<ul>
+<li>
+<p>PodmanでLaravel環境を構築したい人</p>
+</li>
+<li>
+<p>ある程度のLAMP、Laravel、コンテナの知識がある人</p>
+</li>
+</ul>
+<h2 id="なぜpodmanなのか">なぜPodmanなのか</h2>
+<p>なぜDockerではなくPodmanを扱うのかなんだけど、私の理由はただ1つで、<a href="https://docs.redhat.com/ja/documentation/red_hat_enterprise_linux/9/html/building_running_and_managing_containers/con_running-containers-without-docker_assembly_starting-with-containers#:~:text=Red%20Hat%20%E3%81%A7%E3%81%AF%E3%80%81RHEL%209%20%E3%81%8B%E3%82%89%20Docker%20%E3%82%B3%E3%83%B3%E3%83%86%E3%83%8A%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%B3%E3%81%A8%E3%80%81docker%20%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%81%8C%E5%89%8A%E9%99%A4%E3%81%95%E3%82%8C%E3%81%BE%E3%81%97%E3%81%9F%E3%80%82" rel="noopener noreferrer" target="_blank"><strong>RHEL9でDockerが正式にサポートされていないから</strong></a>。</p>
+<p>無理やりDockerをダウンロードして使うこともできるんだけど、Podmanが用意されているならそれを使いたいという感じ。</p>
+<p>Podmanの利点にはルートレスやデーモンレスが挙げられるけど、Dockerでもルートレスは可能らしいので主な利点はデーモンレスになるのかなと思う。</p>
+<h2 id="目標">目標</h2>
+<p>ルートレスPodmanを使ったLaravel環境の構築と、「<a href="https://docs.podman.io/en/v4.9.3/markdown/podman-kube-play.1.html" rel="noopener noreferrer" target="_blank">podman play kube</a>」コマンドを使った自動pod構築を目指す。</p>
+<h2 id="ハンズオン終了時のgithub">ハンズオン終了時のGitHub</h2>
+<p><a href="https://github.com/tamakoma1129/podman-laravel-handson" rel="noopener noreferrer" target="_blank">https://github.com/tamakoma1129/podman-laravel-handson</a></p>
+<h2 id="構築環境">構築環境</h2>
+<ul>
+<li>
+<p>Laravel: 10.x</p>
+</li>
+<li>
+<p>Apache: 2.4.62</p>
+<ul>
+<li>image: <a href="https://hub.docker.com/_/httpd/" rel="noopener noreferrer" target="_blank">https://hub.docker.com/_/httpd/</a></li>
+</ul>
+</li>
+<li>
+<p>MySQL: 8.4.2</p>
+<ul>
+<li>image: <a href="https://hub.docker.com/_/mysql/" rel="noopener noreferrer" target="_blank">https://hub.docker.com/_/mysql/</a></li>
+</ul>
+</li>
+<li>
+<p>PHP-FPM:  8.1-fpm</p>
+<ul>
+<li>image: <a href="https://hub.docker.com/_/php/" rel="noopener noreferrer" target="_blank">https://hub.docker.com/_/php/</a></li>
+</ul>
+</li>
+<li>
+<p>node: 20.16.0-alpine</p>
+<ul>
+<li>
+<p>image: <a href="https://hub.docker.com/_/node/" rel="noopener noreferrer" target="_blank">https://hub.docker.com/_/node/</a></p>
+</li>
+<li>
+<p>備考: viteのビルドで利用</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>最終的なディレクトリ構成は以下になる予定</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#66D9EF">.</span></span>
+<span class="line"><span style="color:#A6E22E">├──</span><span style="color:#E6DB74"> apache</span></span>
+<span class="line"><span style="color:#A6E22E">│</span><span style="color:#E6DB74"> ├──</span><span style="color:#E6DB74"> Containerfile</span></span>
+<span class="line"><span style="color:#A6E22E">│</span><span style="color:#E6DB74"> └──</span><span style="color:#E6DB74"> laravel.conf</span></span>
+<span class="line"><span style="color:#A6E22E">├──</span><span style="color:#E6DB74"> mysql</span></span>
+<span class="line"><span style="color:#A6E22E">│</span><span style="color:#E6DB74"> ├──</span><span style="color:#E6DB74"> db-store</span><span style="color:#88846F"> # DBのデータを入れる</span></span>
+<span class="line"><span style="color:#A6E22E">│</span><span style="color:#E6DB74"> ├──</span><span style="color:#E6DB74"> Containerfile</span></span>
+<span class="line"><span style="color:#A6E22E">│</span><span style="color:#E6DB74"> └──</span><span style="color:#E6DB74"> my.cnf</span><span style="color:#88846F"> # 設定ファイル</span></span>
+<span class="line"><span style="color:#A6E22E">├──</span><span style="color:#E6DB74"> php</span></span>
+<span class="line"><span style="color:#A6E22E">│</span><span style="color:#E6DB74"> ├──</span><span style="color:#E6DB74"> Containerfile</span></span>
+<span class="line"><span style="color:#A6E22E">│</span><span style="color:#E6DB74"> └──</span><span style="color:#E6DB74"> php.ini</span></span>
+<span class="line"><span style="color:#A6E22E">├──</span><span style="color:#E6DB74"> vite</span></span>
+<span class="line"><span style="color:#A6E22E">│</span><span style="color:#E6DB74"> └──</span><span style="color:#E6DB74"> Containerfile</span></span>
+<span class="line"><span style="color:#A6E22E">├──</span><span style="color:#E6DB74"> laravel</span><span style="color:#88846F"> # laravelのディレクトリ</span></span>
+<span class="line"><span style="color:#A6E22E">├──</span><span style="color:#E6DB74"> .gitignore</span></span>
+<span class="line"><span style="color:#A6E22E">└──</span><span style="color:#E6DB74"> podman-laravel-handson.yaml</span><span style="color:#88846F"> # podman play kube用のyamlファイル</span></span></code></pre>
+<h2 id="動作環境">動作環境</h2>
+<p>以下のような動作環境で作成される</p>
+<table><tbody><tr><td>分類</td><td>名前</td><td>備考</td></tr><tr><td>OS</td><td>Almalinux9</td><td>ホストはWindows11でVMで実行</td></tr><tr><td>コンテナツール</td><td>Podman 4.9.4</td><td>Podman4と5で違うところあるので注意</td></tr></tbody></table>
+<p>また、特殊な条件として<strong>ルートレスPodman</strong>かつ<strong>podman play kubeでのyamlファイルから自動pod生成</strong>を目標とする。</p>
+<p><strong>ルートレスでPodmanを動かすため、ルートユーザーでのPodman操作をしないように</strong>。</p>
+<h2 id="記事の表記について">記事の表記について</h2>
+<p>自分で打つコマンドは</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ podman -v</span></span></code></pre>
+<p>のように表記する。</p>
+<p>[linux]の部分が、コマンドの入力環境。<br>
+「$」以降が入力コマンド。</p>
+<h2 id="ハンズオンする人に向けた注意事項">ハンズオンする人に向けた注意事項</h2>
+<p>Podmanのルートレスモードでは気を抜くと権限問題がすぐ発生する。<br>
+もし記事の通りやっているのに権限問題が発生する場合、解決しない場合は以下を確認してほしい。</p>
+<ol>
+<li>
+<p><strong>SELinuxやAppArmorがオンになっていないか？</strong><br>
+オンだとボリューム関連で権限問題が発生します。回避方法はありますが、SELinuxに関する知識が乏しいためこの記事ではSELinuxをオフにした状態で進めます。</p>
+</li>
+<li>
+<p><strong>中間IDを意識しているか？</strong><br>
+ルートレスモードのPodmanでは中間ID(空のPodを作成するを参照)が重要になります。</p>
+</li>
+<li>
+<p><strong>共有フォルダで作業していないか？</strong><br>
+VMなどでWindowsとの共有フォルダを作成している場合、その共有フォルダ内だと権限を適切に設定できずエラーになります。<br>
+共有フォルダ外で作業することを推奨します。</p>
+</li>
+<li>
+<p><strong>もし解決しないときは</strong><br>
+解決しない場合は、自分で現在のPodmanの状態を確認し理解していくのが大切です。<br>
+本記事の最後にPodmanの状態を確認するコマンド一覧を載せているので確認してみてください。</p>
+</li>
+</ol>
+<p>また、この記事は本番環境の構築は想定していません。</p>
+<h2 id="podmanのインストールとバージョン確認">Podmanのインストールとバージョン確認</h2>
+<p>インストールしていない人は他記事や<a href="https://podman.io/docs/installation" rel="noopener noreferrer" target="_blank">公式ドキュメント</a>からインストール。</p>
+<p>「podman -v」でバージョン確認</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ podman -v</span></span>
+<span class="line"><span style="color:#A6E22E">podman</span><span style="color:#E6DB74"> version</span><span style="color:#E6DB74"> 4.9.4-rhel</span></span></code></pre>
+<p>バージョン5だと仕様が異なる可能性が高いので注意。</p>
+<h2 id="selinuxをオフにする">SELinuxをオフにする</h2>
+<p>SELinuxがオンだとボリューム関連で権限問題が発生します。<br>
+SELinuxをオンで動かしている人には申し訳ないですが、この記事ではオフにした状態で進めて行きます。</p>
+<p>回避方法は存在するみたいなので、ハンズオン終了後に試してみてください。</p>
+<h2 id="作業ディレクトリの作成">作業ディレクトリの作成</h2>
+<p><strong>【注意】VMの共有フォルダだと権限問題発生するので避けること</strong></p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ mkdir podman-laravel-handson</span></span>
+<span class="line"><span style="color:#F8F8F2">[linux]$ cd podman-laravel-handson</span></span></code></pre>
+<p>最終的なディレクトリ構成は以下になる</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#66D9EF">.</span></span>
+<span class="line"><span style="color:#A6E22E">├──</span><span style="color:#E6DB74"> apache</span></span>
+<span class="line"><span style="color:#A6E22E">│</span><span style="color:#E6DB74"> ├──</span><span style="color:#E6DB74"> Containerfile</span></span>
+<span class="line"><span style="color:#A6E22E">│</span><span style="color:#E6DB74"> └──</span><span style="color:#E6DB74"> laravel.conf</span></span>
+<span class="line"><span style="color:#A6E22E">├──</span><span style="color:#E6DB74"> mysql</span></span>
+<span class="line"><span style="color:#A6E22E">│</span><span style="color:#E6DB74"> ├──</span><span style="color:#E6DB74"> db-store</span><span style="color:#88846F"> # DBのデータを入れる</span></span>
+<span class="line"><span style="color:#A6E22E">│</span><span style="color:#E6DB74"> ├──</span><span style="color:#E6DB74"> Containerfile</span></span>
+<span class="line"><span style="color:#A6E22E">│</span><span style="color:#E6DB74"> └──</span><span style="color:#E6DB74"> my.cnf</span><span style="color:#88846F"> # 設定ファイル</span></span>
+<span class="line"><span style="color:#A6E22E">├──</span><span style="color:#E6DB74"> php</span></span>
+<span class="line"><span style="color:#A6E22E">│</span><span style="color:#E6DB74"> ├──</span><span style="color:#E6DB74"> Containerfile</span></span>
+<span class="line"><span style="color:#A6E22E">│</span><span style="color:#E6DB74"> └──</span><span style="color:#E6DB74"> php.ini</span></span>
+<span class="line"><span style="color:#A6E22E">├──</span><span style="color:#E6DB74"> vite</span></span>
+<span class="line"><span style="color:#A6E22E">│</span><span style="color:#E6DB74"> └──</span><span style="color:#E6DB74"> Containerfile</span></span>
+<span class="line"><span style="color:#A6E22E">├──</span><span style="color:#E6DB74"> laravel</span><span style="color:#88846F"> # laravelのディレクトリ</span></span>
+<span class="line"><span style="color:#A6E22E">├──</span><span style="color:#E6DB74"> .gitignore</span></span>
+<span class="line"><span style="color:#A6E22E">└──</span><span style="color:#E6DB74"> podman-laravel-handson.yaml</span><span style="color:#88846F"> # podman play kube用のyamlファイル</span></span></code></pre>
+<h2 id="gitで管理">Gitで管理</h2>
+<p>私はGitHubで管理するけど、ここら辺はお好みでよいと思う。</p>
+<p><img alt="" loading="lazy" decoding="async" width="914" height="878" src="/_astro/1.D4D3CelW_Z15QpJG.webp" srcset=""></p>
+<h3 id="初回コミット">初回コミット</h3>
+<p>リモートリポジトリ先は適宜置き換え必要。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux] $ echo </span><span style="color:#E6DB74">"# podman-laravel-handson"</span><span style="color:#F92672"> >></span><span style="color:#F8F8F2"> README.md</span></span>
+<span class="line"><span style="color:#F8F8F2">[linux] $ git init</span></span>
+<span class="line"><span style="color:#F8F8F2">[linux] $ git add README.md</span></span>
+<span class="line"><span style="color:#F8F8F2">[linux] $ git commit -m </span><span style="color:#E6DB74">"first commit"</span></span>
+<span class="line"><span style="color:#F8F8F2">[linux] $ git branch -M main</span></span>
+<span class="line"><span style="color:#F8F8F2">[linux] $ git remote add origin [リモートリポジトリ先]</span></span>
+<span class="line"><span style="color:#F8F8F2">[linux] $ git push -u origin main</span></span></code></pre>
+<p>これ以降のコミットやプッシュはお好みで。</p>
+<h2 id="コードの編集について">コードの編集について</h2>
+<p>Linux内でviやnanoを使いコードを書ける人はそちらでおｋ。</p>
+<p>私はWindowsにGitで持ってきてVSCodeで編集する。</p>
+<h2 id="理解大事-空のpodを作成する">[理解大事] 空のPodを作成する</h2>
+<p>Podとはコンテナが1つ以上入ったグループのこと。<br>
+この<strong>Podに入ったコンテナ同士は名前空間を共有される</strong>。</p>
+<p>名前空間ってなに？　具体的に何の名前空間が共有されるの？　っていう人は<br>
+「<a href="https://qiita.com/thirdpenguin/items/61f1291f6ee804531328" rel="noopener noreferrer" target="_blank">Linux の名前空間が共有されるとはどういうことなのか $ podman pod create —share namespace を通して理解する。</a>」<br>
+という素敵な記事を参照ください。</p>
+<p>今回主に関係するのはnetwork namespaceとuser namespaceの2つ。</p>
+<p>ネットワークの名前空間を共有することで、localhostを通じてコンテナ間接続が可能に。<br>
+ユーザーの名前空間を共有することで、PodでUID、GIDの名前空間の一元管理が可能になる。</p>
+<p>実際にPodを作成するコマンドが以下。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux] $ podman pod create --name podman-laravel-handson-pod </span><span style="color:#AE81FF">\</span></span>
+<span class="line"><span style="color:#F8F8F2">  --userns</span><span style="color:#F92672">=</span><span style="color:#E6DB74">auto:</span><span style="color:#F8F8F2">uidmapping</span><span style="color:#F92672">=</span><span style="color:#E6DB74">0:0:1,</span><span style="color:#F8F8F2">uidmapping</span><span style="color:#F92672">=</span><span style="color:#E6DB74">1:1:65536,</span><span style="color:#F8F8F2">gidmapping</span><span style="color:#F92672">=</span><span style="color:#E6DB74">0:0:1,</span><span style="color:#F8F8F2">gidmapping</span><span style="color:#F92672">=</span><span style="color:#E6DB74">1:1:65536</span><span style="color:#A6E22E"> \</span></span>
+<span class="line"><span style="color:#AE81FF">  --publish</span><span style="color:#E6DB74"> 8080:80</span><span style="color:#AE81FF"> \</span></span>
+<span class="line"><span style="color:#AE81FF">  --replace</span></span></code></pre>
+<ul>
+<li>
+<p><a href="https://docs.podman.io/en/v4.9.3/markdown/podman-pod-create.1.html" rel="noopener noreferrer" target="_blank"><code>podman pod create</code><br>
+</a>でPodの作成</p>
+</li>
+<li>
+<p><a href="https://docs.podman.io/en/v4.9.3/markdown/podman-pod-create.1.html#name-n-name" rel="noopener noreferrer" target="_blank"><code>--name podman-laravel-handson-pod</code></a>でPodの名前付け</p>
+</li>
+<li>
+<p><a href="https://docs.podman.io/en/v4.9.3/markdown/podman-pod-create.1.html#userns-mode" rel="noopener noreferrer" target="_blank"><code>--userns=auto:uidmapping=0:0:1,uidmapping=1:1:65536,gidmapping=0:0:1,gidmapping=1:1:65536</code><br>
+</a>で名前空間モードの指定を行っている。<br>
+具体的には後述。<br>
+ユーザー名前空間が共有されるため、全てのPod内コンテナでこの設定が適用される。</p>
+</li>
+<li>
+<p><a href="https://docs.podman.io/en/v4.9.3/markdown/podman-run.1.html#publish-p-ip-hostport-containerport-protocol" rel="noopener noreferrer" target="_blank"><code>--publish 8080:80</code></a>8080ポートを公開し、コンテナ内の80番に転送。<br>
+8080ポートの理由は、ルートレスではウェルノウンポートを指定できないから。<br>
+ネットワーク名前空間が共有されるため、全てのPod内コンテナでこの設定が適用される。</p>
+</li>
+<li>
+<p><a href="https://docs.podman.io/en/v4.9.3/markdown/podman-pod-create.1.html#replace" rel="noopener noreferrer" target="_blank"><code>--replace</code></a>もし既に同じ名前のPodがあったら置き換える</p>
+</li>
+</ul>
+<h3 id="--usernsについて"><code>--userns</code>について</h3>
+<p><code>--userns=auto</code>のuidmapping,gidmappingオプションを利用しUID,GIDの範囲を指定している。</p>
+<p>使い方はuidもgidも同じで「uidmapping=CONTAINER_UID:HOST_UID:SIZE」だが<strong>ルートレスの場合は少し異なる</strong>。</p>
+<p>ルートレスの場合は「uidmapping=CONTAINER_UID:INTERMEDIATE_UID:SIZE」である。<br>
+ルートレスモードの場合はINTERMEDIATE_ID、つまり中間IDというのを指定する必要がある。</p>
+<p>この中間IDは<a href="https://docs.podman.io/en/v4.9.3/markdown/podman-run.1.html#uidmap-flags-container-uid-from-uid-amount" rel="noopener noreferrer" target="_blank">公式ドキュメント</a>にも説明があるが、一応説明もしてみる。</p>
+<h3 id="中間id">中間ID</h3>
+<p>ルートフルの場合、Container UIDとHost UIDを紐づけたいときContainer UID → Host UIDで良かった。<br>
+ルートレスの場合、Container UIDとHost UIDを紐づけたいときContainer UID → 中間ID　→ Host UIDという順序で紐づける必要がある。</p>
+<p>例えば、コンテナ内でUID0のユーザーをコンテナ外でUID1000にマッピングしたいとする。</p>
+<p>ルートフルの場合は<strong>uidmapping=0:1000:1</strong>となるが、<br>
+ルートレスの場合は<strong>uidmapping=0:[ホストUID1000と紐づいた中間ID]:1</strong>のように指定する必要がある。</p>
+<p>この中間IDはUIDの場合「/etc/subuid」で、GIDの場合「/etc/subgid」で利用範囲を指定する。</p>
+<p><strong>tamakoma:100000:65536</strong><br>
+上の意味は、tamakomaのサブIDをID100000から65536個の連続した範囲で取得するというもの。</p>
+<p>もしpodmanをtamakomaというユーザーで実行しているなら、この/etc/subuidまたは/etc/subgidを設定後「<a href="https://docs.podman.io/en/v4.9.3/markdown/podman-system-migrate.1.html" rel="noopener noreferrer" target="_blank">podman system migrate</a>」を実行してあげることで<strong>中間IDがIDが若い順に作成される</strong>。</p>
+<p>つまり、</p>
+<table><tbody><tr><td>中間ID</td><td>Host ID</td></tr><tr><td>1</td><td>100000</td></tr><tr><td>2</td><td>100001</td></tr><tr><td>…</td><td>…</td></tr><tr><td>n</td><td>n+1</td></tr></tbody></table>
+<p>という感じ。</p>
+<p>もし、/etc/subuidを</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#A6E22E">tamakoma:100000:65536</span></span>
+<span class="line"><span style="color:#A6E22E">tamakoma:1100:1</span></span></code></pre>
+<p>のようにするとどうなるだろうか。</p>
+<p>この場合も中間IDはIDが若い順に作成されるので以下のようになる。</p>
+<table><tbody><tr><td>中間ID</td><td>Host ID</td></tr><tr><td>1</td><td>1100</td></tr><tr><td>2</td><td>100000</td></tr><tr><td>3</td><td>100001</td></tr><tr><td>…</td><td>…</td></tr></tbody></table>
+<p>私はこの<strong>若い順に作成されること</strong>に気づかなくて、かなりの時間を要した。</p>
+<p>実際にどのように中間IDが登録されているかは以下のコマンドで確認できる。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ podman unshare cat /proc/self/uid_map</span></span>
+<span class="line"><span style="color:#A6E22E">         0</span><span style="color:#AE81FF">       1000</span><span style="color:#AE81FF">          1</span></span>
+<span class="line"><span style="color:#A6E22E">         1</span><span style="color:#AE81FF">       1100</span><span style="color:#AE81FF">          1</span></span>
+<span class="line"><span style="color:#A6E22E">         2</span><span style="color:#AE81FF">     100000</span><span style="color:#AE81FF">      65536</span></span></code></pre>
+<p>実際に中間UID1→Host UID1100が登録された後に、UID100000以降が登録されていることがわかる。</p>
+<p>また、<strong>中間ID0に自分自身のIDが登録されている</strong>ことがわかる。<br>
+表示の通り、<a href="https://docs.podman.io/en/v4.9.3/markdown/podman-run.1.html#uidmap-flags-container-uid-from-uid-amount:~:text=The%20current%20user%20ID%20is%20mapped%20to%20UID%3D0%20in%20the%20rootless%20user%20namespace." rel="noopener noreferrer" target="_blank">自分自身のUIDは中間ID0にマッピングされる</a>んだね。</p>
+<p>公式ドキュメントには記述が無かったが、GIDも同じ仕様だと思われる。</p>
+<h3 id="改めて--usernsについて">改めて<code>--userns</code>について</h3>
+<p>ここで改めて先のオプションを見たい。</p>
+<p>以下のオプションが指定されている。</p>
+<ul>
+<li>
+<p>uidmapping=0:0:1</p>
+</li>
+<li>
+<p>uidmapping=1:1:65536</p>
+</li>
+<li>
+<p>gidmapping=0:0:1</p>
+</li>
+<li>
+<p>gidmapping=1:1:65536</p>
+</li>
+</ul>
+<p>Container ID:中間ID:範囲という指定をするのでまとめると</p>
+<p>uidとgidをそれぞれ、ContainerID0→中間ID0のマッピングを1+65536=65537の範囲で行うということになる。</p>
+<p>そのため、</p>
+<ul>
+<li>
+<p>uidmapping=0:0:65537</p>
+</li>
+<li>
+<p>gidmapping=0:0:65537</p>
+</li>
+</ul>
+<p>でも問題なさそうな感じがするんだけど、これだとどうしてもエラーが発生するので分けている。</p>
+<p>この時、/etc/subuidと/etc/subgidは使わなそうなHostIDから65536の範囲をとってもらえればおｋ。</p>
+<h3 id="etcsubuidとetcsubgidの記述">/etc/subuidと/etc/subgidの記述</h3>
+<p>私は扱いやすくするため、/etc/subuidも/etc/subgidも100001から65536の範囲を取得する。</p>
+<p>viなどで、以下のように記述。<br>
+ユーザー名は自身のものに。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#A6E22E">tamakoma:100001:65536</span></span></code></pre>
+<p>こうすれば</p>
+<table><tbody><tr><td>中間ID</td><td>Host ID</td></tr><tr><td>0</td><td>自身のID</td></tr><tr><td>1</td><td>100001</td></tr><tr><td>2</td><td>100002</td></tr><tr><td>…</td><td>…</td></tr><tr><td>n</td><td>100000 + n</td></tr></tbody></table>
+<p>となり、かなり扱いやすいと思う。</p>
+<p>記述後は</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ podman system migrate</span></span></code></pre>
+<p>で変更を反映する。</p>
+<h2 id="php-fpmコンテナを作成する">PHP-FPMコンテナを作成する</h2>
+<p><a href="https://hub.docker.com/_/php/" rel="noopener noreferrer" target="_blank">Docker公式のPHP-FPMコンテナ</a>をベースにカスタマイズする。</p>
+<p>ディレクトリ構成は以下のような感じになる。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#66D9EF">.</span></span>
+<span class="line"><span style="color:#A6E22E">├──</span><span style="color:#E6DB74"> php</span></span>
+<span class="line"><span style="color:#A6E22E">│</span><span style="color:#E6DB74"> ├──</span><span style="color:#E6DB74"> Containerfile</span></span>
+<span class="line"><span style="color:#A6E22E">│</span><span style="color:#E6DB74"> └──</span><span style="color:#E6DB74"> php.ini</span></span>
+<span class="line"><span style="color:#A6E22E">└──</span><span style="color:#E6DB74"> laravel</span><span style="color:#88846F"> # laravelのディレクトリ</span></span></code></pre>
+<h3 id="phpcontainerfileの作成">./php/Containerfileの作成</h3>
+<p>ContainerfileはDockerでいうDockerfileのこと。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ mkdir php</span></span>
+<span class="line"><span style="color:#F8F8F2">[linux]$ touch php/Containerfile</span></span></code></pre>
+<p>Containerfileの中身は以下を丸々コピペしてください。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="docker"><code><span class="line"><span style="color:#F92672">FROM</span><span style="color:#F8F8F2"> docker.io/php:8.1-fpm</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F"># Composerでroot実行を許可する環境変数</span></span>
+<span class="line"><span style="color:#F92672">ENV</span><span style="color:#F8F8F2"> COMPOSER_ALLOW_SUPERUSER=1</span></span>
+<span class="line"><span style="color:#F92672">ENV</span><span style="color:#F8F8F2"> COMPOSER_HOME=/composer</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">COPY</span><span style="color:#F8F8F2"> --from=docker.io/composer:2.6.6 /usr/bin/composer /usr/bin/composer</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F"># git : Laravelをgit pullする為</span></span>
+<span class="line"><span style="color:#88846F"># unzip : Composerに必要。</span></span>
+<span class="line"><span style="color:#88846F"># libzip-dev : zipに必要。</span></span>
+<span class="line"><span style="color:#F92672">RUN</span><span style="color:#F8F8F2"> apt-get update \</span></span>
+<span class="line"><span style="color:#F8F8F2">  &#x26;&#x26; apt-get -y install --no-install-recommends \</span></span>
+<span class="line"><span style="color:#F8F8F2">  git \</span></span>
+<span class="line"><span style="color:#F8F8F2">  unzip \</span></span>
+<span class="line"><span style="color:#F8F8F2">  libzip-dev \</span></span>
+<span class="line"><span style="color:#F8F8F2">  &#x26;&#x26; apt-get clean \</span></span>
+<span class="line"><span style="color:#F8F8F2">  &#x26;&#x26; rm -rf /var/lib/apt/lists/*</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F"># zip : Laravelのプロジェクト作成に必要。</span></span>
+<span class="line"><span style="color:#88846F"># pod_mysql : MySQLに必要。</span></span>
+<span class="line"><span style="color:#F92672">RUN</span><span style="color:#F8F8F2"> docker-php-ext-install zip pdo_mysql</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F"># docker-php-ext-installはphp.iniを上書きするわけでは無いのでここでおｋ</span></span>
+<span class="line"><span style="color:#F92672">COPY</span><span style="color:#F8F8F2"> ./php.ini /usr/local/etc/php/php.ini</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F"># 権限問題的にwww-data=UID3900として実行。主にlaravel/storage/logs/laravel.logをPHP-FPMが弄るために</span></span>
+<span class="line"><span style="color:#F92672">USER</span><span style="color:#F8F8F2"> 3900</span></span></code></pre>
+<p>上記のContainerfileはLaravelを稼働するために必要最低限の拡張機能しか入っていないので、ハンズオンを完了してから色々弄ることを推奨。</p>
+<p>apt-getコマンドは、LinuxのディストリビューションであるDebianのパッケージ管理コマンド。<br>
+Docker公式イメージで語尾にalpineとかが付いていなければ基本Debian。</p>
+<p>docker-php-ext-installコマンドでは、phpの拡張機能をインストールしている。<br>
+勝手にphp.iniなども調整してくれる便利なやつ。</p>
+<p>USER 3900はUID3900で実行するということ。<br>
+つまり、Host UIDは103900になる。</p>
+<p>ルートレスの関係上、PHP-FPMとApacheは同じユーザーで実行したい。<br>
+そのため、今回指定するApacheユーザー(www-data)のUID3900に。</p>
+<h3 id="phpphpiniの作成">./php/php.iniの作成</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ touch php/php.ini</span></span></code></pre>
+<p>ハンズオンなので、php.iniの中身は「<a href="https://qiita.com/ucan-lab/items/0d74378e1b9ba81699a9" rel="noopener noreferrer" target="_blank">PHP7.4 ぼくのかんがえたさいきょうのphp.ini</a>」の開発環境版をほぼ丸々参考にさせて頂いた。</p>
+<p>開発環境版なので、本番環境では利用しないこと。</p>
+<p>エラーログの出力だけ「/dev/stderr」に変更している。<br>
+「/dev/stderr」にすることで、Podmanのログに標準エラー出力で表示される。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="ini"><code><span class="line"><span style="color:#F92672">zend.exception_ignore_args</span><span style="color:#F8F8F2"> = off</span></span>
+<span class="line"><span style="color:#F92672">expose_php</span><span style="color:#F8F8F2"> = on</span></span>
+<span class="line"><span style="color:#F92672">max_execution_time</span><span style="color:#F8F8F2"> = 30</span></span>
+<span class="line"><span style="color:#F92672">max_input_vars</span><span style="color:#F8F8F2"> = 1000</span></span>
+<span class="line"><span style="color:#F92672">upload_max_filesize</span><span style="color:#F8F8F2"> = 64M</span></span>
+<span class="line"><span style="color:#F92672">post_max_size</span><span style="color:#F8F8F2"> = 128M</span></span>
+<span class="line"><span style="color:#F92672">memory_limit</span><span style="color:#F8F8F2"> = 256M</span></span>
+<span class="line"><span style="color:#F92672">error_reporting</span><span style="color:#F8F8F2"> = E_ALL</span></span>
+<span class="line"><span style="color:#F92672">display_errors</span><span style="color:#F8F8F2"> = on</span></span>
+<span class="line"><span style="color:#F92672">display_startup_errors</span><span style="color:#F8F8F2"> = on</span></span>
+<span class="line"><span style="color:#F92672">log_errors</span><span style="color:#F8F8F2"> = on</span></span>
+<span class="line"><span style="color:#F92672">error_log</span><span style="color:#F8F8F2"> = /dev/stderr</span></span>
+<span class="line"><span style="color:#F92672">default_charset</span><span style="color:#F8F8F2"> = UTF-8</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">[Date]</span></span>
+<span class="line"><span style="color:#F92672">date.timezone</span><span style="color:#F8F8F2"> = Asia/Tokyo</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">[mysqlnd]</span></span>
+<span class="line"><span style="color:#F92672">mysqlnd.collect_memory_statistics</span><span style="color:#F8F8F2"> = on</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">[Assertion]</span></span>
+<span class="line"><span style="color:#F92672">zend.assertions</span><span style="color:#F8F8F2"> = 1</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">[mbstring]</span></span>
+<span class="line"><span style="color:#F92672">mbstring.language</span><span style="color:#F8F8F2"> = Japanese</span></span></code></pre>
+<h3 id="laravelの作成">./laravelの作成</h3>
+<p>Laravelプロジェクトを入れる為のlaravelディレクトリの作成。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ mkdir laravel</span></span></code></pre>
+<h3 id="build--run">build &#x26; run</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ podman build --tag php-fpm-8.1-image ./php</span></span></code></pre>
+<p>でイメージ名:php-fpm-8.1-imageでビルド。</p>
+<p>ビルド後、以下でrunする</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#A6E22E">podman</span><span style="color:#E6DB74"> run</span><span style="color:#AE81FF"> --detach</span><span style="color:#AE81FF"> \</span></span>
+<span class="line"><span style="color:#AE81FF">  --pod</span><span style="color:#E6DB74"> podman-laravel-handson-pod</span><span style="color:#AE81FF"> \</span></span>
+<span class="line"><span style="color:#AE81FF">  --name</span><span style="color:#E6DB74"> php-fpm-8.1-container</span><span style="color:#AE81FF"> \</span></span>
+<span class="line"><span style="color:#AE81FF">  --volume</span><span style="color:#E6DB74"> ./laravel:/laravel</span><span style="color:#AE81FF"> \</span></span>
+<span class="line"><span style="color:#AE81FF">  --workdir</span><span style="color:#E6DB74"> /laravel</span><span style="color:#AE81FF"> \</span></span>
+<span class="line"><span style="color:#AE81FF">  --replace</span><span style="color:#AE81FF"> \</span></span>
+<span class="line"><span style="color:#E6DB74">  php-fpm-8.1-image</span></span></code></pre>
+<ul>
+<li>
+<p><a href="https://docs.podman.io/en/v4.9.3/markdown/podman-run.1.html#detach-d" rel="noopener noreferrer" target="_blank"><code>podman run --detach</code></a><br>
+バックグラウンドで実行</p>
+</li>
+<li>
+<p><a href="https://docs.podman.io/en/v4.9.3/markdown/podman-run.1.html#pod-name" rel="noopener noreferrer" target="_blank"><code>--pod podman-laravel-handson-pod</code></a><br>
+指定したPod内にコンテナを作成</p>
+</li>
+<li>
+<p><code>--name php-fpm-8.1-container</code><br>
+コンテナ名を指定</p>
+</li>
+<li>
+<p><a href="https://docs.podman.io/en/v4.9.3/markdown/podman-run.1.html#volume-v-source-volume-host-dir-container-dir-options" rel="noopener noreferrer" target="_blank"><code>--volume ./laravel:/laravel</code></a><br>
+ボリュームの作成</p>
+</li>
+<li>
+<p><code>--workdir /laravel</code><br>
+ワーキングディレクトリの指定</p>
+</li>
+<li>
+<p><code>--replace</code><br>
+既に同じ名前のコンテナがあれば置き換える</p>
+</li>
+<li>
+<p><code>php-fpm-8.1-image</code><br>
+指定したイメージのRun</p>
+</li>
+</ul>
+<p>Run後に以下で詳細を確認。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ podman pod ps --ctr-status --ctr-names</span></span>
+<span class="line"><span style="color:#A6E22E">POD</span><span style="color:#E6DB74"> ID</span><span style="color:#E6DB74">        NAME</span><span style="color:#E6DB74">                        STATUS</span><span style="color:#E6DB74">      CREATED</span><span style="color:#E6DB74">         INFRA</span><span style="color:#E6DB74"> ID</span><span style="color:#E6DB74">      NAMES</span><span style="color:#E6DB74">                                     STATUS</span></span>
+<span class="line"><span style="color:#A6E22E">7a35bf72df98</span><span style="color:#E6DB74">  podman-laravel-handson-pod</span><span style="color:#E6DB74">  Running</span><span style="color:#AE81FF">     18</span><span style="color:#E6DB74"> minutes</span><span style="color:#E6DB74"> ago</span><span style="color:#E6DB74">  f52bacd35083</span><span style="color:#E6DB74">  7a35bf72df98-infra,php-fpm-8.1-container</span><span style="color:#E6DB74">  running,running</span></span></code></pre>
+<p>PodがRunningになっており、infraコンテナと今作ったphp-fpmコンテナがrunnningになってればおｋ。</p>
+<p>infraコンテナというのは、Pod内で名前空間を共有したりするのに利用されるコンテナ。<br>
+infraコンテナはPodを作成すると勝手に作成される。</p>
+<h3 id="php-fpmコンテナ内に入り確認">PHP-FPMコンテナ内に入り確認</h3>
+<p>中に入り色々確認してみよう。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ podman exec -itu root php-fpm-8.1-container bash</span></span></code></pre>
+<p>というコンテナ内でコマンドを実行する<a href="https://docs.podman.io/en/v4.9.3/markdown/podman-exec.1.html" rel="noopener noreferrer" target="_blank">execコマンド</a>でコンテナ内のrootユーザーにログイン。</p>
+<p>PHPのバージョン確認をする</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[php-fpm]$ php -v</span></span>
+<span class="line"><span style="color:#A6E22E">PHP</span><span style="color:#AE81FF"> 8.1.29</span><span style="color:#F8F8F2"> (cli) (</span><span style="color:#A6E22E">built:</span><span style="color:#E6DB74"> Jul</span><span style="color:#AE81FF"> 23</span><span style="color:#AE81FF"> 2024</span><span style="color:#E6DB74"> 09:14:55</span><span style="color:#F8F8F2">) (</span><span style="color:#A6E22E">NTS</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#A6E22E">Copyright</span><span style="color:#F8F8F2"> (c) The PHP Group</span></span>
+<span class="line"><span style="color:#A6E22E">Zend</span><span style="color:#E6DB74"> Engine</span><span style="color:#E6DB74"> v4.1.29,</span><span style="color:#E6DB74"> Copyright</span><span style="color:#F8F8F2"> (c) Zend Technologies</span></span></code></pre>
+<p>Composer</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[php-fpm]$ composer -V</span></span>
+<span class="line"><span style="color:#A6E22E">Composer</span><span style="color:#E6DB74"> version</span><span style="color:#AE81FF"> 2.6.6</span><span style="color:#E6DB74"> 2023-12-08</span><span style="color:#E6DB74"> 18:32:26</span></span></code></pre>
+<p>phpの拡張機能も見てみる</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[php-fpm]$ php -m</span></span>
+<span class="line"><span style="color:#F8F8F2">[PHP Modules]</span></span>
+<span class="line"><span style="color:#A6E22E">Core</span></span>
+<span class="line"><span style="color:#A6E22E">ctype</span></span>
+<span class="line"><span style="color:#A6E22E">curl</span></span>
+<span class="line"><span style="color:#A6E22E">date</span></span>
+<span class="line"><span style="color:#A6E22E">dom</span></span>
+<span class="line"><span style="color:#A6E22E">fileinfo</span></span>
+<span class="line"><span style="color:#A6E22E">filter</span></span>
+<span class="line"><span style="color:#A6E22E">ftp</span></span>
+<span class="line"><span style="color:#66D9EF">hash</span></span>
+<span class="line"><span style="color:#A6E22E">iconv</span></span>
+<span class="line"><span style="color:#A6E22E">json</span></span>
+<span class="line"><span style="color:#A6E22E">libxml</span></span>
+<span class="line"><span style="color:#A6E22E">mbstring</span></span>
+<span class="line"><span style="color:#A6E22E">mysqlnd</span></span>
+<span class="line"><span style="color:#A6E22E">openssl</span></span>
+<span class="line"><span style="color:#A6E22E">pcre</span></span>
+<span class="line"><span style="color:#A6E22E">PDO</span></span>
+<span class="line"><span style="color:#A6E22E">pdo_mysql</span></span>
+<span class="line"><span style="color:#A6E22E">pdo_sqlite</span></span>
+<span class="line"><span style="color:#A6E22E">Phar</span></span>
+<span class="line"><span style="color:#A6E22E">posix</span></span>
+<span class="line"><span style="color:#A6E22E">readline</span></span>
+<span class="line"><span style="color:#A6E22E">Reflection</span></span>
+<span class="line"><span style="color:#A6E22E">session</span></span>
+<span class="line"><span style="color:#A6E22E">SimpleXML</span></span>
+<span class="line"><span style="color:#A6E22E">sodium</span></span>
+<span class="line"><span style="color:#A6E22E">SPL</span></span>
+<span class="line"><span style="color:#A6E22E">sqlite3</span></span>
+<span class="line"><span style="color:#A6E22E">standard</span></span>
+<span class="line"><span style="color:#A6E22E">tokenizer</span></span>
+<span class="line"><span style="color:#A6E22E">xml</span></span>
+<span class="line"><span style="color:#A6E22E">xmlreader</span></span>
+<span class="line"><span style="color:#A6E22E">xmlwriter</span></span>
+<span class="line"><span style="color:#A6E22E">zip</span></span>
+<span class="line"><span style="color:#A6E22E">zlib</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">[Zend Modules]</span></span></code></pre>
+<p>また、PHP-FPMがUID3900で動いているかも確認する。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[php-fpm]$ apt update &#x26;&#x26; </span><span style="color:#A6E22E">apt</span><span style="color:#E6DB74"> install</span><span style="color:#AE81FF"> -y</span><span style="color:#E6DB74"> procps</span></span></code></pre>
+<p>でpsコマンドをインストール。<br>
+root権限にログインしてないと権限エラーになるので注意。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[php-fpm]$ ps aux</span></span>
+<span class="line"><span style="color:#A6E22E">USER</span><span style="color:#E6DB74">         PID</span><span style="color:#E6DB74"> %CPU</span><span style="color:#E6DB74"> %MEM</span><span style="color:#E6DB74">    VSZ</span><span style="color:#E6DB74">   RSS</span><span style="color:#E6DB74"> TTY</span><span style="color:#E6DB74">      STAT</span><span style="color:#E6DB74"> START</span><span style="color:#E6DB74">   TIME</span><span style="color:#E6DB74"> COMMAND</span></span>
+<span class="line"><span style="color:#A6E22E">3900</span><span style="color:#AE81FF">           1</span><span style="color:#AE81FF">  0.0</span><span style="color:#AE81FF">  1.3</span><span style="color:#AE81FF">  80576</span><span style="color:#AE81FF"> 24456</span><span style="color:#E6DB74"> ?</span><span style="color:#E6DB74">        Ss</span><span style="color:#E6DB74">   09:34</span><span style="color:#E6DB74">   0:00</span><span style="color:#E6DB74"> php-fpm:</span><span style="color:#E6DB74"> master</span><span style="color:#E6DB74"> process</span><span style="color:#F8F8F2"> (/usr/local/etc/php-fpm.conf)</span></span>
+<span class="line"><span style="color:#A6E22E">3900</span><span style="color:#AE81FF">           2</span><span style="color:#AE81FF">  0.0</span><span style="color:#AE81FF">  0.5</span><span style="color:#AE81FF">  80576</span><span style="color:#AE81FF">  9344</span><span style="color:#E6DB74"> ?</span><span style="color:#E6DB74">        S</span><span style="color:#E6DB74">    09:34</span><span style="color:#E6DB74">   0:00</span><span style="color:#E6DB74"> php-fpm:</span><span style="color:#E6DB74"> pool</span><span style="color:#E6DB74"> www</span></span>
+<span class="line"><span style="color:#A6E22E">3900</span><span style="color:#AE81FF">           3</span><span style="color:#AE81FF">  0.0</span><span style="color:#AE81FF">  0.5</span><span style="color:#AE81FF">  80576</span><span style="color:#AE81FF">  9344</span><span style="color:#E6DB74"> ?</span><span style="color:#E6DB74">        S</span><span style="color:#E6DB74">    09:34</span><span style="color:#E6DB74">   0:00</span><span style="color:#E6DB74"> php-fpm:</span><span style="color:#E6DB74"> pool</span><span style="color:#E6DB74"> www</span></span></code></pre>
+<p>期待通りな事が分かったので終了。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[php-fpm]$ exit</span></span></code></pre>
+<p>続いてはApacheコンテナを作成する。<br>
+今作ったコンテナやPodはそのままでおｋ。</p>
+<h2 id="apacheコンテナを作成する">Apacheコンテナを作成する</h2>
+<p><a href="https://hub.docker.com/_/httpd/" rel="noopener noreferrer" target="_blank">Docker公式のApacheコンテナ</a>をベースにカスタマイズする。</p>
+<p>ディレクトリ構成は以下のような感じになる。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#66D9EF">.</span></span>
+<span class="line"><span style="color:#A6E22E">├──</span><span style="color:#E6DB74"> apache</span></span>
+<span class="line"><span style="color:#A6E22E">│</span><span style="color:#E6DB74"> ├──</span><span style="color:#E6DB74"> Containerfile</span></span>
+<span class="line"><span style="color:#A6E22E">│</span><span style="color:#E6DB74"> └──</span><span style="color:#E6DB74"> laravel.conf</span></span></code></pre>
+<h3 id="apachecontainerfileの作成">./apache/Containerfileの作成</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ mkdir apache</span></span>
+<span class="line"><span style="color:#F8F8F2">[linux]$ touch apache/Containerfile</span></span></code></pre>
+<p>中身は以下</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="docker"><code><span class="line"><span style="color:#F92672">FROM</span><span style="color:#F8F8F2"> docker.io/httpd:2.4.62</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">RUN</span><span style="color:#F8F8F2"> usermod -u 3900 www-data</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">RUN</span><span style="color:#F8F8F2"> echo </span><span style="color:#E6DB74">"Include conf/extra/laravel.conf"</span><span style="color:#F8F8F2"> >> /usr/local/apache2/conf/httpd.conf</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">CMD</span><span style="color:#F8F8F2"> [</span><span style="color:#E6DB74">"httpd-foreground"</span><span style="color:#F8F8F2">]</span></span></code></pre>
+<ul>
+<li>
+<p><code>RUN usermod -u 3900 www-data</code><br>
+www-dataが初期だとUIDが33なので、3900に変更。<br>
+今回の構成ならUID33のままでも良いんだけど、色々増やすとUIDが他のコンテナと衝突することがあったので。</p>
+</li>
+<li>
+<p><code>RUN echo "Include conf/extra/laravel.conf" >> /usr/local/apache2/conf/httpd.conf</code><br>
+laravel.confを読み込んでもらう為にhttpd.confにincludeを記述。</p>
+</li>
+<li>
+<p><code>CMD ["httpd-foreground"]</code><br>
+初期設定だとバックグラウンドで動いてしまい、コンテナが即座に落ちるのでフォアグラウンドで起動するように。</p>
+</li>
+</ul>
+<h3 id="apachelaravelconfの作成">./apache/laravel.confの作成</h3>
+<p>PHP-FPMと疎通するのに必要なモジュールを有効化したりなどする。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ touch apache/laravel.conf</span></span></code></pre>
+<p>中身は以下</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="apache"><code><span class="line"><span style="color:#88846F"># php-fpmに必要なモジュール</span></span>
+<span class="line"><span style="color:#F92672">LoadModule</span><span style="color:#F8F8F2"> proxy_module modules/mod_proxy.so</span></span>
+<span class="line"><span style="color:#F92672">LoadModule</span><span style="color:#F8F8F2"> authnz_fcgi_module modules/mod_authnz_fcgi.so</span></span>
+<span class="line"><span style="color:#F92672">LoadModule</span><span style="color:#F8F8F2"> proxy_fcgi_module modules/mod_proxy_fcgi.so</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F"># Laravelの.htaccessを読み取る為に必要</span></span>
+<span class="line"><span style="color:#F92672">LoadModule</span><span style="color:#F8F8F2"> rewrite_module modules/mod_rewrite.so</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F"># index.phpを読み取る</span></span>
+<span class="line"><span style="color:#F92672">DirectoryIndex</span><span style="color:#F8F8F2"> index.php</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">&#x3C;VirtualHost </span><span style="color:#E6DB74">*:80</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F92672">    ServerName</span><span style="color:#F8F8F2"> podman-laravel-handson.test</span></span>
+<span class="line"><span style="color:#F92672">    DocumentRoot</span><span style="color:#F8F8F2"> "/laravel/public"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;FilesMatch </span><span style="color:#E6DB74">\.php$</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F92672">        SetHandler</span><span style="color:#F8F8F2"> "proxy:fcgi://localhost:</span><span style="color:#AE81FF">9000</span><span style="color:#F8F8F2">"</span></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;/FilesMatch></span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;Directory </span><span style="color:#E6DB74">"/laravel/public"</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F92672">        AllowOverride</span><span style="color:#F8F8F2"> All</span></span>
+<span class="line"><span style="color:#F92672">        Require</span><span style="color:#F8F8F2"> all granted</span></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;/Directory></span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">    ErrorLog</span><span style="color:#F8F8F2"> /proc/self/fd/</span><span style="color:#AE81FF">2</span></span>
+<span class="line"><span style="color:#F92672">    CustomLog</span><span style="color:#F8F8F2"> /proc/self/fd/</span><span style="color:#AE81FF">1</span><span style="color:#F8F8F2"> common</span></span>
+<span class="line"><span style="color:#F8F8F2">&#x3C;/VirtualHost></span></span></code></pre>
+<p>ここら辺は人の環境によって大きく変わるところだと思うので、お好みで。</p>
+<p>PHP-FPMとはlocalhostで9000番ポートを通し通信している。</p>
+<h3 id="build--run-1">build &#x26; run</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ podman build -t apache-2.4-image ./apache</span></span></code></pre>
+<p>でビルド。</p>
+<p>Runは以下で</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ podman run -d </span><span style="color:#AE81FF">\</span></span>
+<span class="line"><span style="color:#A6E22E">  --pod</span><span style="color:#E6DB74"> podman-laravel-handson-pod</span><span style="color:#AE81FF"> \</span></span>
+<span class="line"><span style="color:#AE81FF">  --name</span><span style="color:#E6DB74"> apache-2.4-container</span><span style="color:#AE81FF"> \</span></span>
+<span class="line"><span style="color:#AE81FF">  --volume</span><span style="color:#E6DB74"> ./laravel:/laravel</span><span style="color:#AE81FF"> \</span></span>
+<span class="line"><span style="color:#AE81FF">  --volume</span><span style="color:#E6DB74"> ./apache/laravel.conf:/usr/local/apache2/conf/extra/laravel.conf</span><span style="color:#AE81FF"> \</span></span>
+<span class="line"><span style="color:#AE81FF">  --workdir</span><span style="color:#E6DB74"> /laravel</span><span style="color:#AE81FF"> \</span></span>
+<span class="line"><span style="color:#AE81FF">  --replace</span><span style="color:#AE81FF"> \</span></span>
+<span class="line"><span style="color:#E6DB74">  apache-2.4-image</span></span></code></pre>
+<p>Run後、「podman pod ps —ctr-status —ctr-names」で動いているか確認。</p>
+<h3 id="apacheコンテナの確認">Apacheコンテナの確認</h3>
+<p>期待通り動いているか確認する。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ mkdir laravel/public</span></span>
+<span class="line"><span style="color:#F8F8F2">[linux]$ echo </span><span style="color:#E6DB74">"&#x3C;?php phpinfo();"</span><span style="color:#F92672"> ></span><span style="color:#F8F8F2"> laravel/public/phpinfo.php</span></span></code></pre>
+<p>でphpの情報を表示するファイルを作成。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ curl http://localhost:8080/phpinfo.php</span></span></code></pre>
+<p>でアクセス。</p>
+<p>長いHTMLが返ってくればおｋ。</p>
+<h3 id="80番ポートでアクセスできるようにする">80番ポートでアクセスできるようにする</h3>
+<p>ここは必要な人のみ。</p>
+<p>私はWindows11にVMでLinuxを入れ、そこでコンテナを構築している。<br>
+そのため、Windows11からコンテナ内にアクセスできるようにしたい。</p>
+<p>既に、Windows11からVMに80番ポートでアクセスできる前提とする。</p>
+<p>やることは、</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ firewall-cmd --permanent --zone</span><span style="color:#F92672">=</span><span style="color:#E6DB74">public</span><span style="color:#F8F8F2"> --add-forward-port</span><span style="color:#F92672">=</span><span style="color:#F8F8F2">port</span><span style="color:#F92672">=</span><span style="color:#E6DB74">80:</span><span style="color:#F8F8F2">proto</span><span style="color:#F92672">=</span><span style="color:#E6DB74">tcp:</span><span style="color:#F8F8F2">toport</span><span style="color:#F92672">=</span><span style="color:#E6DB74">8080</span></span></code></pre>
+<p>で80番を8080に転送。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ sudo firewall-cmd --reload</span></span></code></pre>
+<p>再起動すれば完了。</p>
+<p>Server APIがFPM/FastCGIになってるのとか確認しとくと良いかも。</p>
+<p><img alt="" loading="lazy" decoding="async" width="644" height="44" src="/_astro/2.D-dAvmrG_1yI2sq.webp" srcset=""></p>
+<h3 id="laravelをインストールする">Laravelをインストールする</h3>
+<p>まず、テスト用で作ったファイルを削除。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ rm -rf laravel/</span><span style="color:#F92672">*</span></span></code></pre>
+<p>つづいて、php-fpmコンテナに入り</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ podman exec -itu root php-fpm-8.1-container bash</span></span></code></pre>
+<p>Laravelをインストールする</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[php-fpm]$ composer create-project --prefer-dist  laravel/laravel:^10.0 /laravel</span></span>
+<span class="line"><span style="color:#F8F8F2">[php-fpm]$ php artisan -V</span></span>
+<span class="line"><span style="color:#A6E22E">Laravel</span><span style="color:#E6DB74"> Framework</span><span style="color:#AE81FF"> 10.48.20</span></span></code></pre>
+<h3 id="laravelの権限問題とウェルカム画面表示">Laravelの権限問題とウェルカム画面表示</h3>
+<p>この状態でLaravelにアクセスしてみると</p>
+<p><img alt="" loading="lazy" decoding="async" width="1600" height="306" src="/_astro/3.CcNd0igu_ZcoGPa.webp" srcset=""></p>
+<p>権限問題でエラーになる。</p>
+<p>これは、ApacheとPHP-FPMの実行ユーザーであるwww-dataがlaravelディレクトリに対し適切な権限を持たないから。</p>
+<p>一回出て</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[php-fpm]$ exit</span></span></code></pre>
+<p>以下のように権限を与える</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ sudo chown -R 103900 laravel/storage/</span></span>
+<span class="line"><span style="color:#F8F8F2">[linux]$ sudo chmod -R a</span><span style="color:#F92672">=</span><span style="color:#E6DB74">rX,u+w</span><span style="color:#A6E22E">  laravel/storage/</span></span>
+<span class="line"><span style="color:#F8F8F2">[linux]$ sudo chown -R 103900 laravel/bootstrap/cache/</span></span>
+<span class="line"><span style="color:#F8F8F2">[linux]$ sudo chmod -R a</span><span style="color:#F92672">=</span><span style="color:#E6DB74">rX,u+w</span><span style="color:#A6E22E"> laravel/bootstrap/cache/</span></span></code></pre>
+<p>laravel/storage/とlaravel/bootstrap/cache/以下の所有者をUID103900=コンテナ内のUID3900=www-dataにし、ファイルは644、ディレクトリは755にしている。</p>
+<p>これで</p>
+<p><img alt="" loading="lazy" decoding="async" width="1600" height="781" src="/_astro/4.CsU8eLAZ_mabpC.webp" srcset=""></p>
+<p>ウェルカム画面が表示できた。</p>
+<h2 id="mysqlコンテナを作成する">MySQLコンテナを作成する</h2>
+<p><a href="https://hub.docker.com/_/mysql/" rel="noopener noreferrer" target="_blank">Docker公式のMySQLコンテナ</a>をベースにカスタマイズする。<br>
+<a href="https://hub.docker.com/r/mysql/mysql-server" rel="noopener noreferrer" target="_blank">MySQL公式が提供するコンテナ</a>も存在するが最終Updateが1年前だし、Docker公式イメージで今のところ問題が無いので利用していない。</p>
+<p>ディレクトリ構成は以下のような感じになる。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#66D9EF">.</span></span>
+<span class="line"><span style="color:#A6E22E">├──</span><span style="color:#E6DB74"> mysql</span></span>
+<span class="line"><span style="color:#A6E22E">│</span><span style="color:#E6DB74"> ├──</span><span style="color:#E6DB74"> db-store</span><span style="color:#88846F"> # DBのデータを入れる</span></span>
+<span class="line"><span style="color:#A6E22E">│</span><span style="color:#E6DB74"> ├──</span><span style="color:#E6DB74"> Containerfile</span></span>
+<span class="line"><span style="color:#A6E22E">│</span><span style="color:#E6DB74"> └──</span><span style="color:#E6DB74"> my.cnf</span><span style="color:#88846F"> # 設定ファイル</span></span></code></pre>
+<h3 id="mysqlcontainerfileの作成">./mysql/Containerfileの作成</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ mkdir mysql</span></span>
+<span class="line"><span style="color:#F8F8F2">[linux]$ touch mysql/Containerfile</span></span></code></pre>
+<p>でContainerfile作成。</p>
+<p>中身は以下。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="docker"><code><span class="line"><span style="color:#F92672">FROM</span><span style="color:#F8F8F2"> docker.io/mysql:8.4.2</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F"># mysqlのUIDを3901に。</span></span>
+<span class="line"><span style="color:#F92672">RUN</span><span style="color:#F8F8F2"> usermod -u 3901 mysql</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">ENV</span><span style="color:#F8F8F2"> MYSQL_DATABASE=laravel \</span></span>
+<span class="line"><span style="color:#F8F8F2">  MYSQL_USER=tamakoma \</span></span>
+<span class="line"><span style="color:#F8F8F2">  MYSQL_PASSWORD=secret \</span></span>
+<span class="line"><span style="color:#F8F8F2">  MYSQL_ROOT_PASSWORD=secret \</span></span>
+<span class="line"><span style="color:#F8F8F2">  TZ=Asia/Tokyo</span></span></code></pre>
+<p>予め<a href="https://hub.docker.com/_/mysql#:~:text=tag%20%2D%2Dverbose%20%2D%2Dhelp-,Environment%20Variables,-When%20you%20start" rel="noopener noreferrer" target="_blank">環境変数を指定する</a>ことで、DBやユーザーを作成してくれる。<br>
+今回の名前やパスワードは適当なので、お好みに。</p>
+<h3 id="mysqlmycnfの作成">./mysql/my.cnfの作成</h3>
+<p>MySQLの設定ファイルを作成する。<br>
+私の技術力的に設定ファイルの詳しい意図の説明はできないのであしからず。</p>
+<p>また、ハンズオン程度なら無くても良いと思われる。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ touch mysql/my.cnf</span></span></code></pre>
+<p>中身は本当に最低限わかるものを追加。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>[mysqld]</span></span>
+<span class="line"><span># character set / collation</span></span>
+<span class="line"><span>character_set_server = utf8mb4</span></span>
+<span class="line"><span>collation_server = utf8mb4_ja_0900_as_cs_ks</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span># timezone</span></span>
+<span class="line"><span>default-time-zone = SYSTEM</span></span>
+<span class="line"><span>log_timestamps = SYSTEM</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>[mysql]</span></span>
+<span class="line"><span>default-character-set = utf8mb4</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>[client]</span></span>
+<span class="line"><span>default-character-set = utf8mb4</span></span></code></pre>
+<p>主には日本語向け文字コードの設定と、タイムゾーンの設定。</p>
+<h3 id="mysqldb-storeの作成">./mysql/db-storeの作成</h3>
+<p>データを保存するためのディレクトリ作成。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ mkdir mysql/db-store</span></span></code></pre>
+<p>また、MySQLの実行ユーザーUID3901がdb-storeを弄れるよう所有者の変更。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ sudo chown 103901:103901 mysql/db-store</span></span></code></pre>
+<h3 id="gitignoreの作成">.gitignoreの作成</h3>
+<p>mysql/db-storeの中身をGitに載せると面倒なので無視させる。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ echo </span><span style="color:#E6DB74">"mysql/db-store/*"</span><span style="color:#F92672"> >></span><span style="color:#F8F8F2"> .gitignore</span></span></code></pre>
+<h3 id="build--run-2">build &#x26; run</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ podman build -t mysql-8.4-image ./mysql</span></span></code></pre>
+<p>でビルド。</p>
+<p>Runは以下</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ podman run -d </span><span style="color:#AE81FF">\</span></span>
+<span class="line"><span style="color:#A6E22E">  --pod</span><span style="color:#E6DB74"> podman-laravel-handson-pod</span><span style="color:#AE81FF"> \</span></span>
+<span class="line"><span style="color:#AE81FF">  --name</span><span style="color:#E6DB74"> mysql-8.4-container</span><span style="color:#AE81FF"> \</span></span>
+<span class="line"><span style="color:#AE81FF">  --volume</span><span style="color:#E6DB74"> ./mysql/db-store:/var/lib/mysql</span><span style="color:#AE81FF"> \</span></span>
+<span class="line"><span style="color:#AE81FF">  --volume</span><span style="color:#E6DB74"> ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf</span><span style="color:#AE81FF"> \</span></span>
+<span class="line"><span style="color:#AE81FF">  --replace</span><span style="color:#AE81FF"> \</span></span>
+<span class="line"><span style="color:#E6DB74">  mysql-8.4-image</span></span></code></pre>
+<p>Run後、「podman pod ps —ctr-status —ctr-names」で動いているか確認。</p>
+<h3 id="laravelのenv設定">Laravelの.env設定</h3>
+<p>MySQLに合わせて.envのDB設定を変更。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>DB_CONNECTION=mysql</span></span>
+<span class="line"><span>DB_HOST=127.0.0.1</span></span>
+<span class="line"><span>DB_PORT=3306</span></span>
+<span class="line"><span>DB_DATABASE=laravel</span></span>
+<span class="line"><span>DB_USERNAME=tamakoma</span></span>
+<span class="line"><span>DB_PASSWORD=secret</span></span></code></pre>
+<p>MySQLとはローカルホストの3306ポートを利用して通信を行う。</p>
+<h3 id="laravelでマイグレーション">Laravelでマイグレーション</h3>
+<p>Laravelの設定が終わったらマイグレーションする。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ podman exec -itu root php-fpm-8.1-container bash</span></span>
+<span class="line"><span style="color:#F8F8F2">[php-fpm]$ php artisan migrate</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#A6E22E">   INFO</span><span style="color:#E6DB74">  Preparing</span><span style="color:#E6DB74"> database.</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#A6E22E">  Creating</span><span style="color:#E6DB74"> migration</span><span style="color:#E6DB74"> table</span><span style="color:#E6DB74"> ...............................................................................................................</span><span style="color:#E6DB74"> 88ms</span><span style="color:#E6DB74"> DONE</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#A6E22E">   INFO</span><span style="color:#E6DB74">  Running</span><span style="color:#E6DB74"> migrations.</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#A6E22E">  2014_10_12_000000_create_users_table</span><span style="color:#E6DB74"> ..................................................................................................</span><span style="color:#E6DB74"> 119ms</span><span style="color:#E6DB74"> DONE</span></span>
+<span class="line"><span style="color:#A6E22E">  2014_10_12_100000_create_password_reset_tokens_table</span><span style="color:#E6DB74"> ...................................................................................</span><span style="color:#E6DB74"> 92ms</span><span style="color:#E6DB74"> DONE</span></span>
+<span class="line"><span style="color:#A6E22E">  2019_08_19_000000_create_failed_jobs_table</span><span style="color:#E6DB74"> ............................................................................................</span><span style="color:#E6DB74"> 105ms</span><span style="color:#E6DB74"> DONE</span></span>
+<span class="line"><span style="color:#A6E22E">  2019_12_14_000001_create_personal_access_tokens_table</span><span style="color:#E6DB74"> .................................................................................</span><span style="color:#E6DB74"> 118ms</span><span style="color:#E6DB74"> DONE</span></span></code></pre>
+<h3 id="mysqlの動作確認">MySQLの動作確認</h3>
+<p>マイグレーションが完了したら、新しくターミナルを開きMySQLコンテナ内に入る。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ podman exec -it mysql-8.4-container bash</span></span></code></pre>
+<p>mysqlにログイン。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[mysql]$ mysql -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE</span></span>
+<span class="line"><span style="color:#A6E22E">mysql</span><span style="color:#F8F8F2">> </span><span style="color:#E6DB74">show</span><span style="color:#E6DB74"> databases</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#A6E22E">+--------------------+</span></span>
+<span class="line"><span style="color:#F92672">|</span><span style="color:#A6E22E"> Database</span><span style="color:#F92672">           |</span></span>
+<span class="line"><span style="color:#A6E22E">+--------------------+</span></span>
+<span class="line"><span style="color:#F92672">|</span><span style="color:#A6E22E"> information_schema</span><span style="color:#F92672"> |</span></span>
+<span class="line"><span style="color:#F92672">|</span><span style="color:#A6E22E"> laravel</span><span style="color:#F92672">            |</span></span>
+<span class="line"><span style="color:#F92672">|</span><span style="color:#A6E22E"> performance_schema</span><span style="color:#F92672"> |</span></span>
+<span class="line"><span style="color:#A6E22E">+--------------------+</span></span>
+<span class="line"><span style="color:#A6E22E">3</span><span style="color:#E6DB74"> rows</span><span style="color:#E6DB74"> in</span><span style="color:#E6DB74"> set</span><span style="color:#F8F8F2"> (0.00 </span><span style="color:#E6DB74">sec</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#A6E22E">mysql</span><span style="color:#F8F8F2">> </span><span style="color:#E6DB74">show</span><span style="color:#E6DB74"> tables</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#A6E22E">+------------------------+</span></span>
+<span class="line"><span style="color:#F92672">|</span><span style="color:#A6E22E"> Tables_in_laravel</span><span style="color:#F92672">      |</span></span>
+<span class="line"><span style="color:#A6E22E">+------------------------+</span></span>
+<span class="line"><span style="color:#F92672">|</span><span style="color:#A6E22E"> failed_jobs</span><span style="color:#F92672">            |</span></span>
+<span class="line"><span style="color:#F92672">|</span><span style="color:#A6E22E"> migrations</span><span style="color:#F92672">             |</span></span>
+<span class="line"><span style="color:#F92672">|</span><span style="color:#A6E22E"> password_reset_tokens</span><span style="color:#F92672">  |</span></span>
+<span class="line"><span style="color:#F92672">|</span><span style="color:#A6E22E"> personal_access_tokens</span><span style="color:#F92672"> |</span></span>
+<span class="line"><span style="color:#F92672">|</span><span style="color:#A6E22E"> users</span><span style="color:#F92672">                  |</span></span>
+<span class="line"><span style="color:#A6E22E">+------------------------+</span></span>
+<span class="line"><span style="color:#A6E22E">5</span><span style="color:#E6DB74"> rows</span><span style="color:#E6DB74"> in</span><span style="color:#E6DB74"> set</span><span style="color:#F8F8F2"> (0.01 </span><span style="color:#E6DB74">sec</span><span style="color:#F8F8F2">)</span></span></code></pre>
+<p>しっかりマイグレーションされている。</p>
+<p>こちらのターミナルは使うのでそのままで。</p>
+<h3 id="データを追加してみる">データを追加してみる</h3>
+<p>Laravel経由でデータを追加してみよう。</p>
+<p>MySQLじゃない方のターミナルでPHP-FPMコンテナに入る。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ podman exec -itu root php-fpm-8.1-container bash</span></span>
+<span class="line"><span style="color:#F8F8F2">[php-fpm]$ php artisan tinker</span></span></code></pre>
+<p>でLaravelと対話モードになり、以下を入力</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">$user = new </span><span style="color:#A6E22E">App\Models\User</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">$user</span><span style="color:#E6DB74">-</span><span style="color:#F8F8F2">></span><span style="color:#E6DB74">name</span><span style="color:#E6DB74"> =</span><span style="color:#E6DB74"> 'tamakoma'</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">$user</span><span style="color:#E6DB74">-</span><span style="color:#F8F8F2">></span><span style="color:#E6DB74">email</span><span style="color:#E6DB74"> =</span><span style="color:#E6DB74"> 'phper@example.com'</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">$user</span><span style="color:#E6DB74">-</span><span style="color:#F8F8F2">></span><span style="color:#E6DB74">password</span><span style="color:#E6DB74"> =</span><span style="color:#E6DB74"> Hash::make</span><span style="color:#F8F8F2">(</span><span style="color:#A6E22E">'secret'</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#A6E22E">$user->save</span><span style="color:#F8F8F2">();</span></span></code></pre>
+<p>trueが返ってくればおｋ。</p>
+<p>MySQLを開いているターミナルで以下のSQLを実行しデータが追加されていればおｋ</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#A6E22E">mysql</span><span style="color:#F8F8F2">> </span><span style="color:#E6DB74">SELECT</span><span style="color:#FD971F"> *</span><span style="color:#E6DB74"> FROM</span><span style="color:#E6DB74"> users</span><span style="color:#AE81FF">\G</span></span>
+<span class="line"><span style="color:#F92672">***************************</span><span style="color:#F8F8F2"> 1. row </span><span style="color:#F92672">***************************</span></span>
+<span class="line"><span style="color:#A6E22E">               id:</span><span style="color:#AE81FF"> 1</span></span>
+<span class="line"><span style="color:#A6E22E">             name:</span><span style="color:#E6DB74"> tamakoma</span></span>
+<span class="line"><span style="color:#A6E22E">            email:</span><span style="color:#E6DB74"> phper@example.com</span></span>
+<span class="line"><span style="color:#A6E22E">email_verified_at:</span><span style="color:#E6DB74"> NULL</span></span>
+<span class="line"><span style="color:#A6E22E">         password:</span><span style="color:#F8F8F2"> $2y$12$1NyHIRzsEe6ovPq4rypqiuDlwdgcrKs0FlMldk6hmQ5qNqmiy21Lm</span></span>
+<span class="line"><span style="color:#A6E22E">   remember_token:</span><span style="color:#E6DB74"> NULL</span></span>
+<span class="line"><span style="color:#A6E22E">       created_at:</span><span style="color:#E6DB74"> 2024-08-13</span><span style="color:#E6DB74"> 22:49:04</span></span>
+<span class="line"><span style="color:#A6E22E">       updated_at:</span><span style="color:#E6DB74"> 2024-08-13</span><span style="color:#E6DB74"> 22:49:04</span></span>
+<span class="line"><span style="color:#A6E22E">1</span><span style="color:#E6DB74"> row</span><span style="color:#E6DB74"> in</span><span style="color:#E6DB74"> set</span><span style="color:#F8F8F2"> (0.00 </span><span style="color:#E6DB74">sec</span><span style="color:#F8F8F2">)</span></span></code></pre>
+<p>確認できたらMySQLのターミナルは閉じる。</p>
+<h2 id="viteコンテナを作成する">Viteコンテナを作成する</h2>
+<p>フロントエンドのビルドファイルをどうやって持ってくるか悩んだ末、コンテナ立ち上げ時に自動で毎回ビルドするようにした。<br>
+最適な方法ではないと思うが、私が行った方法を共有する。</p>
+<p>これはPodmanのPodにある<a href="https://docs.podman.io/en/v4.9.3/markdown/podman-create.1.html#init-ctr-type" rel="noopener noreferrer" target="_blank">initコンテナ</a>という機能を利用している。</p>
+<p>ディレクトリ構成は以下のようになる。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#66D9EF">.</span></span>
+<span class="line"><span style="color:#A6E22E">├──</span><span style="color:#E6DB74"> vite</span></span>
+<span class="line"><span style="color:#A6E22E">│</span><span style="color:#E6DB74"> └──</span><span style="color:#E6DB74"> Containerfile</span></span></code></pre>
+<h3 id="initコンテナについて">initコンテナについて</h3>
+<p>簡単に言えば、Pod内にあるコンテナを起動する前に一度だけ起動するコンテナ。</p>
+<p>kubernetesのinitコンテナからインスパイアされているみたい。</p>
+<p>しかし、k8sと違いPodmanのinitコンテナにはalwaysとonceの2つモードがあり、alwaysはPodを再起動するごとに、onceはPod初回起動時のみ稼働する。</p>
+<p>今回は再起動する毎にビルドしてほしいのでalwaysモードで利用する。</p>
+<h3 id="vitecontainerfileの作成">./vite/Containerfileの作成</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ mkdir vite</span></span>
+<span class="line"><span style="color:#F8F8F2">[linux]$ touch vite/Containerfile</span></span></code></pre>
+<p>でContainerfile作成。</p>
+<p>中身は以下のみ。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="docker"><code><span class="line"><span style="color:#F92672">FROM</span><span style="color:#F8F8F2"> docker.io/node:20.16.0-alpine</span></span></code></pre>
+<p>これだけなので、Containerfileを作らずにcreate時このイメージを直接指定してもおk。</p>
+<h3 id="build--create">build &#x26; create</h3>
+<p>以下でビルド</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ podman build -t vite-20.16-image ./vite</span></span></code></pre>
+<p><a href="https://docs.podman.io/en/v4.9.3/markdown/podman-create.1.html#init-ctr-type" rel="noopener noreferrer" target="_blank">initコンテナ特有のオプション</a>を付ける為、<a href="https://docs.podman.io/en/v4.9.3/markdown/podman-create.1.html" rel="noopener noreferrer" target="_blank">createコマンド</a>を利用する。</p>
+<p>createする前に、podを停止しておく。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ podman pod stop podman-laravel-handson-pod</span></span></code></pre>
+<p>createコマンドは以下</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ podman create </span><span style="color:#AE81FF">\</span></span>
+<span class="line"><span style="color:#A6E22E">  --pod</span><span style="color:#E6DB74"> podman-laravel-handson-pod</span><span style="color:#AE81FF"> \</span></span>
+<span class="line"><span style="color:#AE81FF">  --name</span><span style="color:#E6DB74"> vite-20.16-container</span><span style="color:#AE81FF"> \</span></span>
+<span class="line"><span style="color:#AE81FF">  --volume</span><span style="color:#E6DB74"> ./laravel:/laravel</span><span style="color:#AE81FF"> \</span></span>
+<span class="line"><span style="color:#AE81FF">  --replace</span><span style="color:#AE81FF"> \</span></span>
+<span class="line"><span style="color:#AE81FF">  --init-ctr=always</span><span style="color:#AE81FF"> \</span></span>
+<span class="line"><span style="color:#AE81FF">  --workdir</span><span style="color:#E6DB74"> /laravel</span><span style="color:#AE81FF">  \</span></span>
+<span class="line"><span style="color:#E6DB74">  vite-20.16-image</span><span style="color:#AE81FF"> \</span></span>
+<span class="line"><span style="color:#E6DB74">  sh</span><span style="color:#AE81FF"> -c</span><span style="color:#E6DB74"> "npm install &#x26;&#x26; npm run build"</span></span></code></pre>
+<ul>
+<li>
+<p><code>--init-ctr=always</code><br>
+でalwaysモードのinitコンテナに。</p>
+</li>
+<li>
+<p><code>sh -c "npm install &#x26;&#x26; npm run build"</code><br>
+コンテナ起動時にシェルで「npm install &#x26;&#x26; npm run build」を実行。<br>
+実行後、コンテナは勝手に終了する。</p>
+</li>
+</ul>
+<h3 id="podを起動し動作確認">Podを起動し動作確認</h3>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ podman pod start podman-laravel-handson-pod</span></span></code></pre>
+<p>で起動。</p>
+<p>ビルドするので少し時間が掛かる。</p>
+<p>Pod起動後ログを確認。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ podman logs vite-20.16-container</span></span></code></pre>
+<p>ログの最後に「✓ built in 697ms」のようにビルド完了の文字があればおｋ。</p>
+<h2 id="yamlファイルの作成">yamlファイルの作成</h2>
+<p>全てのコンテナを作成したので、ここからはこのコンテナ等が入ったPodを自動構築するファイルを作成する。</p>
+<p>Podmanの便利機能に<a href="https://docs.podman.io/en/v4.9.3/markdown/podman-kube.1.html" rel="noopener noreferrer" target="_blank">kubeコマンド</a>がある。</p>
+<p>これはk8s用のyamlファイルの生成や、k8s用yamlファイルからPod作成などをしてくれるコマンド。</p>
+<p>今回はこれを利用し、yamlファイルの作成やPodの自動作成を行う。</p>
+<h3 id="podman-laravel-handsonyamlの作成">podman-laravel-handson.yamlの作成</h3>
+<p>Podを作成した状態でpodman kube generateコマンドを実行するとPodを元にyamlファイルを作成してくれる。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ podman pod ps --ctr-status --ctr-names</span></span></code></pre>
+<p>でviteコンテナ以外がrunningになっており、期待通り動いていることを確認する。</p>
+<p>以下でyamlの作成。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[lixnu]$ podman generate kube -f</span><span style="color:#F92672">=</span><span style="color:#E6DB74">podman-laravel-handson.yaml</span><span style="color:#A6E22E"> podman-laravel-handson-pod</span></span></code></pre>
+<p>-fでファイル名を指定できる。</p>
+<p>実際に自動で作成されたyamlファイルが以下</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#88846F"># Save the output of this file and use kubectl create -f to import</span></span>
+<span class="line"><span style="color:#88846F"># it into Kubernetes.</span></span>
+<span class="line"><span style="color:#88846F">#</span></span>
+<span class="line"><span style="color:#88846F"># Created with podman-4.9.4-rhel</span></span>
+<span class="line"><span style="color:#F92672">apiVersion</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">v1</span></span>
+<span class="line"><span style="color:#F92672">kind</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">Pod</span></span>
+<span class="line"><span style="color:#F92672">metadata</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">  creationTimestamp</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"2024-08-13T23:45:06Z"</span></span>
+<span class="line"><span style="color:#F92672">  labels</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">    app</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">podman-laravel-handson-pod</span></span>
+<span class="line"><span style="color:#F92672">  name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">podman-laravel-handson-pod</span></span>
+<span class="line"><span style="color:#F92672">spec</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">  containers</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">args</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#E6DB74">php-fpm</span></span>
+<span class="line"><span style="color:#F92672">    image</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">localhost/php-fpm-8.1-image:latest</span></span>
+<span class="line"><span style="color:#F92672">    name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">php-fpm-8.1-container</span></span>
+<span class="line"><span style="color:#F92672">    ports</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#F92672">containerPort</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">80</span></span>
+<span class="line"><span style="color:#F92672">      hostPort</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">8080</span></span>
+<span class="line"><span style="color:#F92672">    securityContext</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">      runAsNonRoot</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">true</span></span>
+<span class="line"><span style="color:#F92672">    volumeMounts</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#F92672">mountPath</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/laravel</span></span>
+<span class="line"><span style="color:#F92672">      name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">home-tamakoma-podman-laravel-handson-laravel-host-0</span></span>
+<span class="line"><span style="color:#F92672">    workingDir</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/laravel</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">image</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">localhost/apache-2.4-image:latest</span></span>
+<span class="line"><span style="color:#F92672">    name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">apache-2.4-container</span></span>
+<span class="line"><span style="color:#F92672">    volumeMounts</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#F92672">mountPath</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/laravel</span></span>
+<span class="line"><span style="color:#F92672">      name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">home-tamakoma-podman-laravel-handson-laravel-host-0</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#F92672">mountPath</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/usr/local/apache2/conf/extra/laravel.conf</span></span>
+<span class="line"><span style="color:#F92672">      name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">home-tamakoma-podman-laravel-handson-apache-laravel.conf-host-1</span></span>
+<span class="line"><span style="color:#F92672">    workingDir</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/laravel</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">args</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#E6DB74">mysqld</span></span>
+<span class="line"><span style="color:#F92672">    image</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">localhost/mysql-8.4-image:latest</span></span>
+<span class="line"><span style="color:#F92672">    name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">mysql-8.4-container</span></span>
+<span class="line"><span style="color:#F92672">    volumeMounts</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#F92672">mountPath</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/etc/mysql/conf.d/my.cnf</span></span>
+<span class="line"><span style="color:#F92672">      name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">home-tamakoma-podman-laravel-handson-mysql-my.cnf-host-0</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#F92672">mountPath</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/var/lib/mysql</span></span>
+<span class="line"><span style="color:#F92672">      name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">home-tamakoma-podman-laravel-handson-mysql-db-store-host-1</span></span>
+<span class="line"><span style="color:#F92672">  hostUsers</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">false</span></span>
+<span class="line"><span style="color:#F92672">  initContainers</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">args</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#E6DB74">sh</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#E6DB74">-c</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#E6DB74">npm install &#x26;&#x26; npm run build</span></span>
+<span class="line"><span style="color:#F92672">    image</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">localhost/vite-20.16-image:latest</span></span>
+<span class="line"><span style="color:#F92672">    name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">vite-20.16-container</span></span>
+<span class="line"><span style="color:#F92672">    resources</span><span style="color:#F8F8F2">: {}</span></span>
+<span class="line"><span style="color:#F92672">    volumeMounts</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#F92672">mountPath</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/laravel</span></span>
+<span class="line"><span style="color:#F92672">      name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">home-tamakoma-podman-laravel-handson-laravel-host-0</span></span>
+<span class="line"><span style="color:#F92672">    workingDir</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/laravel</span></span>
+<span class="line"><span style="color:#F92672">  volumes</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">hostPath</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">      path</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/home/tamakoma/podman-laravel-handson/apache/laravel.conf</span></span>
+<span class="line"><span style="color:#F92672">      type</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">File</span></span>
+<span class="line"><span style="color:#F92672">    name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">home-tamakoma-podman-laravel-handson-apache-laravel.conf-host-1</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">hostPath</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">      path</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/home/tamakoma/podman-laravel-handson/mysql/my.cnf</span></span>
+<span class="line"><span style="color:#F92672">      type</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">File</span></span>
+<span class="line"><span style="color:#F92672">    name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">home-tamakoma-podman-laravel-handson-mysql-my.cnf-host-0</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">hostPath</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">      path</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/home/tamakoma/podman-laravel-handson/mysql/db-store</span></span>
+<span class="line"><span style="color:#F92672">      type</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">Directory</span></span>
+<span class="line"><span style="color:#F92672">    name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">home-tamakoma-podman-laravel-handson-mysql-db-store-host-1</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">hostPath</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">      path</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/home/tamakoma/podman-laravel-handson/laravel</span></span>
+<span class="line"><span style="color:#F92672">      type</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">Directory</span></span>
+<span class="line"><span style="color:#F92672">    name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">home-tamakoma-podman-laravel-handson-laravel-host-0</span></span></code></pre>
+<p>御覧の通りボリュームのパスなどが環境依存なので注意。</p>
+<h3 id="yamlファイルの修正">yamlファイルの修正</h3>
+<p>上記のyamlファイルそのままでは期待通りに動かないので修正する。</p>
+<p>修正したものが以下。<br>
+修正箇所には日本語コメントあり。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#88846F"># Save the output of this file and use kubectl create -f to import</span></span>
+<span class="line"><span style="color:#88846F"># it into Kubernetes.</span></span>
+<span class="line"><span style="color:#88846F">#</span></span>
+<span class="line"><span style="color:#88846F"># Created with podman-4.9.4-rhel</span></span>
+<span class="line"><span style="color:#F92672">apiVersion</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">v1</span></span>
+<span class="line"><span style="color:#F92672">kind</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">Pod</span></span>
+<span class="line"><span style="color:#F92672">metadata</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">  creationTimestamp</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"2024-08-13T23:45:06Z"</span></span>
+<span class="line"><span style="color:#F92672">  labels</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">    app</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">podman-laravel-handson-pod</span></span>
+<span class="line"><span style="color:#F92672">  name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">podman-laravel-handson-pod</span></span>
+<span class="line"><span style="color:#F92672">  annotations</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#88846F">        # initコンテナをalwaysモードに</span></span>
+<span class="line"><span style="color:#F92672">        io.podman.annotations.init.container.type</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">"always"</span></span>
+<span class="line"><span style="color:#F92672">spec</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">  containers</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">args</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#E6DB74">php-fpm</span></span>
+<span class="line"><span style="color:#88846F">    # imageは指定せず、ビルドして作成する</span></span>
+<span class="line"><span style="color:#F92672">    image</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">php</span></span>
+<span class="line"><span style="color:#F92672">    name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">php-fpm-8.1-container</span></span>
+<span class="line"><span style="color:#F92672">    ports</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#F92672">containerPort</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">80</span></span>
+<span class="line"><span style="color:#F92672">      hostPort</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">8080</span></span>
+<span class="line"><span style="color:#F92672">    securityContext</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">      runAsNonRoot</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">true</span></span>
+<span class="line"><span style="color:#F92672">    volumeMounts</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#F92672">mountPath</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/laravel</span></span>
+<span class="line"><span style="color:#F92672">      name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">home-tamakoma-podman-laravel-handson-laravel-host-0</span></span>
+<span class="line"><span style="color:#F92672">    workingDir</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/laravel</span></span>
+<span class="line"><span style="color:#88846F">    # imageは指定せず、ビルドして作成する</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">image</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">apache</span></span>
+<span class="line"><span style="color:#F92672">    name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">apache-2.4-container</span></span>
+<span class="line"><span style="color:#F92672">    volumeMounts</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#F92672">mountPath</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/laravel</span></span>
+<span class="line"><span style="color:#F92672">      name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">home-tamakoma-podman-laravel-handson-laravel-host-0</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#F92672">mountPath</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/usr/local/apache2/conf/extra/laravel.conf</span></span>
+<span class="line"><span style="color:#F92672">      name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">home-tamakoma-podman-laravel-handson-apache-laravel.conf-host-1</span></span>
+<span class="line"><span style="color:#F92672">    workingDir</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/laravel</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">args</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#E6DB74">mysqld</span></span>
+<span class="line"><span style="color:#88846F">    # imageは指定せず、ビルドして作成する</span></span>
+<span class="line"><span style="color:#F92672">    image</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">mysql</span></span>
+<span class="line"><span style="color:#F92672">    name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">mysql-8.4-container</span></span>
+<span class="line"><span style="color:#F92672">    volumeMounts</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#F92672">mountPath</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/etc/mysql/conf.d/my.cnf</span></span>
+<span class="line"><span style="color:#F92672">      name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">home-tamakoma-podman-laravel-handson-mysql-my.cnf-host-0</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#F92672">mountPath</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/var/lib/mysql</span></span>
+<span class="line"><span style="color:#F92672">      name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">home-tamakoma-podman-laravel-handson-mysql-db-store-host-1</span></span>
+<span class="line"><span style="color:#F92672">  hostUsers</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">false</span></span>
+<span class="line"><span style="color:#F92672">  initContainers</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">args</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#E6DB74">sh</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#E6DB74">-c</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#E6DB74">npm install &#x26;&#x26; npm run build</span></span>
+<span class="line"><span style="color:#88846F">    # imageは指定せず、ビルドして作成する</span></span>
+<span class="line"><span style="color:#F92672">    image</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">vite</span></span>
+<span class="line"><span style="color:#F92672">    name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">vite-20.16-container</span></span>
+<span class="line"><span style="color:#F92672">    resources</span><span style="color:#F8F8F2">: {}</span></span>
+<span class="line"><span style="color:#F92672">    volumeMounts</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">    - </span><span style="color:#F92672">mountPath</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/laravel</span></span>
+<span class="line"><span style="color:#F92672">      name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">home-tamakoma-podman-laravel-handson-laravel-host-0</span></span>
+<span class="line"><span style="color:#F92672">    workingDir</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/laravel</span></span>
+<span class="line"><span style="color:#F92672">  volumes</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">hostPath</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">      path</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/home/tamakoma/podman-laravel-handson/apache/laravel.conf</span></span>
+<span class="line"><span style="color:#F92672">      type</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">File</span></span>
+<span class="line"><span style="color:#F92672">    name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">home-tamakoma-podman-laravel-handson-apache-laravel.conf-host-1</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">hostPath</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">      path</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/home/tamakoma/podman-laravel-handson/mysql/my.cnf</span></span>
+<span class="line"><span style="color:#F92672">      type</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">File</span></span>
+<span class="line"><span style="color:#F92672">    name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">home-tamakoma-podman-laravel-handson-mysql-my.cnf-host-0</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">hostPath</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">      path</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/home/tamakoma/podman-laravel-handson/mysql/db-store</span></span>
+<span class="line"><span style="color:#F92672">      type</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">Directory</span></span>
+<span class="line"><span style="color:#F92672">    name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">home-tamakoma-podman-laravel-handson-mysql-db-store-host-1</span></span>
+<span class="line"><span style="color:#F8F8F2">  - </span><span style="color:#F92672">hostPath</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F92672">      path</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">/home/tamakoma/podman-laravel-handson/laravel</span></span>
+<span class="line"><span style="color:#F92672">      type</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">Directory</span></span>
+<span class="line"><span style="color:#F92672">    name</span><span style="color:#F8F8F2">: </span><span style="color:#E6DB74">home-tamakoma-podman-laravel-handson-laravel-host-0</span></span></code></pre>
+<ul>
+<li>
+<p><code>io.podman.annotations.init.container.type: "always"</code><br>
+initコンテナのalwaysモードはk8sにはないPodman特有の機能。<br>
+こういう機能はanotationで指定する。</p>
+<p>onceとalwaysが混在する場合はどうするんだろうと密かに思っている。</p>
+</li>
+<li>
+<p><strong>image: phpなど</strong><br>
+imageを指定してPod作成もできるが、Containerfileの場所を指定してイメージをビルドすることもできる。<br>
+毎回イメージをビルドする方法にすれば、イメージが存在している必要がないのでこの方法に。</p>
+</li>
+</ul>
+<h3 id="podman-play-kubeでpod作成">podman play kubeでPod作成</h3>
+<p><a href="https://docs.podman.io/en/v4.9.3/markdown/podman-kube-play.1.html" rel="noopener noreferrer" target="_blank">podman play kube</a>でyamlファイルからPodを作成する。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ podman play kube podman-laravel-handson.yaml </span><span style="color:#AE81FF">\</span></span>
+<span class="line"><span style="color:#F8F8F2">  --userns</span><span style="color:#F92672">=</span><span style="color:#E6DB74">auto:</span><span style="color:#F8F8F2">uidmapping</span><span style="color:#F92672">=</span><span style="color:#E6DB74">0:0:1,</span><span style="color:#F8F8F2">uidmapping</span><span style="color:#F92672">=</span><span style="color:#E6DB74">1:1:65536,</span><span style="color:#F8F8F2">gidmapping</span><span style="color:#F92672">=</span><span style="color:#E6DB74">0:0:1,</span><span style="color:#F8F8F2">gidmapping</span><span style="color:#F92672">=</span><span style="color:#E6DB74">1:1:65536</span><span style="color:#A6E22E"> \</span></span>
+<span class="line"><span style="color:#AE81FF">  --build</span><span style="color:#AE81FF"> \</span></span>
+<span class="line"><span style="color:#AE81FF">  --replace</span></span></code></pre>
+<p>の実行。<br>
+<code>--userns</code>は空Pod作成時と同じ。<br>
+<a href="https://docs.podman.io/en/v4.9.3/markdown/podman-kube-play.1.html#build" rel="noopener noreferrer" target="_blank"><code>--build</code></a>を付けることで強制ビルドしている。</p>
+<p>実行すると全てのイメージビルドが始まり、ビルドが終わり次第Podが作成され立ち上がる。</p>
+<p>起動したら、<code>podman pod ps --ctr-status --ctr-names</code>で正常に動いているか確認。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ podman pod ps --ctr-status --ctr-names</span></span>
+<span class="line"><span style="color:#A6E22E">POD</span><span style="color:#E6DB74"> ID</span><span style="color:#E6DB74">        NAME</span><span style="color:#E6DB74">                        STATUS</span><span style="color:#E6DB74">      CREATED</span><span style="color:#E6DB74">        INFRA</span><span style="color:#E6DB74"> ID</span><span style="color:#E6DB74">      NAMES</span><span style="color:#E6DB74">                                                                                                                                                                                                               STATUS</span></span>
+<span class="line"><span style="color:#A6E22E">164238600f75</span><span style="color:#E6DB74">  podman-laravel-handson-pod</span><span style="color:#E6DB74">  Running</span><span style="color:#AE81FF">     3</span><span style="color:#E6DB74"> minutes</span><span style="color:#E6DB74"> ago</span><span style="color:#E6DB74">  6d00db0499c6</span><span style="color:#E6DB74">  164238600f75-infra,podman-laravel-handson-pod-vite-20.16-container,podman-laravel-handson-pod-php-fpm-8.1-container,podman-laravel-handson-pod-apache-2.4-container,podman-laravel-handson-pod-mysql-8.4-container</span><span style="color:#E6DB74">  running,exited,running,running,running</span></span></code></pre>
+<p>のように、vite以外がrunningなら成功。</p>
+<p>実際にLaravelにアクセスして表示されるかも見てみる。</p>
+<p><img alt="" loading="lazy" decoding="async" width="1600" height="581" src="/_astro/5.RtBrJacK_ZY9mC0.webp" srcset=""></p>
+<p>問題なさそう。</p>
+<h2 id="環境の再構築">環境の再構築</h2>
+<p><strong>※私の<a href="https://github.com/tamakoma1129/podman-laravel-handson" rel="noopener noreferrer" target="_blank">GitHub</a>にあるものをそのまま使う場合、yamlのvolumeパスが<code>/home/tamakoma/podman-laravel-handson/</code>になっているため、自分の環境に合わせる必要あり。</strong></p>
+<p>環境を再構築できるか確かめよう。</p>
+<p>新しいVM環境を構築し確認していく。<br>
+新しいVMの環境構築は「<a href="https://tamakoma.com/%E7%A7%81%E3%81%AA%E3%82%8A%E3%81%AElaravel%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89/" rel="noopener noreferrer" target="_blank">私なりのlaravel環境構築</a>」等を見てもらえればと思う。</p>
+<p>ここでは、新しいVM環境を構築しユーザー設定やssh設定などを終えた段階から進める。</p>
+<h3 id="podmanのバージョン更新">Podmanのバージョン更新</h3>
+<p>Podmanのバージョン確認をしたら、少し古かったので新しいものにする。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ podman -v</span></span>
+<span class="line"><span style="color:#A6E22E">podman</span><span style="color:#E6DB74"> version</span><span style="color:#AE81FF"> 4.6.1</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">[linux]$ sudo dnf update podman</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">[linux]$ $ podman -v</span></span>
+<span class="line"><span style="color:#A6E22E">podman</span><span style="color:#E6DB74"> version</span><span style="color:#E6DB74"> 4.9.4-rhel</span></span></code></pre>
+<h3 id="githubからリポジトリをクローン">GitHubからリポジトリをクローン</h3>
+<p>gitのインストールをする</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ sudo dnf install -y git-all</span></span></code></pre>
+<p>クローンする</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ git clone https://github.com/tamakoma1129/podman-laravel-handson.git</span></span>
+<span class="line"><span style="color:#F8F8F2">[linux]$ cd cd podman-laravel-handson/</span></span></code></pre>
+<h3 id="権限設定">権限設定</h3>
+<p>UID103900(www-data)とUID103901(mysql)が適切なフォルダにアクセスできるようにする。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ sudo chown -R 103900 laravel/storage/</span></span>
+<span class="line"><span style="color:#F8F8F2">[linux]$ sudo chmod -R a</span><span style="color:#F92672">=</span><span style="color:#E6DB74">rX,u+w</span><span style="color:#A6E22E">  laravel/storage/</span></span>
+<span class="line"><span style="color:#F8F8F2">[linux]$ sudo chown -R 103900 laravel/bootstrap/cache/</span></span>
+<span class="line"><span style="color:#F8F8F2">[linux]$ sudo chmod -R a</span><span style="color:#F92672">=</span><span style="color:#E6DB74">rX,u+w</span><span style="color:#A6E22E"> laravel/bootstrap/cache/</span></span>
+<span class="line"><span style="color:#F8F8F2">[linux]$ mkdir mysql/db-store</span></span>
+<span class="line"><span style="color:#F8F8F2">[linux]$ sudo chown 103901:103901 mysql/db-store</span></span></code></pre>
+<h3 id="etcsubuidとetcsubgidの記述-1">/etc/subuidと/etc/subgidの記述</h3>
+<p>自分のサブIDを指定しておく。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ sudo sh -c </span><span style="color:#E6DB74">'echo "tamakoma:100001:65536" > /etc/subuid'</span></span>
+<span class="line"><span style="color:#F8F8F2">[linux]$ sudo sh -c </span><span style="color:#E6DB74">'echo "tamakoma:100001:65536" > /etc/subgid'</span></span></code></pre>
+<p>sh -cを使う理由は、リダイレクトの「>」にもroot権限を与える為。</p>
+<p>設定したら</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ podman system migrate</span></span></code></pre>
+<p>で設定適用。</p>
+<h3 id="selinuxの設定">SELinuxの設定</h3>
+<p>SELinuxを有効化していると権限問題が発生するのでオフにする。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ sudo vi /etc/selinux/config</span></span></code></pre>
+<p>で「SELINUX=permissive」にする。</p>
+<p>設定したら再起動。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ cd podman-laravel-handson/</span></span>
+<span class="line"><span style="color:#F8F8F2">[linux]$ getenforce</span></span>
+<span class="line"><span style="color:#A6E22E">Permissive</span></span></code></pre>
+<p>でおｋ。</p>
+<h3 id="podman-play-kube">podman play kube</h3>
+<p>Podを構築し起動する</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ podman play kube podman-laravel-handson.yaml </span><span style="color:#AE81FF">\</span></span>
+<span class="line"><span style="color:#F8F8F2">  --userns</span><span style="color:#F92672">=</span><span style="color:#E6DB74">auto:</span><span style="color:#F8F8F2">uidmapping</span><span style="color:#F92672">=</span><span style="color:#E6DB74">0:0:1,</span><span style="color:#F8F8F2">uidmapping</span><span style="color:#F92672">=</span><span style="color:#E6DB74">1:1:65536,</span><span style="color:#F8F8F2">gidmapping</span><span style="color:#F92672">=</span><span style="color:#E6DB74">0:0:1,</span><span style="color:#F8F8F2">gidmapping</span><span style="color:#F92672">=</span><span style="color:#E6DB74">1:1:65536</span><span style="color:#A6E22E"> \</span></span>
+<span class="line"><span style="color:#AE81FF">  --build</span><span style="color:#AE81FF"> \</span></span>
+<span class="line"><span style="color:#AE81FF">  --replace</span></span></code></pre>
+<p>起動後</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ $ podman pod ps --ctr-status --ctr-names</span></span>
+<span class="line"><span style="color:#A6E22E">POD</span><span style="color:#E6DB74"> ID</span><span style="color:#E6DB74">        NAME</span><span style="color:#E6DB74">                        STATUS</span><span style="color:#E6DB74">      CREATED</span><span style="color:#E6DB74">             INFRA</span><span style="color:#E6DB74"> ID</span><span style="color:#E6DB74">      NAMES</span><span style="color:#E6DB74">                                                                                                                                                                                                               STATUS</span></span>
+<span class="line"><span style="color:#A6E22E">1c46df5f536d</span><span style="color:#E6DB74">  podman-laravel-handson-pod</span><span style="color:#E6DB74">  Running</span><span style="color:#E6DB74">     About</span><span style="color:#E6DB74"> a</span><span style="color:#E6DB74"> minute</span><span style="color:#E6DB74"> ago</span><span style="color:#E6DB74">  155daa1eb5ed</span><span style="color:#E6DB74">  1c46df5f536d-infra,podman-laravel-handson-pod-vite-20.16-container,podman-laravel-handson-pod-php-fpm-8.1-container,podman-laravel-handson-pod-apache-2.4-container,podman-laravel-handson-pod-mysql-8.4-container</span><span style="color:#E6DB74">  running,exited,running,running,running</span></span></code></pre>
+<p>のようにvite以外がrunningならおｋ。</p>
+<h3 id="ファイアウォールの設定">ファイアウォールの設定</h3>
+<p>80番ポートを開き、80番ポートを8080番に転送。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ sudo firewall-cmd --permanent --add-service</span><span style="color:#F92672">=</span><span style="color:#E6DB74">http</span></span>
+<span class="line"><span style="color:#F8F8F2">[linux]$ sudo firewall-cmd --permanent --zone</span><span style="color:#F92672">=</span><span style="color:#E6DB74">public</span><span style="color:#F8F8F2"> --add-forward-port</span><span style="color:#F92672">=</span><span style="color:#F8F8F2">port</span><span style="color:#F92672">=</span><span style="color:#E6DB74">80:</span><span style="color:#F8F8F2">proto</span><span style="color:#F92672">=</span><span style="color:#E6DB74">tcp:</span><span style="color:#F8F8F2">toport</span><span style="color:#F92672">=</span><span style="color:#E6DB74">8080</span></span>
+<span class="line"><span style="color:#F8F8F2">[linux]$ sudo firewall-cmd --reload</span></span></code></pre>
+<p>これで接続してみると……</p>
+<p><img alt="" loading="lazy" decoding="async" width="1600" height="259" src="/_astro/6.Be_HK-P2_2jzesb.webp" srcset=""></p>
+<p>のようにエラーになる。</p>
+<p>これはvendorフォルダ以下が生成されていないから。</p>
+<p>composer installして生成しよう。</p>
+<h3 id="composer-install">composer install</h3>
+<p>composer installしてvendor内のデータを作る。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[linux]$ podman exec -itu root podman-laravel-handson-pod-php-fpm-8.1-container bash</span></span></code></pre>
+<p>中に入ったらcomposer installする。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[php-fpm]$ composer install</span></span></code></pre>
+<h3 id="envの編集">.envの編集</h3>
+<p>composer installが終わっても.envの編集ができていないのでやっていく。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[php-fpm]$ cp .env.example .env</span></span></code></pre>
+<p>で写した後</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[php-fpm]$ php artisan key:generate</span></span></code></pre>
+<p>でキー生成。</p>
+<p>これでアクセスすれば</p>
+<p><img alt="" loading="lazy" decoding="async" width="1600" height="920" src="/_astro/7.Cj4zZ_Df_2w3j62.webp" srcset=""></p>
+<p>表示された！</p>
+<h3 id="mysql関連">MySQL関連</h3>
+<p>マイグレーションとstorageのシンボリックリンクをやっておく。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#F8F8F2">[php-fpm]$ php artisan migrate</span></span>
+<span class="line"><span style="color:#F8F8F2">[php-fpm]$ php artisan storage:link</span></span></code></pre>
+<p>問題なく実行できたらLaravel環境の完成だ！</p>
+<p>お疲れ様でした。</p>
+<h2 id="podmanを初期化したいとき">Podmanを初期化したいとき</h2>
+<p><strong>※Podmanやその関係を初期化するので取り返しがつかないことが発生する場合があります。バックアップしてから臨むことが好ましいです。</strong></p>
+<p>色々弄っていたらPodmanでファイルの破損？　が発生しPodmanコマンドが何も動かなくなってしまったことがある。</p>
+<p>具体的には以下のようなエラー</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#A6E22E">Error:</span><span style="color:#E6DB74"> loading</span><span style="color:#E6DB74"> primary</span><span style="color:#E6DB74"> layer</span><span style="color:#E6DB74"> store</span><span style="color:#E6DB74"> data:</span><span style="color:#AE81FF"> 1</span><span style="color:#E6DB74"> error</span><span style="color:#E6DB74"> occurred:</span><span style="color:#FD971F"> *</span><span style="color:#E6DB74"> deleting</span><span style="color:#E6DB74"> layer</span><span style="color:#E6DB74"> "9aee9bd805f04b0209d407b44cf2a278b074904d78fb60bb4ac062eb1e2652d1":</span><span style="color:#E6DB74"> unlinkat</span><span style="color:#E6DB74"> /home/tamakoma/.local/share/containers/storage/overlay/9aee9bd805f04b0209d407b44cf2a278b074904d78fb60bb4ac062eb1e2652d1/diff/etc:</span><span style="color:#E6DB74"> permission</span><span style="color:#E6DB74"> denied</span></span></code></pre>
+<p>適当なpodmanコマンドを実行しても以上のエラーになり、podmanコマンドがそもそも動かなくなってしまったので、初期化を試みた。</p>
+<p>まず、何故かpermission deniedになっているところがあるので</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#A6E22E">sudo</span><span style="color:#E6DB74"> chown</span><span style="color:#AE81FF"> -R</span><span style="color:#E6DB74"> tamakoma</span><span style="color:#E6DB74"> /home/tamakoma/.local/share/containers/storage/</span></span>
+<span class="line"><span style="color:#A6E22E">sudo</span><span style="color:#E6DB74"> chmod</span><span style="color:#AE81FF"> -R</span><span style="color:#E6DB74"> a=rX,u+w</span><span style="color:#E6DB74"> /home/tamakoma/.local/share/containers/storage/</span></span></code></pre>
+<p>で権限変更。</p>
+<p>体感5分くらい掛かった気がする。</p>
+<p>その後、</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#A6E22E">podman</span><span style="color:#E6DB74"> stop</span><span style="color:#F8F8F2"> $(</span><span style="color:#A6E22E">podman</span><span style="color:#E6DB74"> ps</span><span style="color:#AE81FF"> -aq</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#A6E22E">podman</span><span style="color:#E6DB74"> rm</span><span style="color:#F8F8F2"> $(</span><span style="color:#A6E22E">podman</span><span style="color:#E6DB74"> ps</span><span style="color:#AE81FF"> -aq</span><span style="color:#F8F8F2">)</span></span></code></pre>
+<p>で現在あるコンテナをすべて削除。</p>
+<p>続いて、</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#A6E22E">podman</span><span style="color:#E6DB74"> rmi</span><span style="color:#F8F8F2"> $(</span><span style="color:#A6E22E">podman</span><span style="color:#E6DB74"> images</span><span style="color:#AE81FF"> -aq</span><span style="color:#F8F8F2">)</span></span></code></pre>
+<p>でイメージの削除。</p>
+<p>ここで外部のコンテナとイメージがつながっていて削除できないと言われたら</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#A6E22E">docker</span><span style="color:#E6DB74"> rm</span><span style="color:#F8F8F2"> $(</span><span style="color:#A6E22E">podman</span><span style="color:#E6DB74"> ps </span><span style="color:#AE81FF"> --external</span><span style="color:#AE81FF"> -q</span><span style="color:#F8F8F2">)</span></span></code></pre>
+<p>でコンテナ削除してから先のコマンド。</p>
+<p>強制削除してくれと書いてあったら-f付けて削除。</p>
+<p>つづいて、ボリュームとネットワークの削除。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#A6E22E">podman</span><span style="color:#E6DB74"> volume</span><span style="color:#E6DB74"> rm</span><span style="color:#F8F8F2"> $(</span><span style="color:#A6E22E">podman</span><span style="color:#E6DB74"> volume</span><span style="color:#E6DB74"> ls</span><span style="color:#AE81FF"> -q</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#A6E22E">podman</span><span style="color:#E6DB74"> network</span><span style="color:#E6DB74"> rm</span><span style="color:#F8F8F2"> $(</span><span style="color:#A6E22E">podman</span><span style="color:#E6DB74"> network</span><span style="color:#E6DB74"> ls</span><span style="color:#AE81FF"> -q</span><span style="color:#F8F8F2">)</span></span></code></pre>
+<p>最後にpodman systemを使い</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#A6E22E">podman</span><span style="color:#E6DB74"> system</span><span style="color:#E6DB74"> prune</span><span style="color:#AE81FF"> -a</span><span style="color:#AE81FF"> --force</span><span style="color:#AE81FF"> --volumes</span></span>
+<span class="line"><span style="color:#A6E22E">podman</span><span style="color:#E6DB74"> system</span><span style="color:#E6DB74"> prune</span><span style="color:#AE81FF"> --external</span></span></code></pre>
+<p>を実行。</p>
+<p>これで一通り初期化が完了したと思われる。</p>
+<h3 id="さらに踏み込んだpodmanの初期化">さらに踏み込んだPodmanの初期化</h3>
+<p>以上のことをしても、どうしても原因不明の権限エラーになってしまう。</p>
+<p>これ、本当に憶測でしかないんだけど、何かしらのデータが破損または残留していてPodmanが理想の挙動をしてくれていない。<br>
+実際に名前空間が謎の配分されてたり、よくわかんない</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#A6E22E">W:</span><span style="color:#E6DB74"> Could</span><span style="color:#E6DB74"> not</span><span style="color:#E6DB74"> open</span><span style="color:#E6DB74"> file</span><span style="color:#E6DB74"> '/var/log/apt/term.log'</span><span style="color:#E6DB74"> -</span><span style="color:#E6DB74"> OpenLog</span><span style="color:#F8F8F2"> (75: </span><span style="color:#E6DB74">Value</span><span style="color:#E6DB74"> too</span><span style="color:#E6DB74"> large</span><span style="color:#E6DB74"> for</span><span style="color:#E6DB74"> defined</span><span style="color:#E6DB74"> data</span><span style="color:#E6DB74"> type</span><span style="color:#F8F8F2">)</span></span></code></pre>
+<p>というエラー？　警告？　が発生したり、謎の権限エラーが発生したりする。</p>
+<p>私はこのよくわからないエラーと2日の間戦っている。時間的には10時間ほど。</p>
+<p>ネット上に落ちていないエラーが多いし、ChatGPTに聞いてもふんわりした回答しか貰えない。</p>
+<p>こういう時は</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#A6E22E">rm</span><span style="color:#AE81FF"> -rf</span><span style="color:#E6DB74"> ~/.config/containers</span><span style="color:#E6DB74"> ~/.local/share/containers</span></span></code></pre>
+<p>で設定データ、コンテナ・イメージデータなど、全てを根本から削除する方法もあるみたい。</p>
+<p>これは<a href="https://stackoverflow.com/questions/65775075/problems-running-podman-in-ubuntu-20-04" rel="noopener noreferrer" target="_blank">Stackoverflow</a>から得た情報。</p>
+<p>かなり踏み込んだリセットなので、最終手段にどうぞ。<br>
+バックアップを忘れずに。<br>
+私はこれで、理想の挙動をしてくれるようになった。<br>
+マジでありがとうStackoverflowの人。</p>
+<h2 id="podmanのおすすめコマンド">Podmanのおすすめコマンド</h2>
+<p>私が実際によく使っていたコマンドを挙げて終わります。</p>
+<ul>
+<li>
+<p><strong>Linuxに設定されているサブIDを確認する</strong><br>
+<code>cat /etc/subuid</code><br>
+<code>cat /etc/subgid</code></p>
+</li>
+<li>
+<p><strong>現在ルートレスでPodmanを実行しているか</strong><br>
+<code>podman info | grep -i rootless</code></p>
+</li>
+<li>
+<p><strong>Podmanに認識、マッピングされている名前空間を確認する</strong><br>
+<code>podman unshare cat /proc/self/uid_map</code><br>
+<code>podman unshare cat /proc/self/gid_map</code></p>
+</li>
+<li>
+<p><strong>Podmanの様々な情報を確認</strong><br>
+<code>podman info</code></p>
+</li>
+<li>
+<p><strong>特定のコンテナのマッピングなどの情報を確認する</strong><br>
+<code>podman inspect [コンテナidまたはname]</code></p>
+</li>
+<li>
+<p><strong>特定のコンテナのPIDを確認する</strong><br>
+<code>podman inspect [コンテナidまたはname] --format '{{.State.Pid}}'</code></p>
+</li>
+<li>
+<p><strong>特定のコンテナの実際に使われているマッピングを確認する</strong><br>
+<code>cat /proc/[container_pid]/gid_map</code></p>
+</li>
+<li>
+<p><strong>現在のPodとそのPodに属するコンテナの稼働状況を確認する</strong><br>
+<code>podman pod ps --ctr-status --ctr-names</code></p>
+</li>
+</ul>
+<h2 id="もしご指摘があれば">もしご指摘があれば</h2>
+<p>もしこの記事や方法にご指摘があれば<a href="https://github.com/tamakoma1129/podman-laravel-handson/issues" rel="noopener noreferrer" target="_blank">GitHubのissue</a>などで伝えていただければ幸いです。</p></section><aside class="w-[300px] hidden lg:block shrink-0" data-astro-cid-e2rqhpi3><nav class="sticky top-16 h-fit  bg-white py-24 pl-24 rounded-md" data-astro-cid-tqqy2vud><section data-astro-cid-tqqy2vud><header data-astro-cid-tqqy2vud><h2 class="font-bold text-lg" data-astro-cid-tqqy2vud>目次</h2></header></section><div class="article-toc scroll-smooth mt-4 py-16 pr-24 overflow-y-auto max-h-[90svh]" data-astro-cid-tqqy2vud></div></nav><script type="module" src="/_astro/ArticleTOC.astro_astro_type_script_index_0_lang.mX9zJvT_.js"></script></aside></div><div class="mt-40 mb-64" data-pagefind-ignore data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Laravel"># Laravel</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Podman"># Podman</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Linux"># Linux</a></div></div></article></main></div><footer class="pb-40 px-24 md:px-0 bg-white"><hr class="mx-auto w-2/3 md:w-1/2 my-24 h-[1px] border-0 bg-slate-400"><div class="mx-8 md:mx-64"><a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" target="_blank" rel="noopener noreferrer"><img src="/_astro/by-nc.DpMeGFcJ_ZF0RGK.svg" alt="クリエイティブコモンズ 表示-非営利 4.0 ライセンス" loading="lazy" decoding="async" width="125" height="44"></a><p class="text-xs md:text-sm">本サイト「<a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">tamakoma.com</a>」から提供されるブログ内の文章、プログラミングコードは、<a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">クリエイティブ・コモンズ 表示-非営利 4.0 ライセンス</a>の下に提供されます。</p><p class="text-xs md:text-sm">音楽や画像などのメディアコンテンツにはこのライセンスは適用されません。</p></div><p class="text-center text-sm"><a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Top</a> / <a href="/contact" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Contact</a> / <a href="/feed.xml" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">RSS Feed</a></p><p class="mt-24 text-center">&copy; tamakoma 2018-2026</p></footer></div></body></html>

@@ -1,0 +1,487 @@
+<!DOCTYPE html><html lang="ja" class="text-slate-700"><head><meta charset="utf-8"><title>HTMLPurifier for Laravelを手探りで解説する | tamakoma.com</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v7.0.3"><meta name="twitter:card" content="summary"><meta property="og:title" content="HTMLPurifier for Laravelを手探りで解説する"><meta property="og:type" content="website"><meta property="og:url" content="https://tamakoma.com/blog/html-purifier-laravel/"><meta property="og:image" content="/_astro/mikuteto-OGP.DYQebPDj.png"><meta property="og:description" content="学んだことを残すブログ"><meta property="og:site_name" content="tamakoma.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.0.1/dist/css/yakuhanjp_s.css"><link rel="sitemap" href="/sitemap-index.xml"><link rel="stylesheet" href="/_astro/BaseLayout.Ddu7R_5r.css"><style>/*! tailwindcss v4.2.2 | MIT License | https://tailwindcss.com */
+.article-toc[data-astro-cid-tqqy2vud] .toc-link{font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));display:block}@media (hover:hover){.article-toc[data-astro-cid-tqqy2vud] .toc-link:hover{color:var(--color-slate-600,oklch(44.6% .043 257.281));text-decoration-line:underline}}.article-toc[data-astro-cid-tqqy2vud] .toc-link.to-link-active{color:var(--color-miku-500,oklch(63.7% .1071 185.34))}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H2){margin-left:var(--spacing-24,24px)}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H3){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:10px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H4){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:20px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H5){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:30px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H6){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:40px}.article-toc[data-astro-cid-tqqy2vud] .toc-list{list-style-type:decimal;list-style-position:outside}@layer properties{@supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))){*,:before,:after,::backdrop{--tw-font-weight:initial;--tw-border-style:solid}}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a{--tw-font-weight:var(--font-weight-semibold,600);font-weight:var(--font-weight-semibold,600);color:var(--color-miku-500,oklch(63.7% .1071 185.34));text-underline-offset:2px;text-decoration-line:underline}@media (hover:hover){article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a:hover{color:var(--color-miku-700,oklch(50.5% .0901 187.01))}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] code:not(pre>code){margin-inline:var(--spacing-4,4px);border-radius:var(--radius-md,.375rem);border-style:var(--tw-border-style);background-color:var(--color-sumi-100,oklch(97% 0 0));padding-inline:var(--spacing-4,4px);--tw-font-weight:var(--font-weight-normal,400);font-weight:var(--font-weight-normal,400);color:var(--color-black,#000);border-width:0;padding-block:2px}@property --tw-font-weight{syntax:"*";inherits:false}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid}
+</style><script type="module" src="/_astro/page.DCEeCLip.js"></script><script>!(function(w,p,f,c){if(!window.crossOriginIsolated && !navigator.serviceWorker) return;c=w[p]=Object.assign(w[p]||{},{"lib":"/~partytown/","debug":false});c[f]=(c[f]||[])})(window,'partytown','forward');/* Partytown 0.13.2 - MIT QwikDev */
+const t={preserveBehavior:!1},e=e=>{if("string"==typeof e)return[e,t];const[n,r=t]=e;return[n,{...t,...r}]},n=Object.freeze((t=>{const e=new Set;let n=[];do{Object.getOwnPropertyNames(n).forEach((t=>{"function"==typeof n[t]&&e.add(t)}))}while((n=Object.getPrototypeOf(n))!==Object.prototype);return Array.from(e)})());!function(t,r,o,i,a,s,c,l,d,p,u=t,f){function h(){f||(f=1,"/"==(c=(s.lib||"/~partytown/")+(s.debug?"debug/":""))[0]&&(d=r.querySelectorAll('script[type="text/partytown"]'),i!=t?i.dispatchEvent(new CustomEvent("pt1",{detail:t})):(l=setTimeout(v,(null==s?void 0:s.fallbackTimeout)||1e4),r.addEventListener("pt0",w),a?y(1):o.serviceWorker?o.serviceWorker.register(c+(s.swPath||"partytown-sw.js"),{scope:c}).then((function(t){t.active?y():t.installing&&t.installing.addEventListener("statechange",(function(t){"activated"==t.target.state&&y()}))}),console.error):v())))}function y(e){p=r.createElement(e?"script":"iframe"),t._pttab=Date.now(),e||(p.style.display="block",p.style.width="0",p.style.height="0",p.style.border="0",p.style.visibility="hidden",p.setAttribute("aria-hidden",!0)),p.src=c+"partytown-"+(e?"atomics.js?v=0.13.2":"sandbox-sw.html?"+t._pttab),r.querySelector(s.sandboxParent||"body").appendChild(p)}function v(n,o){for(w(),i==t&&(s.forward||[]).map((function(n){const[r]=e(n);delete t[r.split(".")[0]]})),n=0;n<d.length;n++)(o=r.createElement("script")).innerHTML=d[n].innerHTML,o.nonce=s.nonce,r.head.appendChild(o);p&&p.parentNode.removeChild(p)}function w(){clearTimeout(l)}s=t.partytown||{},i==t&&(s.forward||[]).map((function(r){const[o,{preserveBehavior:i}]=e(r);u=t,o.split(".").map((function(e,r,o){var a;u=u[o[r]]=r+1<o.length?u[o[r]]||(a=o[r+1],n.includes(a)?[]:{}):(()=>{let e=null;if(i){const{methodOrProperty:n,thisObject:r}=((t,e)=>{let n=t;for(let t=0;t<e.length-1;t+=1)n=n[e[t]];return{thisObject:n,methodOrProperty:e.length>0?n[e[e.length-1]]:void 0}})(t,o);"function"==typeof n&&(e=(...t)=>n.apply(r,...t))}return function(){let n;return e&&(n=e(arguments)),(t._ptf=t._ptf||[]).push(o,arguments),n}})()}))})),"complete"==r.readyState?h():(t.addEventListener("DOMContentLoaded",h),t.addEventListener("load",h))}(window,document,navigator,top,window.crossOriginIsolated);;(e=>{e.addEventListener("astro:before-swap",e=>{let r=document.body.querySelector("iframe[src*='/~partytown/']");if(r)e.newDocument.body.append(r)})})(document);</script></head><body class="bg-repeat bg-white anywhere" style="background-image: url(/_astro/mikuteto-gray.Dix8k1Tp.gif)"><div class="min-h-screen flex flex-col justify-between" id="container"><div><header><nav class="flex flex-col items-center pt-40 pb-24"><a href="/blog" class="text-3xl md:text-5xl font-bold mb-40 text-slate-400 drop-shadow-2xl">tamakoma.com</a><div class="w-full flex justify-center [&amp;&gt;a]:bg-white [&amp;&gt;a]:border-slate-400"><a href="/" class="block py-8 px-16 text-sumi-600 rounded-l border-l border-y">home</a><a href="/blog/" class="block py-8 px-16 text-sumi-600 border">blog</a><a href="/about/" class="block py-8 px-16 text-sumi-600 rounded-r border-r border-y">about</a></div></nav></header><main class="bg-slate-100 w-full flex justify-end" data-astro-cid-e2rqhpi3><article class="grow" data-pagefind-body data-astro-cid-e2rqhpi3><header class="mt-24 w-11/12 max-w-[700px] mx-auto" data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-pagefind-weight="6.7" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-pagefind-weight="6.5" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Laravel"># Laravel</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=HTMLPurifier"># HTMLPurifier</a></div><h1 class="text-center text-xl md:text-3xl font-bold px-24 mt-40" data-astro-cid-e2rqhpi3>HTMLPurifier for Laravelを手探りで解説する</h1><div class="text-slate-400 text-sm gap-16 flex justify-center mt-24" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>投稿日 <time datetime="2024-10-23T00:00:00.000Z">2024/10/23</time></span><span data-astro-cid-e2rqhpi3>最終更新日 <time datetime="2024-12-18T00:00:00.000Z">2024/12/18</time></span></div></header><hr class="bg-slate-200 rounded-full mx-auto h-4 my-40 w-40 border-0"><div class="flex mx-auto justify-center gap-40" data-astro-cid-e2rqhpi3><section id="article-body" class="
+                            prose prose-neutral
+                            prose-blockquote:border-miku-400 prose-blockquote:font-normal
+                            w-0 grow
+                            max-w-[650px] bg-white box-content px-16 md:px-40 py-24 rounded-md
+                            " data-astro-cid-e2rqhpi3><p>2024年10月23日</p>
+<p>※過去ブログから一部切り出したものです</p>
+<p>このHTMLPurifier for LaravelってGitHubにWikiもないし使い方の解説が無い。<br>
+なんなら日本語の解説ブログも無い。<br>
+その為、かなり手探りで理解を進めていた。</p>
+<p>最近大まかに理解できたので一回ここにまとめる。</p>
+<h2 id="前提">前提</h2>
+<p>前提として</p>
+<ul>
+<li>HTMLPurifierはHTMLを洗浄(Purifier)し悪意のあるコードやHTMLの文法チェックをしてくれるもの</li>
+<li><a href="https://github.com/mewebstudio/Purifier" rel="noopener noreferrer" target="_blank">HTMLPurifier for Laravel</a>はHTMLPurifierをLaravelで手軽に使えるようにしたものなので、本家は<a href="http://htmlpurifier.org/" rel="noopener noreferrer" target="_blank">HTMLPurifier</a>である</li>
+<li>その為、ドキュメントは<a href="http://htmlpurifier.org/docs/" rel="noopener noreferrer" target="_blank">HTMLPurifierのドキュメント</a>を見ると良い</li>
+<li>手探りなので、間違っていたりミスリードしている可能性がある</li>
+</ul>
+<h2 id="インストール">インストール</h2>
+<p>HTMLPurifier for Laravelの<a href="https://github.com/mewebstudio/Purifier" rel="noopener noreferrer" target="_blank">GitHub</a>に書いてある。</p>
+<p>Laravel5.5以降の場合は<br>
+<code>composer require mews/purifier</code><br>
+するだけ。<br>
+Laravel10や11にも対応しているので安心うれしい。</p>
+<h2 id="使い方">使い方</h2>
+<p>これもGitHubに書いてあるけど一応。</p>
+<p>まず、以下を使いたいところに入れる。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F92672">use</span><span style="color:#F8F8F2"> Mews\Purifier\Facades\</span><span style="color:#66D9EF;font-style:italic">Purifier</span><span style="color:#F8F8F2">;</span></span></code></pre>
+<p>その上で以下のようにすると、デフォルトの設定で洗浄してくれる。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#66D9EF;font-style:italic">Purifier</span><span style="color:#F92672">::</span><span style="color:#A6E22E">clean</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"洗浄したいHTML"</span><span style="color:#F8F8F2">);</span></span></code></pre>
+<p>以下のようにすると、指定した設定を適用できる。<br>
+この場合は<code>titles</code>という設定で洗浄している。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#66D9EF;font-style:italic">Purifier</span><span style="color:#F92672">::</span><span style="color:#A6E22E">clean</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'洗浄したいHTML'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'titles'</span><span style="color:#F8F8F2">);</span></span></code></pre>
+<p>以下のようにすると設定を上書きできる。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#66D9EF;font-style:italic">Purifier</span><span style="color:#F92672">::</span><span style="color:#A6E22E">clean</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'This is my H1 title'</span><span style="color:#F8F8F2">, </span><span style="color:#66D9EF">array</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'Attr.EnableID'</span><span style="color:#F92672"> =></span><span style="color:#AE81FF"> true</span><span style="color:#F8F8F2">));</span></span></code></pre>
+<h2 id="htmlpurifier-for-laravelのconfig">HTMLPurifier for Laravelのconfig</h2>
+<p>以下のコマンドでPurifierのconfigを公開し、config/purifier.phpで弄れるようにする。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#A6E22E">php</span><span style="color:#E6DB74"> artisan</span><span style="color:#E6DB74"> vendor:publish</span><span style="color:#AE81FF"> --provider=</span><span style="color:#E6DB74">"Mews\Purifier\PurifierServiceProvider"</span></span></code></pre>
+<p>以下が初期のconfigファイル</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F92672">&#x3C;?</span><span style="color:#AE81FF">php</span></span>
+<span class="line"><span style="color:#88846F">/**</span></span>
+<span class="line"><span style="color:#88846F">* Ok, glad you are here</span></span>
+<span class="line"><span style="color:#88846F">* first we get a config instance, and set the settings</span></span>
+<span class="line"><span style="color:#88846F">* $config = HTMLPurifier_Config::createDefault();</span></span>
+<span class="line"><span style="color:#88846F">* $config->set('Core.Encoding', $this->config->get('purifier.encoding'));</span></span>
+<span class="line"><span style="color:#88846F">* $config->set('Cache.SerializerPath', $this->config->get('purifier.cachePath'));</span></span>
+<span class="line"><span style="color:#88846F">* if ( ! $this->config->get('purifier.finalize')) {</span></span>
+<span class="line"><span style="color:#88846F">*     $config->autoFinalize = false;</span></span>
+<span class="line"><span style="color:#88846F">* }</span></span>
+<span class="line"><span style="color:#88846F">* $config->loadArray($this->getConfig());</span></span>
+<span class="line"><span style="color:#88846F">*</span></span>
+<span class="line"><span style="color:#88846F">* You must NOT delete the default settings</span></span>
+<span class="line"><span style="color:#88846F">* anything in settings should be compacted with params that needed to instance HTMLPurifier_Config.</span></span>
+<span class="line"><span style="color:#88846F">*</span></span>
+<span class="line"><span style="color:#88846F">* </span><span style="color:#F92672">@link</span><span style="color:#88846F"> http://htmlpurifier.org/live/configdoc/plain.html</span></span>
+<span class="line"><span style="color:#88846F">*/</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">return</span><span style="color:#F8F8F2"> [</span></span>
+<span class="line"><span style="color:#E6DB74">   'encoding'</span><span style="color:#F92672">           =></span><span style="color:#E6DB74"> 'UTF-8'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">   'finalize'</span><span style="color:#F92672">           =></span><span style="color:#AE81FF"> true</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">   'ignoreNonStrings'</span><span style="color:#F92672">   =></span><span style="color:#AE81FF"> false</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">   'cachePath'</span><span style="color:#F92672">          =></span><span style="color:#A6E22E"> storage_path</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'app/purifier'</span><span style="color:#F8F8F2">),</span></span>
+<span class="line"><span style="color:#E6DB74">   'cacheFileMode'</span><span style="color:#F92672">      =></span><span style="color:#AE81FF"> 0755</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">   'settings'</span><span style="color:#F92672">      =></span><span style="color:#F8F8F2"> [</span></span>
+<span class="line"><span style="color:#E6DB74">       'default'</span><span style="color:#F92672"> =></span><span style="color:#F8F8F2"> [</span></span>
+<span class="line"><span style="color:#E6DB74">           'HTML.Doctype'</span><span style="color:#F92672">             =></span><span style="color:#E6DB74"> 'HTML 4.01 Transitional'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">           'HTML.Allowed'</span><span style="color:#F92672">             =></span><span style="color:#E6DB74"> 'div,b,strong,i,em,u,a[href|title],ul,ol,li,p[style],br,span[style],img[width|height|alt|src]'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">           'CSS.AllowedProperties'</span><span style="color:#F92672">    =></span><span style="color:#E6DB74"> 'font,font-size,font-weight,font-style,font-family,text-decoration,padding-left,color,background-color,text-align'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">           'AutoFormat.AutoParagraph'</span><span style="color:#F92672"> =></span><span style="color:#AE81FF"> true</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">           'AutoFormat.RemoveEmpty'</span><span style="color:#F92672">   =></span><span style="color:#AE81FF"> true</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">       ],</span></span>
+<span class="line"><span style="color:#E6DB74">       'test'</span><span style="color:#F92672">    =></span><span style="color:#F8F8F2"> [</span></span>
+<span class="line"><span style="color:#E6DB74">           'Attr.EnableID'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'true'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">       ],</span></span>
+<span class="line"><span style="color:#E6DB74">       "youtube"</span><span style="color:#F92672"> =></span><span style="color:#F8F8F2"> [</span></span>
+<span class="line"><span style="color:#E6DB74">           "HTML.SafeIframe"</span><span style="color:#F92672">      =></span><span style="color:#E6DB74"> 'true'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">           "URI.SafeIframeRegexp"</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> "%^(http://|https://|//)(www.youtube.com/embed/|player.vimeo.com/video/)%"</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">       ],</span></span>
+<span class="line"><span style="color:#E6DB74">       'custom_definition'</span><span style="color:#F92672"> =></span><span style="color:#F8F8F2"> [</span></span>
+<span class="line"><span style="color:#E6DB74">           'id'</span><span style="color:#F92672">  =></span><span style="color:#E6DB74"> 'html5-definitions'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">           'rev'</span><span style="color:#F92672"> =></span><span style="color:#AE81FF"> 1</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">           'debug'</span><span style="color:#F92672"> =></span><span style="color:#AE81FF"> false</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">           'elements'</span><span style="color:#F92672"> =></span><span style="color:#F8F8F2"> [</span></span>
+<span class="line"><span style="color:#88846F">               // http://developers.whatwg.org/sections.html</span></span>
+<span class="line"><span style="color:#F8F8F2">               [</span><span style="color:#E6DB74">'section'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Block'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Flow'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Common'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">               [</span><span style="color:#E6DB74">'nav'</span><span style="color:#F8F8F2">,     </span><span style="color:#E6DB74">'Block'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Flow'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Common'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">               [</span><span style="color:#E6DB74">'article'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Block'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Flow'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Common'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">               [</span><span style="color:#E6DB74">'aside'</span><span style="color:#F8F8F2">,   </span><span style="color:#E6DB74">'Block'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Flow'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Common'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">               [</span><span style="color:#E6DB74">'header'</span><span style="color:#F8F8F2">,  </span><span style="color:#E6DB74">'Block'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Flow'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Common'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">               [</span><span style="color:#E6DB74">'footer'</span><span style="color:#F8F8F2">,  </span><span style="color:#E6DB74">'Block'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Flow'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Common'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">           </span></span>
+<span class="line"><span style="color:#88846F">            // Content model actually excludes several tags, not modelled here</span></span>
+<span class="line"><span style="color:#F8F8F2">               [</span><span style="color:#E6DB74">'address'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Block'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Flow'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Common'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">               [</span><span style="color:#E6DB74">'hgroup'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Block'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Required: h1 | h2 | h3 | h4 | h5 | h6'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Common'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">           </span></span>
+<span class="line"><span style="color:#88846F">            // http://developers.whatwg.org/grouping-content.html</span></span>
+<span class="line"><span style="color:#F8F8F2">               [</span><span style="color:#E6DB74">'figure'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Block'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Optional: (figcaption, Flow) | (Flow, figcaption) | Flow'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Common'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">               [</span><span style="color:#E6DB74">'figcaption'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Inline'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Flow'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Common'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">           </span></span>
+<span class="line"><span style="color:#88846F">            // http://developers.whatwg.org/the-video-element.html#the-video-element</span></span>
+<span class="line"><span style="color:#F8F8F2">               [</span><span style="color:#E6DB74">'video'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Block'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Optional: (source, Flow) | (Flow, source) | Flow'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Common'</span><span style="color:#F8F8F2">, [</span></span>
+<span class="line"><span style="color:#E6DB74">                   'src'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'URI'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">               'type'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'Text'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">               'width'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'Length'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">               'height'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'Length'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">               'poster'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'URI'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">               'preload'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'Enum#auto,metadata,none'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">               'controls'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'Bool'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">               ]],</span></span>
+<span class="line"><span style="color:#F8F8F2">               [</span><span style="color:#E6DB74">'source'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Block'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Flow'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Common'</span><span style="color:#F8F8F2">, [</span></span>
+<span class="line"><span style="color:#E6DB74">               'src'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'URI'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">               'type'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'Text'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">               ]],</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">            // http://developers.whatwg.org/text-level-semantics.html</span></span>
+<span class="line"><span style="color:#F8F8F2">               [</span><span style="color:#E6DB74">'s'</span><span style="color:#F8F8F2">,    </span><span style="color:#E6DB74">'Inline'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Inline'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Common'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">               [</span><span style="color:#E6DB74">'var'</span><span style="color:#F8F8F2">,  </span><span style="color:#E6DB74">'Inline'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Inline'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Common'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">               [</span><span style="color:#E6DB74">'sub'</span><span style="color:#F8F8F2">,  </span><span style="color:#E6DB74">'Inline'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Inline'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Common'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">               [</span><span style="color:#E6DB74">'sup'</span><span style="color:#F8F8F2">,  </span><span style="color:#E6DB74">'Inline'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Inline'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Common'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">               [</span><span style="color:#E6DB74">'mark'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Inline'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Inline'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Common'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">               [</span><span style="color:#E6DB74">'wbr'</span><span style="color:#F8F8F2">,  </span><span style="color:#E6DB74">'Inline'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Empty'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Core'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">           </span></span>
+<span class="line"><span style="color:#88846F">            // http://developers.whatwg.org/edits.html</span></span>
+<span class="line"><span style="color:#F8F8F2">               [</span><span style="color:#E6DB74">'ins'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Block'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Flow'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Common'</span><span style="color:#F8F8F2">, [</span><span style="color:#E6DB74">'cite'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'URI'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'datetime'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'CDATA'</span><span style="color:#F8F8F2">]],</span></span>
+<span class="line"><span style="color:#F8F8F2">               [</span><span style="color:#E6DB74">'del'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Block'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Flow'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Common'</span><span style="color:#F8F8F2">, [</span><span style="color:#E6DB74">'cite'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'URI'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'datetime'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'CDATA'</span><span style="color:#F8F8F2">]],</span></span>
+<span class="line"><span style="color:#F8F8F2">           ],</span></span>
+<span class="line"><span style="color:#E6DB74">           'attributes'</span><span style="color:#F92672"> =></span><span style="color:#F8F8F2"> [</span></span>
+<span class="line"><span style="color:#F8F8F2">               [</span><span style="color:#E6DB74">'iframe'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'allowfullscreen'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Bool'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">               [</span><span style="color:#E6DB74">'table'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'height'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Text'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">               [</span><span style="color:#E6DB74">'td'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'border'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Text'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">               [</span><span style="color:#E6DB74">'th'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'border'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Text'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">               [</span><span style="color:#E6DB74">'tr'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'width'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Text'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">               [</span><span style="color:#E6DB74">'tr'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'height'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Text'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">               [</span><span style="color:#E6DB74">'tr'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'border'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Text'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">           ],</span></span>
+<span class="line"><span style="color:#F8F8F2">       ],</span></span>
+<span class="line"><span style="color:#E6DB74">       'custom_attributes'</span><span style="color:#F92672"> =></span><span style="color:#F8F8F2"> [</span></span>
+<span class="line"><span style="color:#F8F8F2">           [</span><span style="color:#E6DB74">'a'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'target'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Enum#_blank,_self,_target,_top'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">       ],</span></span>
+<span class="line"><span style="color:#E6DB74">       'custom_elements'</span><span style="color:#F92672"> =></span><span style="color:#F8F8F2"> [</span></span>
+<span class="line"><span style="color:#F8F8F2">           [</span><span style="color:#E6DB74">'u'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Inline'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Inline'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Common'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">       ],</span></span>
+<span class="line"><span style="color:#F8F8F2">   ],</span></span>
+<span class="line"><span style="color:#F8F8F2">];</span></span></code></pre>
+<p>ここで主な設定を弄れるが、一番上のコメントにある通り</p>
+<blockquote>
+<p>You must NOT delete the default settings.<br>
+anything in settings should be compacted with params that needed to instance HTMLPurifier_Config.</p>
+</blockquote>
+<p>デフォルトの設定は削除しちゃだめ。</p>
+<p>デフォルトっていうのは<br>
+<code>'default' => [</code><br>
+で定義されている設定のことだろう。</p>
+<h2 id="configを簡単に説明する">configを簡単に説明する</h2>
+<p>めっちゃ簡単に説明すると、</p>
+<ul>
+<li><code>HTML.Allowed</code>に許可したいタグ名と属性を入れればおｋ！</li>
+<li><code>CSS.AllowedProperties</code>に許可したいCSS名入れればおｋ！</li>
+<li>ホワイトリスト形式だから、Allowedに入れないと許可されないよ！</li>
+</ul>
+<p>以上。</p>
+<p>正直、今挙げたものだけを弄れば大抵のことは済むんだけど、audioタグ等の新しめなタグを使いたい場合はちゃんと理解しないといけない。</p>
+<h2 id="configをちゃんと説明する">configをちゃんと説明する</h2>
+<p>configの配列で定義されているのは主に以下の6つ。</p>
+<h3 id="encoding">encoding</h3>
+<p><a href="http://htmlpurifier.org/live/configdoc/plain.html#:~:text=for%20maximum%20portability.-,Core.Encoding,-Type" rel="noopener noreferrer" target="_blank">本家ドキュメントのこの部分</a>が該当。<br>
+configでいう<code>'encoding'           => 'UTF-8',</code>の部分。</p>
+<p>とにかく、UTF-8でエンコードする分には問題なさそう。</p>
+<h3 id="finalize">finalize</h3>
+<p><a href="http://htmlpurifier.org/doxygen/html/classHTMLPurifier__Config.html#a8f2653854dec7eb305c547fd6f4a43dd:~:text=standalone.php.-,HTMLPurifier_Config%3A%3AautoFinalize,),-Finalizes%20configuration%20only" rel="noopener noreferrer" target="_blank">本家ドキュメントのこの部分</a>が該当。finalizeの説明については<a href="http://htmlpurifier.org/doxygen/html/classHTMLPurifier__Config.html#a38fa0b59bebd8f820bff43e1135bce04:~:text=and%20phorum_htmlpurifier_get_config().-,HTMLPurifier_Config%3A%3Afinalize,),-Finalizes%20a%20configuration" rel="noopener noreferrer" target="_blank">ここ</a>が該当。<br>
+configの<code>'finalize'           => true,</code>の部分。</p>
+<p>これがtrueだと設定を後から変えられないようにできる。<br>
+falseだと設定を後から変えられる。</p>
+<h3 id="ignorenonstrings">ignoreNonStrings</h3>
+<p>本家ドキュメントにない、for Laravel特有の機能。<br>
+configの<code>'ignoreNonStrings'   => false,</code>の部分</p>
+<p>コードを探したら以下の部分が該当。<br>
+<code>vendor\mews\purifier\src\Purifier.php</code></p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#88846F">//If $dirty is not an explicit string, bypass purification assuming configuration allows this</span></span>
+<span class="line"><span style="color:#F8F8F2">$ignoreNonStrings </span><span style="color:#F92672">=</span><span style="color:#FD971F"> $this</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">config</span><span style="color:#F92672">-></span><span style="color:#A6E22E">get</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'purifier.ignoreNonStrings'</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">false</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">$stringTest </span><span style="color:#F92672">=</span><span style="color:#66D9EF"> is_string</span><span style="color:#F8F8F2">($dirty);</span></span>
+<span class="line"><span style="color:#F92672">if</span><span style="color:#F8F8F2">($stringTest </span><span style="color:#F92672">===</span><span style="color:#AE81FF"> false</span><span style="color:#F92672"> &#x26;&#x26;</span><span style="color:#F8F8F2"> $ignoreNonStrings </span><span style="color:#F92672">===</span><span style="color:#AE81FF"> true</span><span style="color:#F8F8F2">) {</span></span>
+<span class="line"><span style="color:#F92672">   return</span><span style="color:#F8F8F2"> $dirty;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">return</span><span style="color:#FD971F"> $this</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">purifier</span><span style="color:#F92672">-></span><span style="color:#A6E22E">purify</span><span style="color:#F8F8F2">($dirty, $configObject);</span></span></code></pre>
+<p>つまりtrueにしていると、取得したHTMLがString型じゃない場合purifierせずにreturnするようになる。<br>
+falseにしていると、一応purifierしてくれるっぽい。</p>
+<h3 id="cachepath">cachePath</h3>
+<p>本家ドキュメントにない、for Laravel特有の機能。<br>
+configの<code>'cachePath'          => storage_path('app/purifier'),</code>の部分。</p>
+<p>configのキャッシュを保存する場所の指定。</p>
+<h3 id="cachefilemode">cacheFileMode</h3>
+<p>configの<code>'cacheFileMode'      => 0755,</code>の部分。</p>
+<p>キャッシュを保存するディレクトリのパーミッション。<br>
+ちなみに、上2つは以下のコードで利用されている。<br>
+<code>vendor\mews\purifier\src\Purifier.php</code></p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F92672">private</span><span style="color:#66D9EF;font-style:italic"> function</span><span style="color:#A6E22E"> checkCacheDirectory</span><span style="color:#F8F8F2">()</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F8F8F2">   $cachePath </span><span style="color:#F92672">=</span><span style="color:#FD971F"> $this</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">config</span><span style="color:#F92672">-></span><span style="color:#A6E22E">get</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'purifier.cachePath'</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">   if</span><span style="color:#F8F8F2"> ($cachePath) {</span></span>
+<span class="line"><span style="color:#F92672">       if</span><span style="color:#F8F8F2"> (</span><span style="color:#F92672">!</span><span style="color:#FD971F">$this</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">files</span><span style="color:#F92672">-></span><span style="color:#A6E22E">isDirectory</span><span style="color:#F8F8F2">($cachePath)) {</span></span>
+<span class="line"><span style="color:#FD971F">           $this</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">files</span><span style="color:#F92672">-></span><span style="color:#A6E22E">makeDirectory</span><span style="color:#F8F8F2">($cachePath, </span><span style="color:#FD971F">$this</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">config</span><span style="color:#F92672">-></span><span style="color:#A6E22E">get</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'purifier.cacheFileMode'</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">0755</span><span style="color:#F8F8F2">),</span><span style="color:#AE81FF">true</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">       }</span></span>
+<span class="line"><span style="color:#F8F8F2">   }</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<h3 id="settings">settings</h3>
+<p>一番大事でよく弄る部分。</p>
+<p>ここで許可したいHTMLタグや定義されていないタグを定義する。<br>
+一番大事なので下で詳しく解説する。</p>
+<h2 id="configのsettingsを詳しく理解する">configのsettingsを詳しく理解する</h2>
+<p>前述したとおり一番大事な部分だし、軽く使うならここのdefaultに定義されているHTML.Allowedとかを弄れば良い。<br>
+しかし、ちょっと深いところまで弄りたいならここをしっかり理解したほうが良い。</p>
+<p>settings関連のコードは<code>vendor\mews\purifier\src\Purifier.php</code>のgetConfigメソッドにある。</p>
+<p>該当部分を切り抜くと以下のようになる。<br>
+私の理解でコメントも付けておいた。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#88846F">// configの新しいオブジェクトを作成</span></span>
+<span class="line"><span style="color:#F8F8F2">$configObject </span><span style="color:#F92672">=</span><span style="color:#66D9EF;font-style:italic"> HTMLPurifier_Config</span><span style="color:#F92672">::</span><span style="color:#A6E22E">createDefault</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// configの変更を許可するか否か。config/purifier.phpで定義されているものを利用している。</span></span>
+<span class="line"><span style="color:#F92672">if</span><span style="color:#F8F8F2"> (</span><span style="color:#F92672">!</span><span style="color:#FD971F"> $this</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">config</span><span style="color:#F92672">-></span><span style="color:#A6E22E">get</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'purifier.finalize'</span><span style="color:#F8F8F2">)) {</span></span>
+<span class="line"><span style="color:#F8F8F2">   $configObject</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">autoFinalize </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> false</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// configの初期設定。config/purifier.phpで定義されているものを利用している。</span></span>
+<span class="line"><span style="color:#F8F8F2">$defaultConfig </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> [];</span></span>
+<span class="line"><span style="color:#F8F8F2">$defaultConfig[</span><span style="color:#E6DB74">'Core.Encoding'</span><span style="color:#F8F8F2">] </span><span style="color:#F92672">=</span><span style="color:#FD971F"> $this</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">config</span><span style="color:#F92672">-></span><span style="color:#A6E22E">get</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'purifier.encoding'</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">$defaultConfig[</span><span style="color:#E6DB74">'Cache.SerializerPath'</span><span style="color:#F8F8F2">] </span><span style="color:#F92672">=</span><span style="color:#FD971F"> $this</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">config</span><span style="color:#F92672">-></span><span style="color:#A6E22E">get</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'purifier.cachePath'</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">$defaultConfig[</span><span style="color:#E6DB74">'Cache.SerializerPermissions'</span><span style="color:#F8F8F2">] </span><span style="color:#F92672">=</span><span style="color:#FD971F"> $this</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">config</span><span style="color:#F92672">-></span><span style="color:#A6E22E">get</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'purifier.cacheFileMode'</span><span style="color:#F8F8F2">, </span><span style="color:#AE81FF">0755</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// もし使うconfigが指定されていたらそれを。無指定ならdefaultを使う。</span></span>
+<span class="line"><span style="color:#F92672">if</span><span style="color:#F8F8F2"> (</span><span style="color:#F92672">!</span><span style="color:#F8F8F2"> $config) {</span></span>
+<span class="line"><span style="color:#F8F8F2">   $config </span><span style="color:#F92672">=</span><span style="color:#FD971F"> $this</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">config</span><span style="color:#F92672">-></span><span style="color:#A6E22E">get</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'purifier.settings.default'</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">} </span><span style="color:#F92672">elseif</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF">is_string</span><span style="color:#F8F8F2">($config)) {</span></span>
+<span class="line"><span style="color:#F8F8F2">   $config </span><span style="color:#F92672">=</span><span style="color:#FD971F"> $this</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">config</span><span style="color:#F92672">-></span><span style="color:#A6E22E">get</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'purifier.settings.'</span><span style="color:#F92672"> .</span><span style="color:#F8F8F2"> $config);</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 指定されたconfigが配列じゃないなら配列に</span></span>
+<span class="line"><span style="color:#F92672">if</span><span style="color:#F8F8F2"> (</span><span style="color:#F92672">!</span><span style="color:#66D9EF"> is_array</span><span style="color:#F8F8F2">($config)) {</span></span>
+<span class="line"><span style="color:#F8F8F2">   $config </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> [];</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// configを初期設定したものとmerge。</span></span>
+<span class="line"><span style="color:#F8F8F2">$config </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> $defaultConfig </span><span style="color:#F92672">+</span><span style="color:#F8F8F2"> $config;</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 出来上がったconfigを$configObjectにロード</span></span>
+<span class="line"><span style="color:#F8F8F2">$configObject</span><span style="color:#F92672">-></span><span style="color:#A6E22E">loadArray</span><span style="color:#F8F8F2">($config);</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// custom_definitionが定義されていれば、カスタムタグを追加</span></span>
+<span class="line"><span style="color:#F92672">if</span><span style="color:#F8F8F2"> ($definitionConfig </span><span style="color:#F92672">=</span><span style="color:#FD971F"> $this</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">config</span><span style="color:#F92672">-></span><span style="color:#A6E22E">get</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'purifier.settings.custom_definition'</span><span style="color:#F8F8F2">)) {</span></span>
+<span class="line"><span style="color:#FD971F">   $this</span><span style="color:#F92672">-></span><span style="color:#A6E22E">addCustomDefinition</span><span style="color:#F8F8F2">($definitionConfig, $configObject);</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// custom_elementsが定義されていれば、カスタム要素を追加</span></span>
+<span class="line"><span style="color:#F92672">if</span><span style="color:#F8F8F2"> ($elements </span><span style="color:#F92672">=</span><span style="color:#FD971F"> $this</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">config</span><span style="color:#F92672">-></span><span style="color:#A6E22E">get</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'purifier.settings.custom_elements'</span><span style="color:#F8F8F2">)) {</span></span>
+<span class="line"><span style="color:#F92672">   if</span><span style="color:#F8F8F2"> ($def </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> $configObject</span><span style="color:#F92672">-></span><span style="color:#A6E22E">maybeGetRawHTMLDefinition</span><span style="color:#F8F8F2">()) {</span></span>
+<span class="line"><span style="color:#FD971F">       $this</span><span style="color:#F92672">-></span><span style="color:#A6E22E">addCustomElements</span><span style="color:#F8F8F2">($elements, $def);</span></span>
+<span class="line"><span style="color:#F8F8F2">   }</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// custom_attributesが定義されていれば、カスタム属性を追加</span></span>
+<span class="line"><span style="color:#F92672">if</span><span style="color:#F8F8F2"> ($attributes </span><span style="color:#F92672">=</span><span style="color:#FD971F"> $this</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">config</span><span style="color:#F92672">-></span><span style="color:#A6E22E">get</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'purifier.settings.custom_attributes'</span><span style="color:#F8F8F2">)) {</span></span>
+<span class="line"><span style="color:#F92672">   if</span><span style="color:#F8F8F2"> ($def </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> $configObject</span><span style="color:#F92672">-></span><span style="color:#A6E22E">maybeGetRawHTMLDefinition</span><span style="color:#F8F8F2">()) {</span></span>
+<span class="line"><span style="color:#FD971F">       $this</span><span style="color:#F92672">-></span><span style="color:#A6E22E">addCustomAttributes</span><span style="color:#F8F8F2">($attributes, $def);</span></span>
+<span class="line"><span style="color:#F8F8F2">   }</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">return</span><span style="color:#F8F8F2"> $configObject;</span></span></code></pre>
+<p>つまりこのことからわかることは、<strong>変に指定しない限り</strong><code>purifier.settings.default</code><strong>に定義されたものが使われる</strong>ということ。</p>
+<p>なので、初期から設定されている<code>purifier.settings.test</code>や<code>purifier.settings.youtube</code>は<code>Purifier::clean("洗浄したいHTML","test")</code>のように指定しない限り何も関与しない。</p>
+<p>また、</p>
+<ul>
+<li>custom_definition</li>
+<li>custom_elements</li>
+<li>custom_attributes</li>
+</ul>
+<p>という特別なconfigがあることもわかった。</p>
+<h3 id="custom_definitioncustom_elementscustom_attributesとは何か">custom_definition、custom_elements、custom_attributesとは何か</h3>
+<p>前提として、<strong>HTMLPurifierは事前に定義されていないタグ名or属性名のものがあった場合、エラーを吐くようになっている</strong>。</p>
+<p>そして、<strong>HTMLPurifierは<a href="https://www.kanzaki.com/docs/html/xhtml11.html#:~:text=%E3%81%A3%E3%81%A6%E3%81%84%E3%81%BE%E3%81%99%E3%80%82-,XHTML%201.1%E3%81%AEDTD,-%E4%B8%8A%E8%A8%98%E3%81%AE%E3%82%88%E3%81%86" rel="noopener noreferrer" target="_blank">XHTML1.1</a>を<a href="http://htmlpurifier.org/docs/enduser-customize.html#:~:text=on%20this%20later).-,XHTML%201.1,-As%20of%20HTMLPurifier" rel="noopener noreferrer" target="_blank">想定して</a>タグ名or属性名をデフォルトで定義している</strong>。</p>
+<p>逆を言えば、<strong><a href="https://html.spec.whatwg.org/dev/sections.html" rel="noopener noreferrer" target="_blank">HTML5.0で登場したタグ</a>や<a href="https://oembed.com/" rel="noopener noreferrer" target="_blank">oEmbed</a>などのオリジナルタグはHTMLPurifierに定義されていない</strong>。</p>
+<p>その為、定義されていないタグや属性を使いたい場合、この「custom_definition、custom_elements、custom_attributes」のconfigに自分で定義しなきゃいけないということ。</p>
+<p>さっきのconfigのcustom_difinitionをちょこっと見てみると</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F8F8F2">[</span><span style="color:#E6DB74">'section'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Block'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Flow'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Common'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">[</span><span style="color:#E6DB74">'nav'</span><span style="color:#F8F8F2">,     </span><span style="color:#E6DB74">'Block'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Flow'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Common'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">[</span><span style="color:#E6DB74">'article'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Block'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Flow'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Common'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">[</span><span style="color:#E6DB74">'aside'</span><span style="color:#F8F8F2">,   </span><span style="color:#E6DB74">'Block'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Flow'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Common'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">[</span><span style="color:#E6DB74">'header'</span><span style="color:#F8F8F2">,  </span><span style="color:#E6DB74">'Block'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Flow'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Common'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">[</span><span style="color:#E6DB74">'footer'</span><span style="color:#F8F8F2">,  </span><span style="color:#E6DB74">'Block'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Flow'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Common'</span><span style="color:#F8F8F2">],</span></span></code></pre>
+<p>のようになんか既に定義されている。</p>
+<p>これはfor Laravelを作った作者さんの優しさで頻繁に使いそうなHTML5.0のタグを事前定義してくれたってことだと思う。<br>
+だからXHTML1.1にないarticleタグとかをHTML.Allowedに入れても未定義エラーにならないんだね。</p>
+<h2 id="タグの定義方法">タグの定義方法</h2>
+<p>これはHTMLPurifierの<a href="http://htmlpurifier.org/docs/enduser-customize.html#:~:text=DefinitionID%20and%20DefinitionRev.-,Add%20an%20attribute,-For%20this%20example" rel="noopener noreferrer" target="_blank">公式ドキュメント</a>にそれに近いものの記載があるのでそれを見るのが良いと思う。</p>
+<p>やることは、custom_definition、custom_elements、custom_attributesそれぞれに適切な定義をしてあげる感じ。</p>
+<p>一応自分の理解の為にも以下に記す。<br>
+理解のしやすさのためにcustom_difinitionを最後にする。</p>
+<h3 id="custom_attributes">custom_attributes</h3>
+<p>これはカスタム属性を追加するconfig。<br>
+初期では以下のようになっている</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#E6DB74">'custom_attributes'</span><span style="color:#F92672"> =></span><span style="color:#F8F8F2"> [</span></span>
+<span class="line"><span style="color:#F8F8F2">   [</span><span style="color:#E6DB74">'a'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'target'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Enum#_blank,_self,_target,_top'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">],</span></span></code></pre>
+<p>これは左から</p>
+<ol>
+<li>許可する属性の対象である要素名</li>
+<li>許可する属性名</li>
+<li>許可する値</li>
+</ol>
+<p>を入力する。</p>
+<p>上の例だとEnumで指定しているが他にもいろいろ指定方法はある。<br>
+詳しくは<a href="http://htmlpurifier.org/docs/enduser-customize.html#:~:text=DefinitionID%20and%20DefinitionRev.-,Add%20an%20attribute,-For%20this%20example" rel="noopener noreferrer" target="_blank">公式ドキュメント</a>を。</p>
+<h3 id="custom_elements">custom_elements</h3>
+<p>これはカスタム要素を追加するconfig。<br>
+初期では以下のようになっている</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#E6DB74">'custom_elements'</span><span style="color:#F92672"> =></span><span style="color:#F8F8F2"> [</span></span>
+<span class="line"><span style="color:#F8F8F2">   [</span><span style="color:#E6DB74">'u'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Inline'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Inline'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Common'</span><span style="color:#F8F8F2">],</span></span>
+<span class="line"><span style="color:#F8F8F2">],</span></span></code></pre>
+<p>これは左から</p>
+<ol>
+<li>許可する要素名</li>
+<li>インライン要素かブロック要素か(Inline-Blockはできないみたい)
+<ul>
+<li>Inline: インライン要素</li>
+<li>Block: ブロック要素</li>
+<li>false: 上記に適合しない型。(liやtrなど)</li>
+</ul>
+</li>
+<li>許可する子要素
+<ul>
+<li>Empty: 何も許可しない。(brやhrなど)</li>
+<li>Inline: 任意の数のInlineとテキスト。(spanなど)</li>
+<li>Flow: 任意の数のBlock,Inline,テキスト。(divなど)</li>
+</ul>
+</li>
+<li>一般的な属性を持つか
+<ul>
+<li>I18N: lang属性を持つ</li>
+<li>Core: style, class, id, titleの属性を持つ</li>
+<li>Common: 上2つどちらも</li>
+</ul>
+</li>
+</ol>
+<p>こんな感じ。許可する子要素は説明したもの以外にも細かく指定できる。<br>
+詳しくは<a href="http://htmlpurifier.org/docs/enduser-customize.html#:~:text=love%20the%20shorthand.-,Add%20an%20element,-Adding%20attributes%20is" rel="noopener noreferrer" target="_blank">公式ドキュメント</a>を。</p>
+<p>また、上の例には無いが5つ目の引数で属性を指定できる。<br>
+以下の例がわかりやすい。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F8F8F2">[</span><span style="color:#E6DB74">'video'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Block'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Optional: (source, Flow) | (Flow, source) | Flow'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'Common'</span><span style="color:#F8F8F2">, [</span></span>
+<span class="line"><span style="color:#E6DB74">    'src'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'URI'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">    'type'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'Text'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">    'width'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'Length'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">    'height'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'Length'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">    'poster'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'URI'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">    'preload'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'Enum#auto,metadata,none'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">    'controls'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'Bool'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">]],</span></span></code></pre>
+<p>2次配列で指定できるんだね。</p>
+<h3 id="custom_definition">custom_definition</h3>
+<p>こいつがメインの定義config。</p>
+<p>主に以下の5つの定義をする</p>
+<ol>
+<li><strong>id</strong><br>
+<a href="http://htmlpurifier.org/live/configdoc/plain.html#:~:text=Doctype%20is%20blank.-,HTML.DefinitionID,-Version%20added" rel="noopener noreferrer" target="_blank">公式ドキュメントのこの部分</a>。<br>
+configの<code>'id'  => 'html5-definitions',</code>の部分。<br>
+つまり、cacheに変更したことを知らせるためのIDってこと？</li>
+<li><strong>rev</strong><br>
+<a href="http://htmlpurifier.org/live/configdoc/plain.html#:~:text=advanced%20API%20features.-,HTML.DefinitionRev,-Version%20added" rel="noopener noreferrer" target="_blank">公式ドキュメントのこの部分</a>。<br>
+configの<code>'rev' => 1,</code>の部分。<br>
+IDは時系列を持たないけど、バージョンで指定すれば時系列がわかるよ！　ってこと？</li>
+<li><strong>debug</strong><br>
+configの<code>'debug' => false,</code>の部分。<br>
+for Laravel特有のものだけど、やってることは<a href="http://htmlpurifier.org/live/configdoc/plain.html#:~:text=Cache.DefinitionImpl" rel="noopener noreferrer" target="_blank">Cache.DefinitionImpl</a>をnullにしてキャッシュを残さないようにしているだけ。<br>
+つまり、設定を変えたら毎回読み込みなおしてすぐ反映されるようにしている。</li>
+<li><strong>elements</strong><br>
+「custom_elements」で定義できたものをここでもできるようにしている。</li>
+<li><strong>attributes</strong><br>
+「custom_attributes」で定義できたものをここでもできるようにしている。</li>
+</ol>
+<p>わざわざcustom_definitionで要素と属性を定義する意味はなんだろうと思うよね。<br>
+ソースコード見た感じだと、IDとVerの指定ができるってのと、Debugが指定できるのがいいねって感じだった。</p>
+<p>for Laravelを作った人的にcustom_definitionを使ってくれ感がすごいので、私はcustom_definitionで定義していこうと思う。</p>
+<h2 id="uriのスキームを指定する">URIのスキームを指定する</h2>
+<p><a href="https://www.ipa.go.jp/security/vuln/websecurity/ug65p900000196e2-att/000017316.pdf" rel="noopener noreferrer" target="_blank">安全なウェブサイトの作り方</a>のXSSにもある通り、URLを出力させるときはスキームを「http」や「https」のみ許可したほうが良い。</p>
+<p>HTMLPurifierでは属性の持てる値でURIというのを指定すると、「javascript:」などのURLを入れても洗浄してくれるようになる。</p>
+<p>じゃあURIを指定するとデフォルトで何が許可されているのかってところなんだけど、<a href="http://htmlpurifier.org/live/configdoc/plain.html#URI:~:text=URI-,URI.AllowedSchemes,-Type" rel="noopener noreferrer" target="_blank">公式ドキュメント</a>によると以下の7つが許可されているみたい。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#66D9EF">array</span><span style="color:#F8F8F2"> (</span></span>
+<span class="line"><span style="color:#E6DB74"> 'http'</span><span style="color:#F92672"> =></span><span style="color:#AE81FF"> true</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74"> 'https'</span><span style="color:#F92672"> =></span><span style="color:#AE81FF"> true</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74"> 'mailto'</span><span style="color:#F92672"> =></span><span style="color:#AE81FF"> true</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74"> 'ftp'</span><span style="color:#F92672"> =></span><span style="color:#AE81FF"> true</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74"> 'nntp'</span><span style="color:#F92672"> =></span><span style="color:#AE81FF"> true</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74"> 'news'</span><span style="color:#F92672"> =></span><span style="color:#AE81FF"> true</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74"> 'tel'</span><span style="color:#F92672"> =></span><span style="color:#AE81FF"> true</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">)</span></span></code></pre>
+<p>httpとhttpsはわかるんだけど、それ以外はそもそも知らないし必要ないと思うので許可したくない。</p>
+<p>そんな場合はdefaultとかに</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#E6DB74">'URI.AllowedSchemes'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'http, https'</span><span style="color:#F8F8F2">,</span></span></code></pre>
+<p>を指定してあげればおｋ。<br>
+こうすれば<code>mailto:example@example.com?subject=件名</code>みたいなURLが入っていても洗浄してくれる。</p>
+<h2 id="uriのカスタムフィルター">URIのカスタムフィルター</h2>
+<p>2024年12月18日追記</p>
+<p>URI…もうちょいカスタマイズしたいよね。<br>
+例えば、imgタグのURIは特定のドメインのみ、aタグのURIは何でもおｋみたいな。</p>
+<p>それを叶えてくれるのが<a href="http://htmlpurifier.org/docs/enduser-uri-filter.html" rel="noopener noreferrer" target="_blank">URIFilter</a>というもの。</p>
+<p>まず、好きなところに<code>HTMLPurifier_URIFilter</code>クラスを継承したオリジナルのフィルタを作る。</p>
+<p>私は<code>app/HTMLPurifierFilters/HTMLPurifier_URIFilter_HostFilter</code>というファイルを作り、以下のような中身にした。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F92672">&#x3C;?</span><span style="color:#AE81FF">php</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">namespace</span><span> </span><span style="color:#A6E22E;text-decoration:underline">App\HTMLPurifierFilters</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">use</span><span style="color:#66D9EF;font-style:italic"> HTMLPurifier_Config</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">use</span><span style="color:#66D9EF;font-style:italic"> HTMLPurifier_Context</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">use</span><span style="color:#66D9EF;font-style:italic"> HTMLPurifier_URI</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">use</span><span style="color:#66D9EF;font-style:italic"> HTMLPurifier_URIFilter</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">class</span><span> </span><span style="color:#A6E22E;text-decoration:underline">HTMLPurifier_URIFilter_HostFilter</span><span style="color:#F92672"> extends</span><span> </span><span style="color:#A6E22E;font-style:italic;text-decoration:underline">HTMLPurifier_URIFilter</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#F92672">    public</span><span style="color:#F8F8F2"> $name </span><span style="color:#F92672">=</span><span style="color:#E6DB74"> 'URIFilter_HostFilter'</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">    protected</span><span style="color:#F8F8F2"> $allowedHostsForImg </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> [</span></span>
+<span class="line"><span style="color:#E6DB74">        'example.com'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">    ];</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">    /**</span></span>
+<span class="line"><span style="color:#88846F">     * バリデーション後にこのフィルターを実行する必要がある場合は True。</span></span>
+<span class="line"><span style="color:#88846F">     * デフォルトではバリデーション前に実行される。</span></span>
+<span class="line"><span style="color:#88846F">     * @type bool</span></span>
+<span class="line"><span style="color:#88846F">     */</span></span>
+<span class="line"><span style="color:#F92672">    public</span><span style="color:#F8F8F2"> $post </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> false</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">    /**</span></span>
+<span class="line"><span style="color:#88846F">     * Filter a URI object</span></span>
+<span class="line"><span style="color:#88846F">     * </span><span style="color:#F92672">@param</span><span style="color:#66D9EF;font-style:italic"> HTMLPurifier_URI</span><span style="color:#88846F"> $uri</span></span>
+<span class="line"><span style="color:#88846F">     * </span><span style="color:#F92672">@param</span><span style="color:#66D9EF;font-style:italic"> HTMLPurifier_Config</span><span style="color:#88846F"> $config</span></span>
+<span class="line"><span style="color:#88846F">     * </span><span style="color:#F92672">@param</span><span style="color:#66D9EF;font-style:italic"> HTMLPurifier_Context</span><span style="color:#88846F"> $context</span></span>
+<span class="line"><span style="color:#88846F">     * </span><span style="color:#F92672">@return</span><span style="color:#F92672"> bool</span></span>
+<span class="line"><span style="color:#88846F">     */</span></span>
+<span class="line"><span style="color:#F92672">    public</span><span style="color:#66D9EF;font-style:italic"> function</span><span style="color:#A6E22E"> filter</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">&#x26;</span><span style="color:#F8F8F2">$uri, $config, $context) {</span></span>
+<span class="line"><span style="color:#F8F8F2">        $currentToken </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> $context</span><span style="color:#F92672">-></span><span style="color:#A6E22E">get</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'CurrentToken'</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F92672">        if</span><span style="color:#F8F8F2"> (</span><span style="color:#F92672">!</span><span style="color:#F8F8F2">$currentToken </span><span style="color:#F92672">||</span><span style="color:#F92672"> !</span><span style="color:#66D9EF">isset</span><span style="color:#F8F8F2">($currentToken</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">name)) {</span></span>
+<span class="line"><span style="color:#F92672">            return</span><span style="color:#AE81FF"> false</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">        $currentTag </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> $currentToken</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">name;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">        if</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF">in_array</span><span style="color:#F8F8F2">($currentTag, [</span><span style="color:#E6DB74">"a"</span><span style="color:#F8F8F2">])) {</span></span>
+<span class="line"><span style="color:#F92672">            return</span><span style="color:#AE81FF"> true</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">        if</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF">in_array</span><span style="color:#F8F8F2">($currentTag, [</span><span style="color:#E6DB74">"img"</span><span style="color:#F8F8F2">])) {</span></span>
+<span class="line"><span style="color:#F92672">            if</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF">in_array</span><span style="color:#F8F8F2">($uri</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">host, </span><span style="color:#FD971F">$this</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">allowedHostsForImg)) {</span></span>
+<span class="line"><span style="color:#F92672">                return</span><span style="color:#AE81FF"> true</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">            }</span></span>
+<span class="line"><span style="color:#F8F8F2">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">        return</span><span style="color:#AE81FF"> false</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<p>コードの通り、aタグならtrueを返しimgタグなら特定のホストじゃないとfalseになるようにしている。<br>
+falseだとそもそもURIが無効とみなされて削除されるみたい。</p>
+<p>また、<code>&#x26;$uri</code>という引数方法からもわかる通り、URIを直接いじいじもできるみたい。</p>
+<p>このURIフィルターを適用するには</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#66D9EF;font-style:italic">Purifier</span><span style="color:#F92672">::</span><span style="color:#A6E22E">clean</span><span style="color:#F8F8F2">($html, </span><span style="color:#E6DB74">"default"</span><span style="color:#F8F8F2">, </span><span style="color:#66D9EF;font-style:italic">function</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">HTMLPurifier_Config</span><span style="color:#F8F8F2"> $config) {</span></span>
+<span class="line"><span style="color:#F8F8F2">    $uri </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> $config</span><span style="color:#F92672">-></span><span style="color:#A6E22E">getDefinition</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"URI"</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">    $uri</span><span style="color:#F92672">-></span><span style="color:#A6E22E">addFilter</span><span style="color:#F8F8F2">(</span><span style="color:#F92672">new</span><span style="color:#66D9EF;font-style:italic"> HTMLPurifier_URIFilter_HostFilter</span><span style="color:#F8F8F2">(), $config);</span></span>
+<span class="line"><span style="color:#F8F8F2">});</span></span></code></pre>
+<p>のように指定してあげる必要がある。</p>
+<p>以上です。</p></section><aside class="w-[300px] hidden lg:block shrink-0" data-astro-cid-e2rqhpi3><nav class="sticky top-16 h-fit  bg-white py-24 pl-24 rounded-md" data-astro-cid-tqqy2vud><section data-astro-cid-tqqy2vud><header data-astro-cid-tqqy2vud><h2 class="font-bold text-lg" data-astro-cid-tqqy2vud>目次</h2></header></section><div class="article-toc scroll-smooth mt-4 py-16 pr-24 overflow-y-auto max-h-[90svh]" data-astro-cid-tqqy2vud></div></nav><script type="module" src="/_astro/ArticleTOC.astro_astro_type_script_index_0_lang.mX9zJvT_.js"></script></aside></div><div class="mt-40 mb-64" data-pagefind-ignore data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Laravel"># Laravel</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=HTMLPurifier"># HTMLPurifier</a></div></div></article></main></div><footer class="pb-40 px-24 md:px-0 bg-white"><hr class="mx-auto w-2/3 md:w-1/2 my-24 h-[1px] border-0 bg-slate-400"><div class="mx-8 md:mx-64"><a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" target="_blank" rel="noopener noreferrer"><img src="/_astro/by-nc.DpMeGFcJ_ZF0RGK.svg" alt="クリエイティブコモンズ 表示-非営利 4.0 ライセンス" loading="lazy" decoding="async" width="125" height="44"></a><p class="text-xs md:text-sm">本サイト「<a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">tamakoma.com</a>」から提供されるブログ内の文章、プログラミングコードは、<a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">クリエイティブ・コモンズ 表示-非営利 4.0 ライセンス</a>の下に提供されます。</p><p class="text-xs md:text-sm">音楽や画像などのメディアコンテンツにはこのライセンスは適用されません。</p></div><p class="text-center text-sm"><a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Top</a> / <a href="/contact" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Contact</a> / <a href="/feed.xml" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">RSS Feed</a></p><p class="mt-24 text-center">&copy; tamakoma 2018-2026</p></footer></div></body></html>

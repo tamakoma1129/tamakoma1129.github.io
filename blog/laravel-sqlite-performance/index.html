@@ -1,0 +1,417 @@
+<!DOCTYPE html><html lang="ja" class="text-slate-700"><head><meta charset="utf-8"><title>Laravelで本番運用するときにSQLiteってどうなの？ | tamakoma.com</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v7.0.3"><meta name="twitter:card" content="summary"><meta property="og:title" content="Laravelで本番運用するときにSQLiteってどうなの？"><meta property="og:type" content="website"><meta property="og:url" content="https://tamakoma.com/blog/laravel-sqlite-performance/"><meta property="og:image" content="/_astro/mikuteto-OGP.DYQebPDj.png"><meta property="og:description" content="学んだことを残すブログ"><meta property="og:site_name" content="tamakoma.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.0.1/dist/css/yakuhanjp_s.css"><link rel="sitemap" href="/sitemap-index.xml"><link rel="stylesheet" href="/_astro/BaseLayout.Ddu7R_5r.css"><style>/*! tailwindcss v4.2.2 | MIT License | https://tailwindcss.com */
+.article-toc[data-astro-cid-tqqy2vud] .toc-link{font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));display:block}@media (hover:hover){.article-toc[data-astro-cid-tqqy2vud] .toc-link:hover{color:var(--color-slate-600,oklch(44.6% .043 257.281));text-decoration-line:underline}}.article-toc[data-astro-cid-tqqy2vud] .toc-link.to-link-active{color:var(--color-miku-500,oklch(63.7% .1071 185.34))}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H2){margin-left:var(--spacing-24,24px)}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H3){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:10px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H4){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:20px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H5){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:30px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H6){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:40px}.article-toc[data-astro-cid-tqqy2vud] .toc-list{list-style-type:decimal;list-style-position:outside}@layer properties{@supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))){*,:before,:after,::backdrop{--tw-font-weight:initial;--tw-border-style:solid}}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a{--tw-font-weight:var(--font-weight-semibold,600);font-weight:var(--font-weight-semibold,600);color:var(--color-miku-500,oklch(63.7% .1071 185.34));text-underline-offset:2px;text-decoration-line:underline}@media (hover:hover){article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a:hover{color:var(--color-miku-700,oklch(50.5% .0901 187.01))}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] code:not(pre>code){margin-inline:var(--spacing-4,4px);border-radius:var(--radius-md,.375rem);border-style:var(--tw-border-style);background-color:var(--color-sumi-100,oklch(97% 0 0));padding-inline:var(--spacing-4,4px);--tw-font-weight:var(--font-weight-normal,400);font-weight:var(--font-weight-normal,400);color:var(--color-black,#000);border-width:0;padding-block:2px}@property --tw-font-weight{syntax:"*";inherits:false}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid}
+</style><script type="module" src="/_astro/page.DCEeCLip.js"></script><script>!(function(w,p,f,c){if(!window.crossOriginIsolated && !navigator.serviceWorker) return;c=w[p]=Object.assign(w[p]||{},{"lib":"/~partytown/","debug":false});c[f]=(c[f]||[])})(window,'partytown','forward');/* Partytown 0.13.2 - MIT QwikDev */
+const t={preserveBehavior:!1},e=e=>{if("string"==typeof e)return[e,t];const[n,r=t]=e;return[n,{...t,...r}]},n=Object.freeze((t=>{const e=new Set;let n=[];do{Object.getOwnPropertyNames(n).forEach((t=>{"function"==typeof n[t]&&e.add(t)}))}while((n=Object.getPrototypeOf(n))!==Object.prototype);return Array.from(e)})());!function(t,r,o,i,a,s,c,l,d,p,u=t,f){function h(){f||(f=1,"/"==(c=(s.lib||"/~partytown/")+(s.debug?"debug/":""))[0]&&(d=r.querySelectorAll('script[type="text/partytown"]'),i!=t?i.dispatchEvent(new CustomEvent("pt1",{detail:t})):(l=setTimeout(v,(null==s?void 0:s.fallbackTimeout)||1e4),r.addEventListener("pt0",w),a?y(1):o.serviceWorker?o.serviceWorker.register(c+(s.swPath||"partytown-sw.js"),{scope:c}).then((function(t){t.active?y():t.installing&&t.installing.addEventListener("statechange",(function(t){"activated"==t.target.state&&y()}))}),console.error):v())))}function y(e){p=r.createElement(e?"script":"iframe"),t._pttab=Date.now(),e||(p.style.display="block",p.style.width="0",p.style.height="0",p.style.border="0",p.style.visibility="hidden",p.setAttribute("aria-hidden",!0)),p.src=c+"partytown-"+(e?"atomics.js?v=0.13.2":"sandbox-sw.html?"+t._pttab),r.querySelector(s.sandboxParent||"body").appendChild(p)}function v(n,o){for(w(),i==t&&(s.forward||[]).map((function(n){const[r]=e(n);delete t[r.split(".")[0]]})),n=0;n<d.length;n++)(o=r.createElement("script")).innerHTML=d[n].innerHTML,o.nonce=s.nonce,r.head.appendChild(o);p&&p.parentNode.removeChild(p)}function w(){clearTimeout(l)}s=t.partytown||{},i==t&&(s.forward||[]).map((function(r){const[o,{preserveBehavior:i}]=e(r);u=t,o.split(".").map((function(e,r,o){var a;u=u[o[r]]=r+1<o.length?u[o[r]]||(a=o[r+1],n.includes(a)?[]:{}):(()=>{let e=null;if(i){const{methodOrProperty:n,thisObject:r}=((t,e)=>{let n=t;for(let t=0;t<e.length-1;t+=1)n=n[e[t]];return{thisObject:n,methodOrProperty:e.length>0?n[e[e.length-1]]:void 0}})(t,o);"function"==typeof n&&(e=(...t)=>n.apply(r,...t))}return function(){let n;return e&&(n=e(arguments)),(t._ptf=t._ptf||[]).push(o,arguments),n}})()}))})),"complete"==r.readyState?h():(t.addEventListener("DOMContentLoaded",h),t.addEventListener("load",h))}(window,document,navigator,top,window.crossOriginIsolated);;(e=>{e.addEventListener("astro:before-swap",e=>{let r=document.body.querySelector("iframe[src*='/~partytown/']");if(r)e.newDocument.body.append(r)})})(document);</script></head><body class="bg-repeat bg-white anywhere" style="background-image: url(/_astro/mikuteto-gray.Dix8k1Tp.gif)"><div class="min-h-screen flex flex-col justify-between" id="container"><div><header><nav class="flex flex-col items-center pt-40 pb-24"><a href="/blog" class="text-3xl md:text-5xl font-bold mb-40 text-slate-400 drop-shadow-2xl">tamakoma.com</a><div class="w-full flex justify-center [&amp;&gt;a]:bg-white [&amp;&gt;a]:border-slate-400"><a href="/" class="block py-8 px-16 text-sumi-600 rounded-l border-l border-y">home</a><a href="/blog/" class="block py-8 px-16 text-sumi-600 border">blog</a><a href="/about/" class="block py-8 px-16 text-sumi-600 rounded-r border-r border-y">about</a></div></nav></header><main class="bg-slate-100 w-full flex justify-end" data-astro-cid-e2rqhpi3><article class="grow" data-pagefind-body data-astro-cid-e2rqhpi3><header class="mt-24 w-11/12 max-w-[700px] mx-auto" data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-pagefind-weight="6.7" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-pagefind-weight="6.5" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Larave"># Larave</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=SQLite"># SQLite</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=MySQL"># MySQL</a></div><h1 class="text-center text-xl md:text-3xl font-bold px-24 mt-40" data-astro-cid-e2rqhpi3>Laravelで本番運用するときにSQLiteってどうなの？</h1><div class="text-slate-400 text-sm gap-16 flex justify-center mt-24" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>投稿日 <time datetime="2025-12-14T00:00:00.000Z">2025/12/14</time></span><span data-astro-cid-e2rqhpi3>最終更新日 <time datetime="2025-12-14T00:00:00.000Z">2025/12/14</time></span></div></header><hr class="bg-slate-200 rounded-full mx-auto h-4 my-40 w-40 border-0"><div class="flex mx-auto justify-center gap-40" data-astro-cid-e2rqhpi3><section id="article-body" class="
+                            prose prose-neutral
+                            prose-blockquote:border-miku-400 prose-blockquote:font-normal
+                            w-0 grow
+                            max-w-[650px] bg-white box-content px-16 md:px-40 py-24 rounded-md
+                            " data-astro-cid-e2rqhpi3><p>2025年12月13日</p>
+<p>この記事はQiita「<a href="https://qiita.com/advent-calendar/2025/laravel" rel="noopener noreferrer" target="_blank">Laravel Advent Calendar 2025</a>」参加記事です。</p>
+<p>「SQLiteでも本番運用に耐えられるのでは」的な話を聞いたり聞かなかったりするので、パフォーマンスを自分なりに検証してみる。</p>
+<p>もし、結構いけそうなら個人開発レベルの本番運用に採用したい。</p>
+<h2 id="検証方法">検証方法</h2>
+<p>なんちゃって検証なので、ローカルで検証する。</p>
+<h3 id="動作環境">動作環境</h3>
+<ul>
+<li>Kubuntu OS</li>
+<li>Laravel12</li>
+<li>PHP: 8.4</li>
+<li>SQLite: 3.46.1</li>
+<li>MySQL: 8.4.7</li>
+<li>Laravel Octane(FrankenPHP)
+<ul>
+<li>理由: PHP-FPMだと同時書き込み量的にPHP-FPMが自体がボトルネックになりうるので<br>
+上記の環境をDockerで構築して、MySQLの場合とSQLiteの場合で比較する。</li>
+</ul>
+</li>
+</ul>
+<p>また、他情報として</p>
+<ul>
+<li>負荷テストにはKubuntuからk6を使う</li>
+<li>ストレージにはwrite/read共に1500Mib以上のSSDを利用している</li>
+</ul>
+<h3 id="sqliteの設定pragma">SQLiteの設定（PRAGMA）</h3>
+<p>SQLiteには色々設定（<a href="https://sqlite.org/pragma.html" rel="noopener noreferrer" target="_blank">PRAGMA</a>）があるっぽい。</p>
+<p>以下の2つだけ明示的に設定を指定し、あとはLaravelにお任せしている。</p>
+<ul>
+<li><code>journal_mode</code>: 以下2通りそれぞれ検証
+<ol>
+<li><code>DELETE</code></li>
+<li><code>WAL</code></li>
+</ol>
+</li>
+<li><code>synchronous</code>: <code>NORMAL</code></li>
+</ul>
+<h3 id="mysqlの設定">MySQLの設定</h3>
+<p>こちらは速度に関係ありそうな設定はなにも弄らずMySQLイメージそのままの初期設定にしている。</p>
+<h3 id="dbの状態">DBの状態</h3>
+<p>事前にシーダーで10GBくらいデータを入れておく。<br>
+毎回初期化するのは面倒なので、データは１回いれたらそのまま。<br>
+検証順で若干のデータ量の揺れはあるけど、微差なはずなのでそこは妥協。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#A6E22E">$</span><span style="color:#E6DB74"> ls</span><span style="color:#E6DB74"> database.sqlite</span><span style="color:#AE81FF"> -l</span><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#A6E22E">-rw-rw-r--</span><span style="color:#AE81FF"> 1</span><span style="color:#E6DB74"> tamakoma</span><span style="color:#E6DB74"> tamakoma</span><span style="color:#AE81FF"> 10694750208</span><span style="color:#E6DB74"> 12月</span><span style="color:#AE81FF"> 13</span><span style="color:#E6DB74"> 20:07</span><span style="color:#E6DB74"> database.sqlite</span></span></code></pre>
+<p>MySQLの方、ちょっと入れすぎた</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#A6E22E">mysql</span><span style="color:#F8F8F2">> </span><span style="color:#E6DB74">SELECT</span><span style="color:#F8F8F2"> </span></span>
+<span class="line"><span style="color:#A6E22E">    -</span><span style="color:#F8F8F2">>     </span><span style="color:#E6DB74">table_schema</span><span style="color:#E6DB74"> AS</span><span style="color:#E6DB74"> 'Database',</span></span>
+<span class="line"><span style="color:#A6E22E">    -</span><span style="color:#F8F8F2">>     </span><span style="color:#E6DB74">ROUND</span><span style="color:#F8F8F2">(</span><span style="color:#A6E22E">SUM(data_length</span><span style="color:#E6DB74"> +</span><span style="color:#E6DB74"> index_length</span><span style="color:#F8F8F2">) </span><span style="color:#E6DB74">/</span><span style="color:#AE81FF"> 1024</span><span style="color:#E6DB74"> /</span><span style="color:#AE81FF"> 1024</span><span style="color:#E6DB74"> /</span><span style="color:#E6DB74"> 1024,</span><span style="color:#AE81FF"> 2</span><span style="color:#F8F8F2">) AS </span><span style="color:#E6DB74">'Size (GB)'</span></span>
+<span class="line"><span style="color:#A6E22E">    -</span><span style="color:#F8F8F2">> </span><span style="color:#E6DB74">FROM</span><span style="color:#E6DB74"> information_schema.tables</span></span>
+<span class="line"><span style="color:#A6E22E">    -</span><span style="color:#F8F8F2">> </span><span style="color:#E6DB74">WHERE</span><span style="color:#E6DB74"> table_schema</span><span style="color:#E6DB74"> =</span><span style="color:#E6DB74"> 'laravel'</span></span>
+<span class="line"><span style="color:#A6E22E">    -</span><span style="color:#F8F8F2">> </span><span style="color:#E6DB74">GROUP</span><span style="color:#E6DB74"> BY</span><span style="color:#E6DB74"> table_schema</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#A6E22E">+----------+-----------+</span></span>
+<span class="line"><span style="color:#F92672">|</span><span style="color:#A6E22E"> Database</span><span style="color:#F92672"> |</span><span style="color:#A6E22E"> Size</span><span style="color:#F8F8F2"> (GB) </span><span style="color:#F92672">|</span></span>
+<span class="line"><span style="color:#A6E22E">+----------+-----------+</span></span>
+<span class="line"><span style="color:#F92672">|</span><span style="color:#A6E22E"> laravel</span><span style="color:#F92672">  |</span><span style="color:#A6E22E">     12.23</span><span style="color:#F92672"> |</span></span>
+<span class="line"><span style="color:#A6E22E">+----------+-----------+</span></span></code></pre>
+<p>articlesのレコード数は大体300万件くらいだった。</p>
+<h3 id="マイグレーションファイル">マイグレーションファイル</h3>
+<p>以下のマイグレーションファイルでusersとarticlesテーブルを作り利用する。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F92672">    public</span><span style="color:#66D9EF;font-style:italic"> function</span><span style="color:#A6E22E"> up</span><span style="color:#F8F8F2">()</span><span style="color:#F92672">:</span><span style="color:#F92672"> void</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        Schema</span><span style="color:#F92672">::</span><span style="color:#A6E22E">create</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'users'</span><span style="color:#F8F8F2">, </span><span style="color:#66D9EF;font-style:italic">function</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">Blueprint</span><span style="color:#F8F8F2"> $table) {</span></span>
+<span class="line"><span style="color:#F8F8F2">            $table</span><span style="color:#F92672">-></span><span style="color:#A6E22E">id</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">            $table</span><span style="color:#F92672">-></span><span style="color:#A6E22E">string</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'name'</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">            $table</span><span style="color:#F92672">-></span><span style="color:#A6E22E">string</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'email'</span><span style="color:#F8F8F2">)</span><span style="color:#F92672">-></span><span style="color:#A6E22E">unique</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">            $table</span><span style="color:#F92672">-></span><span style="color:#A6E22E">timestamp</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'email_verified_at'</span><span style="color:#F8F8F2">)</span><span style="color:#F92672">-></span><span style="color:#A6E22E">nullable</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">            $table</span><span style="color:#F92672">-></span><span style="color:#A6E22E">string</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'password'</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">            $table</span><span style="color:#F92672">-></span><span style="color:#A6E22E">rememberToken</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">            $table</span><span style="color:#F92672">-></span><span style="color:#A6E22E">timestamps</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">        });</span></span>
+<span class="line"><span style="color:#F8F8F2">	}</span></span></code></pre>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F92672">    public</span><span style="color:#66D9EF;font-style:italic"> function</span><span style="color:#A6E22E"> up</span><span style="color:#F8F8F2">()</span><span style="color:#F92672">:</span><span style="color:#F92672"> void</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        Schema</span><span style="color:#F92672">::</span><span style="color:#A6E22E">create</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'articles'</span><span style="color:#F8F8F2">, </span><span style="color:#66D9EF;font-style:italic">function</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">Blueprint</span><span style="color:#F8F8F2"> $table) {</span></span>
+<span class="line"><span style="color:#F8F8F2">            $table</span><span style="color:#F92672">-></span><span style="color:#A6E22E">id</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">            $table</span><span style="color:#F92672">-></span><span style="color:#A6E22E">foreignId</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'user_id'</span><span style="color:#F8F8F2">)</span><span style="color:#F92672">-></span><span style="color:#A6E22E">constrained</span><span style="color:#F8F8F2">()</span><span style="color:#F92672">-></span><span style="color:#A6E22E">cascadeOnDelete</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">            $table</span><span style="color:#F92672">-></span><span style="color:#A6E22E">string</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'title'</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">            $table</span><span style="color:#F92672">-></span><span style="color:#A6E22E">text</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'body'</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">            $table</span><span style="color:#F92672">-></span><span style="color:#A6E22E">timestamps</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">        });</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span></code></pre>
+<h3 id="dbの操作コード">DBの操作コード</h3>
+<p>以下のルートへアクセスすることで、適当なデータを作成 or 読み込みするようになっている。<br>
+記事のtitleやbodyは<code>'body' => Str::repeat("あ", 1000),</code>で固定値を生成。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#66D9EF;font-style:italic">Route</span><span style="color:#F92672">::</span><span style="color:#A6E22E">post</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'articles'</span><span style="color:#F8F8F2">, </span><span style="color:#66D9EF;font-style:italic">function</span><span style="color:#F8F8F2"> () {</span></span>
+<span class="line"><span style="color:#F8F8F2">    $article </span><span style="color:#F92672">=</span><span style="color:#66D9EF;font-style:italic"> Article</span><span style="color:#F92672">::</span><span style="color:#A6E22E">factory</span><span style="color:#F8F8F2">()</span><span style="color:#F92672">-></span><span style="color:#A6E22E">create</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#A6E22E"> response</span><span style="color:#F8F8F2">()</span><span style="color:#F92672">-></span><span style="color:#A6E22E">json</span><span style="color:#F8F8F2">($article</span><span style="color:#F92672">-></span><span style="color:#A6E22E">load</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'user'</span><span style="color:#F8F8F2">), </span><span style="color:#AE81FF">201</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">Route</span><span style="color:#F92672">::</span><span style="color:#A6E22E">get</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'articles'</span><span style="color:#F8F8F2">, </span><span style="color:#66D9EF;font-style:italic">function</span><span style="color:#F8F8F2"> () {</span></span>
+<span class="line"><span style="color:#F8F8F2">    $articles </span><span style="color:#F92672">=</span><span style="color:#66D9EF;font-style:italic"> Article</span><span style="color:#F92672">::</span><span style="color:#A6E22E">orderBy</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'id'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'desc'</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F92672">        -></span><span style="color:#A6E22E">limit</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">20</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F92672">        -></span><span style="color:#A6E22E">get</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#A6E22E"> response</span><span style="color:#F8F8F2">()</span><span style="color:#F92672">-></span><span style="color:#A6E22E">json</span><span style="color:#F8F8F2">($articles);</span></span>
+<span class="line"><span style="color:#F8F8F2">});</span></span></code></pre>
+<h2 id="検証する">検証する</h2>
+<h3 id="読み取りのテスト">読み取りのテスト</h3>
+<p>以下のk6コードでテストする。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="js"><code><span class="line"><span style="color:#F92672">import</span><span style="color:#F8F8F2"> http </span><span style="color:#F92672">from</span><span style="color:#E6DB74"> 'k6/http'</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">import</span><span style="color:#F8F8F2"> { sleep, check } </span><span style="color:#F92672">from</span><span style="color:#E6DB74"> 'k6'</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">export</span><span style="color:#66D9EF;font-style:italic"> const</span><span style="color:#F8F8F2"> options </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> {</span></span>
+<span class="line"><span style="color:#F8F8F2">  vus: </span><span style="color:#AE81FF">50</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">  duration: </span><span style="color:#E6DB74">'30s'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">export</span><span style="color:#F92672"> default</span><span style="color:#66D9EF;font-style:italic"> function</span><span style="color:#F8F8F2"> () {</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">  const</span><span style="color:#F8F8F2"> res </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> http.</span><span style="color:#A6E22E">get</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'http://localhost/api/articles'</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#A6E22E">  check</span><span style="color:#F8F8F2">(res, { </span><span style="color:#E6DB74">"status is 200"</span><span style="color:#F8F8F2">: (</span><span style="color:#FD971F;font-style:italic">res</span><span style="color:#F8F8F2">) </span><span style="color:#66D9EF;font-style:italic">=></span><span style="color:#F8F8F2"> res.status </span><span style="color:#F92672">===</span><span style="color:#AE81FF"> 200</span><span style="color:#F8F8F2"> });</span></span>
+<span class="line"><span style="color:#A6E22E">  sleep</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">0.1</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<p>やってることは</p>
+<ul>
+<li>30秒間</li>
+<li>50人同時に</li>
+<li>0.1秒ごとに読み取りリクエストを送る</li>
+</ul>
+<p>という感じ。</p>
+<p>結果は以下</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>項目</th><th>SQLite(delete)</th><th>SQLite(wal)</th><th>MySQL</th></tr></thead><tbody><tr><td>平均レスポンス</td><td>4.5ms</td><td>4.42ms</td><td>3.49ms</td></tr><tr><td>中央値レスポンス</td><td>4.16ms</td><td>4.05ms</td><td>3.19ms</td></tr><tr><td>最大値レスポンス</td><td>45.74</td><td>75.33</td><td>33.58ms</td></tr><tr><td>レスポンス成功率</td><td>100.00%</td><td>100.00%</td><td>100.00%</td></tr><tr><td>総リクエスト</td><td>14299</td><td>14312</td><td>14450</td></tr></tbody></table>
+<h3 id="書き込みのテスト">書き込みのテスト</h3>
+<p>以下のk6コードでテストする。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="js"><code><span class="line"><span style="color:#F92672">import</span><span style="color:#F8F8F2"> http </span><span style="color:#F92672">from</span><span style="color:#E6DB74"> 'k6/http'</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">import</span><span style="color:#F8F8F2"> { sleep, check } </span><span style="color:#F92672">from</span><span style="color:#E6DB74"> 'k6'</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">export</span><span style="color:#66D9EF;font-style:italic"> const</span><span style="color:#F8F8F2"> options </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> {</span></span>
+<span class="line"><span style="color:#F8F8F2">  vus: </span><span style="color:#AE81FF">10</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">  duration: </span><span style="color:#E6DB74">'30s'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">export</span><span style="color:#F92672"> default</span><span style="color:#66D9EF;font-style:italic"> function</span><span style="color:#F8F8F2"> () {</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">  const</span><span style="color:#F8F8F2"> res </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> http.</span><span style="color:#A6E22E">post</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'http://localhost/api/articles'</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#A6E22E">  check</span><span style="color:#F8F8F2">(res, { </span><span style="color:#E6DB74">"status is 201"</span><span style="color:#F8F8F2">: (</span><span style="color:#FD971F;font-style:italic">res</span><span style="color:#F8F8F2">) </span><span style="color:#66D9EF;font-style:italic">=></span><span style="color:#F8F8F2"> res.status </span><span style="color:#F92672">===</span><span style="color:#AE81FF"> 201</span><span style="color:#F8F8F2"> });</span></span>
+<span class="line"><span style="color:#A6E22E">  sleep</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">0.1</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<p>やってることは</p>
+<ul>
+<li>30秒間</li>
+<li>10人同時に</li>
+<li>0.1秒ごとに書き込みリクエストが来る</li>
+</ul>
+<p>という感じ。</p>
+<p>結果は以下</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>項目</th><th>SQLite(delete)</th><th>SQLite(wal)</th><th>MySQL</th></tr></thead><tbody><tr><td>平均レスポンス</td><td>11.62ms</td><td>5.27ms</td><td>14.82ms</td></tr><tr><td>中央値レスポンス</td><td>8.52ms</td><td>2.81ms</td><td>11.98ms</td></tr><tr><td>最大値レスポンス</td><td>840.39ms</td><td>440.04ms</td><td>322.94ms</td></tr><tr><td>レスポンス成功率</td><td>100.00%</td><td>100.00%</td><td>100.00%</td></tr><tr><td>総リクエスト</td><td>2677</td><td>2863</td><td>2603</td></tr></tbody></table>
+<p>MySQLよりSQLiteの方がこの値を見る分にはパフォーマンスが良いのにビビっている。</p>
+<h3 id="30同時接続の書き込みのテスト">30同時接続の書き込みのテスト</h3>
+<p>思ったよりSQLiteがいけるので、もう少し負荷を上げる。</p>
+<p>Articleの作成、編集、削除、トランザクションを詰め込んだコードを以下のように書き</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#66D9EF;font-style:italic">Route</span><span style="color:#F92672">::</span><span style="color:#A6E22E">post</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'articles2'</span><span style="color:#F8F8F2">, </span><span style="color:#66D9EF;font-style:italic">function</span><span style="color:#F8F8F2"> () {</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">    DB</span><span style="color:#F92672">::</span><span style="color:#A6E22E">transaction</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">function</span><span style="color:#F8F8F2"> () {</span></span>
+<span class="line"><span style="color:#F8F8F2">        $article </span><span style="color:#F92672">=</span><span style="color:#66D9EF;font-style:italic"> Article</span><span style="color:#F92672">::</span><span style="color:#A6E22E">factory</span><span style="color:#F8F8F2">()</span><span style="color:#F92672">-></span><span style="color:#A6E22E">create</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">        $article</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">title </span><span style="color:#F92672">=</span><span style="color:#E6DB74"> "いいいいいいい"</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">        $article</span><span style="color:#F92672">-></span><span style="color:#A6E22E">save</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">        $article</span><span style="color:#F92672">-></span><span style="color:#A6E22E">delete</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">    });</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#A6E22E"> response</span><span style="color:#F8F8F2">()</span><span style="color:#F92672">-></span><span style="color:#A6E22E">json</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'ok'</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">});</span></span></code></pre>
+<p>以下のように同時接続数を3倍の30にしたものでやってみる。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="js"><code><span class="line"><span style="color:#F92672">import</span><span style="color:#F8F8F2"> http </span><span style="color:#F92672">from</span><span style="color:#E6DB74"> 'k6/http'</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">import</span><span style="color:#F8F8F2"> { sleep, check } </span><span style="color:#F92672">from</span><span style="color:#E6DB74"> 'k6'</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">export</span><span style="color:#66D9EF;font-style:italic"> const</span><span style="color:#F8F8F2"> options </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> {</span></span>
+<span class="line"><span style="color:#F8F8F2">  vus: </span><span style="color:#AE81FF">30</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">  duration: </span><span style="color:#E6DB74">'30s'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">export</span><span style="color:#F92672"> default</span><span style="color:#66D9EF;font-style:italic"> function</span><span style="color:#F8F8F2"> () {</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">  const</span><span style="color:#F8F8F2"> res </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> http.</span><span style="color:#A6E22E">post</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'http://localhost/api/articles2'</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#A6E22E">  check</span><span style="color:#F8F8F2">(res, { </span><span style="color:#E6DB74">"status is 200"</span><span style="color:#F8F8F2">: (</span><span style="color:#FD971F;font-style:italic">res</span><span style="color:#F8F8F2">) </span><span style="color:#66D9EF;font-style:italic">=></span><span style="color:#F8F8F2"> res.status </span><span style="color:#F92672">===</span><span style="color:#AE81FF"> 200</span><span style="color:#F8F8F2"> });</span></span>
+<span class="line"><span style="color:#A6E22E">  sleep</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">0.1</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<p>結果は以下</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>項目</th><th>SQLite(delete)</th><th>SQLite(wal)</th><th>MySQL</th></tr></thead><tbody><tr><td>平均レスポンス</td><td>36.52ms</td><td>4.5ms</td><td>12ms</td></tr><tr><td>中央値レスポンス</td><td>6.63ms</td><td>2.31ms</td><td>9.73ms</td></tr><tr><td>最大値レスポンス</td><td>4.44s</td><td>480.4ms</td><td>506.89ms</td></tr><tr><td>レスポンス成功率</td><td>100.00%</td><td>100.00%</td><td>100.00%</td></tr><tr><td>総リクエスト</td><td>6579</td><td>8583</td><td>7989</td></tr></tbody></table>
+<p>SQLite(delete)は明らかにここらへんで処理能力が追いつけなくなっている。</p>
+<h3 id="50同時接続の書き込みテスト">50同時接続の書き込みテスト</h3>
+<p>30でもまだ行けそうなのでさっきのテストコードの同時書き込みを50にしてみる。</p>
+<p>結果は以下</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>項目</th><th>SQLite(delete)</th><th>SQLite(wal)</th><th>MySQL</th></tr></thead><tbody><tr><td>平均レスポンス</td><td>166.29ms</td><td>4.72ms</td><td>17.12ms</td></tr><tr><td>中央値レスポンス</td><td>52.66ms</td><td>2.35ms</td><td>14.16ms</td></tr><tr><td>最大値レスポンス</td><td>4.37s</td><td>597ms</td><td>600.29ms</td></tr><tr><td>レスポンス成功率</td><td>100.00%</td><td>100.00%</td><td>100.00%</td></tr><tr><td>総リクエスト</td><td>5644</td><td>14278</td><td>12762</td></tr></tbody></table>
+<p>SQLite(delete)はもう無理だけど、SQLite(wal)とMySQLはまだ戦えそう。</p>
+<h3 id="100同時接続の書き込みテスト">100同時接続の書き込みテスト</h3>
+<p>50でもまだいけそうなので、同時接続を100にしてみる。</p>
+<p>結果は以下</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>項目</th><th>SQLite(delete)</th><th>SQLite(wal)</th><th>MySQL</th></tr></thead><tbody><tr><td>平均レスポンス</td><td>343.3ms</td><td>16.76ms</td><td>19.36ms</td></tr><tr><td>中央値レスポンス</td><td>249.58ms</td><td>4.61ms</td><td>14.14ms</td></tr><tr><td>最大値レスポンス</td><td>3.85s</td><td>1.73s</td><td>553.03ms</td></tr><tr><td>レスポンス成功率</td><td>100.00%</td><td>100.00%</td><td>100.00%</td></tr><tr><td>総リクエスト</td><td>6809</td><td>25636</td><td>25051</td></tr></tbody></table>
+<p>私の環境だとだいたいここらへんが限界そう。</p>
+<h2 id="まとめ">まとめ</h2>
+<p>私の環境では<br>
+<strong>SQLite(wal) >= MySQL > SQLite(delete)</strong><br>
+という順でパフォーマンスが良かった。</p>
+<p>なぜSQLiteの方がパフォーマンスが出たかなんだけど、MySQLの方は別コンテナで動かしているのでその分コンテナ間の通信に時間がかかっちゃってたんだと思う。ただ、そのコンテナ間通信が要らないというのもSQLiteの強みなので、しっかりその強みが見れたのかなと。</p>
+<p>30秒間で25636リクエスト = 1秒間に850リクエストくらいあの書き込みを処理できるってことなので、思ったよりSQLiteすごい。</p>
+<h3 id="sqliteとサーバー型のdbの使い分け">SQLiteとサーバー型のDBの使い分け</h3>
+<p>じゃあ全部SQLiteで良いのかっていうとそういうわけでもない。<br>
+実は<a href="https://sqlite.org/whentouse.html" rel="noopener noreferrer" target="_blank">SQLiteの公式サイト</a>に使い分けに関しては載ってて、以下の場合はSQLiteよりMySQLとかの方が良い</p>
+<ol>
+<li>SQLiteのファイルとアプリケーションサーバーが同じ物理デバイス上にない</li>
+<li>同時書き込みが多い</li>
+<li>281テラバイト以上のデータを扱いたい</li>
+</ol>
+<p>今回2番の同時書き込みに関してはかなり余裕があることがわかったので、サーバーが1台で足りる状態なら私は今後SQLiteを使うかなと思う。</p>
+<p>ただ、やっぱりサーバーをスケーリングしてSQLiteをネットワークファイルシステムに置いて〜みたいになってくると<a href="https://sqlite.org/whentouse.html#:~:text=Client/Server%20Applications" rel="noopener noreferrer" target="_blank">SQLiteは仕組み上不整合が起きる</a>みたいなので、その場合はMySQLに移ったりする必要があるのかなと。</p>
+<p>以上です。</p></section><aside class="w-[300px] hidden lg:block shrink-0" data-astro-cid-e2rqhpi3><nav class="sticky top-16 h-fit  bg-white py-24 pl-24 rounded-md" data-astro-cid-tqqy2vud><section data-astro-cid-tqqy2vud><header data-astro-cid-tqqy2vud><h2 class="font-bold text-lg" data-astro-cid-tqqy2vud>目次</h2></header></section><div class="article-toc scroll-smooth mt-4 py-16 pr-24 overflow-y-auto max-h-[90svh]" data-astro-cid-tqqy2vud></div></nav><script type="module" src="/_astro/ArticleTOC.astro_astro_type_script_index_0_lang.mX9zJvT_.js"></script></aside></div><div class="mt-40 mb-64" data-pagefind-ignore data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Larave"># Larave</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=SQLite"># SQLite</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=MySQL"># MySQL</a></div></div></article></main></div><footer class="pb-40 px-24 md:px-0 bg-white"><hr class="mx-auto w-2/3 md:w-1/2 my-24 h-[1px] border-0 bg-slate-400"><div class="mx-8 md:mx-64"><a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" target="_blank" rel="noopener noreferrer"><img src="/_astro/by-nc.DpMeGFcJ_ZF0RGK.svg" alt="クリエイティブコモンズ 表示-非営利 4.0 ライセンス" loading="lazy" decoding="async" width="125" height="44"></a><p class="text-xs md:text-sm">本サイト「<a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">tamakoma.com</a>」から提供されるブログ内の文章、プログラミングコードは、<a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">クリエイティブ・コモンズ 表示-非営利 4.0 ライセンス</a>の下に提供されます。</p><p class="text-xs md:text-sm">音楽や画像などのメディアコンテンツにはこのライセンスは適用されません。</p></div><p class="text-center text-sm"><a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Top</a> / <a href="/contact" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Contact</a> / <a href="/feed.xml" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">RSS Feed</a></p><p class="mt-24 text-center">&copy; tamakoma 2018-2026</p></footer></div></body></html>

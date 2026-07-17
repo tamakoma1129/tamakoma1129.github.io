@@ -1,0 +1,335 @@
+<!DOCTYPE html><html lang="ja" class="text-slate-700"><head><meta charset="utf-8"><title>Noitaで重音テトmodをつくる | tamakoma.com</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v7.0.3"><meta name="twitter:card" content="summary"><meta property="og:title" content="Noitaで重音テトmodをつくる"><meta property="og:type" content="website"><meta property="og:url" content="https://tamakoma.com/blog/noita-mod-angry-teto/"><meta property="og:image" content="/_astro/mikuteto-OGP.DYQebPDj.png"><meta property="og:description" content="学んだことを残すブログ"><meta property="og:site_name" content="tamakoma.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.0.1/dist/css/yakuhanjp_s.css"><link rel="sitemap" href="/sitemap-index.xml"><link rel="stylesheet" href="/_astro/BaseLayout.Ddu7R_5r.css"><style>/*! tailwindcss v4.2.2 | MIT License | https://tailwindcss.com */
+.article-toc[data-astro-cid-tqqy2vud] .toc-link{font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));display:block}@media (hover:hover){.article-toc[data-astro-cid-tqqy2vud] .toc-link:hover{color:var(--color-slate-600,oklch(44.6% .043 257.281));text-decoration-line:underline}}.article-toc[data-astro-cid-tqqy2vud] .toc-link.to-link-active{color:var(--color-miku-500,oklch(63.7% .1071 185.34))}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H2){margin-left:var(--spacing-24,24px)}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H3){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:10px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H4){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:20px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H5){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:30px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H6){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:40px}.article-toc[data-astro-cid-tqqy2vud] .toc-list{list-style-type:decimal;list-style-position:outside}@layer properties{@supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))){*,:before,:after,::backdrop{--tw-font-weight:initial;--tw-border-style:solid}}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a{--tw-font-weight:var(--font-weight-semibold,600);font-weight:var(--font-weight-semibold,600);color:var(--color-miku-500,oklch(63.7% .1071 185.34));text-underline-offset:2px;text-decoration-line:underline}@media (hover:hover){article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a:hover{color:var(--color-miku-700,oklch(50.5% .0901 187.01))}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] code:not(pre>code){margin-inline:var(--spacing-4,4px);border-radius:var(--radius-md,.375rem);border-style:var(--tw-border-style);background-color:var(--color-sumi-100,oklch(97% 0 0));padding-inline:var(--spacing-4,4px);--tw-font-weight:var(--font-weight-normal,400);font-weight:var(--font-weight-normal,400);color:var(--color-black,#000);border-width:0;padding-block:2px}@property --tw-font-weight{syntax:"*";inherits:false}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid}
+</style><script type="module" src="/_astro/page.DCEeCLip.js"></script><script>!(function(w,p,f,c){if(!window.crossOriginIsolated && !navigator.serviceWorker) return;c=w[p]=Object.assign(w[p]||{},{"lib":"/~partytown/","debug":false});c[f]=(c[f]||[])})(window,'partytown','forward');/* Partytown 0.13.2 - MIT QwikDev */
+const t={preserveBehavior:!1},e=e=>{if("string"==typeof e)return[e,t];const[n,r=t]=e;return[n,{...t,...r}]},n=Object.freeze((t=>{const e=new Set;let n=[];do{Object.getOwnPropertyNames(n).forEach((t=>{"function"==typeof n[t]&&e.add(t)}))}while((n=Object.getPrototypeOf(n))!==Object.prototype);return Array.from(e)})());!function(t,r,o,i,a,s,c,l,d,p,u=t,f){function h(){f||(f=1,"/"==(c=(s.lib||"/~partytown/")+(s.debug?"debug/":""))[0]&&(d=r.querySelectorAll('script[type="text/partytown"]'),i!=t?i.dispatchEvent(new CustomEvent("pt1",{detail:t})):(l=setTimeout(v,(null==s?void 0:s.fallbackTimeout)||1e4),r.addEventListener("pt0",w),a?y(1):o.serviceWorker?o.serviceWorker.register(c+(s.swPath||"partytown-sw.js"),{scope:c}).then((function(t){t.active?y():t.installing&&t.installing.addEventListener("statechange",(function(t){"activated"==t.target.state&&y()}))}),console.error):v())))}function y(e){p=r.createElement(e?"script":"iframe"),t._pttab=Date.now(),e||(p.style.display="block",p.style.width="0",p.style.height="0",p.style.border="0",p.style.visibility="hidden",p.setAttribute("aria-hidden",!0)),p.src=c+"partytown-"+(e?"atomics.js?v=0.13.2":"sandbox-sw.html?"+t._pttab),r.querySelector(s.sandboxParent||"body").appendChild(p)}function v(n,o){for(w(),i==t&&(s.forward||[]).map((function(n){const[r]=e(n);delete t[r.split(".")[0]]})),n=0;n<d.length;n++)(o=r.createElement("script")).innerHTML=d[n].innerHTML,o.nonce=s.nonce,r.head.appendChild(o);p&&p.parentNode.removeChild(p)}function w(){clearTimeout(l)}s=t.partytown||{},i==t&&(s.forward||[]).map((function(r){const[o,{preserveBehavior:i}]=e(r);u=t,o.split(".").map((function(e,r,o){var a;u=u[o[r]]=r+1<o.length?u[o[r]]||(a=o[r+1],n.includes(a)?[]:{}):(()=>{let e=null;if(i){const{methodOrProperty:n,thisObject:r}=((t,e)=>{let n=t;for(let t=0;t<e.length-1;t+=1)n=n[e[t]];return{thisObject:n,methodOrProperty:e.length>0?n[e[e.length-1]]:void 0}})(t,o);"function"==typeof n&&(e=(...t)=>n.apply(r,...t))}return function(){let n;return e&&(n=e(arguments)),(t._ptf=t._ptf||[]).push(o,arguments),n}})()}))})),"complete"==r.readyState?h():(t.addEventListener("DOMContentLoaded",h),t.addEventListener("load",h))}(window,document,navigator,top,window.crossOriginIsolated);;(e=>{e.addEventListener("astro:before-swap",e=>{let r=document.body.querySelector("iframe[src*='/~partytown/']");if(r)e.newDocument.body.append(r)})})(document);</script></head><body class="bg-repeat bg-white anywhere" style="background-image: url(/_astro/mikuteto-gray.Dix8k1Tp.gif)"><div class="min-h-screen flex flex-col justify-between" id="container"><div><header><nav class="flex flex-col items-center pt-40 pb-24"><a href="/blog" class="text-3xl md:text-5xl font-bold mb-40 text-slate-400 drop-shadow-2xl">tamakoma.com</a><div class="w-full flex justify-center [&amp;&gt;a]:bg-white [&amp;&gt;a]:border-slate-400"><a href="/" class="block py-8 px-16 text-sumi-600 rounded-l border-l border-y">home</a><a href="/blog/" class="block py-8 px-16 text-sumi-600 border">blog</a><a href="/about/" class="block py-8 px-16 text-sumi-600 rounded-r border-r border-y">about</a></div></nav></header><main class="bg-slate-100 w-full flex justify-end" data-astro-cid-e2rqhpi3><article class="grow" data-pagefind-body data-astro-cid-e2rqhpi3><header class="mt-24 w-11/12 max-w-[700px] mx-auto" data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-pagefind-weight="6.7" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-pagefind-weight="6.5" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=noita"># noita</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=mod"># mod</a></div><h1 class="text-center text-xl md:text-3xl font-bold px-24 mt-40" data-astro-cid-e2rqhpi3>Noitaで重音テトmodをつくる</h1><div class="text-slate-400 text-sm gap-16 flex justify-center mt-24" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>投稿日 <time datetime="2025-05-31T00:00:00.000Z">2025/05/31</time></span><span data-astro-cid-e2rqhpi3>最終更新日 <time datetime="2025-08-23T00:00:00.000Z">2025/08/23</time></span></div></header><hr class="bg-slate-200 rounded-full mx-auto h-4 my-40 w-40 border-0"><div class="flex mx-auto justify-center gap-40" data-astro-cid-e2rqhpi3><section id="article-body" class="
+                            prose prose-neutral
+                            prose-blockquote:border-miku-400 prose-blockquote:font-normal
+                            w-0 grow
+                            max-w-[650px] bg-white box-content px-16 md:px-40 py-24 rounded-md
+                            " data-astro-cid-e2rqhpi3><p>2025年05月31日</p>
+<p><a href="https://store.steampowered.com/app/881100/Noita/?l=japanese" rel="noopener noreferrer" target="_blank">Noita</a>という激おもろゲームがあるんだけど、modを作ったので簡単な作り方なども含めて残しておく。</p>
+<p>作ったmodは<a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3490848589" rel="noopener noreferrer" target="_blank">Angry Teto</a>という一緒に戦ってくれるアングリーゴーストの見た目を重音テトにリプレイスするもの。<br>
+<img alt="angry_teto.gif" loading="lazy" decoding="async" width="943" height="638" src="/_astro/angry_teto.AP2DkbLw_Z20El6z.webp" srcset=""></p>
+<p>既にメインキャラを<a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2770087781&#x26;searchtext=miku" rel="noopener noreferrer" target="_blank">初音ミクに変える素晴らしいmod</a>は存在していて、あとは重音テトとも一緒に戦えたら嬉しいよねという理由で。</p>
+<p>【追記（2025年8月23日）】<br>
+Noitaのランキングを見てみたら、Angry Tetoが最も人気の一位になってました！<br>
+<img alt="image1.webp" loading="lazy" decoding="async" width="1378" height="950" src="/_astro/image1.DikdZoaS_248mAQ.webp" srcset=""></p>
+<p>テトさん人気が本当に凄まじい。<br>
+使っていただきありがとうございますm(__)m<br>
+<img alt="image2.webp" loading="lazy" decoding="async" width="960" height="604" src="/_astro/image2.C39bEX8W_1oDm1g.webp" srcset=""></p>
+<h2 id="前提">前提</h2>
+<ul>
+<li>Windows環境の話です</li>
+<li>PCでのプログラミング経験がある前提で話しています</li>
+<li>私は今回使う<a href="https://www.lua.org/" rel="noopener noreferrer" target="_blank">lua</a>というプログラミング言語も、Noitaのmod作成も未経験でしたので未熟な部分あると思われます</li>
+</ul>
+<h2 id="公式のドキュメントと利用許諾書を読む">公式のドキュメントと利用許諾書を読む</h2>
+<p>Noitaをインストールすると、インストールしたNoitaフォルダ内に<br>
+<code>Noita\tools_modding</code>のようにtools_moddingフォルダができている。</p>
+<p>これが公式の用意しているドキュメント群で、公式情報をみたい場合は主にここを参照することになる。</p>
+<p>以下は読むことが必須</p>
+<ul>
+<li><code>READ_ME_FIRST.txt</code></li>
+<li><code>Noita-ModdingAgreement-vXXX.rtf</code>: Mod同意書</li>
+</ul>
+<p>また、以下のファイル/フォルダも必要に応じて読むと良さげ</p>
+<ul>
+<li><code>component_documentation.txt</code>
+<ul>
+<li>各コンポーネントのメンバ変数とかその説明とかが書いてある</li>
+</ul>
+</li>
+<li><code>lua_api_documentation.html</code>
+<ul>
+<li>Noitaの提供するAPIの一覧が書いてある</li>
+</ul>
+</li>
+<li><code>lua_debugging.txt</code>
+<ul>
+<li>Luaのデバッグ方法について書いてある</li>
+</ul>
+</li>
+<li><code>noita-fmod-project</code>フォルダ
+<ul>
+<li>音をいじりたい場合はこのフォルダ内を参照する必要あり</li>
+</ul>
+</li>
+</ul>
+<h2 id="mod作成の環境構築まで">Mod作成の環境構築まで</h2>
+<p>恐らく、Lua言語をいじるのであれば<a href="https://github.com/unknownworlds/decoda" rel="noopener noreferrer" target="_blank">Decoda</a>というIDEが良いのだけど、今回は大規模なModを作成するわけでないのでVSCodeを利用する。</p>
+<p>Gitとかは説明しないけど、使った方が良いので適当なところで各自でやってもらう感じで。</p>
+<h3 id="dataフォルダを生成する">dataフォルダを生成する</h3>
+<p><code>data</code>というModを作りやすくするためにNoitaが分離してくれたフォルダがある。</p>
+<p>このdataフォルダ内にMod製作者が弄りたいであろうファイルが管理されていて、これ等を上書きする形でプログラムや見た目を簡単に改造できるようになっている感じ。</p>
+<p>以下の手順でdataフォルダを生成する</p>
+<ol>
+<li><code>Noita\tools_modding</code>の中身を<code>Noita</code>フォルダに全てコピペ</li>
+<li><code>data_wak_unpack.bat</code>を実行<br>
+こうすると私の場合は<code>AppData\LocalLow\Nolla_Games_Noita\data</code>にdataフォルダが生成された。</li>
+</ol>
+<h3 id="modを構築するフォルダを作る">modを構築するフォルダを作る</h3>
+<p>`Noita\mods\に好きな名前でフォルダを作る。</p>
+<p>今回私の場合はだと<code>Noita\mods\angry_teto\</code>のような感じでフォルダを作成した。</p>
+<h2 id="modを制作する">Modを制作する</h2>
+<p>作成したmod構築用フォルダをVSCodeやらで開いて、作業していく。</p>
+<p>また、modの具体的な構築例をみたい場合は公式のmodで既に用意されている</p>
+<ul>
+<li><code>Noita\mods\example</code></li>
+<li><code>Noita\mods\nightmare</code><br>
+を参考にすると良い。<br>
+もし、具体的に制作したいmodがあり、それに似たModが既に配布されているのであれば、その配布されているModを参照するのも大いにあり。</li>
+</ul>
+<h3 id="modxmlを作成する">mod.xmlを作成する</h3>
+<p>Modを読み込むのに必須なファイルである<code>mod.xml</code>を作成する。</p>
+<p>もしかしたらバージョンによって中身が変わるかもなので、具体的な例は<code>Noita\mods\example\mod.xml</code>を参照するのが良いと思われる。</p>
+<p>私の場合は以下</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="color:#F8F8F2">&#x3C;</span><span style="color:#F92672">Mod</span></span>
+<span class="line"><span style="color:#A6E22E">	name</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"Angry Teto"</span></span>
+<span class="line"><span style="color:#A6E22E">	description</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"Changes Angry Ghost to Angry Teto"</span></span>
+<span class="line"><span style="color:#A6E22E">	request_no_api_restrictions</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"0"</span></span>
+<span class="line"><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">&#x3C;/</span><span style="color:#F92672">Mod</span><span style="color:#F8F8F2">></span></span></code></pre>
+<p><code>request_no_api_restrictions</code>は、基本的にmodでの利用が禁止されているLuaAPIを利用したい場合のみ<code>1</code>にする。<br>
+<code>1</code>にすると自由度が増す代わりに、ワークショップで配布できなくなるので注意。</p>
+<h3 id="リスポーン時にangry_ghostパークを所持する部分を作る">リスポーン時にangry_ghostパークを所持する部分を作る</h3>
+<p>今回作るmodはパークangry_ghostの見た目を変えるmodなので、初期リスポーン時にこのパークを所持しておきたい。</p>
+<p>丁度、Steamのワークショップで一番人気のあるmodの<a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2182627060" rel="noopener noreferrer" target="_blank">Edit Wands Always</a>を参考にすれば良さそう。</p>
+<p>ワークショップのmodは以下の手順でフォルダを閲覧できる</p>
+<ul>
+<li>該当modをワークショップからサブスクライブ</li>
+<li>該当modのIDをURLとかから確認する</li>
+<li><code>Noitaが入っているディスク\SteamLibrary\steamapps\workshop\content\881100\該当modのID</code>がそのmodフォルダ
+<ul>
+<li><code>881100</code>がNoitaのゲームID</li>
+<li>Edit Wands AlwaysのIDは<code>2182627060</code></li>
+</ul>
+</li>
+</ul>
+<p>Edit Wands Alwaysのmodフォルダを開くと何個かファイルが存在するけど、大事なのは</p>
+<ul>
+<li><code>init.lua</code></li>
+<li><code>files/remove.lua</code><br>
+の２つだけなので、安心。</li>
+</ul>
+<h4 id="initlua">init.lua</h4>
+<p>コード見せたほうが早いと思うので見せる。<br>
+以下のような感じで最初からangry_ghostを所持している。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="lua"><code><span class="line"><span style="color:#66D9EF">dofile_once</span><span style="color:#F8F8F2">( </span><span style="color:#E6DB74">"data/scripts/lib/utilities.lua" </span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#66D9EF">dofile_once</span><span style="color:#F8F8F2">( </span><span style="color:#E6DB74">"data/scripts/perks/perk_list.lua" </span><span style="color:#F8F8F2">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">-- リスポーン時の実行関数</span></span>
+<span class="line"><span style="color:#F92672">function</span><span style="color:#A6E22E"> OnPlayerSpawned</span><span style="color:#F8F8F2">(</span><span style="color:#FD971F;font-style:italic">player_entity</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#88846F">	-- 複数回実行されないようにフラグ管理</span></span>
+<span class="line"><span style="color:#F92672">    if</span><span style="color:#66D9EF"> GameHasFlagRun</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"angry_teto_already_run"</span><span style="color:#F8F8F2">) </span><span style="color:#F92672">then</span></span>
+<span class="line"><span style="color:#F92672">        return</span></span>
+<span class="line"><span style="color:#F92672">    end</span></span>
+<span class="line"><span style="color:#66D9EF">    GameAddFlagRun</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"angry_teto_already_run"</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">    local</span><span style="color:#F8F8F2"> perk_id  </span><span style="color:#F92672">=</span><span style="color:#E6DB74"> "ANGRY_GHOST"</span></span>
+<span class="line"><span style="color:#F92672">    local</span><span style="color:#F8F8F2"> perk_data </span><span style="color:#F92672">=</span><span style="color:#66D9EF"> get_perk_with_id</span><span style="color:#F8F8F2">(perk_list, perk_id)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">	-- 恐らく必要なフラグ建て(Edit Wands Alwaysにあったのでそのまま流用)</span></span>
+<span class="line"><span style="color:#66D9EF">    GameAddFlagRun</span><span style="color:#F8F8F2">( </span><span style="color:#66D9EF">get_perk_picked_flag_name</span><span style="color:#F8F8F2">(perk_id) )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">	-- アングリーゴーストを出現させる関数の実行</span></span>
+<span class="line"><span style="color:#F8F8F2">    perk_data.</span><span style="color:#66D9EF">func</span><span style="color:#F8F8F2">( </span><span style="color:#AE81FF">nil</span><span style="color:#F8F8F2">, player_entity, </span><span style="color:#AE81FF">nil</span><span style="color:#F8F8F2"> )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">	-- 取得パーク一覧に追加</span></span>
+<span class="line"><span style="color:#F92672">    local</span><span style="color:#F8F8F2"> ui </span><span style="color:#F92672">=</span><span style="color:#66D9EF"> EntityCreateNew</span><span style="color:#F8F8F2">( </span><span style="color:#E6DB74">"" </span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#66D9EF">    EntityAddComponent</span><span style="color:#F8F8F2">( ui, </span><span style="color:#E6DB74">"UIIconComponent"</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#66D9EF">    EntityAddComponent</span><span style="color:#F8F8F2">( ui, </span><span style="color:#E6DB74">"UIIconComponent"</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#F8F8F2">        {</span></span>
+<span class="line"><span style="color:#F8F8F2">            name              </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> perk_data.ui_name,</span></span>
+<span class="line"><span style="color:#F8F8F2">            description       </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> perk_data.ui_description,</span></span>
+<span class="line"><span style="color:#F8F8F2">            icon_sprite_file  </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> perk_data.ui_icon</span></span>
+<span class="line"><span style="color:#F8F8F2">        }</span></span>
+<span class="line"><span style="color:#F8F8F2">    )</span></span>
+<span class="line"><span style="color:#66D9EF">    EntityAddChild</span><span style="color:#F8F8F2">( player_entity, ui )</span></span>
+<span class="line"><span style="color:#F92672">end</span></span></code></pre>
+<p><code>OnPlayerSpawned()</code>, <code>GameHasFlagRun()</code>, <code>perk_data.func()</code>とかどこで定義されてんの？　っていう関数がいっぱい出てくるんだけど、マジで頑張って探すしかないっぽい。</p>
+<p>ただ、今回はEdit Wands Alwaysのコードを参考にしているのである程度何の関数が必要で、それがどこに定義されているのかあたりを付けられる感じ。<br>
+<code>OnPlayerSpawned()</code>とかは公式modであるexampleのinit.luaに書いてあったりする。<br>
+<code>GameHasFlagRun()</code>は<code>lua_api_documentation.html</code>に説明ある。<br>
+<code>UIIconComponent</code>も<code>component_documentation.txt</code>に説明ある。</p>
+<p>どこに説明がなくても、<code>data</code>フォルダ内に大体処理はあるので全ファイル探索とかすればどうにかはなりそう。</p>
+<h3 id="見た目を変える">見た目を変える</h3>
+<p>今回はangry_ghostの見た目を変えたいので以下のファイルを上書きする形になる</p>
+<ul>
+<li><code>data\items_gfx\perks\angry_ghost.png</code>
+<ul>
+<li>パークのアイコン</li>
+</ul>
+</li>
+<li><code>data\projectiles_gfx\angry_ghost.png</code>
+<ul>
+<li>angry_ghostの見た目部分のスプライト</li>
+</ul>
+</li>
+<li><code>data\ui_gfx\perk_icons\angry_ghost.png</code>
+<ul>
+<li>UIのアイコン</li>
+</ul>
+</li>
+</ul>
+<p>この３つを自分のmodフォルダ内に作る。<br>
+つまり以下のような感じ</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>.</span></span>
+<span class="line"><span>|-- data</span></span>
+<span class="line"><span>|   |-- items_gfx</span></span>
+<span class="line"><span>|   |   `-- perks</span></span>
+<span class="line"><span>|   |       `-- angry_ghost.png</span></span>
+<span class="line"><span>|   |-- projectiles_gfx</span></span>
+<span class="line"><span>|   |   `-- angry_ghost.png</span></span>
+<span class="line"><span>|   `-- ui_gfx</span></span>
+<span class="line"><span>|       `-- perk_icons</span></span>
+<span class="line"><span>|           `-- angry_ghost.png</span></span>
+<span class="line"><span>|-- init.lua</span></span>
+<span class="line"><span>`-- mod.xml</span></span></code></pre>
+<p>ここはもう気合で元絵を参考にドット絵を描くしかない。</p>
+<p>ドットの数がそのままNoita内での大きさになるので、注意。<br>
+そのため、アイコン系は元画像と同じピクセル数が良い。</p>
+<p>スプライト部分は元画像が8x8を1フレームとするスプライトでも、xmlで</p>
+<ul>
+<li>特定のアクションを何フレームにするか</li>
+<li>1フレームを何ピクセルx何ピクセルにするか<br>
+等を決められる。</li>
+</ul>
+<p>ただ、どちらにしろ画像の大きさ＝ゲーム内での大きさなのは注意。</p>
+<h4 id="xmlを調整する">XMLを調整する</h4>
+<p>私の場合、スプライトの1フレームの大きさが<code>10x9</code>→<code>33x31</code>と3倍くらいに大きくなったのでXMLをいじらないと正常に表示されない。</p>
+<p>今回の場合は以下のファイルをいじる形になる</p>
+<ul>
+<li><code>data\entities\misc\perks\angry_ghost.xml</code></li>
+<li><code>data\projectiles_gfx\angry_ghost.xml</code></li>
+</ul>
+<p>例えば、<code>data\projectiles_gfx\angry_ghost.xml</code>では以下のようにAnimation毎にスプライトの適用方法を定めていたり、offsetの指定があったりするので自分の画像の大きさに合わせる。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="diff"><code><span class="line"><span style="color:#F8F8F2"> &#x3C;Sprite </span></span>
+<span class="line"><span style="color:#F8F8F2">   default_animation="float_right" </span></span>
+<span class="line"><span style="color:#F8F8F2">   filename="data/projectiles_gfx/angry_ghost.png" </span></span>
+<span class="line"><span style="color:#F92672"><span style="user-select: none;">-</span>  offset_x="4.5" </span></span>
+<span class="line"><span style="color:#F92672"><span style="user-select: none;">-</span>  offset_y="5" ></span></span>
+<span class="line"><span style="color:#A6E22E"><span style="user-select: none;">+</span>  offset_x="15.5" </span></span>
+<span class="line"><span style="color:#A6E22E"><span style="user-select: none;">+</span>  offset_y="16.5" ></span></span>
+<span class="line"><span style="color:#F8F8F2"> </span></span>
+<span class="line"><span style="color:#F8F8F2">   &#x3C;RectAnimation </span></span>
+<span class="line"><span style="color:#F8F8F2">     name="float_right" </span></span>
+<span class="line"><span style="color:#F8F8F2">     frame_count="8" </span></span>
+<span class="line"><span style="color:#F92672"><span style="user-select: none;">-</span>    frame_height="10" </span></span>
+<span class="line"><span style="color:#A6E22E"><span style="user-select: none;">+</span>    frame_height="33" </span></span>
+<span class="line"><span style="color:#F8F8F2">     frame_wait="0.14" </span></span>
+<span class="line"><span style="color:#F92672"><span style="user-select: none;">-</span>    frame_width="9" </span></span>
+<span class="line"><span style="color:#F92672"><span style="user-select: none;">-</span>    frames_per_row="12" </span></span>
+<span class="line"><span style="color:#A6E22E"><span style="user-select: none;">+</span>    frame_width="31" </span></span>
+<span class="line"><span style="color:#A6E22E"><span style="user-select: none;">+</span>    frames_per_row="8" </span></span>
+<span class="line"><span style="color:#F8F8F2">     pos_x="0" </span></span>
+<span class="line"><span style="color:#F8F8F2">     pos_y="0" ></span></span>
+<span class="line"><span style="color:#F8F8F2">   &#x3C;/RectAnimation></span></span>
+<span class="line"><span style="color:#F8F8F2">...</span></span></code></pre>
+<p>この<code>RectAnimation</code>では</p>
+<ul>
+<li>name: アニメーションの名前</li>
+<li>frame_count: 何フレームのアニメーションか</li>
+<li>frame_height: 1フレームあたりの高さ</li>
+<li>frame_wait: 1フレームあたりの長さ</li>
+<li>frame_width: 1フレームあたりの横幅</li>
+<li>frames_per_row: スプライト上で1行に並んでいるフレームの数</li>
+<li>pos_x, pos_y: スプライト画像内での開始位置<br>
+が決まっているっぽい。</li>
+</ul>
+<p>他にも<code>data\entities\misc\perks\angry_ghost.xml</code>で</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="diff"><code><span class="line"><span style="color:#F8F8F2"> &#x3C;Entity tags="angry_ghost" ></span></span>
+<span class="line"><span style="color:#F8F8F2"> 	&#x3C;HitboxComponent </span></span>
+<span class="line"><span style="color:#F8F8F2">         _tags="enabled_in_world"</span></span>
+<span class="line"><span style="color:#F92672"><span style="user-select: none;">-</span>        aabb_min_x="-4" </span></span>
+<span class="line"><span style="color:#F92672"><span style="user-select: none;">-</span>        aabb_max_x="4" </span></span>
+<span class="line"><span style="color:#F92672"><span style="user-select: none;">-</span>        aabb_min_y="-3" </span></span>
+<span class="line"><span style="color:#F92672"><span style="user-select: none;">-</span>        aabb_max_y="3"</span></span>
+<span class="line"><span style="color:#A6E22E"><span style="user-select: none;">+</span>        aabb_min_x="-16" </span></span>
+<span class="line"><span style="color:#A6E22E"><span style="user-select: none;">+</span>        aabb_max_x="16" </span></span>
+<span class="line"><span style="color:#A6E22E"><span style="user-select: none;">+</span>        aabb_min_y="-17" </span></span>
+<span class="line"><span style="color:#A6E22E"><span style="user-select: none;">+</span>        aabb_max_y="17"</span></span>
+<span class="line"><span style="color:#F8F8F2">     >&#x3C;/HitboxComponent></span></span></code></pre>
+<p>のようにヒットボックスを調整して完了。</p>
+<h2 id="modをworkshopで公開する">ModをWorkShopで公開する</h2>
+<p>NoitaはWorkShopでModを世界へ共有できるので、やってみよう。</p>
+<h3 id="workshopxmlをつくる">workshop.xmlをつくる</h3>
+<p>MODフォルダ内に <code>workshop.xml</code> というファイルを作成して説明文を書く</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="color:#F8F8F2">    &#x3C;</span><span style="color:#F92672">Mod</span></span>
+<span class="line"><span style="color:#A6E22E">        name</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"YOUR_MOD_NAME_HERE"</span></span>
+<span class="line"><span style="color:#A6E22E">        description</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"YOUR_MOD_DESCRIPTION_HERE"</span></span>
+<span class="line"><span style="color:#A6E22E">        tags</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"TAGS"</span></span>
+<span class="line"><span style="color:#A6E22E">        dont_upload_folders</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"FOLDER_TO_IGNORE1|FOLDER_TO_IGNORE2"</span></span>
+<span class="line"><span style="color:#A6E22E">        dont_upload_files</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"FILE_TO_IGNORE1|FILE_TO_IGNORE2"</span></span>
+<span class="line"><span style="color:#F8F8F2">    > </span></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;/</span><span style="color:#F92672">Mod</span><span style="color:#F8F8F2">></span></span></code></pre>
+<p>tagsは記事書いている時点で</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>        gameplay</span></span>
+<span class="line"><span>        graphics</span></span>
+<span class="line"><span>        quality of life</span></span>
+<span class="line"><span>        translations</span></span>
+<span class="line"><span>        perks</span></span>
+<span class="line"><span>        spells</span></span>
+<span class="line"><span>        player characters</span></span>
+<span class="line"><span>        loadouts</span></span>
+<span class="line"><span>        biomes</span></span>
+<span class="line"><span>        total conversions</span></span>
+<span class="line"><span>        game modes</span></span>
+<span class="line"><span>        creatures</span></span>
+<span class="line"><span>        bosses</span></span>
+<span class="line"><span>        alchemy</span></span>
+<span class="line"><span>        tweaks</span></span>
+<span class="line"><span>        items</span></span>
+<span class="line"><span>        audio</span></span>
+<span class="line"><span>        cheats</span></span>
+<span class="line"><span>        funny</span></span>
+<span class="line"><span>        streaming integration</span></span>
+<span class="line"><span>        mod dependencies</span></span></code></pre>
+<p>の中から複数選べる感じ。</p>
+<p>私は以下のような感じで設定</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="color:#F8F8F2">&#x3C;</span><span style="color:#F92672">Mod</span></span>
+<span class="line"><span style="color:#A6E22E">    name</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"Angry Teto"</span></span>
+<span class="line"><span style="color:#A6E22E">    description</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"Changes Angry Ghost to Angry Teto"</span></span>
+<span class="line"><span style="color:#A6E22E">    tags</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"graphics,funny"</span></span>
+<span class="line"><span style="color:#A6E22E">    dont_upload_folders</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"assets_dev"</span></span>
+<span class="line"><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">&#x3C;/</span><span style="color:#F92672">Mod</span><span style="color:#F8F8F2">></span></span></code></pre>
+<ul>
+<li><code>.git</code>フォルダはデフォで無視されるっぽいので記述いらない</li>
+<li>画像の編集で使ったGIMPのファイルとかを<code>assets_dev</code>フォルダでgit管理するので、<code>dont_upload_folders=</code>に入れた感じ</li>
+</ul>
+<h3 id="workshop_preview_imagepngをつくる">workshop_preview_image.pngをつくる</h3>
+<p>いわゆるサムネ画像を<strong>16:9</strong>で作成する。</p>
+<p>他の人のサムネを見ると、Noita特有のフォントを使ってるのが多かった。<br>
+どうしてるんだろうと思ったら<a href="https://www.reddit.com/r/noita/comments/jp56ub/a_while_ago_i_made_noita_blackletter_this_is_now/" rel="noopener noreferrer" target="_blank">redditで個人の方が配布している</a>っぽい。<br>
+ありがたく使わせていただく。</p>
+<p>最終的に以下のようなサムネにした。<br>
+<img alt="workshop_preview_image.webp" loading="lazy" decoding="async" width="1920" height="1080" src="/_astro/workshop_preview_image.gDcQXsCw_ZuPXU7.webp" srcset=""></p>
+<h3 id="アップロード">アップロード</h3>
+<p>実際にここまで作ったら、<code>Noita/</code>で</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#66D9EF">.</span><span style="color:#F8F8F2">\</span><span style="color:#E6DB74">noita_dev.exe</span><span style="color:#AE81FF"> -workshop_upload</span></span></code></pre>
+<p>を実行。</p>
+<p>実行すると以下のようにコマンドプロンプトで対話方式のアップロードが始まる。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>----------------------------------------------</span></span>
+<span class="line"><span>Modding Noita is only allowed if you agree to the Modding Agreement.</span></span>
+<span class="line"><span>The Modding Agreement can be found in the tools_modding folder shipped along with the game.</span></span>
+<span class="line"><span>Uploaded mods will be hidden until you have agreed the Steam Workshop Legal Agreement.</span></span>
+<span class="line"><span>----------------------------------------------</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Mods available for upload:</span></span>
+<span class="line"><span>   angry_teto</span></span>
+<span class="line"><span>Please type the name of the mod to upload to Steam Workshop and press [ENTER]:</span></span>
+<span class="line"><span>angry_teto</span></span>
+<span class="line"><span>Please type change notes (for example "First release", use '\n' for newline) and press [ENTER]:</span></span>
+<span class="line"><span>First release</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Name:         Angry Teto</span></span>
+<span class="line"><span>Description:  Changes Angry Ghost to Angry Teto</span></span>
+<span class="line"><span>Tags:         graphics,funny</span></span>
+<span class="line"><span>Change notes: First release</span></span>
+<span class="line"><span>Above info will appear in Steam Workshop. Does it look OK? [y/n]: y</span></span>
+<span class="line"><span>...</span></span>
+<span class="line"><span>Uploading...</span></span>
+<span class="line"><span>Done!</span></span></code></pre>
+<p>Done!でアップロード完了。</p>
+<p>誰でも使えるようになるよ。</p>
+<p>以上です。</p></section><aside class="w-[300px] hidden lg:block shrink-0" data-astro-cid-e2rqhpi3><nav class="sticky top-16 h-fit  bg-white py-24 pl-24 rounded-md" data-astro-cid-tqqy2vud><section data-astro-cid-tqqy2vud><header data-astro-cid-tqqy2vud><h2 class="font-bold text-lg" data-astro-cid-tqqy2vud>目次</h2></header></section><div class="article-toc scroll-smooth mt-4 py-16 pr-24 overflow-y-auto max-h-[90svh]" data-astro-cid-tqqy2vud></div></nav><script type="module" src="/_astro/ArticleTOC.astro_astro_type_script_index_0_lang.mX9zJvT_.js"></script></aside></div><div class="mt-40 mb-64" data-pagefind-ignore data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=noita"># noita</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=mod"># mod</a></div></div></article></main></div><footer class="pb-40 px-24 md:px-0 bg-white"><hr class="mx-auto w-2/3 md:w-1/2 my-24 h-[1px] border-0 bg-slate-400"><div class="mx-8 md:mx-64"><a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" target="_blank" rel="noopener noreferrer"><img src="/_astro/by-nc.DpMeGFcJ_ZF0RGK.svg" alt="クリエイティブコモンズ 表示-非営利 4.0 ライセンス" loading="lazy" decoding="async" width="125" height="44"></a><p class="text-xs md:text-sm">本サイト「<a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">tamakoma.com</a>」から提供されるブログ内の文章、プログラミングコードは、<a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">クリエイティブ・コモンズ 表示-非営利 4.0 ライセンス</a>の下に提供されます。</p><p class="text-xs md:text-sm">音楽や画像などのメディアコンテンツにはこのライセンスは適用されません。</p></div><p class="text-center text-sm"><a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Top</a> / <a href="/contact" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Contact</a> / <a href="/feed.xml" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">RSS Feed</a></p><p class="mt-24 text-center">&copy; tamakoma 2018-2026</p></footer></div></body></html>

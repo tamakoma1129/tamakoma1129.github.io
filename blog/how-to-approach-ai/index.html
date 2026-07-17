@@ -1,0 +1,118 @@
+<!DOCTYPE html><html lang="ja" class="text-slate-700"><head><meta charset="utf-8"><title>AIの向き合い方など | tamakoma.com</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v7.0.3"><meta name="twitter:card" content="summary"><meta property="og:title" content="AIの向き合い方など"><meta property="og:type" content="website"><meta property="og:url" content="https://tamakoma.com/blog/how-to-approach-ai/"><meta property="og:image" content="/_astro/mikuteto-OGP.DYQebPDj.png"><meta property="og:description" content="学んだことを残すブログ"><meta property="og:site_name" content="tamakoma.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.0.1/dist/css/yakuhanjp_s.css"><link rel="sitemap" href="/sitemap-index.xml"><link rel="stylesheet" href="/_astro/BaseLayout.Ddu7R_5r.css"><style>/*! tailwindcss v4.2.2 | MIT License | https://tailwindcss.com */
+.article-toc[data-astro-cid-tqqy2vud] .toc-link{font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));display:block}@media (hover:hover){.article-toc[data-astro-cid-tqqy2vud] .toc-link:hover{color:var(--color-slate-600,oklch(44.6% .043 257.281));text-decoration-line:underline}}.article-toc[data-astro-cid-tqqy2vud] .toc-link.to-link-active{color:var(--color-miku-500,oklch(63.7% .1071 185.34))}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H2){margin-left:var(--spacing-24,24px)}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H3){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:10px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H4){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:20px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H5){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:30px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H6){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:40px}.article-toc[data-astro-cid-tqqy2vud] .toc-list{list-style-type:decimal;list-style-position:outside}@layer properties{@supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))){*,:before,:after,::backdrop{--tw-font-weight:initial;--tw-border-style:solid}}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a{--tw-font-weight:var(--font-weight-semibold,600);font-weight:var(--font-weight-semibold,600);color:var(--color-miku-500,oklch(63.7% .1071 185.34));text-underline-offset:2px;text-decoration-line:underline}@media (hover:hover){article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a:hover{color:var(--color-miku-700,oklch(50.5% .0901 187.01))}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] code:not(pre>code){margin-inline:var(--spacing-4,4px);border-radius:var(--radius-md,.375rem);border-style:var(--tw-border-style);background-color:var(--color-sumi-100,oklch(97% 0 0));padding-inline:var(--spacing-4,4px);--tw-font-weight:var(--font-weight-normal,400);font-weight:var(--font-weight-normal,400);color:var(--color-black,#000);border-width:0;padding-block:2px}@property --tw-font-weight{syntax:"*";inherits:false}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid}
+</style><script type="module" src="/_astro/page.DCEeCLip.js"></script><script>!(function(w,p,f,c){if(!window.crossOriginIsolated && !navigator.serviceWorker) return;c=w[p]=Object.assign(w[p]||{},{"lib":"/~partytown/","debug":false});c[f]=(c[f]||[])})(window,'partytown','forward');/* Partytown 0.13.2 - MIT QwikDev */
+const t={preserveBehavior:!1},e=e=>{if("string"==typeof e)return[e,t];const[n,r=t]=e;return[n,{...t,...r}]},n=Object.freeze((t=>{const e=new Set;let n=[];do{Object.getOwnPropertyNames(n).forEach((t=>{"function"==typeof n[t]&&e.add(t)}))}while((n=Object.getPrototypeOf(n))!==Object.prototype);return Array.from(e)})());!function(t,r,o,i,a,s,c,l,d,p,u=t,f){function h(){f||(f=1,"/"==(c=(s.lib||"/~partytown/")+(s.debug?"debug/":""))[0]&&(d=r.querySelectorAll('script[type="text/partytown"]'),i!=t?i.dispatchEvent(new CustomEvent("pt1",{detail:t})):(l=setTimeout(v,(null==s?void 0:s.fallbackTimeout)||1e4),r.addEventListener("pt0",w),a?y(1):o.serviceWorker?o.serviceWorker.register(c+(s.swPath||"partytown-sw.js"),{scope:c}).then((function(t){t.active?y():t.installing&&t.installing.addEventListener("statechange",(function(t){"activated"==t.target.state&&y()}))}),console.error):v())))}function y(e){p=r.createElement(e?"script":"iframe"),t._pttab=Date.now(),e||(p.style.display="block",p.style.width="0",p.style.height="0",p.style.border="0",p.style.visibility="hidden",p.setAttribute("aria-hidden",!0)),p.src=c+"partytown-"+(e?"atomics.js?v=0.13.2":"sandbox-sw.html?"+t._pttab),r.querySelector(s.sandboxParent||"body").appendChild(p)}function v(n,o){for(w(),i==t&&(s.forward||[]).map((function(n){const[r]=e(n);delete t[r.split(".")[0]]})),n=0;n<d.length;n++)(o=r.createElement("script")).innerHTML=d[n].innerHTML,o.nonce=s.nonce,r.head.appendChild(o);p&&p.parentNode.removeChild(p)}function w(){clearTimeout(l)}s=t.partytown||{},i==t&&(s.forward||[]).map((function(r){const[o,{preserveBehavior:i}]=e(r);u=t,o.split(".").map((function(e,r,o){var a;u=u[o[r]]=r+1<o.length?u[o[r]]||(a=o[r+1],n.includes(a)?[]:{}):(()=>{let e=null;if(i){const{methodOrProperty:n,thisObject:r}=((t,e)=>{let n=t;for(let t=0;t<e.length-1;t+=1)n=n[e[t]];return{thisObject:n,methodOrProperty:e.length>0?n[e[e.length-1]]:void 0}})(t,o);"function"==typeof n&&(e=(...t)=>n.apply(r,...t))}return function(){let n;return e&&(n=e(arguments)),(t._ptf=t._ptf||[]).push(o,arguments),n}})()}))})),"complete"==r.readyState?h():(t.addEventListener("DOMContentLoaded",h),t.addEventListener("load",h))}(window,document,navigator,top,window.crossOriginIsolated);;(e=>{e.addEventListener("astro:before-swap",e=>{let r=document.body.querySelector("iframe[src*='/~partytown/']");if(r)e.newDocument.body.append(r)})})(document);</script></head><body class="bg-repeat bg-white anywhere" style="background-image: url(/_astro/mikuteto-gray.Dix8k1Tp.gif)"><div class="min-h-screen flex flex-col justify-between" id="container"><div><header><nav class="flex flex-col items-center pt-40 pb-24"><a href="/blog" class="text-3xl md:text-5xl font-bold mb-40 text-slate-400 drop-shadow-2xl">tamakoma.com</a><div class="w-full flex justify-center [&amp;&gt;a]:bg-white [&amp;&gt;a]:border-slate-400"><a href="/" class="block py-8 px-16 text-sumi-600 rounded-l border-l border-y">home</a><a href="/blog/" class="block py-8 px-16 text-sumi-600 border">blog</a><a href="/about/" class="block py-8 px-16 text-sumi-600 rounded-r border-r border-y">about</a></div></nav></header><main class="bg-slate-100 w-full flex justify-end" data-astro-cid-e2rqhpi3><article class="grow" data-pagefind-body data-astro-cid-e2rqhpi3><header class="mt-24 w-11/12 max-w-[700px] mx-auto" data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-pagefind-weight="6.7" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E6%97%A5%E5%B8%B8" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">日常</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-pagefind-weight="6.5" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=AI"># AI</a></div><h1 class="text-center text-xl md:text-3xl font-bold px-24 mt-40" data-astro-cid-e2rqhpi3>AIの向き合い方など</h1><div class="text-slate-400 text-sm gap-16 flex justify-center mt-24" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>投稿日 <time datetime="2025-11-29T00:00:00.000Z">2025/11/29</time></span><span data-astro-cid-e2rqhpi3>最終更新日 <time datetime="2025-11-29T00:00:00.000Z">2025/11/29</time></span></div></header><hr class="bg-slate-200 rounded-full mx-auto h-4 my-40 w-40 border-0"><div class="flex mx-auto justify-center gap-40" data-astro-cid-e2rqhpi3><section id="article-body" class="
+                            prose prose-neutral
+                            prose-blockquote:border-miku-400 prose-blockquote:font-normal
+                            w-0 grow
+                            max-w-[650px] bg-white box-content px-16 md:px-40 py-24 rounded-md
+                            " data-astro-cid-e2rqhpi3><p>2025年11月28日</p>
+<p>おおよそ3年前からChatGPTなるものが出てきた。<br>
+今では親も使うし、会社でも推奨されるまでになった。</p>
+<p>周りの人まで使うようになって見えてきたのは、AIとの向き合い方が人それぞれだいぶ違うということ。<br>
+別に私の方法が優れているとは思いはしないけど、今の所私はAIで困ってないので私の向き合い方を紹介する。</p>
+<p>私はWebエンジニアなので、主にプログラミングにおける話になるのはご了承いただいて。</p>
+<h2 id="結論">結論</h2>
+<p>結論だけ言えば、「自分主導で使う」という一言に収まるんじゃないかなと思う。<br>
+AI主導になったらそれはもうAI以下のクオリティしか吐き出せないし、人間である意味が無い。</p>
+<h2 id="aiの前提">AIの前提</h2>
+<p>私の知っているAIに関する前提を共有したい。<br>
+色々書きなぐったんだけど、だいたい「AIは確率的である」ということに帰着するのでこれを軸に話していく。</p>
+<h3 id="aiは確率的であるということ">AIは確率的であるということ</h3>
+<p>なんかよく、「AIは次の文を予測しながら出力しているだけ」という説明があるんだけど、結構それはマジで、次の文を予測しながら確率的に適当な言葉を並べているということを理解しておかなきゃいけない。</p>
+<h4 id="これを理解すると何がわかるか">これを理解すると何がわかるか</h4>
+<p>確率的であるので、以下のようなことが言える</p>
+<ul>
+<li><strong>学習していないデータは出力のしようがない</strong>
+<ul>
+<li>時事問題を質問しても、間違った答えを出したり、わかりませんと出力されるのはそういうこと</li>
+<li>ただ、今はWeb検索機能とかあるので、ある程度いけるっちゃいける</li>
+</ul>
+</li>
+<li><strong>学習データの量・質が悪いと、出力も悪い</strong>
+<ul>
+<li>有名どころのAIサービス使っていれば基本ここらへんは問題ない。ただ、中国のAIを使うと中国寄りの答えになるとかはあるみたい。</li>
+</ul>
+</li>
+<li><strong>平均的な答えを出しがち</strong>
+<ul>
+<li>平均的な答えを出しがちなので、一般的でも間違っている答えを出したりする。この問題はプログラミングにおいて顕著で、動くんだけどセキュリティリスクのある出力や冗長な出力をしがち。</li>
+</ul>
+</li>
+<li><strong>AIの言うことは真実ではないということ</strong>
+<ul>
+<li>人間も一緒だけど、間違ったことを言っている可能性がそれなりにあるので、重要なものは絶対にファクトチェックを行う。間違っている理由は様々で、学習されたデータが古い&#x26;質が悪いとか、単に確率的に運が悪かったとか。</li>
+</ul>
+</li>
+<li><strong>計算に弱いということ</strong>
+<ul>
+<li>1+1くらいなら学習データがいっぱいあると思うので「2」という答えを出せるんだけど、83287×473878とか適当な掛け算をさせるともう正確な答えは出せない。</li>
+<li>ただ、今はプログラムを自分で書いて計算とかしてくれるので、プログラムを書かせれば結構いける(電力の消費とか考えると絶対電卓の方がいいけど)。</li>
+</ul>
+</li>
+<li><strong>AIにイラつく必要がないということ</strong>
+<ul>
+<li>AIもわざと間違ったことを言ってるわけではないので、イラつく必要はない。AIの出力に文句言っている人が時々居るけど、別に怒る理由が無い。</li>
+</ul>
+</li>
+</ul>
+<h4 id="文脈をいじる">文脈をいじる</h4>
+<p>AIは確率的なんだけど、この確率をある程度操作することが私達にはできる。例えば「早急」という言葉、これは「さっきゅう」という読みが正しいんだけど、一般的に「そっきゅう」と言われがち。</p>
+<p>これをAIに「さっきゅう」と読ませたい場合は「さっきゅう」と読まれがちなシチュエーション、文脈を用意してあげればいい。例えば、</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>「早急」の読み方はなんですか？</span></span></code></pre>
+<p>と質問してあげれば、正式な知識を答える文脈になるので学習データに問題がなければ「さっきゅう」が高確率で選ばれる。</p>
+<p>逆に、ちょっと子供っぽい文脈で</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>中学生が書いた日記を、すべてひらがなに変換してください: 「まじやべー！宿題忘れてた。早急にやらないと先生に怒られる」</span></span></code></pre>
+<p>と聞けば、「そっきゅう」が選ばれやすい。実際の会話は「<a href="https://claude.ai/share/88bf3222-b047-4907-9ee6-98b93978fa6c" rel="noopener noreferrer" target="_blank">https://claude.ai/share/88bf3222-b047-4907-9ee6-98b93978fa6c</a>」から見れる。</p>
+<p>こういうのがプロンプトエンジニアリングにつながるのかなと思う。<br>
+結構これ馬鹿にできなくて、AIの回答に私達から作用できる部分ってここくらいなので、色々試したほうが良いと思う。</p>
+<p>よく、「あなたはプロのエンジニアです」みたいな前提を入れる例があるけど、あれも良い出力の確率を上げる作業だと言える。実際に意味あるかは知らないけど。</p>
+<h2 id="aiとの向き合い方">AIとの向き合い方</h2>
+<p>私の基本的なAIとの向き合い方は以下のような感じだと言える</p>
+<ul>
+<li>自分でわからない部分はAIにすぐ聞く
+<ul>
+<li>ただ、一次情報は絶対確認する</li>
+<li>ただ、実装はだいたい自分でする</li>
+</ul>
+</li>
+<li>答えが明示なものはAIに作成してもらう
+<ul>
+<li>ただ、出力された回答は必ず確認する</li>
+</ul>
+</li>
+</ul>
+<p>これ、今こうやって見てみるとGoogle検索→AIになっただけで、AIになって新しくなったのって「明らかに答えが明示なものはAIに作成してもらう」部分だけだね。</p>
+<h3 id="自分でわからない部分はaiにすぐ聞く">自分でわからない部分はAIにすぐ聞く</h3>
+<p>これは、私の学習スタイル的なものが根底にある。<br>
+そもそも私はAIに限らず、答えがあるものであれば、すぐに答えを見て学ぶスタイルを取っている。<br>
+なので、これも同様にその方法で学んでいるだけっちゃだけ。</p>
+<p>ただ、</p>
+<ul>
+<li>一次情報を確認する</li>
+<li>実装は自分でする</li>
+</ul>
+<p>というのが本当に大事だと思う。</p>
+<h4 id="一次情報を確認する">一次情報を確認する</h4>
+<p>例えば、AIから「〇〇という方法やコードで実装できます」という情報を手に入れたら、その〇〇を公式ドキュメントまたはソースコードを見て正しいかどうかを検証する。</p>
+<p>これは、AIが間違ったことを言っている可能性があるっていうのと、知識のメインを一次情報にしたいから。</p>
+<p>つまり、AIは知識の導入に過ぎなくて、知識の土台は一次情報にしたい。<br>
+ただ、一次情報ってめっちゃわかりにくかったり、検索に引っかからなかったりするので、その補助としてAIを使うイメージ。</p>
+<p>AIならこちらの文脈に合わせた答えを出してくれるのでとても助かっている。</p>
+<h4 id="実装は自分でする">実装は自分でする</h4>
+<p>大事なのは、<strong>理解できていない部分は</strong>自分で実装するということ。<br>
+明らかな答えがあり、出力されたコードを全部人に説明できるレベルであればAIに実装させて良いと思う。</p>
+<p>実装を自分で行う理由は、その知識を理解し自分の力にしたいから。<br>
+自分の力にしないとまたAIに聞くはめになるし、AIから出力されたものをまた検証しなきゃいけなくなる。</p>
+<p>自分の力になっていればAIの出力するコードが明らかに正しい・正しくないとわかるし、自分主導で物事を進められる。</p>
+<p>人に説明できるレベルじゃないのに、理解をないがしろにして進めてもいずれ無理が出てくるし、完成したプログラムに不安しかないので私は理解するようにしている。</p>
+<p>これはAIを使う上で<strong>絶対</strong>で、いくら急いでいても理解は疎かにしない(自分で書かないときはあるけど)。</p>
+<h3 id="答えが明示なものはaiに実装してもらう">答えが明示なものはAIに実装してもらう</h3>
+<p>私はPHP + Laravelという技術スタックを使うんだけど、Laravelの基本的な部分は理解しているつもり。なので、特殊なことでなければAIに実装してもらうことも多い。<br>
+つまり、自分の中で答えが明らかで、出力されたコードを人に説明できるレベルであればAIにコードを実装してもらっている。</p>
+<h3 id="コンテクストを大事にする">コンテクストを大事にする</h3>
+<p>AIを利用する際に差が出るとしたらこの「コンテクスト」かなと思う。<br>
+私はコンテクストをかなり大事にしながらAIと会話するようにしている。</p>
+<p>今のところ、AIと人間の大きく違うところは膨大なコンテクストを把握しているか否かだと思う。人間は膨大なコンテクストを持っているけど、AIはせいぜい数千〜万文字程度のコンテクストしか持てない。なんなら、私達から提供しない限りは1つも持っていない。なので、できるだけ質の良いコンテクストを与えて、無駄なコンテクストが入り込んだら会話を巻き戻すということをしている。</p>
+<p>よくあるMCP、会話のメモリ機能、CLAUDE.mdなどの設定はこのコンテクストを支えるものなのでうまく使えるなら使ったほうが良いとは思う。ただ、逆に言えば無駄なコンテクストを含める原因にもなるので仕組みを理解しながら使わないといけない。</p>
+<p>以上です。</p></section><aside class="w-[300px] hidden lg:block shrink-0" data-astro-cid-e2rqhpi3><nav class="sticky top-16 h-fit  bg-white py-24 pl-24 rounded-md" data-astro-cid-tqqy2vud><section data-astro-cid-tqqy2vud><header data-astro-cid-tqqy2vud><h2 class="font-bold text-lg" data-astro-cid-tqqy2vud>目次</h2></header></section><div class="article-toc scroll-smooth mt-4 py-16 pr-24 overflow-y-auto max-h-[90svh]" data-astro-cid-tqqy2vud></div></nav><script type="module" src="/_astro/ArticleTOC.astro_astro_type_script_index_0_lang.mX9zJvT_.js"></script></aside></div><div class="mt-40 mb-64" data-pagefind-ignore data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E6%97%A5%E5%B8%B8" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">日常</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=AI"># AI</a></div></div></article></main></div><footer class="pb-40 px-24 md:px-0 bg-white"><hr class="mx-auto w-2/3 md:w-1/2 my-24 h-[1px] border-0 bg-slate-400"><div class="mx-8 md:mx-64"><a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" target="_blank" rel="noopener noreferrer"><img src="/_astro/by-nc.DpMeGFcJ_ZF0RGK.svg" alt="クリエイティブコモンズ 表示-非営利 4.0 ライセンス" loading="lazy" decoding="async" width="125" height="44"></a><p class="text-xs md:text-sm">本サイト「<a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">tamakoma.com</a>」から提供されるブログ内の文章、プログラミングコードは、<a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">クリエイティブ・コモンズ 表示-非営利 4.0 ライセンス</a>の下に提供されます。</p><p class="text-xs md:text-sm">音楽や画像などのメディアコンテンツにはこのライセンスは適用されません。</p></div><p class="text-center text-sm"><a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Top</a> / <a href="/contact" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Contact</a> / <a href="/feed.xml" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">RSS Feed</a></p><p class="mt-24 text-center">&copy; tamakoma 2018-2026</p></footer></div></body></html>

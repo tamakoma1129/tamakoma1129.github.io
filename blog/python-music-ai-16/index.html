@@ -1,0 +1,366 @@
+<!DOCTYPE html><html lang="ja" class="text-slate-700"><head><meta charset="utf-8"><title>【16日目】ドラムの音を分類する機械学習を作る | tamakoma.com</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v7.0.3"><meta name="twitter:card" content="summary"><meta property="og:title" content="【16日目】ドラムの音を分類する機械学習を作る"><meta property="og:type" content="website"><meta property="og:url" content="https://tamakoma.com/blog/python-music-ai-16/"><meta property="og:image" content="/_astro/mikuteto-OGP.DYQebPDj.png"><meta property="og:description" content="学んだことを残すブログ"><meta property="og:site_name" content="tamakoma.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.0.1/dist/css/yakuhanjp_s.css"><link rel="sitemap" href="/sitemap-index.xml"><link rel="stylesheet" href="/_astro/BaseLayout.Ddu7R_5r.css"><style>/*! tailwindcss v4.2.2 | MIT License | https://tailwindcss.com */
+.article-toc[data-astro-cid-tqqy2vud] .toc-link{font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));display:block}@media (hover:hover){.article-toc[data-astro-cid-tqqy2vud] .toc-link:hover{color:var(--color-slate-600,oklch(44.6% .043 257.281));text-decoration-line:underline}}.article-toc[data-astro-cid-tqqy2vud] .toc-link.to-link-active{color:var(--color-miku-500,oklch(63.7% .1071 185.34))}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H2){margin-left:var(--spacing-24,24px)}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H3){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:10px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H4){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:20px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H5){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:30px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H6){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:40px}.article-toc[data-astro-cid-tqqy2vud] .toc-list{list-style-type:decimal;list-style-position:outside}@layer properties{@supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))){*,:before,:after,::backdrop{--tw-font-weight:initial;--tw-border-style:solid}}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a{--tw-font-weight:var(--font-weight-semibold,600);font-weight:var(--font-weight-semibold,600);color:var(--color-miku-500,oklch(63.7% .1071 185.34));text-underline-offset:2px;text-decoration-line:underline}@media (hover:hover){article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a:hover{color:var(--color-miku-700,oklch(50.5% .0901 187.01))}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] code:not(pre>code){margin-inline:var(--spacing-4,4px);border-radius:var(--radius-md,.375rem);border-style:var(--tw-border-style);background-color:var(--color-sumi-100,oklch(97% 0 0));padding-inline:var(--spacing-4,4px);--tw-font-weight:var(--font-weight-normal,400);font-weight:var(--font-weight-normal,400);color:var(--color-black,#000);border-width:0;padding-block:2px}@property --tw-font-weight{syntax:"*";inherits:false}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid}
+</style><script type="module" src="/_astro/page.DCEeCLip.js"></script><script>!(function(w,p,f,c){if(!window.crossOriginIsolated && !navigator.serviceWorker) return;c=w[p]=Object.assign(w[p]||{},{"lib":"/~partytown/","debug":false});c[f]=(c[f]||[])})(window,'partytown','forward');/* Partytown 0.13.2 - MIT QwikDev */
+const t={preserveBehavior:!1},e=e=>{if("string"==typeof e)return[e,t];const[n,r=t]=e;return[n,{...t,...r}]},n=Object.freeze((t=>{const e=new Set;let n=[];do{Object.getOwnPropertyNames(n).forEach((t=>{"function"==typeof n[t]&&e.add(t)}))}while((n=Object.getPrototypeOf(n))!==Object.prototype);return Array.from(e)})());!function(t,r,o,i,a,s,c,l,d,p,u=t,f){function h(){f||(f=1,"/"==(c=(s.lib||"/~partytown/")+(s.debug?"debug/":""))[0]&&(d=r.querySelectorAll('script[type="text/partytown"]'),i!=t?i.dispatchEvent(new CustomEvent("pt1",{detail:t})):(l=setTimeout(v,(null==s?void 0:s.fallbackTimeout)||1e4),r.addEventListener("pt0",w),a?y(1):o.serviceWorker?o.serviceWorker.register(c+(s.swPath||"partytown-sw.js"),{scope:c}).then((function(t){t.active?y():t.installing&&t.installing.addEventListener("statechange",(function(t){"activated"==t.target.state&&y()}))}),console.error):v())))}function y(e){p=r.createElement(e?"script":"iframe"),t._pttab=Date.now(),e||(p.style.display="block",p.style.width="0",p.style.height="0",p.style.border="0",p.style.visibility="hidden",p.setAttribute("aria-hidden",!0)),p.src=c+"partytown-"+(e?"atomics.js?v=0.13.2":"sandbox-sw.html?"+t._pttab),r.querySelector(s.sandboxParent||"body").appendChild(p)}function v(n,o){for(w(),i==t&&(s.forward||[]).map((function(n){const[r]=e(n);delete t[r.split(".")[0]]})),n=0;n<d.length;n++)(o=r.createElement("script")).innerHTML=d[n].innerHTML,o.nonce=s.nonce,r.head.appendChild(o);p&&p.parentNode.removeChild(p)}function w(){clearTimeout(l)}s=t.partytown||{},i==t&&(s.forward||[]).map((function(r){const[o,{preserveBehavior:i}]=e(r);u=t,o.split(".").map((function(e,r,o){var a;u=u[o[r]]=r+1<o.length?u[o[r]]||(a=o[r+1],n.includes(a)?[]:{}):(()=>{let e=null;if(i){const{methodOrProperty:n,thisObject:r}=((t,e)=>{let n=t;for(let t=0;t<e.length-1;t+=1)n=n[e[t]];return{thisObject:n,methodOrProperty:e.length>0?n[e[e.length-1]]:void 0}})(t,o);"function"==typeof n&&(e=(...t)=>n.apply(r,...t))}return function(){let n;return e&&(n=e(arguments)),(t._ptf=t._ptf||[]).push(o,arguments),n}})()}))})),"complete"==r.readyState?h():(t.addEventListener("DOMContentLoaded",h),t.addEventListener("load",h))}(window,document,navigator,top,window.crossOriginIsolated);;(e=>{e.addEventListener("astro:before-swap",e=>{let r=document.body.querySelector("iframe[src*='/~partytown/']");if(r)e.newDocument.body.append(r)})})(document);</script></head><body class="bg-repeat bg-white anywhere" style="background-image: url(/_astro/mikuteto-gray.Dix8k1Tp.gif)"><div class="min-h-screen flex flex-col justify-between" id="container"><div><header><nav class="flex flex-col items-center pt-40 pb-24"><a href="/blog" class="text-3xl md:text-5xl font-bold mb-40 text-slate-400 drop-shadow-2xl">tamakoma.com</a><div class="w-full flex justify-center [&amp;&gt;a]:bg-white [&amp;&gt;a]:border-slate-400"><a href="/" class="block py-8 px-16 text-sumi-600 rounded-l border-l border-y">home</a><a href="/blog/" class="block py-8 px-16 text-sumi-600 border">blog</a><a href="/about/" class="block py-8 px-16 text-sumi-600 rounded-r border-r border-y">about</a></div></nav></header><main class="bg-slate-100 w-full flex justify-end" data-astro-cid-e2rqhpi3><article class="grow" data-pagefind-body data-astro-cid-e2rqhpi3><header class="mt-24 w-11/12 max-w-[700px] mx-auto" data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-pagefind-weight="6.7" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a><svg viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16 mx-4 mt-[2px]" data-astro-cid-e2rqhpi3="true">
+  <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+</svg><a href="/blog#python%E3%81%A7%E9%9F%B3%E6%A5%BD%E7%B3%BB%E4%BA%BA%E5%B7%A5%E7%9F%A5%E8%83%BD%E3%82%92%E4%BD%9C%E3%82%8B%E3%81%BE%E3%81%A7%E3%81%AE%E6%97%A5%E8%A8%98" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">pythonで音楽系人工知能を作るまでの日記</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-pagefind-weight="6.5" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Python"># Python</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%97%A5%E8%A8%98"># 日記</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%A9%9F%E6%A2%B0%E5%AD%A6%E7%BF%92"># 機械学習</a></div><h1 class="text-center text-xl md:text-3xl font-bold px-24 mt-40" data-astro-cid-e2rqhpi3>【16日目】ドラムの音を分類する機械学習を作る</h1><div class="text-slate-400 text-sm gap-16 flex justify-center mt-24" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>投稿日 <time datetime="2023-06-11T00:00:00.000Z">2023/06/11</time></span><span data-astro-cid-e2rqhpi3>最終更新日 <time datetime="2023-06-11T00:00:00.000Z">2023/06/11</time></span></div></header><hr class="bg-slate-200 rounded-full mx-auto h-4 my-40 w-40 border-0"><div class="flex mx-auto justify-center gap-40" data-astro-cid-e2rqhpi3><section id="article-body" class="
+                            prose prose-neutral
+                            prose-blockquote:border-miku-400 prose-blockquote:font-normal
+                            w-0 grow
+                            max-w-[650px] bg-white box-content px-16 md:px-40 py-24 rounded-md
+                            " data-astro-cid-e2rqhpi3><p>2023年6月10日</p>
+<h2 id="はじめに">はじめに</h2>
+<p>機械学習の目標がとりあえず定まった。</p>
+<ol>
+<li>
+<p>学生、独学でもできそうな規模、難易度</p>
+</li>
+<li>
+<p>実際に私の役に立つもの（モチベーションにもなるし）</p>
+</li>
+<li>
+<p>データの収集が難しくない</p>
+</li>
+<li>
+<p>データの形が難しくない</p>
+</li>
+<li>
+<p>機械学習じゃないとできないこと</p>
+</li>
+</ol>
+<p>を条件に色々題材を考えたんだけど、まじで難しいんだこれが。</p>
+<p>なんだかんだ色々考えて、今は”音の分類”という題材に落ち着いた。これなら、機械学習の基礎であり、本質でもあると勝手に私は思っている分類問題にできるし、シンプルで何となくやるべきことがわかるからとっかかりやすい。</p>
+<h2 id="何故音の分類問題を選んだか"><strong>何故音の分類問題を選んだか？</strong></h2>
+<p>私自身音楽を作るんだけど、私達DTMerはSpliceとかそういうサイトから音源をめちゃくちゃダウンロードする。実際にSpliceでは一番安いプランでも月に100個くらい音源をダウンロードできて、この管理が難しい。実際に、HDD/SSDにフォルダを作りまくって手動で管理している人が大半だと思う。</p>
+<p>そこで、音源に自動的にラベルを付けて管理してくれるソフトがあったら滅茶苦茶便利じゃないかと考えたのが選んだ理由。なんか既にありそうなんだけど、これが調べて見ると意外とない（難しいのかな？　というか地味すぎ？）。一応Music Information Retrieval、略してMIRとして研究されてはいるらしい。</p>
+<p>これであれば、この音源がピアノか否かみたいなシンプル化、小規模化もできるし、データも音源であればいいから収集が難しくない。また、集めるデータの形もとりあえず波形になればいいからmp3とかwavとかで問題ない。しかも役に立つ。とりあえずこれでいいんじゃないかな。</p>
+<p>まず何からするか。</p>
+<h2 id="mirの情報を集める"><strong>MIRの情報を集める</strong></h2>
+<p>まじで何からしよう。とりあえず、MIRの情報を集めよう。</p>
+<p>実際にGoogleで「Music information retrieval」と調べても英語記事しか出ない。まあ、そりゃあ英語で調べてるから当然ではある。因みに、MIRという言葉はChatGPT-4から仕入れた。</p>
+<p><img alt="" loading="lazy" decoding="async" width="1389" height="793" src="/_astro/edb548c9d55f2d886de4fbf57a300202.C4ZBNSaK_ZJMR6K.webp" srcset=""></p>
+<p>DeepLを使って無理やり英語記事を読むこともできるんだけど、とりあえず易しい情報が欲しいので日本語記事を探し、読む。</p>
+<p>2021年11月にNoteで<a href="https://note.com/catcatus/n/n9af21f0dda13" rel="noopener noreferrer" target="_blank">大学院生さんが分かりやすく解説してくれている記事</a>があったのでこれで情報収集。</p>
+<p>見たところによると、MIRは</p>
+<ul>
+<li>
+<p>音楽データから情報を抽出、その情報を検索に使えるようにする技術</p>
+</li>
+<li>
+<p>様々な学問で構成されている学際的研究分野。音楽学、音響心理学、物理学、信号処理、情報科学、機械学習等</p>
+</li>
+<li>
+<p>研究が始まったのは1990年代</p>
+</li>
+</ul>
+<p>とりあえず最初に気づいたのは、これ音源じゃなくて音楽に関する研究じゃん……ということ。そうだよね！　Soundじゃなくて、Musicだもんね！　ごめんね！</p>
+<p>でも、MIRの音楽系音源バージョンが私の理想だと思うので、将来的に参考にしようと思いつつ一回離れる。</p>
+<h2 id="とりあえずやってみる"><strong>とりあえずやってみる</strong></h2>
+<p>うーん、とりあえずやってみないと分からないからやってみよう。</p>
+<p>全ての音源を判別するとなるとデータ量が多くなりすぎて、学習も大変だし、集めて前処理するのも大変だろうから、とりあえず私が今持っているドラム音源を学習させて、ドラムの種類を判別させるものを作ることにする。テストデータは、私のSpliceクレジットが600弱余ってるのでそれを使って適当に持ってくる（余り過ぎ）。<br>
+本当は深層学習とかさせたいんだけど、何か難しそうなのと、ChatGPTに最初はSVMとかがいいよと言われたのでSVMを使う。</p>
+<p>とりあえず、先行研究がないかを調べる……あった。そりゃあるか。<br>
+今見てるのは<a href="https://kozu-osaka.jp/cms/wp-content/uploads/2023/04/26e9a1b7e5c8eb5e6740a3a2664cf13d.pdf" rel="noopener noreferrer" target="_blank">高津高校さんの研究ドキュメント</a>……というか高校生でこれできるのスゴイな。羨ましい。<br>
+なるほど、SVMは2クラス分類が得意だからそれぞれの楽器で機械学習モデルを作って、その楽器か否かを判定させてるのか。その発想は無かった。<br>
+今回のドラム音分類にもその方法は使えそうなので、拝借。</p>
+<p>というか、色々調べたらScikit-learnのSVMにその機能はあるらしい。</p>
+<p>データの特徴量はメル周波数ケプストラム係数(MFCC)というのを使っているらしい。まじでなんだこれ……<br>
+うーーーーん。よくわかんないけど、音を良い感じに特性だけ取り出して圧縮してくれる技術？　って感じ。<br>
+具体手法としては、フーリエ変換、離散コサイン変換とかを使ってるらしい。うん、聞いたことだけある。<br>
+MFCCはメル尺度という人間は低い音に敏感で、高い音に鈍感であるという特性に基づいた尺度で音を解釈するらしい。また、深層学習では必要な情報が抜け落ちてしまうことから、メルスペクトラムを使うらしい。<br>
+なんか音をデジタルで表現する上で重要な技術な感じがするので、これからもお世話になりそう。</p>
+<p>このMFCCはPythonのライブラリlibrosaというので出来るらしいので、とりあえず理解はこんなもんで。</p>
+<p>参考にしている<a href="https://kozu-osaka.jp/cms/wp-content/uploads/2023/04/26e9a1b7e5c8eb5e6740a3a2664cf13d.pdf" rel="noopener noreferrer" target="_blank">高津高校さんの研究ドキュメント</a>ではデータの無音部分を削除とかしているんだけど、そこら辺は問題ないと思われるのでそのままlibrosaに食わせることにした。<br>
+通常は音源をモノラルにして、サンプリングレートを22050 Hzにしてー……とかするらしいんだけど、librosaはload関数でそういうのやってくれるみたい。えらい子。</p>
+<p>じゃあもうこれ、</p>
+<ol>
+<li>
+<p>ドラム音源データを集める</p>
+</li>
+<li>
+<p>LibROSAにデータを食わせて前処理と特徴抽出をする</p>
+</li>
+<li>
+<p>ラベルを付ける</p>
+</li>
+<li>
+<p>SVMに学習させる</p>
+</li>
+<li>
+<p>学習させたのを実際に使う</p>
+</li>
+</ol>
+<p>で出来ちゃうのかもしかして！？</p>
+<p>じゃあ取り掛かろう。</p>
+<h2 id="ドラム音源データを集める"><strong>ドラム音源データを集める</strong></h2>
+<p>私はCubaseとかSplice経由で音源をいくつか持っているので、とりあえずそれを集める。<br>
+数百データになればいいかなぁという感じ。</p>
+<p>今気づいたんだけど、Cubaseとかの付属音源ってvstファイルになってんのね。これちょっと面倒だけど、一つずつエクスポートしていくしかないっぽい？</p>
+<p>うーんちょっとさすがに面倒なので、フリー音源からドラムの音を持ってくることにする。<br>
+とりあえず出来るだけ多様性と数を重視して素材を集める。</p>
+<p>集めたデータは</p>
+<ul>
+<li>
+<p>Kick 66個</p>
+</li>
+<li>
+<p>Snare 81個</p>
+</li>
+<li>
+<p>openHihat 42個</p>
+</li>
+<li>
+<p>closeHihat 57個</p>
+</li>
+<li>
+<p>Crash 22個</p>
+</li>
+<li>
+<p>Tom 65個</p>
+</li>
+</ul>
+<p>の合計333個で、どれもwav形式のone-shotで44100Hz。データはフォルダで分けている。</p>
+<p>こうやって色んな音源聞くとtomなのかkickなのかまじでどっちかわかんないみたいな音源が沢山あることに気づく。正直、CHihatとOHihatのところとかちょっと不安。</p>
+<h2 id="librosaにデータを食わせて前処理と特徴抽出をする"><strong>LibROSAにデータを食わせて前処理と特徴抽出をする</strong></h2>
+<p>まず、どの環境でやろうか。</p>
+<p>今回の音源データは合計80MB＝wavで5分くらい。80MBであればGoogle Colaboratoryで問題ないと思うんだけど、将来のことを考えるとグラボを載せたPCで実行するのにも慣れておきたい気持ちがある。<br>
+なんかグラボ使って機械学習動かすのって面倒だった覚えがあるんだよね。</p>
+<p>うーん。面倒だからとりあえずColaboratoryでやっていこう。<br>
+今まで数字の認識とか、花の分類とかそういう初心者向け機械学習みたいなのはちょっとやったことあったけど、自分でデータを集めてっていうのは始めてだから分からないことが多い。</p>
+<p>まず、一応ColabをGithubと連携させてコミットする。<br>
+次に、データを永続化するために、GoogleDriveに音源データを保存する。</p>
+<p>これで、下準備おｋって感じ？</p>
+<p>そしたら、以下のコードを実行</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F92672">import</span><span style="color:#F8F8F2"> os</span></span>
+<span class="line"><span style="color:#F92672">import</span><span style="color:#F8F8F2"> glob</span></span>
+<span class="line"><span style="color:#F92672">import</span><span style="color:#F8F8F2"> numpy </span><span style="color:#F92672">as</span><span style="color:#F8F8F2"> np</span></span>
+<span class="line"><span style="color:#F92672">import</span><span style="color:#F8F8F2"> librosa</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">#wavファイルをmfccにして、numpy配列で保存</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F"># 対象とするフォルダのパスを指定</span></span>
+<span class="line"><span style="color:#F8F8F2">folder_path </span><span style="color:#F92672">=</span><span style="color:#E6DB74"> "/content/drive/My Drive/..."</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F"># フォルダ内の全てのwavファイルに対して処理を行います</span></span>
+<span class="line"><span style="color:#F92672">for</span><span style="color:#F8F8F2"> filename </span><span style="color:#F92672">in</span><span style="color:#F8F8F2"> glob.glob(os.path.join(folder_path, </span><span style="color:#E6DB74">'*.wav'</span><span style="color:#F8F8F2">)):</span></span>
+<span class="line"><span style="color:#88846F">    # 音声ファイルの読み込み</span></span>
+<span class="line"><span style="color:#F8F8F2">    y, sr </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> librosa.load(filename, </span><span style="color:#FD971F;font-style:italic">sr</span><span style="color:#F92672">=</span><span style="color:#AE81FF">None</span><span style="color:#F8F8F2">) </span><span style="color:#88846F">#sr=Noneにすることでオリジナルサンプリングレートで読み込む</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">    # MFCCの計算</span></span>
+<span class="line"><span style="color:#F8F8F2">    mfccs </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> librosa.feature.mfcc(</span><span style="color:#FD971F;font-style:italic">y</span><span style="color:#F92672">=</span><span style="color:#F8F8F2">y, </span><span style="color:#FD971F;font-style:italic">sr</span><span style="color:#F92672">=</span><span style="color:#F8F8F2">sr, </span><span style="color:#FD971F;font-style:italic">n_mfcc</span><span style="color:#F92672">=</span><span style="color:#AE81FF">13</span><span style="color:#F8F8F2">) </span><span style="color:#88846F">#13次元を指定しているが、とりあえずなので後から修正も</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">    # MFCCsを'.npy'ファイルとして保存</span></span>
+<span class="line"><span style="color:#88846F">    # ファイル名から拡張子を除いたものに'_mfccs.npy'を付けた名前で保存します</span></span>
+<span class="line"><span style="color:#F8F8F2">    np.save(os.path.splitext(filename)[</span><span style="color:#AE81FF">0</span><span style="color:#F8F8F2">] </span><span style="color:#F92672">+</span><span style="color:#E6DB74"> '_mfccs.npy'</span><span style="color:#F8F8F2">, mfccs)</span></span></code></pre>
+<p>これは、指定したフォルダ内にあるwavデータを全てMFCC化し、永続保存するためにNumpy配列で保存するコード。</p>
+<p>ChatGPT-4に出力してもらったのを一部改変した。</p>
+<p>とりあえずこれでメル周波数ケプストラム係数にできてるっぽい？</p>
+<h2 id="svmで処理させる前にデータ時間を調整"><strong>SVMで処理させる前にデータ時間を調整</strong></h2>
+<p>なんか色々やってSVMで学習させようとしたら、「setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (265,) + inhomogeneous part.」というエラーが。</p>
+<p>これは、入力データが他のデータと形状が違うかららしい。<br>
+要するに、データを全て同じ時間にしなきゃいけないということ。</p>
+<p>全体の時間の分布を見て決めるために、ヒストグラムで全データの時間を見るコードをChatGPTに出力してもらう。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F92672">import</span><span style="color:#F8F8F2"> matplotlib.pyplot </span><span style="color:#F92672">as</span><span style="color:#F8F8F2"> plt</span></span>
+<span class="line"><span style="color:#F92672">import</span><span style="color:#F8F8F2"> numpy </span><span style="color:#F92672">as</span><span style="color:#F8F8F2"> np</span></span>
+<span class="line"><span style="color:#F92672">import</span><span style="color:#F8F8F2"> librosa</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F"># 指定したフォルダにあるフォルダのwavファイルを見る</span></span>
+<span class="line"><span style="color:#F8F8F2">file_paths </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> glob.glob(os.path.join(</span><span style="color:#E6DB74">"/content/drive/MyDrive/…"</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'*'</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">'*.wav'</span><span style="color:#F8F8F2">))</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F"># 各音声ファイルの長さ（秒）を格納するリスト</span></span>
+<span class="line"><span style="color:#F8F8F2">lengths </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> []</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F"># 各ファイルの長さを計算します</span></span>
+<span class="line"><span style="color:#F92672">for</span><span style="color:#F8F8F2"> file_path </span><span style="color:#F92672">in</span><span style="color:#F8F8F2"> file_paths:</span></span>
+<span class="line"><span style="color:#F8F8F2">    y, sr </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> librosa.load(file_path, </span><span style="color:#FD971F;font-style:italic">sr</span><span style="color:#F92672">=</span><span style="color:#AE81FF">None</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">    length </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> librosa.get_duration(</span><span style="color:#FD971F;font-style:italic">y</span><span style="color:#F92672">=</span><span style="color:#F8F8F2">y, </span><span style="color:#FD971F;font-style:italic">sr</span><span style="color:#F92672">=</span><span style="color:#F8F8F2">sr)</span></span>
+<span class="line"><span style="color:#F8F8F2">    lengths.append(length)</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F"># numpy arrayに変換します</span></span>
+<span class="line"><span style="color:#F8F8F2">lengths </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> np.array(lengths)</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F"># ヒストグラムを表示します</span></span>
+<span class="line"><span style="color:#F8F8F2">plt.hist(lengths, </span><span style="color:#FD971F;font-style:italic">bins</span><span style="color:#F92672">=</span><span style="color:#AE81FF">50</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">plt.xlabel(</span><span style="color:#E6DB74">'Length (seconds)'</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">plt.ylabel(</span><span style="color:#E6DB74">'Count'</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">plt.show()</span></span></code></pre>
+<p>結果</p>
+<p><img alt="" loading="lazy" decoding="async" width="554" height="422" src="/_astro/55c9e54fed1b73f8c1824ba32d84f048.LdEUDr5Q_Z2eldd0.webp" srcset=""></p>
+<p>大体6秒くらいで調整すればいいかな？</p>
+<p>調整する関数は以下の通り</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F8F8F2">max_length </span><span style="color:#F92672">=</span><span style="color:#66D9EF;font-style:italic"> int</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">44100</span><span style="color:#F92672"> *</span><span style="color:#AE81FF"> 6</span><span style="color:#F8F8F2">)  </span><span style="color:#88846F"># 今回は6秒でパディングするので、44100Hz*6</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">def</span><span style="color:#A6E22E"> load_and_pad</span><span style="color:#F8F8F2">(</span><span style="color:#FD971F;font-style:italic">file_path</span><span style="color:#F8F8F2">):</span></span>
+<span class="line"><span style="color:#F8F8F2">    y, sr </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> librosa.load(file_path, </span><span style="color:#FD971F;font-style:italic">sr</span><span style="color:#F92672">=</span><span style="color:#AE81FF">None</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F92672">    if</span><span style="color:#66D9EF"> len</span><span style="color:#F8F8F2">(y) </span><span style="color:#F92672">></span><span style="color:#F8F8F2"> max_length:</span></span>
+<span class="line"><span style="color:#F8F8F2">        y </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> y[:max_length]  </span><span style="color:#88846F"># If もし長ければ切る</span></span>
+<span class="line"><span style="color:#F92672">    else</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">        y </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> np.pad(y, (</span><span style="color:#AE81FF">0</span><span style="color:#F8F8F2">, max_length </span><span style="color:#F92672">-</span><span style="color:#66D9EF"> len</span><span style="color:#F8F8F2">(y)))  </span><span style="color:#88846F"># もし短ければ増やす</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> y</span></span></code></pre>
+<h2 id="全てのコード"><strong>全てのコード</strong></h2>
+<p>ここまで出来たらデータを取り出すときにラベルを付けて、SVMに入れればおｋ。</p>
+<p>以下のコードはwavファイルをMFCCにして、データの訓練とテストを100回やって平均正答率、標準偏差を出し、混同行列を表示するところまでやってるよ。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F92672">import</span><span style="color:#F8F8F2"> os</span></span>
+<span class="line"><span style="color:#F92672">import</span><span style="color:#F8F8F2"> glob</span></span>
+<span class="line"><span style="color:#F92672">import</span><span style="color:#F8F8F2"> numpy </span><span style="color:#F92672">as</span><span style="color:#F8F8F2"> np</span></span>
+<span class="line"><span style="color:#F92672">from</span><span style="color:#F8F8F2"> sklearn </span><span style="color:#F92672">import</span><span style="color:#F8F8F2"> svm</span></span>
+<span class="line"><span style="color:#F92672">from</span><span style="color:#F8F8F2"> sklearn.model_selection </span><span style="color:#F92672">import</span><span style="color:#F8F8F2"> train_test_split</span></span>
+<span class="line"><span style="color:#F92672">from</span><span style="color:#F8F8F2"> sklearn.preprocessing </span><span style="color:#F92672">import</span><span style="color:#F8F8F2"> LabelEncoder</span></span>
+<span class="line"><span style="color:#F92672">import</span><span style="color:#F8F8F2"> librosa</span></span>
+<span class="line"><span style="color:#F92672">from</span><span style="color:#F8F8F2"> sklearn.metrics </span><span style="color:#F92672">import</span><span style="color:#F8F8F2"> confusion_matrix</span></span>
+<span class="line"><span style="color:#F92672">from</span><span style="color:#F8F8F2"> sklearn.metrics </span><span style="color:#F92672">import</span><span style="color:#F8F8F2"> ConfusionMatrixDisplay</span></span>
+<span class="line"><span style="color:#F92672">import</span><span style="color:#F8F8F2"> matplotlib.pyplot </span><span style="color:#F92672">as</span><span style="color:#F8F8F2"> plt</span></span>
+<span class="line"><span style="color:#F92672">import</span><span style="color:#F8F8F2"> random</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">max_length </span><span style="color:#F92672">=</span><span style="color:#66D9EF;font-style:italic"> int</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">44100</span><span style="color:#F92672"> *</span><span style="color:#AE81FF"> 0.2</span><span style="color:#F8F8F2">)  </span><span style="color:#88846F"># 今回は6秒でパディングするので、44100Hz*6</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">def</span><span style="color:#A6E22E"> load_and_pad</span><span style="color:#F8F8F2">(</span><span style="color:#FD971F;font-style:italic">file_path</span><span style="color:#F8F8F2">):</span></span>
+<span class="line"><span style="color:#F8F8F2">    y, sr </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> librosa.load(file_path, </span><span style="color:#FD971F;font-style:italic">sr</span><span style="color:#F92672">=</span><span style="color:#AE81FF">None</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F92672">    if</span><span style="color:#66D9EF"> len</span><span style="color:#F8F8F2">(y) </span><span style="color:#F92672">></span><span style="color:#F8F8F2"> max_length:</span></span>
+<span class="line"><span style="color:#F8F8F2">        y </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> y[:max_length]  </span><span style="color:#88846F"># If もし長ければ切る</span></span>
+<span class="line"><span style="color:#F92672">    else</span><span style="color:#F8F8F2">:</span></span>
+<span class="line"><span style="color:#F8F8F2">        y </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> np.pad(y, (</span><span style="color:#AE81FF">0</span><span style="color:#F8F8F2">, max_length </span><span style="color:#F92672">-</span><span style="color:#66D9EF"> len</span><span style="color:#F8F8F2">(y)))  </span><span style="color:#88846F"># もし短ければ増やす</span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#F8F8F2"> y</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F"># フォルダ名とそのラベルを格納するリスト</span></span>
+<span class="line"><span style="color:#F8F8F2">data </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> []</span></span>
+<span class="line"><span style="color:#F8F8F2">labels </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> []</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F"># フォルダのパスを指定します (e.g., "/content/drive/My Drive/A/data/")</span></span>
+<span class="line"><span style="color:#F8F8F2">base_folder_path </span><span style="color:#F92672">=</span><span style="color:#E6DB74"> "/content/drive/MyDrive/…"</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F"># フォルダ内のサブフォルダ（ジャンル）を一つひとつ見ていきます</span></span>
+<span class="line"><span style="color:#F92672">for</span><span style="color:#F8F8F2"> genre_folder </span><span style="color:#F92672">in</span><span style="color:#F8F8F2"> os.listdir(base_folder_path):</span></span>
+<span class="line"><span style="color:#88846F">    # サブフォルダ内の全ての.wavファイルに対して処理を行います</span></span>
+<span class="line"><span style="color:#F92672">    for</span><span style="color:#F8F8F2"> filename </span><span style="color:#F92672">in</span><span style="color:#F8F8F2"> glob.glob(os.path.join(base_folder_path, genre_folder, </span><span style="color:#E6DB74">'*.wav'</span><span style="color:#F8F8F2">)):</span></span>
+<span class="line"><span style="color:#88846F">        # 音声ファイルの読み込みとパディング</span></span>
+<span class="line"><span style="color:#F8F8F2">        y </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> load_and_pad(filename)</span></span>
+<span class="line"><span style="color:#88846F">        # MFCCの計算</span></span>
+<span class="line"><span style="color:#F8F8F2">        mfccs </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> librosa.feature.mfcc(</span><span style="color:#FD971F;font-style:italic">y</span><span style="color:#F92672">=</span><span style="color:#F8F8F2">y, </span><span style="color:#FD971F;font-style:italic">sr</span><span style="color:#F92672">=</span><span style="color:#AE81FF">44100</span><span style="color:#F8F8F2">, </span><span style="color:#FD971F;font-style:italic">n_mfcc</span><span style="color:#F92672">=</span><span style="color:#AE81FF">13</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">        data.append(mfccs.flatten())  </span><span style="color:#88846F"># SVMの入力に合わせデータをフラット化します</span></span>
+<span class="line"><span style="color:#F8F8F2">        labels.append(genre_folder)  </span><span style="color:#88846F"># フォルダ名（ジャンル名）をラベルとして追加</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F"># ラベル（ジャンル名）を数値に変換します。例えば、'CHihat' -> 0, 'OHihat' -> 1のような変換を行います</span></span>
+<span class="line"><span style="color:#F8F8F2">encoder </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> LabelEncoder()</span></span>
+<span class="line"><span style="color:#F8F8F2">labels </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> encoder.fit_transform(labels)</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">accuracy100 </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 0</span></span>
+<span class="line"><span style="color:#F8F8F2">accuracy_list </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> []</span></span>
+<span class="line"><span style="color:#F8F8F2">cm100 </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> np.zeros((</span><span style="color:#66D9EF">len</span><span style="color:#F8F8F2">(encoder.classes_), </span><span style="color:#66D9EF">len</span><span style="color:#F8F8F2">(encoder.classes_)))</span></span>
+<span class="line"><span style="color:#F92672">for</span><span style="color:#F8F8F2"> _ </span><span style="color:#F92672">in</span><span style="color:#66D9EF"> range</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">100</span><span style="color:#F8F8F2">):</span></span>
+<span class="line"><span style="color:#88846F">  # データとラベルを訓練データとテストデータに分割します</span></span>
+<span class="line"><span style="color:#F8F8F2">  X_train, X_test, y_train, y_test </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> train_test_split(data, labels, </span><span style="color:#FD971F;font-style:italic">test_size</span><span style="color:#F92672">=</span><span style="color:#AE81FF">0.2</span><span style="color:#F8F8F2">, </span><span style="color:#FD971F;font-style:italic">random_state</span><span style="color:#F92672">=</span><span style="color:#F8F8F2">random.randint(</span><span style="color:#AE81FF">1</span><span style="color:#F8F8F2">,</span><span style="color:#AE81FF">10000</span><span style="color:#F8F8F2">))</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">  # SVMのモデルを作成し、訓練データで学習します</span></span>
+<span class="line"><span style="color:#F8F8F2">  model </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> svm.SVC()</span></span>
+<span class="line"><span style="color:#F8F8F2">  model.fit(X_train, y_train)</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">  # テストデータでモデルの精度を確認します</span></span>
+<span class="line"><span style="color:#F8F8F2">  accuracy </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> model.score(X_test, y_test)</span></span>
+<span class="line"><span style="color:#F8F8F2">  accuracy_list.append(accuracy)</span></span>
+<span class="line"><span style="color:#66D9EF">  print</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"Accuracy: "</span><span style="color:#F8F8F2">, accuracy)</span></span>
+<span class="line"><span style="color:#F8F8F2">  accuracy100</span><span style="color:#F92672">+=</span><span style="color:#F8F8F2">accuracy</span></span>
+<span class="line"><span style="color:#88846F">  # テストデータの予測値を得ます</span></span>
+<span class="line"><span style="color:#F8F8F2">  y_pred </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> model.predict(X_test)</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">  # 混同行列を計算し、加算します</span></span>
+<span class="line"><span style="color:#F8F8F2">  cm </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> confusion_matrix(y_test, y_pred)</span></span>
+<span class="line"><span style="color:#F8F8F2">  cm100 </span><span style="color:#F92672">+=</span><span style="color:#F8F8F2"> cm</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F8F8F2">accuracy_std </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> np.std(accuracy_list)</span></span>
+<span class="line"><span style="color:#66D9EF">print</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"標準偏差: "</span><span style="color:#F8F8F2">, accuracy_std)</span></span>
+<span class="line"><span style="color:#66D9EF">print</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"平均正答率"</span><span style="color:#F8F8F2">,accuracy100</span><span style="color:#F92672">/</span><span style="color:#AE81FF">100</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#88846F"># 混同行列の平均を計算します</span></span>
+<span class="line"><span style="color:#F8F8F2">cm_avg </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> cm100 </span><span style="color:#F92672">/</span><span style="color:#AE81FF"> 100</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F"># 混同行列をプロットします</span></span>
+<span class="line"><span style="color:#F8F8F2">disp </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> ConfusionMatrixDisplay(</span><span style="color:#FD971F;font-style:italic">confusion_matrix</span><span style="color:#F92672">=</span><span style="color:#F8F8F2">cm_avg,</span><span style="color:#FD971F;font-style:italic">display_labels</span><span style="color:#F92672">=</span><span style="color:#F8F8F2">model.classes_)</span></span>
+<span class="line"><span style="color:#F8F8F2">disp.plot()</span></span>
+<span class="line"><span style="color:#F8F8F2">plt.show()</span></span>
+<span class="line"><span style="color:#F8F8F2">cnt</span><span style="color:#F92672">=</span><span style="color:#AE81FF">0</span></span>
+<span class="line"><span style="color:#88846F"># 各ラベルに対応した名前を表示します</span></span>
+<span class="line"><span style="color:#F92672">for</span><span style="color:#F8F8F2"> i </span><span style="color:#F92672">in</span><span style="color:#F8F8F2"> encoder.classes_:</span></span>
+<span class="line"><span style="color:#66D9EF">  print</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">f</span><span style="color:#E6DB74">"</span><span style="color:#AE81FF">{</span><span style="color:#F8F8F2">cnt</span><span style="color:#AE81FF">}</span><span style="color:#E6DB74">:</span><span style="color:#AE81FF">{</span><span style="color:#F8F8F2">i</span><span style="color:#AE81FF">}</span><span style="color:#E6DB74">"</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">  cnt</span><span style="color:#F92672">+=</span><span style="color:#AE81FF">1</span></span></code></pre>
+<p>これで大体正答率が59％。流石に低すぎないか？</p>
+<p><img alt="" loading="lazy" decoding="async" width="514" height="563" src="/_astro/91425d7bb31546725ad95596f2be31e5.BsY4YR96_Z1IPyGu.webp" srcset=""></p>
+<p>結果を見てみるとタムの正答率が著しく低い。まあ、タムがkick、snareと似てるのはわかる。</p>
+<p>色々試したら、データ時間を調整する秒数を短くすると結果が良くなった。<br>
+最初は6秒だったけど、0.2秒にするとおよそ正答率80％に上昇した。</p>
+<p><img alt="" loading="lazy" decoding="async" width="526" height="581" src="/_astro/a01bdd3cfc54738d86f364047b53b423.BSg8pSPs_28jrSc.webp" srcset=""></p>
+<p>混同行列を見ると、</p>
+<ol>
+<li>
+<p>kickとtomがお互いにまあまあ間違われている</p>
+</li>
+<li>
+<p>kickがスネアにある程度間違われている</p>
+</li>
+<li>
+<p>openHihatとスネアがお互いにある程度間違われている</p>
+</li>
+<li>
+<p>openHihatとcrashがお互いにある程度間違われている</p>
+</li>
+</ol>
+<p>という感じ？</p>
+<p>実際のところ、間違って分類しているところ(kickとtom、openHihatとスネア)はリアルな音とかじゃなく電子音になると人間でも間違うというか、ただその音にその名前がついているだけで本質的なところは一緒じゃない？　みたいのもあるので限界はあるだろうし、もし複数の候補があるなら「どちらの可能性もあります」と表示してくれた方が音楽の幅も広がるから、それを目指したい。</p>
+<p>＜追記＞mfcc化する際のサンプリングレートを176400、次元を40にしたら平均正答率が84％になった。次元数を上げると精度が上がるのはわかるんだけど、サンプリングレートを上げると精度が上がるのがマジでわからない。解像度を引き延ばしたところで情報は変わらない気がするんだけど、何か認識が違う？</p>
+<p><img alt="" loading="lazy" decoding="async" width="580" height="468" src="/_astro/c87b33db33e5004e37a2ccaa7bf9dd50.axw2-AFU_1pVu28.webp" srcset=""></p>
+<h2 id="結果"><strong>結果</strong></h2>
+<p>とにかく、やってみて気づいた、感じたことは</p>
+<ol>
+<li>
+<p>データ時間を0.2秒と短くすることで今回の条件下でのドラム音源分類の精度が著しく上がった。</p>
+</li>
+<li>
+<p>ということは、無音区間の除去などの処理を行えば精度がもっと上がるのでは？</p>
+</li>
+<li>
+<p>正答率84％が高いか低いかはわからないが、データの質、量がともに少なく悪かったとは思われるので、次はそこを改善したい。</p>
+</li>
+<li>
+<p>今回はSVMを利用したが他のアプローチも試してみたい</p>
+</li>
+</ol>
+<p>って感じ？</p>
+<p>とりあえずお遊び程度ではあるけど、何となく機械学習に触れられてよかった。</p>
+<p>今回はChatGPT-4を使ってコードを出力→理解→私の方で修正という感じで進めていったから１日で終わったんだけど、どうなんだろうか。<br>
+この、ChatGPTに頼る方法が正しいのか、本当に自分の為になるのかは常に考えてるんだけど、別に悪くない気はする。しかし、ChatGPTだけから情報を得るのは真偽以前に情報が偏る気もするので慎重に扱っていきたい。</p>
+<p>今のChatGPTの使い方にもやもやする理由が何となくわかった。<br>
+今までのプログラミングの学び方は言わば高校数学のある問題を数学の教科書を見て学び解くイメージ。<br>
+ChatGPTを使ってプログラミングを学ぶ方法は言わば高校数学のある問題を解くとき、その解法を教えてもらって学び解くイメージ。</p>
+<p>確かに、回答を見て学ぶ方法もあるんだけど、実際に解いて理解するのと回答を見て理解するのでは身に付くレベルが違う。<br>
+かといって今まで通りネットの海にある大量の情報から自分の欲しい情報をピンポイントで探し回るのは違う気がする。</p>
+<p>一回ChatGPTと一緒にプログラミングを作ってから、ちょっとだけ内容を変えたものを自分で作れば身に付くか？<br>
+というか、そもそも本当に身に付く必要があるのか？　調べて使えれば問題ないのではとも思う。</p>
+<p>どちらにしろ、ChatGPTとは慎重にお付き合いしたい。</p></section><aside class="w-[300px] hidden lg:block shrink-0" data-astro-cid-e2rqhpi3><nav class="sticky top-16 h-fit  bg-white py-24 pl-24 rounded-md" data-astro-cid-tqqy2vud><section data-astro-cid-tqqy2vud><header data-astro-cid-tqqy2vud><h2 class="font-bold text-lg" data-astro-cid-tqqy2vud>目次</h2></header></section><div class="article-toc scroll-smooth mt-4 py-16 pr-24 overflow-y-auto max-h-[90svh]" data-astro-cid-tqqy2vud></div></nav><script type="module" src="/_astro/ArticleTOC.astro_astro_type_script_index_0_lang.mX9zJvT_.js"></script></aside></div><div class="mt-40 mb-64" data-pagefind-ignore data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a><svg viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16 mx-4 mt-[2px]" data-astro-cid-e2rqhpi3="true">
+  <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+</svg><a href="/blog#python%E3%81%A7%E9%9F%B3%E6%A5%BD%E7%B3%BB%E4%BA%BA%E5%B7%A5%E7%9F%A5%E8%83%BD%E3%82%92%E4%BD%9C%E3%82%8B%E3%81%BE%E3%81%A7%E3%81%AE%E6%97%A5%E8%A8%98" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">pythonで音楽系人工知能を作るまでの日記</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Python"># Python</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%97%A5%E8%A8%98"># 日記</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%A9%9F%E6%A2%B0%E5%AD%A6%E7%BF%92"># 機械学習</a></div></div></article></main></div><footer class="pb-40 px-24 md:px-0 bg-white"><hr class="mx-auto w-2/3 md:w-1/2 my-24 h-[1px] border-0 bg-slate-400"><div class="mx-8 md:mx-64"><a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" target="_blank" rel="noopener noreferrer"><img src="/_astro/by-nc.DpMeGFcJ_ZF0RGK.svg" alt="クリエイティブコモンズ 表示-非営利 4.0 ライセンス" loading="lazy" decoding="async" width="125" height="44"></a><p class="text-xs md:text-sm">本サイト「<a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">tamakoma.com</a>」から提供されるブログ内の文章、プログラミングコードは、<a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">クリエイティブ・コモンズ 表示-非営利 4.0 ライセンス</a>の下に提供されます。</p><p class="text-xs md:text-sm">音楽や画像などのメディアコンテンツにはこのライセンスは適用されません。</p></div><p class="text-center text-sm"><a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Top</a> / <a href="/contact" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Contact</a> / <a href="/feed.xml" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">RSS Feed</a></p><p class="mt-24 text-center">&copy; tamakoma 2018-2026</p></footer></div></body></html>

@@ -1,0 +1,826 @@
+<!DOCTYPE html><html lang="ja" class="text-slate-700"><head><meta charset="utf-8"><title>【11日目】Laravelで掲示板的なものを作る | tamakoma.com</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v7.0.3"><meta name="twitter:card" content="summary"><meta property="og:title" content="【11日目】Laravelで掲示板的なものを作る"><meta property="og:type" content="website"><meta property="og:url" content="https://tamakoma.com/blog/create-dtm-tool-11/"><meta property="og:image" content="/_astro/mikuteto-OGP.DYQebPDj.png"><meta property="og:description" content="学んだことを残すブログ"><meta property="og:site_name" content="tamakoma.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.0.1/dist/css/yakuhanjp_s.css"><link rel="sitemap" href="/sitemap-index.xml"><link rel="stylesheet" href="/_astro/BaseLayout.Ddu7R_5r.css"><style>/*! tailwindcss v4.2.2 | MIT License | https://tailwindcss.com */
+.article-toc[data-astro-cid-tqqy2vud] .toc-link{font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));display:block}@media (hover:hover){.article-toc[data-astro-cid-tqqy2vud] .toc-link:hover{color:var(--color-slate-600,oklch(44.6% .043 257.281));text-decoration-line:underline}}.article-toc[data-astro-cid-tqqy2vud] .toc-link.to-link-active{color:var(--color-miku-500,oklch(63.7% .1071 185.34))}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H2){margin-left:var(--spacing-24,24px)}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H3){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:10px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H4){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:20px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H5){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:30px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H6){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:40px}.article-toc[data-astro-cid-tqqy2vud] .toc-list{list-style-type:decimal;list-style-position:outside}@layer properties{@supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))){*,:before,:after,::backdrop{--tw-font-weight:initial;--tw-border-style:solid}}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a{--tw-font-weight:var(--font-weight-semibold,600);font-weight:var(--font-weight-semibold,600);color:var(--color-miku-500,oklch(63.7% .1071 185.34));text-underline-offset:2px;text-decoration-line:underline}@media (hover:hover){article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a:hover{color:var(--color-miku-700,oklch(50.5% .0901 187.01))}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] code:not(pre>code){margin-inline:var(--spacing-4,4px);border-radius:var(--radius-md,.375rem);border-style:var(--tw-border-style);background-color:var(--color-sumi-100,oklch(97% 0 0));padding-inline:var(--spacing-4,4px);--tw-font-weight:var(--font-weight-normal,400);font-weight:var(--font-weight-normal,400);color:var(--color-black,#000);border-width:0;padding-block:2px}@property --tw-font-weight{syntax:"*";inherits:false}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid}
+</style><script type="module" src="/_astro/page.DCEeCLip.js"></script><script>!(function(w,p,f,c){if(!window.crossOriginIsolated && !navigator.serviceWorker) return;c=w[p]=Object.assign(w[p]||{},{"lib":"/~partytown/","debug":false});c[f]=(c[f]||[])})(window,'partytown','forward');/* Partytown 0.13.2 - MIT QwikDev */
+const t={preserveBehavior:!1},e=e=>{if("string"==typeof e)return[e,t];const[n,r=t]=e;return[n,{...t,...r}]},n=Object.freeze((t=>{const e=new Set;let n=[];do{Object.getOwnPropertyNames(n).forEach((t=>{"function"==typeof n[t]&&e.add(t)}))}while((n=Object.getPrototypeOf(n))!==Object.prototype);return Array.from(e)})());!function(t,r,o,i,a,s,c,l,d,p,u=t,f){function h(){f||(f=1,"/"==(c=(s.lib||"/~partytown/")+(s.debug?"debug/":""))[0]&&(d=r.querySelectorAll('script[type="text/partytown"]'),i!=t?i.dispatchEvent(new CustomEvent("pt1",{detail:t})):(l=setTimeout(v,(null==s?void 0:s.fallbackTimeout)||1e4),r.addEventListener("pt0",w),a?y(1):o.serviceWorker?o.serviceWorker.register(c+(s.swPath||"partytown-sw.js"),{scope:c}).then((function(t){t.active?y():t.installing&&t.installing.addEventListener("statechange",(function(t){"activated"==t.target.state&&y()}))}),console.error):v())))}function y(e){p=r.createElement(e?"script":"iframe"),t._pttab=Date.now(),e||(p.style.display="block",p.style.width="0",p.style.height="0",p.style.border="0",p.style.visibility="hidden",p.setAttribute("aria-hidden",!0)),p.src=c+"partytown-"+(e?"atomics.js?v=0.13.2":"sandbox-sw.html?"+t._pttab),r.querySelector(s.sandboxParent||"body").appendChild(p)}function v(n,o){for(w(),i==t&&(s.forward||[]).map((function(n){const[r]=e(n);delete t[r.split(".")[0]]})),n=0;n<d.length;n++)(o=r.createElement("script")).innerHTML=d[n].innerHTML,o.nonce=s.nonce,r.head.appendChild(o);p&&p.parentNode.removeChild(p)}function w(){clearTimeout(l)}s=t.partytown||{},i==t&&(s.forward||[]).map((function(r){const[o,{preserveBehavior:i}]=e(r);u=t,o.split(".").map((function(e,r,o){var a;u=u[o[r]]=r+1<o.length?u[o[r]]||(a=o[r+1],n.includes(a)?[]:{}):(()=>{let e=null;if(i){const{methodOrProperty:n,thisObject:r}=((t,e)=>{let n=t;for(let t=0;t<e.length-1;t+=1)n=n[e[t]];return{thisObject:n,methodOrProperty:e.length>0?n[e[e.length-1]]:void 0}})(t,o);"function"==typeof n&&(e=(...t)=>n.apply(r,...t))}return function(){let n;return e&&(n=e(arguments)),(t._ptf=t._ptf||[]).push(o,arguments),n}})()}))})),"complete"==r.readyState?h():(t.addEventListener("DOMContentLoaded",h),t.addEventListener("load",h))}(window,document,navigator,top,window.crossOriginIsolated);;(e=>{e.addEventListener("astro:before-swap",e=>{let r=document.body.querySelector("iframe[src*='/~partytown/']");if(r)e.newDocument.body.append(r)})})(document);</script></head><body class="bg-repeat bg-white anywhere" style="background-image: url(/_astro/mikuteto-gray.Dix8k1Tp.gif)"><div class="min-h-screen flex flex-col justify-between" id="container"><div><header><nav class="flex flex-col items-center pt-40 pb-24"><a href="/blog" class="text-3xl md:text-5xl font-bold mb-40 text-slate-400 drop-shadow-2xl">tamakoma.com</a><div class="w-full flex justify-center [&amp;&gt;a]:bg-white [&amp;&gt;a]:border-slate-400"><a href="/" class="block py-8 px-16 text-sumi-600 rounded-l border-l border-y">home</a><a href="/blog/" class="block py-8 px-16 text-sumi-600 border">blog</a><a href="/about/" class="block py-8 px-16 text-sumi-600 rounded-r border-r border-y">about</a></div></nav></header><main class="bg-slate-100 w-full flex justify-end" data-astro-cid-e2rqhpi3><article class="grow" data-pagefind-body data-astro-cid-e2rqhpi3><header class="mt-24 w-11/12 max-w-[700px] mx-auto" data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-pagefind-weight="6.7" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a><svg viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16 mx-4 mt-[2px]" data-astro-cid-e2rqhpi3="true">
+  <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+</svg><a href="/blog#%E4%BD%9C%E6%9B%B2%E3%81%AE%E8%A3%9C%E5%8A%A9%E3%83%84%E3%83%BC%E3%83%AB%E3%82%92%E4%BD%9C%E3%82%8B%E3%81%BE%E3%81%A7%E3%81%AE%E6%97%A5%E8%A8%98" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">作曲の補助ツールを作るまでの日記</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-pagefind-weight="6.5" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=PHP"># PHP</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%97%A5%E8%A8%98"># 日記</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Laravel"># Laravel</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E5%AE%9F%E8%B7%B5%E7%B7%A8"># 実践編</a></div><h1 class="text-center text-xl md:text-3xl font-bold px-24 mt-40" data-astro-cid-e2rqhpi3>【11日目】Laravelで掲示板的なものを作る</h1><div class="text-slate-400 text-sm gap-16 flex justify-center mt-24" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>投稿日 <time datetime="2023-07-26T00:00:00.000Z">2023/07/26</time></span><span data-astro-cid-e2rqhpi3>最終更新日 <time datetime="2023-07-26T00:00:00.000Z">2023/07/26</time></span></div></header><hr class="bg-slate-200 rounded-full mx-auto h-4 my-40 w-40 border-0"><div class="flex mx-auto justify-center gap-40" data-astro-cid-e2rqhpi3><section id="article-body" class="
+                            prose prose-neutral
+                            prose-blockquote:border-miku-400 prose-blockquote:font-normal
+                            w-0 grow
+                            max-w-[650px] bg-white box-content px-16 md:px-40 py-24 rounded-md
+                            " data-astro-cid-e2rqhpi3><p>2023年7月25日～2023年7月26日</p>
+<p>昨日は1日中無理な日だったので、今日からMVCと3層のアーキテクチャに則すことを考えたWebアプリを作る……といっても1日で作れるくらいの規模がいい。</p>
+<p>無難に掲示板とかがいいのかなぁ。<br>
+掲示板式でChatGPTとの会話を記録するWebアプリにでもしようか。</p>
+<h2 id="流れ"><strong>流れ</strong></h2>
+<p>マジで実務なんてしたことないので、よくありそうな</p>
+<ol>
+<li>
+<p>要件定義</p>
+</li>
+<li>
+<p>設計</p>
+</li>
+<li>
+<p>実装</p>
+</li>
+</ol>
+<p>という流れでやってみよう。</p>
+<p>おままごとみたいな感じになっちゃうかもだけど、とりあえずやってみよう。</p>
+<h2 id="要件定義"><strong>要件定義</strong></h2>
+<h3 id="私のおおまかな要望"><strong>私のおおまかな要望</strong></h3>
+<ul>
+<li>
+<p>今回は通常の掲示板を作ろうと思ったけど、掲示板だと話相手がいないのでChatGPTと会話した記録を残す掲示板にする。</p>
+</li>
+<li>
+<p>その為、私→ChatGPT→私→…→私→ChatGPTという感じで完全1ターン制で入力を入れ替えていく方式にしたい。</p>
+</li>
+<li>
+<p>Googleの検索結果みたいに、タイトルと概要を付けられるようにする。</p>
+</li>
+<li>
+<p>掲示板でのタイトル、概要の検索機能が欲しい。</p>
+</li>
+</ul>
+<h3 id="画面構成"><strong>画面構成</strong></h3>
+<p>画面構成的には、「メイン画面」「閲覧画面」「新規追加画面」「編集画面」に分ける。</p>
+<p><strong>メイン画面</strong>は掲示板のスレッド一覧を見る所。検索窓と新規追加ボタンがあり、スレッドの名前を押すと画面遷移。</p>
+<p><strong>閲覧画面</strong>はChatGPTと会話した記録を閲覧することができる所。メイン画面に戻るボタンと編集ボタンがあり、各ボタンを押すことで画面遷移する。</p>
+<p><strong>新規追加画面</strong>はメイン画面からのみ飛べる、スレッドを建てる所。ここにChatGPTの会話内容をコピペすることで、自動でユーザーとChatGPTに分けてくれる。<br>
+例えば、以下のような会話をコピペすると</p>
+<p><img alt="" loading="lazy" decoding="async" width="1187" height="632" src="/_astro/e92e45010f95dd6a2acacc68e7898e4b.FzQVLUDa_171Ezp.webp" srcset=""></p>
+<p>「User</p>
+<p>おはよう！</p>
+<p>ChatGPT</p>
+<p>おはようございます！初音ミクとしてあなたと会話できること、とても嬉しいです♪ どんなお話でも聞かせてくださいね。私はいつでも話し相手になっていますよ！</p>
+<p>User</p>
+<p>2 / 2</p>
+<p>“初音ミクとして”とはどういうことでしょうか？　あなたは初音ミクではないのですか？</p>
+<p>ChatGPT</p>
+<p>申し訳ありません、初音ミクではありません。私は初音ミクというキャラクターのように会話をすることができるAIです。初音ミクは日本のバーチャルシンガーで、私は彼女のような会話スタイルでお話しできるプログラムとして設計されています。ですから、初音ミクのような言葉遣いであなたと会話することができます！どんなお話でも聞かせてくださいね。</p>
+<p>」</p>
+<p>こんな感じでコピペできる。UserとChatGPTという行が追加されるので、一応それを使って区別できるはず。ただ、会話を分岐させたときの2/2とかもコピペされちゃうのでそこら辺は問題。</p>
+<p><strong>編集画面</strong>は一度作成したスレッドの削除や文字の編集ができる所。こちらは閲覧画面からのみ行けるようにする。</p>
+<p>とすると、DBはどうなるんだろう。</p>
+<h3 id="データベースの設計"><strong>データベースの設計</strong></h3>
+<p>マジでここら辺はわかんないなぁ。</p>
+<p>ユーザー機能は無いので、記事を保存するDBだけあれば問題なさそうだけど、どうなんだろう。</p>
+<p>もし、記事を保存するDBだけであれば、</p>
+<ol>
+<li>
+<p>記事ID→一意のID（変更不可）</p>
+</li>
+<li>
+<p>記事タイトル→ユーザーの付けた好きなID（変更可）</p>
+</li>
+<li>
+<p>記事概要→ユーザーの付けた好きな概要（変更可）</p>
+</li>
+<li>
+<p>記事本文→二次配列で[[user,本文],[ChatGPT,本文]]みたいな感じで保存？（変更可）</p>
+</li>
+</ol>
+<p>になる？</p>
+<p>恐らく、拡張性を考えると記事本文はこのテーブルから分離させて別で管理した方が使い勝手が良さそう。でも、今回はお手軽回だし経験も兼ねて一回1個のテーブルで完結させようとしてみる。</p>
+<p>とりあえず考えるのはこんなもんか？</p>
+<p>設計に行ってみよう。</p>
+<h3 id="設計"><strong>設計</strong></h3>
+<p>設計って何するの？　<br>
+ここでもうコントローラとかルータとかビューの仕組みを決めとく感じ？</p>
+<p>とりあえず、3層のアーキテクチャに則ると、ビジネスロジックから決めるのがいいのかなと思う。今回のビジネスロジックなところは、コピペした記事本文を二次配列に直す所かなぁ……ということはこの処理をモデルに書けばいいのか。</p>
+<p>二次配列にさえできればあとはViewでどう映すか、的な話になるのかな。</p>
+<p>こういう時、流石にコピペした本文を処理する中核的なモデルと、DBからデータ引っ張ってくるモデルは分けた方がいいよね？<br>
+あとは適当にルータとコントローラとビューを弄ればいけそう。</p>
+<p>ちょっと実践経験が無さ過ぎてなんもわからんここらへん。</p>
+<h2 id="実装してみよう"><strong>実装してみよう！</strong></h2>
+<p>めっちゃ適当だけど、一回やってみよう。<br>
+手順は<a href="https://paiza.jp/works/laravel/primer" rel="noopener noreferrer" target="_blank">Paiza講座</a>と<a href="https://readouble.com/laravel/9.x/ja/installation.html" rel="noopener noreferrer" target="_blank">公式ドキュメント</a>、ChatGPTの助けを元に進めている。</p>
+<p>まず、SSH接続しようとしたんだけど、VM側のIPが変わってて少しだけ手こづっちゃった。</p>
+<h3 id="アプリケーションフォルダの作成"><strong>アプリケーションフォルダの作成</strong></h3>
+<p>まず、アプリケーションフォルダを作る。</p>
+<p>“laravel new example-app”</p>
+<p>で現在位置のディレクトリにアプリフォルダを作れる。今回はChatGPT_Boardという名前にする。</p>
+<p><img alt="" loading="lazy" decoding="async" width="364" height="44" src="/_astro/8dc9f83b16655ec93c86a53a984de202.CwAxluE7_Z2tWg5s.webp" srcset=""></p>
+<h3 id="dbの作成"><strong>DBの作成</strong></h3>
+<p>マイグレーションでDBの作成は出来ないので、MySQLでDBを事前に作成しておく。<br>
+また、日本語を入れる場合、文字化け防止でエンコードの設定をutf8mb4にしておいた方がいいっぽいのでそれもしておく。</p>
+<p>まず、MySQLが稼働してるかの確認。<br>
+“sudo systemctl status mysqld”</p>
+<p><img alt="" loading="lazy" decoding="async" width="296" height="64" src="/_astro/0a33ad500a8a4073f04a8adba6cf8074.C72l-S1F_1rpC7m.webp" srcset=""></p>
+<p>確認出来たら‘mysql -u root -p’でrootにログイン。<br>
+「-u ユーザー名」でユーザ―の指定で、-pはパスワードを設定している時だけつける。</p>
+<p>ログインして“show variables like “chara%”;”でエンコード設定を確認。</p>
+<p>chara%は正規表現で、charaがエンコード的な意味。</p>
+<p><img alt="" loading="lazy" decoding="async" width="566" height="227" src="/_astro/3330ed2ec065aeed4fd8a83465454267.C42Ys9f9_ZpaNmd.webp" srcset=""></p>
+<p>見てみた感じ、databaseがutf8mb4になっているので問題なさそう。<br>
+初期から設定されてたのかこれ。</p>
+<p>なら、DBを作成する。</p>
+<p>“create database DB名”でDBの作成。<br>
+DB名はアプリ名と全く同じのでいいかな？</p>
+<p><img alt="" loading="lazy" decoding="async" width="242" height="219" src="/_astro/c22f5bb6feb7c0764535a3573cc0c609.CvdfAdZ8_ZBeRSD.webp" srcset=""></p>
+<p>おｋ</p>
+<h3 id="envの設定"><strong>.envの設定</strong></h3>
+<p>ここら辺もやっておかないといけない。</p>
+<p>DB関連はこんな感じで設定すればいいと思う。</p>
+<p><img alt="" loading="lazy" decoding="async" width="259" height="123" src="/_astro/8241b01390e99dbd6ab77589b7b14a96.Bg2Sh5TB_28McgQ.webp" srcset=""></p>
+<p>パスワードは自身が設定したものを。</p>
+<h3 id="gitに上げてホストpcと共有"><strong>gitに上げてホストPCと共有</strong></h3>
+<p>前と同じようにgitでホストPCと共有しておこう。</p>
+<p>gitignoreとかreadme.mdとかは初期からあるので、そのままディレクトリに移って<br>
+“git init”</p>
+<p><img alt="" loading="lazy" decoding="async" width="715" height="47" src="/_astro/4996134c01133dd8364596f2cc228588.CklR9t18_1UPHXi.webp" srcset=""></p>
+<p>git対象をこのディレクトリ以下全てにしたいので、<br>
+“git add -A”</p>
+<p>とりあえずcommit<br>
+‘git commit -m “Hello ChatGPTBoard”’</p>
+<p>ここで、githubに移って、gitignoreとかreadmeのない空のリポジトリを作成しておく。</p>
+<p>“git remote add origin リポジトリのURL”<br>
+で、originというリモートリポジトリをgithubにホストしてもらう。</p>
+<p>“git push -u origin main”<br>
+でpushと、-uを指定することで毎回origin mainを指定しなくてもcommitとかpullができるように。</p>
+<p><img alt="" loading="lazy" decoding="async" width="1149" height="587" src="/_astro/72d503abd9213aec80798b6e6fab6fb2.C29435sH_gqRDo.webp" srcset=""></p>
+<p>おｋ</p>
+<p>次にホストPCでクローンする。<br>
+前と同じように自分で作りたいディレクトリに移ってcmdから<br>
+“git clone 自分のリポジトリURL”<br>
+でおｋ。</p>
+<p>お～！　2回目だから滅茶苦茶スムーズにいけた</p>
+<h2 id="作っていく"><strong>作っていく</strong></h2>
+<p>といっても、マジで何したらいいのかわかんないので、とりあえずDBとやり取りするためのEloquentモデルをmake modelで作成してみる。</p>
+<p>make modelについては<a href="https://qiita.com/niisan-tokyo/items/9c799989cb535489f201" rel="noopener noreferrer" target="_blank">こちら</a>がわかりやすい。<br>
+Qiita記事を見た感じ、factory以外はあると良さそう。</p>
+<p>また、色々考えたんだけど、ChatGPTの内容をコピペするのは技術的に1日以上かかっちゃいそうだから、普通に掲示板っぽく1メッセージずつ入れていく方式にする。<br>
+あと、DBに二次配列は良くないみたい。基本1次元で、工夫して順序を決めるっぽいね。</p>
+<p>DBのテーブルもこの場合複数あった方が良さそうなので、複数作成する。</p>
+<p>ChatGPTに相談したところ、ThreadsテーブルとPostテーブルで分けた方がいいと言われた。</p>
+<p>つまり、スレッドテーブルは</p>
+<ul>
+<li>
+<p>スレッドID</p>
+</li>
+<li>
+<p>タイトル</p>
+</li>
+<li>
+<p>概要</p>
+</li>
+<li>
+<p>作成日</p>
+</li>
+</ul>
+<p>を保存し、</p>
+<p>ポストテーブルは</p>
+<ul>
+<li>
+<p>ポストID</p>
+</li>
+<li>
+<p>ロール（ChatGPTかユーザーか）</p>
+</li>
+<li>
+<p>本文</p>
+</li>
+<li>
+<p>スレッドID</p>
+</li>
+<li>
+<p>投稿日</p>
+</li>
+</ul>
+<p>を保存する。</p>
+<p>スレッドIDでポストテーブルと紐づけて、投稿日で順序を決めるという感じ。</p>
+<p>なるほどねぇ。</p>
+<p>ちょっとポストテーブルだとわかりにくいので、メッセージテーブルという名前にしようか。</p>
+<h3 id="make-model"><strong>make model</strong></h3>
+<p>make modelでモデルファイルを作るけど、コントローラはどっちも必要だよね？　どっちもCRUDするもんね？　ファクトリーは簡単にDBテストが出来るらしいんだけど、ちょっとわからないのでスルー。</p>
+<p>ってことでモデルファイル+マイグレーションファイル+コントローラファイルを一気に作る。</p>
+<p>“php artisan make:model Thread -m -c -r”</p>
+<p>“php artisan make:model Message -m -c -r”</p>
+<p>-mはマイグレーションファイルのことで、-cがコントローラファイル、-rがコントローラファイルの内容にCRUD系のテンプレメソッドを作ってくれる。</p>
+<h3 id="マイグレーションファイルを弄る"><strong>マイグレーションファイルを弄る</strong></h3>
+<p>スレッドテーブルのマイグレーションファイルは以下のようにした。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F92672">public</span><span style="color:#66D9EF;font-style:italic"> function</span><span style="color:#A6E22E"> up</span><span style="color:#F8F8F2">()</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        Schema</span><span style="color:#F92672">::</span><span style="color:#A6E22E">create</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'threads'</span><span style="color:#F8F8F2">, </span><span style="color:#66D9EF;font-style:italic">function</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">Blueprint</span><span style="color:#F8F8F2"> $table) {</span></span>
+<span class="line"><span style="color:#F8F8F2">            $table</span><span style="color:#F92672">-></span><span style="color:#A6E22E">id</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">            $table</span><span style="color:#F92672">-></span><span style="color:#A6E22E">string</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"title"</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">            $table</span><span style="color:#F92672">-></span><span style="color:#A6E22E">string</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"overview"</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">            $table</span><span style="color:#F92672">-></span><span style="color:#A6E22E">timestamps</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">        });</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span></code></pre>
+<p>既にあるものにtitleとoverviewを追加した形。<br>
+id()は一意のidになるらしい。</p>
+<p>あまり分からないのはup()とdown()の違いと、Schema::createとその中身。</p>
+<p>upメソッドはmigration時に呼び出されるもので、downメソッドはロールバックする処理を”自分”で記述するところ。要するに、ロールバックさせたいときは自分で動作をdownメソッドに記述しておかなきゃいけない。</p>
+<p>Schema::createはファザードで、Schemaクラスのcreateメソッドを呼び出している。createとある通り、テーブルの作成メソッド。</p>
+<p>第一引数の名前のテーブルを作成(今回はthreadsを作成)し、第二引数でカラムを設定できる。その際に、functionでBlueprintというオブジェクトを呼び出し、ここにカラムを指定し、第二引数に渡しているイメージ。</p>
+<p>次に、メッセージテーブルのマイグレーションファイルの設定。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F92672">public</span><span style="color:#66D9EF;font-style:italic"> function</span><span style="color:#A6E22E"> up</span><span style="color:#F8F8F2">()</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        Schema</span><span style="color:#F92672">::</span><span style="color:#A6E22E">create</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'messages'</span><span style="color:#F8F8F2">, </span><span style="color:#66D9EF;font-style:italic">function</span><span style="color:#F8F8F2"> (</span><span style="color:#66D9EF;font-style:italic">Blueprint</span><span style="color:#F8F8F2"> $table) {</span></span>
+<span class="line"><span style="color:#F8F8F2">            $table</span><span style="color:#F92672">-></span><span style="color:#A6E22E">id</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">            $table</span><span style="color:#F92672">-></span><span style="color:#A6E22E">foreignId</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'thread_id'</span><span style="color:#F8F8F2">)</span><span style="color:#F92672">-></span><span style="color:#A6E22E">constrained</span><span style="color:#F8F8F2">()</span><span style="color:#F92672">-></span><span style="color:#A6E22E">onDelete</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'cascade'</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">            $table</span><span style="color:#F92672">-></span><span style="color:#A6E22E">text</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"message"</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">            $table</span><span style="color:#F92672">-></span><span style="color:#A6E22E">string</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"role"</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">            $table</span><span style="color:#F92672">-></span><span style="color:#A6E22E">timestamps</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#F8F8F2">        });</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span></code></pre>
+<p>ここでの謎は「$table->foreignId(‘thread_id’)->constrained()->onDelete(‘cascade’);」の部分。</p>
+<ul>
+<li>
+<p><strong>foreignId()</strong><br>
+これは外部キー制約というものらしく、threadのidを参照し一致しているかを確認してくれる的な感じ。</p>
+</li>
+<li>
+<p><strong>constrained()</strong><br>
+はforeignIdに渡された値から対象のテーブルとカラムを予測してくれるらしい。そんなことある？　恐らくこれはLaravelの規則に従ったテーブル名じゃないとダメらしく、もし独自の名前を付けたならconstrained()にその名前を渡さなきゃいけない。<br>
+恐らく、今回はこのままで大丈夫。</p>
+</li>
+<li>
+<p><strong>onDelete()</strong><br>
+cascadeが滝→連鎖的に的な意味で、今回の場合はthread_idが無くなったら一緒にこのメッセージも消えるという設定。</p>
+</li>
+</ul>
+<p>ここらへんの詳細は<a href="https://readouble.com/laravel/9.x/ja/migrations.html" rel="noopener noreferrer" target="_blank">公式ドキュメント</a>を。<br>
+バージョンによっても変わるっぽい。</p>
+<p>設定し終わったら”php artisan migrate”でマイグレート。</p>
+<p><img alt="" loading="lazy" decoding="async" width="778" height="60" src="/_astro/8c5ee42412f79d7527e003d0796baa5d.DvrnAOiV_21yLr4.webp" srcset=""></p>
+<p>おｋ！</p>
+<p>一応出来てるか確認する。<br>
+“mysql -u root -p”<br>
+でmysql入って<br>
+“use DB名”<br>
+でDB選択して</p>
+<p>“show tables;”でテーブル確認。</p>
+<p><img alt="" loading="lazy" decoding="async" width="273" height="270" src="/_astro/f61ea6606667706bfe58565ab03dff1f.cl_cdSox_Z1YMrac.webp" srcset=""></p>
+<p>おｋ。</p>
+<h3 id="モデルのリレーション設定"><strong>モデルのリレーション設定</strong></h3>
+<p>さっきのはマイグレーション、つまりDB側のリレーションの設定でモデルの設定はEloquent ORMのリレーションの設定。</p>
+<p>これをすることで、簡単に関連データを取得できるようになるらしい。</p>
+<p>こちらも詳しくは<a href="https://readouble.com/laravel/9.x/ja/eloquent-relationships.html#one-to-many" rel="noopener noreferrer" target="_blank">公式ドキュメント（日本語訳）</a>を見てもらうといいと思う。</p>
+<h4 id="スレッドモデル"><strong>スレッドモデル</strong></h4>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F92672">use</span><span style="color:#F8F8F2"> App\Models\</span><span style="color:#66D9EF;font-style:italic">Message</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">class</span><span> </span><span style="color:#A6E22E;text-decoration:underline">Thread</span><span style="color:#F92672"> extends</span><span> </span><span style="color:#A6E22E;font-style:italic;text-decoration:underline">Model</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#AE81FF">    public</span><span style="color:#66D9EF;font-style:italic"> function</span><span style="color:#A6E22E"> messages</span><span style="color:#F8F8F2">()</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#AE81FF">        return</span><span style="color:#FD971F"> $this</span><span style="color:#F92672">-></span><span style="color:#A6E22E">hasMany</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">Message</span><span style="color:#F92672">::class</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<p>のようになった。</p>
+<p>スレッドIDは一意なのに対し、メッセージ側でスレッドIDと紐づいているのは複数あるので、一対多の関係。その場合はhasManyをつける。<br>
+hsaMany以外の具体的な指定が無いけど、こちらもLaravelの規約に従った名前を付けていれば自動で探してくれるらしい。</p>
+<p>また、ファザードでMessageモデルを指定しているので、use App\Models\Message;が必要。</p>
+<h4 id="メッセージモデル"><strong>メッセージモデル</strong></h4>
+<p>こちらも大体おなじ。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F92672">use</span><span style="color:#F8F8F2"> App\Models\</span><span style="color:#66D9EF;font-style:italic">Thread</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">class</span><span> </span><span style="color:#A6E22E;text-decoration:underline">Message</span><span style="color:#F92672"> extends</span><span> </span><span style="color:#A6E22E;font-style:italic;text-decoration:underline">Model</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#AE81FF">    public</span><span style="color:#66D9EF;font-style:italic"> function</span><span style="color:#A6E22E"> thread</span><span style="color:#F8F8F2">()</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#AE81FF">        return</span><span style="color:#FD971F"> $this</span><span style="color:#F92672">-></span><span style="color:#A6E22E">belongsTo</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">Thread</span><span style="color:#F92672">::class</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<p>逆にこちらは複数側なのでbelongsToを付ける。</p>
+<p>とりあえず、これでDB関連の設定は出来たと信じる。</p>
+<h2 id="メイン画面の作成"><strong>メイン画面の作成</strong></h2>
+<p>とりあえずPaiza講座と同じようにメイン画面から作っていこう。</p>
+<h3 id="ルータ設定"><strong>ルータ設定</strong></h3>
+<p>とりあえず</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F92672">use</span><span style="color:#F8F8F2"> App\Http\Controllers\</span><span style="color:#66D9EF;font-style:italic">ThreadController</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">Route</span><span style="color:#F92672">::</span><span style="color:#A6E22E">get</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"/threads"</span><span style="color:#F8F8F2">, [</span><span style="color:#66D9EF;font-style:italic">ThreadController</span><span style="color:#F92672">::class</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">"index"</span><span style="color:#F8F8F2">])</span><span style="color:#F92672">-></span><span style="color:#A6E22E">name</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"threads.list"</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">Route</span><span style="color:#F92672">::</span><span style="color:#A6E22E">get</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'/'</span><span style="color:#F8F8F2">, </span><span style="color:#66D9EF;font-style:italic">function</span><span style="color:#F8F8F2"> () {</span></span>
+<span class="line"><span style="color:#AE81FF">    return</span><span style="color:#A6E22E"> redirect</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"/threads"</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">});</span></span></code></pre>
+<p>に変更。</p>
+<p>＠で書くやり方もあるんだけど、現在はこの書き方が推奨されてるっぽい。</p>
+<p>つまり、/threadsをメイン画面にし、/threadsにアクセスすると、threadcontrollerのindexメソッドの処理を行う。</p>
+<h3 id="スレッドコントローラ"><strong>スレッドコントローラ</strong></h3>
+<p>ここらへんはPaizaを参考にやってる。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F92672">public</span><span style="color:#66D9EF;font-style:italic"> function</span><span style="color:#A6E22E"> index</span><span style="color:#F8F8F2">()</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F8F8F2">        $threads</span><span style="color:#F92672">=</span><span style="color:#66D9EF;font-style:italic">Thread</span><span style="color:#F92672">::</span><span style="color:#A6E22E">all</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#AE81FF">        return</span><span style="color:#A6E22E"> view</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'thread.index'</span><span style="color:#F8F8F2">,[</span><span style="color:#E6DB74">"threads"</span><span style="color:#F92672">=></span><span style="color:#F8F8F2">$threads]);</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span></code></pre>
+<p>つまり、モデルThreadから全てのデータを取得するというもの。Threadモデルにall()メソッドなんてなかったと思うけど、なんかプリセットされてるみたい。詳しくは<a href="https://readouble.com/laravel/9.x/ja/eloquent.html" rel="noopener noreferrer" target="_blank">公式ドキュメント</a>を。</p>
+<p>それと、今回はall()で取得してるけど量が多い場合は$threads = Thread::paginate(10);などで制限して取得する。</p>
+<p>この情報は<a href="https://laravel.com/api/9.x/Illuminate/Contracts/Pagination/Paginator.html" rel="noopener noreferrer" target="_blank">LaravelのAPI一覧</a>にある。</p>
+<p>また、今回付けたthread.indexという名前はディレクトリ構造を表していて、view/theread/indexにビューがあるということになる。</p>
+<h3 id="ビューの制作"><strong>ビューの制作</strong></h3>
+<p>ここは完全にPaiza様の講座のhtmlをパクらせていただく。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="html"><code><span class="line"><span style="color:#F8F8F2">&#x3C;!</span><span style="color:#F92672">DOCTYPE</span><span style="color:#A6E22E"> html</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">&#x3C;</span><span style="color:#F92672">html</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;</span><span style="color:#F92672">head</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;</span><span style="color:#F92672">meta</span><span style="color:#A6E22E"> charset</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">'utf-8'</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;</span><span style="color:#F92672">title</span><span style="color:#F8F8F2">>ChatGPT_Board&#x3C;/</span><span style="color:#F92672">title</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;</span><span style="color:#F92672">style</span><span style="color:#F8F8F2">></span><span style="color:#F92672">body</span><span style="color:#F8F8F2"> {</span><span style="color:#66D9EF;font-style:italic">padding</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">10</span><span style="color:#F92672">px</span><span style="color:#F8F8F2">;}&#x3C;/</span><span style="color:#F92672">style</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;/</span><span style="color:#F92672">head</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;</span><span style="color:#F92672">body</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;</span><span style="color:#F92672">h1</span><span style="color:#F8F8F2">>スレッド一覧&#x3C;/</span><span style="color:#F92672">h1</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        @foreach ($threads as $thread)</span></span>
+<span class="line"><span style="color:#F8F8F2">            &#x3C;</span><span style="color:#F92672">p</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">                {{ $thread->title}},</span></span>
+<span class="line"><span style="color:#F8F8F2">                {{ $thread->overview }},</span></span>
+<span class="line"><span style="color:#F8F8F2">                {{ $thread->timestamps }}</span></span>
+<span class="line"><span style="color:#F8F8F2">            &#x3C;/</span><span style="color:#F92672">p</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        @endforeach</span></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;/</span><span style="color:#F92672">body</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">&#x3C;/</span><span style="color:#F92672">html</span><span style="color:#F8F8F2">></span></span></code></pre>
+<h3 id="dbにテストデータを入れる為にシーダーを使う"><strong>DBにテストデータを入れる為にシーダーを使う</strong></h3>
+<p>動作確認を行いたいが、テストデータが無いと出来ないのでDBにデータを入れてみる。<br>
+シーダー→シード→seed→種ってことで、DBに初期値を入れることができるみたい。</p>
+<p>“php artisan make:seeder ThreadsTableSeeder”<br>
+でシーダーを作ってみる。</p>
+<p>database/seedersにシーダーが出来ている。</p>
+<p><img alt="" loading="lazy" decoding="async" width="380" height="163" src="/_astro/f64e71f06d3692e9afdcbd75bb93cf5e.CwoShLRL_1cKP7.webp" srcset=""></p>
+<p>中身は以下の通り</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F92672">&#x3C;?</span><span style="color:#AE81FF">php</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">namespace</span><span> </span><span style="color:#A6E22E;text-decoration:underline">Database\Seeders</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">use</span><span style="color:#F8F8F2"> Illuminate\Database\Console\Seeds\</span><span style="color:#66D9EF;font-style:italic">WithoutModelEvents</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">use</span><span style="color:#F8F8F2"> Illuminate\Database\</span><span style="color:#66D9EF;font-style:italic">Seeder</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">use</span><span style="color:#F8F8F2"> Illuminate\Support\Facades\</span><span style="color:#66D9EF;font-style:italic">DB</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">class</span><span> </span><span style="color:#A6E22E;text-decoration:underline">ThreadsTableSeeder</span><span style="color:#F92672"> extends</span><span> </span><span style="color:#A6E22E;font-style:italic;text-decoration:underline">Seeder</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#88846F">    /**</span></span>
+<span class="line"><span style="color:#88846F">     * Run the database seeds.</span></span>
+<span class="line"><span style="color:#88846F">     *</span></span>
+<span class="line"><span style="color:#88846F">     * </span><span style="color:#F92672">@return</span><span style="color:#F92672"> void</span></span>
+<span class="line"><span style="color:#88846F">     */</span></span>
+<span class="line"><span style="color:#F92672">    public</span><span style="color:#66D9EF;font-style:italic"> function</span><span style="color:#A6E22E"> run</span><span style="color:#F8F8F2">()</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        DB</span><span style="color:#F92672">::</span><span style="color:#A6E22E">table</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'threads'</span><span style="color:#F8F8F2">)</span><span style="color:#F92672">-></span><span style="color:#A6E22E">insert</span><span style="color:#F8F8F2">([</span></span>
+<span class="line"><span style="color:#F8F8F2">            [</span></span>
+<span class="line"><span style="color:#E6DB74">                'title'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'サンプルスレッド1'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">                'overview'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'これはサンプルのスレッド1です。'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">                'created_at'</span><span style="color:#F92672"> =></span><span style="color:#A6E22E"> now</span><span style="color:#F8F8F2">(),</span></span>
+<span class="line"><span style="color:#E6DB74">                'updated_at'</span><span style="color:#F92672"> =></span><span style="color:#A6E22E"> now</span><span style="color:#F8F8F2">(),</span></span>
+<span class="line"><span style="color:#F8F8F2">            ],</span></span>
+<span class="line"><span style="color:#F8F8F2">            [</span></span>
+<span class="line"><span style="color:#E6DB74">                'title'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'サンプルスレッド2'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">                'overview'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'これはサンプルのスレッド2です。'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">                'created_at'</span><span style="color:#F92672"> =></span><span style="color:#A6E22E"> now</span><span style="color:#F8F8F2">(),</span></span>
+<span class="line"><span style="color:#E6DB74">                'updated_at'</span><span style="color:#F92672"> =></span><span style="color:#A6E22E"> now</span><span style="color:#F8F8F2">(),</span></span>
+<span class="line"><span style="color:#F8F8F2">            ],</span></span>
+<span class="line"><span style="color:#F8F8F2">            [</span></span>
+<span class="line"><span style="color:#E6DB74">                'title'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'サンプルスレッド3'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">                'overview'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'これはサンプルのスレッド3です。'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">                'created_at'</span><span style="color:#F92672"> =></span><span style="color:#A6E22E"> now</span><span style="color:#F8F8F2">(),</span></span>
+<span class="line"><span style="color:#E6DB74">                'updated_at'</span><span style="color:#F92672"> =></span><span style="color:#A6E22E"> now</span><span style="color:#F8F8F2">(),</span></span>
+<span class="line"><span style="color:#F8F8F2">            ]</span></span>
+<span class="line"><span style="color:#F8F8F2">        ]);</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<p>created_atなんてカラム作ってないと思うかもなんだけど、timestampsが担ってるみたい。</p>
+<p>これを記述した後に<br>
+“php artisan db:seed —class=ThreadsTableSeeder”<br>
+でシーダーを適用。</p>
+<p>よし、これでいいのかな。</p>
+<h3 id="テストをしてみる"><strong>テストをしてみる</strong></h3>
+<p>早速接続</p>
+<p><img alt="" loading="lazy" decoding="async" width="1362" height="734" src="/_astro/53e9756ee6edef2fb550e9a8a3300f30.CtVZg5O4_1uOafY.webp" srcset=""></p>
+<p>404。</p>
+<p>恐らく、アプリを新しくしたのでバーチャルホストの設定を更新しなきゃいけないなこれ。<br>
+詳しくは7日目と8日目参照。</p>
+<p>更新してきた。</p>
+<p><img alt="" loading="lazy" decoding="async" width="599" height="209" src="/_astro/ec9374d7b55b34bf8ea77220cd45a039.DY2eSk_u_Z33gPC.webp" srcset=""></p>
+<p>前もこうなった気がする。</p>
+<p>権限問題だと思われるので、フォルダのパーミッションを設定する。</p>
+<p>おｋ！</p>
+<p><img alt="" loading="lazy" decoding="async" width="562" height="345" src="/_astro/9666e20a83fb3bbc55fa3f7316bbc22c.D5LupW1W_Z5xi3Q.webp" srcset=""></p>
+<p>なんかURLの末尾に意図しないものがついてるけど、とりあえず動いた。</p>
+<h3 id="viewのテンプレート化"><strong>viewのテンプレート化</strong></h3>
+<p>ここらへんもPaizaの受け売りなんだけど、Bladeを使ってテンプレート化できるのでテンプレ化する……といっても今はメイン画面のみなのでテンプレート化する意味は薄め。</p>
+<p><img alt="" loading="lazy" decoding="async" width="339" height="141" src="/_astro/a4992afed10fcecba28b4fa49b2d3cc1.BU-GnU2P_Z2lDCGv.webp" srcset=""></p>
+<p>layout.blade.phpをthreadフォルダ内に作って、以下のようにする。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="blade"><code><span class="line"><span style="color:#F8F8F2">&#x3C;!</span><span style="color:#F92672">DOCTYPE</span><span style="color:#A6E22E"> html</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">&#x3C;</span><span style="color:#F92672">html</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;</span><span style="color:#F92672">head</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;</span><span style="color:#F92672">meta</span><span style="color:#A6E22E"> charset</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">'utf-8'</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;</span><span style="color:#F92672">title</span><span style="color:#F8F8F2">>ChatGPT_Board&#x3C;/</span><span style="color:#F92672">title</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;</span><span style="color:#F92672">style</span><span style="color:#F8F8F2">></span><span style="color:#F92672">body</span><span style="color:#F8F8F2"> {</span><span style="color:#66D9EF;font-style:italic">padding</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">10</span><span style="color:#F92672">px</span><span style="color:#F8F8F2">;}&#x3C;/</span><span style="color:#F92672">style</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;/</span><span style="color:#F92672">head</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;</span><span style="color:#F92672">body</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F92672">        @yield</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'content'</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;/</span><span style="color:#F92672">body</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">&#x3C;/</span><span style="color:#F92672">html</span><span style="color:#F8F8F2">></span></span></code></pre>
+<p>そして、それに合わせてindex.blade.phpを修正</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="blade"><code><span class="line"><span style="color:#F92672">@extends</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'thread.layout'</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">@section</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'content'</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;</span><span style="color:#F92672">h1</span><span style="color:#F8F8F2">>スレッド一覧&#x3C;/</span><span style="color:#F92672">h1</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F92672">    @foreach </span><span style="color:#F8F8F2">($threads </span><span style="color:#F92672">as</span><span style="color:#F8F8F2"> $thread)</span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;</span><span style="color:#F92672">p</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#66D9EF">            {{</span><span style="color:#F8F8F2"> $thread</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">title</span><span style="color:#66D9EF">}}</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#66D9EF">            {{</span><span style="color:#F8F8F2"> $thread</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">overview </span><span style="color:#66D9EF">}}</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#66D9EF">            {{</span><span style="color:#F8F8F2"> $thread</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">timestamps </span><span style="color:#66D9EF">}}</span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;/</span><span style="color:#F92672">p</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F92672">    @endforeach</span></span>
+<span class="line"><span style="color:#F92672">@endsection</span></span></code></pre>
+<p>たぶん、プログラミング出来る人だったら説明しなくてもこのコード見るだけで理解できると思うけど、一応説明。</p>
+<p>layoutのcontentの部分だけオリジナル要素で、それ以外はテンプレというレイアウトを作成する→それに合わせてindex.blade.phpを、contentの部分だけ残し、残りは削除という感じ。</p>
+<p>何も変わってはないけど、一応適応できたことを確認。</p>
+<p>Paiza様のをほぼそのままもってきて、layoutを以下のようなコードに更新しBootstrapを適用。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="blade"><code><span class="line"><span style="color:#F8F8F2">&#x3C;!</span><span style="color:#F92672">DOCTYPE</span><span style="color:#A6E22E"> html</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">&#x3C;</span><span style="color:#F92672">html</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;</span><span style="color:#F92672">head</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;</span><span style="color:#F92672">meta</span><span style="color:#A6E22E"> charset</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">'utf-8'</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;</span><span style="color:#F92672">meta</span><span style="color:#A6E22E"> name</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">'viewport'</span><span style="color:#A6E22E"> content</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">'width=device-width, initial-scale=1, shrink-to-fit=no'</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;</span><span style="color:#F92672">link</span><span style="color:#A6E22E"> rel</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">'stylesheet'</span><span style="color:#A6E22E"> href</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css'</span><span style="color:#F8F8F2"> ></span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;</span><span style="color:#F92672">title</span><span style="color:#F8F8F2">>ChatGPT_Board&#x3C;/</span><span style="color:#F92672">title</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;</span><span style="color:#F92672">style</span><span style="color:#F8F8F2">></span><span style="color:#F92672">body</span><span style="color:#F8F8F2"> {</span><span style="color:#66D9EF;font-style:italic">padding-top</span><span style="color:#F8F8F2">: </span><span style="color:#AE81FF">80</span><span style="color:#F92672">px</span><span style="color:#F8F8F2">;}&#x3C;/</span><span style="color:#F92672">style</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;/</span><span style="color:#F92672">head</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;</span><span style="color:#F92672">body</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;</span><span style="color:#F92672">nav</span><span style="color:#A6E22E"> class</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">'navbar navbar-expand-md navbar-dark bg-dark fixed-top'</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">            &#x3C;</span><span style="color:#F92672">a</span><span style="color:#A6E22E"> class</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">'navbar-brand'</span><span style="color:#A6E22E"> href</span><span style="color:#F8F8F2">=</span><span style="color:#66D9EF">{{</span><span style="color:#A6E22E">route</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'threads.list'</span><span style="color:#F8F8F2">)</span><span style="color:#66D9EF">}}</span><span style="color:#F8F8F2">>ChatGPT_Board&#x3C;/</span><span style="color:#F92672">a</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;/</span><span style="color:#F92672">nav</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;</span><span style="color:#F92672">div</span><span style="color:#A6E22E"> class</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">'container'</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F92672">        @yield</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'content'</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;/</span><span style="color:#F92672">div</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;/</span><span style="color:#F92672">body</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">&#x3C;/</span><span style="color:#F92672">html</span><span style="color:#F8F8F2">></span></span></code></pre>
+<p>結果こんな感じ。</p>
+<p><img alt="" loading="lazy" decoding="async" width="820" height="406" src="/_astro/51ef26114bce12db4f73caba6f4c1424.BsZ9WwX-_2qHJCB.webp" srcset=""></p>
+<p>まあ、さっきよりは見た目が良くなったね。</p>
+<p>Bootstrapを使うと、画面比率に合わせてレイアウトを自動調整してくれるよ。<br>
+それ以外の詳しいことはわからないけど、便利ではあると思う。</p>
+<h3 id="閲覧画面の作成"><strong>閲覧画面の作成</strong></h3>
+<p>閲覧画面というより、詳細画面といった方がいいのか？　</p>
+<h3 id="ルーティング"><strong>ルーティング</strong></h3>
+<p>「Route::get(‘/shop/{id}’, ‘ShopController@show’)->name(‘shop.detail’);」このルーティングはPaizaのやつなんだけど、こんな感じでURLに{id}とやることで、今回の場合は”/shop/{ここ}”の部分をidとして受け取れる。つまり、”/shop/1”というURLならidに1を代入して受け取ることができる。</p>
+<p>これは変数名をidとしているだけで、数字だけじゃなく文字列でもなんでも受け取れてしまうので注意。</p>
+<p>それに倣って今回、閲覧画面のルーティングをするとすれば、<br>
+“Route::get(“/thread/{id}”,[ThreadController::class, “show”])->name(“threads.detail”);”<br>
+みたいな感じでいいのかなと思う。</p>
+<h3 id="コントローラ"><strong>コントローラ</strong></h3>
+<p>恐らくここがPaizaと違く、2つのモデルからDBのデータを引っ張ってきてViewに渡すという動作をしなきゃいけない。</p>
+<p>具体的には、Threadモデルのタイトルと、ThreadIdと一致するMessageモデルの全メッセージを取得し、Viewに送ってやる必要がある。<br>
+とりあえず、該当のThreadモデルの全データを取得する。要するに、クリックした記事のID、タイトル、概要、timestanmpの全てを取得する。</p>
+<p>$thread = Thread::find($id);</p>
+<p>これで、urlから取得したidのthreadを見つける。<br>
+次に、その記事と結びつくメッセージを全て取得する。</p>
+<p>$messages = $thread->messages;</p>
+<p>これでいけるらしい。<br>
+これは、threadモデルでhasManyのリレーションを定義したからORMであるEloquentが認識してやってくれているみたい。</p>
+<p>これをもうViewに渡してしまえば終わりなのでは？</p>
+<p>        return view(‘thread.show’,[“thread”=>$thread,“messages”=>$messages]);</p>
+<p>とりあえず、これでやってみよう。</p>
+<h3 id="ビュー"><strong>ビュー</strong></h3>
+<p>ビューを作っていこう！</p>
+<p>ここら辺は少ないHTMLの知識を総動員して作ろうと思ったんだけど、別にテンプレートを使いまわしても問題ないのかこれ。<br>
+やってみよう。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="blade"><code><span class="line"><span style="color:#F92672">@extends</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'thread.layout'</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F92672">@section</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'content'</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;</span><span style="color:#F92672">h1</span><span style="color:#F8F8F2">></span><span style="color:#66D9EF">{{</span><span style="color:#F8F8F2"> $thread</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">title </span><span style="color:#66D9EF">}}</span><span style="color:#F8F8F2">&#x3C;/</span><span style="color:#F92672">h1</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F92672">    @foreach </span><span style="color:#F8F8F2">($messages </span><span style="color:#F92672">as</span><span style="color:#F8F8F2"> $message)</span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;</span><span style="color:#F92672">p</span><span style="color:#F8F8F2">></span><span style="color:#66D9EF">{{</span><span style="color:#F8F8F2"> $message</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">role </span><span style="color:#66D9EF">}}</span><span style="color:#F8F8F2">&#x3C;/</span><span style="color:#F92672">p</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;</span><span style="color:#F92672">p</span><span style="color:#F8F8F2">></span><span style="color:#66D9EF">{{</span><span style="color:#F8F8F2"> $message</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">message </span><span style="color:#66D9EF">}}</span><span style="color:#F8F8F2">&#x3C;/</span><span style="color:#F92672">p</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;</span><span style="color:#F92672">p</span><span style="color:#F8F8F2">></span><span style="color:#66D9EF">{{</span><span style="color:#F8F8F2"> $message</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">created_at </span><span style="color:#66D9EF">}}</span><span style="color:#F8F8F2">&#x3C;/</span><span style="color:#F92672">p</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F92672">    @endforeach</span></span>
+<span class="line"><span style="color:#F92672">@endsection</span></span></code></pre>
+<p>とりあえずこんなもんでいいのでは。</p>
+<h3 id="テストの為のシーダー"><strong>テストの為のシーダー</strong></h3>
+<p>こちらも動作確認をしたいので、初期値を設定する。</p>
+<p>“php artisan make:seeder ThreadsDetailSeeder”</p>
+<p>でいいかな。</p>
+<p>内容は</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F92672">&#x3C;?</span><span style="color:#AE81FF">php</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">namespace</span><span> </span><span style="color:#A6E22E;text-decoration:underline">Database\Seeders</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">use</span><span style="color:#F8F8F2"> Illuminate\Database\Console\Seeds\</span><span style="color:#66D9EF;font-style:italic">WithoutModelEvents</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">use</span><span style="color:#F8F8F2"> Illuminate\Database\</span><span style="color:#66D9EF;font-style:italic">Seeder</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">use</span><span style="color:#F8F8F2"> Illuminate\Support\Facades\</span><span style="color:#66D9EF;font-style:italic">DB</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">class</span><span> </span><span style="color:#A6E22E;text-decoration:underline">ThreadsDetailSeeder</span><span style="color:#F92672"> extends</span><span> </span><span style="color:#A6E22E;font-style:italic;text-decoration:underline">Seeder</span></span>
+<span class="line"><span style="color:#F8F8F2">{</span></span>
+<span class="line"><span style="color:#88846F">    /**</span></span>
+<span class="line"><span style="color:#88846F">     * Run the database seeds.</span></span>
+<span class="line"><span style="color:#88846F">     *</span></span>
+<span class="line"><span style="color:#88846F">     * </span><span style="color:#F92672">@return</span><span style="color:#F92672"> void</span></span>
+<span class="line"><span style="color:#88846F">     */</span></span>
+<span class="line"><span style="color:#F92672">    public</span><span style="color:#66D9EF;font-style:italic"> function</span><span style="color:#A6E22E"> run</span><span style="color:#F8F8F2">()</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">        DB</span><span style="color:#F92672">::</span><span style="color:#A6E22E">table</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'messages'</span><span style="color:#F8F8F2">)</span><span style="color:#F92672">-></span><span style="color:#A6E22E">insert</span><span style="color:#F8F8F2">([</span></span>
+<span class="line"><span style="color:#F8F8F2">            [</span></span>
+<span class="line"><span style="color:#E6DB74">                'thread_id'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> '1'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">                'message'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'テストメッセージ1です'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">                'role'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'User'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">                'created_at'</span><span style="color:#F92672"> =></span><span style="color:#A6E22E"> now</span><span style="color:#F8F8F2">(),</span></span>
+<span class="line"><span style="color:#E6DB74">                'updated_at'</span><span style="color:#F92672"> =></span><span style="color:#A6E22E"> now</span><span style="color:#F8F8F2">(),</span></span>
+<span class="line"><span style="color:#F8F8F2">            ],</span></span>
+<span class="line"><span style="color:#F8F8F2">            [</span></span>
+<span class="line"><span style="color:#E6DB74">                'thread_id'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> '1'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">                'message'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'テストメッセージ2です'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">                'role'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'ChatGPT'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">                'created_at'</span><span style="color:#F92672"> =></span><span style="color:#A6E22E"> now</span><span style="color:#F8F8F2">(),</span></span>
+<span class="line"><span style="color:#E6DB74">                'updated_at'</span><span style="color:#F92672"> =></span><span style="color:#A6E22E"> now</span><span style="color:#F8F8F2">(),</span></span>
+<span class="line"><span style="color:#F8F8F2">            ],</span></span>
+<span class="line"><span style="color:#F8F8F2">            [</span></span>
+<span class="line"><span style="color:#E6DB74">                'thread_id'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> '1'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">                'message'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'テストメッセージ3です'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">                'role'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'User'</span><span style="color:#F8F8F2">,</span></span>
+<span class="line"><span style="color:#E6DB74">                'created_at'</span><span style="color:#F92672"> =></span><span style="color:#A6E22E"> now</span><span style="color:#F8F8F2">(),</span></span>
+<span class="line"><span style="color:#E6DB74">                'updated_at'</span><span style="color:#F92672"> =></span><span style="color:#A6E22E"> now</span><span style="color:#F8F8F2">(),</span></span>
+<span class="line"><span style="color:#F8F8F2">            ]</span></span>
+<span class="line"><span style="color:#F8F8F2">        ]);</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span></code></pre>
+<p>でやってみる。<br>
+thread_idは1から順々に振られていくはずなので、これで問題ないはず。</p>
+<p>“php artisan db:seed —class=ThreadsDetailSeeder”<br>
+で適用。</p>
+<h3 id="テスト"><strong>テスト</strong></h3>
+<p>動くかなぁ～</p>
+<p><img alt="" loading="lazy" decoding="async" width="743" height="730" src="/_astro/ec7e308182f0f08e7b1fb53202822abf.B6GlPTuw_ZGh3HV.webp" srcset=""></p>
+<p>何も問題なく動いた！　嬉しいね！</p>
+<p>時間が恐らく世界標準時間になっている所を覗けば予想通り。<br>
+そうか、時間の設定も必要だよねそりゃ。</p>
+<h3 id="メイン画面の修正"><strong>メイン画面の修正</strong></h3>
+<p>現在の設定だとURLに直接idを打ち込む必要があるので、リンクさせる。<br>
+HTML(Hyper Text Markup Language)って言うくらいだしね。</p>
+<p>ついでに、Paizaの方を見るとメイン画面をテーブル化していたので、それも参考にさせていただいて、以下のようなコードに修正。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="blade"><code><span class="line"><span style="color:#F92672">@extends</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'thread.layout'</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F92672">@section</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'content'</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;</span><span style="color:#F92672">h1</span><span style="color:#F8F8F2">>スレッド一覧&#x3C;/</span><span style="color:#F92672">h1</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;</span><span style="color:#F92672">a</span><span style="color:#A6E22E"> href</span><span style="color:#F8F8F2">=</span><span style="color:#66D9EF">{{</span><span style="color:#A6E22E"> route</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'threads.create'</span><span style="color:#F8F8F2">) </span><span style="color:#66D9EF">}}</span><span style="color:#A6E22E"> class</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">'btn btn-outline-primary'</span><span style="color:#F8F8F2">>新規スレッドを作成&#x3C;/</span><span style="color:#F92672">a</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;</span><span style="color:#F92672">table</span><span style="color:#A6E22E"> class</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">'table table-striped table-hover'</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;</span><span style="color:#F92672">tr</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">            &#x3C;</span><span style="color:#F92672">th</span><span style="color:#F8F8F2">>タイトル&#x3C;/</span><span style="color:#F92672">th</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">            &#x3C;</span><span style="color:#F92672">th</span><span style="color:#F8F8F2">>概要&#x3C;/</span><span style="color:#F92672">th</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">            &#x3C;</span><span style="color:#F92672">th</span><span style="color:#F8F8F2">>作成日時&#x3C;/</span><span style="color:#F92672">th</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;/</span><span style="color:#F92672">tr</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F92672">        @foreach </span><span style="color:#F8F8F2">($threads </span><span style="color:#F92672">as</span><span style="color:#F8F8F2"> $thread)</span></span>
+<span class="line"><span style="color:#F8F8F2">            &#x3C;</span><span style="color:#F92672">tr</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">                &#x3C;</span><span style="color:#F92672">td</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">                    &#x3C;</span><span style="color:#F92672">a</span><span style="color:#A6E22E"> href</span><span style="color:#F8F8F2">=</span><span style="color:#66D9EF">{{</span><span style="color:#A6E22E"> route</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'threads.detail'</span><span style="color:#F8F8F2">, [</span><span style="color:#E6DB74">'id'</span><span style="color:#F92672"> =></span><span style="color:#F8F8F2"> $thread</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">id]) </span><span style="color:#66D9EF">}}</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#66D9EF">                        {{</span><span style="color:#F8F8F2"> $thread</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">title </span><span style="color:#66D9EF">}}</span></span>
+<span class="line"><span style="color:#F8F8F2">                    &#x3C;/</span><span style="color:#F92672">a</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">                &#x3C;/</span><span style="color:#F92672">td</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">                &#x3C;</span><span style="color:#F92672">td</span><span style="color:#F8F8F2">></span><span style="color:#66D9EF">{{</span><span style="color:#F8F8F2"> $thread</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">overview </span><span style="color:#66D9EF">}}</span><span style="color:#F8F8F2">&#x3C;/</span><span style="color:#F92672">td</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">                &#x3C;</span><span style="color:#F92672">td</span><span style="color:#F8F8F2">></span><span style="color:#66D9EF">{{</span><span style="color:#F8F8F2"> $thread</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">created_at </span><span style="color:#66D9EF">}}</span><span style="color:#F8F8F2">&#x3C;/</span><span style="color:#F92672">td</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">            &#x3C;/</span><span style="color:#F92672">tr</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F92672">        @endforeach</span></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;/</span><span style="color:#F92672">table</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F92672">@endsection</span></span></code></pre>
+<p>すると。</p>
+<p><img alt="" loading="lazy" decoding="async" width="1600" height="490" src="/_astro/d61f12c29ea54eb5127b69ac12574401.Ch2O2WTK_178dFd.webp" srcset=""></p>
+<p>こんな感じでスッキリ＆リンクを押すことで該当記事に飛べるように。</p>
+<h3 id="新規追加画面の作成"><strong>新規追加画面の作成</strong></h3>
+<p>スレッドを自分で作成出来るようにする。<br>
+つまり、DBにデータを保存する作業。</p>
+<p>Paizaの方ではコントローラのstoreメソッドで新規作成の全てを賄ってたんだけど、じゃあcreateメソッドって何のためにあるの？　ってなるよね。</p>
+<p>ちなみに、今回はコントローラを<br>
+“php artisan make:model Thread -m -c -r”<br>
+のrオプションを付けて作ったのでテンプレのメソッドがある。</p>
+<p>実際にメソッドを挙げると</p>
+<ol>
+<li>
+<p><strong>index</strong></p>
+</li>
+<li>
+<p><strong>create</strong></p>
+</li>
+<li>
+<p><strong>store</strong></p>
+</li>
+<li>
+<p><strong>show</strong></p>
+</li>
+<li>
+<p><strong>edit</strong></p>
+</li>
+<li>
+<p><strong>update</strong></p>
+</li>
+<li>
+<p><strong>destroy</strong></p>
+</li>
+</ol>
+<p>の７つ。</p>
+<p>ここで気になるのはcreate-storeの関係とedit-updateの関係。<br>
+どっちも同じような意味だけど、どう違うの？　という話。</p>
+<p>簡潔に言えば、create,editメソッドはインターフェースの部分を呼び出すメソッドで、storeとupdateはデータを保存する処理を呼び出すメソッド。</p>
+<p>だから新規追加をする場合、流れ的には</p>
+<ol>
+<li>
+<p><strong>ユーザーが新規追加画面へ行くボタンを押す</strong></p>
+</li>
+<li>
+<p><strong>ルーティングがコントローラのcreateメソッドを呼び出す</strong></p>
+</li>
+<li>
+<p><strong>createメソッドが新規追加画面のviewに遷移させる</strong></p>
+</li>
+<li>
+<p><strong>ユーザーが新規追加画面でデータを入れ送信</strong></p>
+</li>
+<li>
+<p><strong>ルーティングがコントローラのstoreメソッドに渡す</strong></p>
+</li>
+<li>
+<p><strong>storeメソッドが受け取り、DBに反映させるモデルメソッドを呼び出す</strong></p>
+</li>
+<li>
+<p><strong>モデルがDBにデータを保存する</strong></p>
+</li>
+</ol>
+<p>という感じになる。</p>
+<p>恐らく、Paizaではこれくらいの小規模であれば必要ないと割り切りシンプルさに振ったんだと思う。<br>
+今回は別にそんなに複雑になるわけではないと思うので、メソッドは全部使ってみる。</p>
+<h3 id="ルーティングの作成"><strong>ルーティングの作成</strong></h3>
+<p>とりあえず、createメソッドの方から。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#66D9EF;font-style:italic">Route</span><span style="color:#F92672">::</span><span style="color:#A6E22E">get</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"/thread/create"</span><span style="color:#F8F8F2">, \[</span><span style="color:#66D9EF;font-style:italic">ThreadController</span><span style="color:#F92672">::class</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">"create"</span><span style="color:#F8F8F2">\])</span><span style="color:#F92672">-></span><span style="color:#A6E22E">name</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"threads.create"</span><span style="color:#F8F8F2">);</span></span></code></pre>
+<p>を追加。</p>
+<p>因みに、ルーティングの順序は大切で、/thread/{id}が上にあると/thread/createにアクセスしても全て{id}として吸われてしまうので注意。</p>
+<h3 id="コントローラの作成"><strong>コントローラの作成</strong></h3>
+<p>といっても、静的なところなのでviewに遷移させるだけ。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F92672">public</span><span style="color:#66D9EF;font-style:italic"> function</span><span style="color:#A6E22E"> create</span><span style="color:#F8F8F2">()</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#AE81FF">        return </span><span style="color:#A6E22E"> view</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'thread.create'</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span></code></pre>
+<h3 id="ビューの作成"><strong>ビューの作成</strong></h3>
+<p>テンプレートを利用し以下の通りに。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="blade"><code><span class="line"><span style="color:#F92672">@extends</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'thread.layout'</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F92672">@section</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'content'</span><span style="color:#F8F8F2">)</span></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;</span><span style="color:#F92672">h1</span><span style="color:#F8F8F2">>新しい記事の作成&#x3C;/</span><span style="color:#F92672">h1</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;</span><span style="color:#F92672">form</span><span style="color:#A6E22E"> method</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"POST"</span><span style="color:#A6E22E"> action</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">""</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F92672">        @csrf</span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;</span><span style="color:#F92672">div</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">            &#x3C;</span><span style="color:#F92672">label</span><span style="color:#A6E22E"> for</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"title"</span><span style="color:#F8F8F2">>タイトル:&#x3C;/</span><span style="color:#F92672">label</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">            &#x3C;</span><span style="color:#F92672">input</span><span style="color:#A6E22E"> type</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"text"</span><span style="color:#A6E22E"> id</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"title"</span><span style="color:#A6E22E"> name</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"title"</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;/</span><span style="color:#F92672">div</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;</span><span style="color:#F92672">div</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">            &#x3C;</span><span style="color:#F92672">label</span><span style="color:#A6E22E"> for</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"overview"</span><span style="color:#F8F8F2">>概要:&#x3C;/</span><span style="color:#F92672">label</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">            &#x3C;</span><span style="color:#F92672">input</span><span style="color:#A6E22E"> type</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"text"</span><span style="color:#A6E22E"> id</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"overview"</span><span style="color:#A6E22E"> name</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"overview"</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;/</span><span style="color:#F92672">div</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;</span><span style="color:#F92672">button</span><span style="color:#A6E22E"> type</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"submit"</span><span style="color:#F8F8F2">>記事を作成&#x3C;/</span><span style="color:#F92672">button</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;/</span><span style="color:#F92672">form</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F92672">@endsection</span></span></code></pre>
+<p>@CSRFというのは、「クロスサイトリクエストフォージェリ」という攻撃から守る為の物。詳しくは<a href="https://readouble.com/laravel/9.x/ja/csrf.html" rel="noopener noreferrer" target="_blank">公式ドキュメント</a>を……といいたいんだけど、マジでわかりにくい。<br>
+理解するにはセッションとかクッキーの知識が必要で、私も説明できるほど理解できてないので、とりあえずユーザーが入力してPOSTする系の物には@CSRFを付けとこうという認識で。</p>
+<p>また、Paizaでは{{ Form::label(‘name’, ‘店名:’) }}のようにFormファザードを使っているんだけど、Laravelでの標準サポートは現在されていないらしく、使うにはパッケージを入れなきゃいけないっぽいので今回は通常の方法で。</p>
+<p>まだコントローラを作成していないので未入力だけど、formのところを<br>
+<code>&#x3C;form method="POST" action="{{ route('threads.store') }}"></code><br>
+にすることでthreads.storeルーティングを呼び出して、storeメソッドを呼び出すという感じ。</p>
+<h3 id="テスト-1"><strong>テスト</strong></h3>
+<p>一応この画面が動くかのテスト。</p>
+<p><img alt="" loading="lazy" decoding="async" width="776" height="390" src="/_astro/a4455c8adaa272722944ed06082c8eff.ClJ6VXF8_1nF9Bi.webp" srcset=""></p>
+<p>動くねぇ。</p>
+<p>次はstoreの処理を書く。</p>
+<h3 id="ルーティングの作成-1"><strong>ルーティングの作成</strong></h3>
+<p>ルーティングを追加。<br>
+追加後の全体像はこんな感じ。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F92672">&#x3C;?</span><span style="color:#AE81FF">php</span></span>
+<span class="line"><span style="color:#F92672">use</span><span style="color:#F8F8F2"> Illuminate\Support\Facades\</span><span style="color:#66D9EF;font-style:italic">Route</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F92672">use</span><span style="color:#F8F8F2"> App\Http\Controllers\</span><span style="color:#66D9EF;font-style:italic">ThreadController</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">Route</span><span style="color:#F92672">::</span><span style="color:#A6E22E">get</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"/threads"</span><span style="color:#F8F8F2">, [</span><span style="color:#66D9EF;font-style:italic">ThreadController</span><span style="color:#F92672">::class</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">"index"</span><span style="color:#F8F8F2">])</span><span style="color:#F92672">-></span><span style="color:#A6E22E">name</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"threads.list"</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">Route</span><span style="color:#F92672">::</span><span style="color:#A6E22E">get</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"/thread/create"</span><span style="color:#F8F8F2">, [</span><span style="color:#66D9EF;font-style:italic">ThreadController</span><span style="color:#F92672">::class</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">"create"</span><span style="color:#F8F8F2">])</span><span style="color:#F92672">-></span><span style="color:#A6E22E">name</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"threads.create"</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">Route</span><span style="color:#F92672">::</span><span style="color:#A6E22E">post</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"/thread/store"</span><span style="color:#F8F8F2">, [</span><span style="color:#66D9EF;font-style:italic">ThreadController</span><span style="color:#F92672">::class</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">"store"</span><span style="color:#F8F8F2">])</span><span style="color:#F92672">-></span><span style="color:#A6E22E">name</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"threads.store"</span><span style="color:#F8F8F2">);</span><span style="color:#88846F">    //追加</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">Route</span><span style="color:#F92672">::</span><span style="color:#A6E22E">get</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"/thread/{id}"</span><span style="color:#F8F8F2">,[</span><span style="color:#66D9EF;font-style:italic">ThreadController</span><span style="color:#F92672">::class</span><span style="color:#F8F8F2">, </span><span style="color:#E6DB74">"show"</span><span style="color:#F8F8F2">])</span><span style="color:#F92672">-></span><span style="color:#A6E22E">name</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"threads.detail"</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">Route</span><span style="color:#F92672">::</span><span style="color:#A6E22E">get</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'/'</span><span style="color:#F8F8F2">, </span><span style="color:#66D9EF;font-style:italic">function</span><span style="color:#F8F8F2"> () {</span></span>
+<span class="line"><span style="color:#AE81FF">    return</span><span style="color:#A6E22E"> redirect</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">"/threads"</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">});</span></span></code></pre>
+<h3 id="コントローラの作成-1"><strong>コントローラの作成</strong></h3>
+<p>不安だけど、こんな感じ。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F92672">public</span><span style="color:#66D9EF;font-style:italic"> function</span><span style="color:#A6E22E"> store</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">Request</span><span style="color:#F8F8F2"> $request)</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F8F8F2">        $thread </span><span style="color:#F92672">=</span><span style="color:#F92672"> new</span><span style="color:#66D9EF;font-style:italic"> Thread</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">        $thread</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">title </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> $request</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">title;</span></span>
+<span class="line"><span style="color:#F8F8F2">        $thread</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">overview </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> $request</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">overview;</span></span>
+<span class="line"><span style="color:#F8F8F2">        $thread</span><span style="color:#F92672">-></span><span style="color:#A6E22E">save</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#AE81FF">        return</span><span style="color:#A6E22E"> redirect</span><span style="color:#F8F8F2">()</span><span style="color:#F92672">-></span><span style="color:#A6E22E">route</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'threads.list'</span><span style="color:#F8F8F2">);</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span></code></pre>
+<p>保存後にメイン画面にリダイレクトするようになってる。</p>
+<h3 id="細かい調整"><strong>細かい調整</strong></h3>
+<p>storeメソッドを作成したのでさっき作ったviewのPOST先を指定。</p>
+<p><code>&#x3C;form method="POST" action="{{ route('threads.store') }}"></code></p>
+<p>単純にURLに直接入力して新規画面行ったり、一覧画面に行ったりするのが面倒なので、リンクの追加。</p>
+<p><code>&#x3C;a href={{ route('threads.list') }} class='btn btn-outline-primary'></code>記事一覧へ戻る</p>
+<p>と</p>
+<p><code>&#x3C;a href={{ route('threads.create') }} class='btn btn-outline-primary'></code>新規スレッドを作成</p>
+<p>を追加。</p>
+<h3 id="テスト-2"><strong>テスト</strong></h3>
+<p>動くかな？</p>
+<p><img alt="" loading="lazy" decoding="async" width="940" height="394" src="/_astro/084f0ed861df417e367794ad27f2685d.BO8pC2fK_nuiRS.webp" srcset=""></p>
+<p><img alt="" loading="lazy" decoding="async" width="1600" height="464" src="/_astro/ab9b88e9ded43351d0d57f646bfecdd7.Ck6Kz6Qk_2dfspN.webp" srcset=""></p>
+<p>おー！　何も問題なく作れた！<br>
+「新規スレッドを作成」ボタンと「記事一覧へ戻る」ボタンも問題なし！<br>
+素晴らしいねぇ</p>
+<p>新しい記事を作成するときのフォームがめっちゃちっちゃいくらいかな、不満点は。</p>
+<h3 id="編集画面の作成投稿フォームの作成"><strong>編集画面の作成（投稿フォームの作成）</strong></h3>
+<p>編集画面なんだけど、掲示板形式だし閲覧画面に新規投稿フォームを一番下にくっつければいいんじゃないかなと思ったりしている。</p>
+<p>実際に2chとかを見てみると</p>
+<p><img alt="" loading="lazy" decoding="async" width="793" height="171" src="/_astro/d10491dd7650bbd68c2d7a006f9f72d4.gALNUU4u_elOut.webp" srcset=""></p>
+<p>みたいな感じのフォームが掲示板の一番下にくっついてるんだよね。<br>
+こんな感じの方が便利そう。</p>
+<p>投稿したメッセージの編集はできなくて、スレッドの編集、削除のみ可能みたいな感じで。</p>
+<p>となると、閲覧画面であるThread.showのビューに投稿フォームをくっつけて、Messageコントローラのstoreメソッドを使えばいいのかな。</p>
+<p>とりあえずやってみようか。</p>
+<h3 id="threadshowbladephpの編集"><strong>Thread.show.blade.phpの編集</strong></h3>
+<p>投稿フォームと、一覧に戻るリンクを付ける。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="blade"><code><span class="line"><span style="color:#F8F8F2">&#x3C;</span><span style="color:#F92672">form</span><span style="color:#A6E22E"> method</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"POST"</span><span style="color:#A6E22E"> action</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"</span><span style="color:#66D9EF">{{</span><span style="color:#A6E22E"> route</span><span style="color:#E6DB74">('messages.store') </span><span style="color:#66D9EF">}}</span><span style="color:#E6DB74">"</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F92672">        @csrf</span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;</span><span style="color:#F92672">input</span><span style="color:#A6E22E"> type</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"hidden"</span><span style="color:#A6E22E"> name</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"thread_id"</span><span style="color:#A6E22E"> value</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"</span><span style="color:#66D9EF">{{</span><span style="color:#F8F8F2"> $thread</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">id</span><span style="color:#66D9EF"> }}</span><span style="color:#E6DB74">"</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;</span><span style="color:#F92672">div</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">            &#x3C;</span><span style="color:#F92672">label</span><span style="color:#A6E22E"> for</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"role"</span><span style="color:#F8F8F2">>役割:&#x3C;/</span><span style="color:#F92672">label</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">            &#x3C;</span><span style="color:#F92672">input</span><span style="color:#A6E22E"> type</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"radio"</span><span style="color:#A6E22E"> id</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"role"</span><span style="color:#A6E22E"> name</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"role"</span><span style="color:#A6E22E"> value</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"User"</span><span style="color:#A6E22E"> checked</span><span style="color:#F8F8F2">>User</span></span>
+<span class="line"><span style="color:#F8F8F2">            &#x3C;</span><span style="color:#F92672">input</span><span style="color:#A6E22E"> type</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"radio"</span><span style="color:#A6E22E"> id</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"role"</span><span style="color:#A6E22E"> name</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"role"</span><span style="color:#A6E22E"> value</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"ChatGPT"</span><span style="color:#F8F8F2">>ChatGPT</span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;/</span><span style="color:#F92672">div</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;</span><span style="color:#F92672">div</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">            &#x3C;</span><span style="color:#F92672">label</span><span style="color:#A6E22E"> for</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"message"</span><span style="color:#F8F8F2">>メッセージ:&#x3C;/</span><span style="color:#F92672">label</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">            &#x3C;</span><span style="color:#F92672">input</span><span style="color:#A6E22E"> type</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"text"</span><span style="color:#A6E22E"> id</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"message"</span><span style="color:#A6E22E"> name</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"message"</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;/</span><span style="color:#F92672">div</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">        &#x3C;</span><span style="color:#F92672">button</span><span style="color:#A6E22E"> type</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">"submit"</span><span style="color:#F8F8F2">>メッセージを作成&#x3C;/</span><span style="color:#F92672">button</span><span style="color:#F8F8F2">></span></span>
+<span class="line"><span style="color:#F8F8F2">    &#x3C;</span><span style="color:#F92672">a</span><span style="color:#A6E22E"> href</span><span style="color:#F8F8F2">=</span><span style="color:#66D9EF">{{</span><span style="color:#A6E22E"> route</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'threads.list'</span><span style="color:#F8F8F2">) </span><span style="color:#66D9EF">}}</span><span style="color:#A6E22E"> class</span><span style="color:#F8F8F2">=</span><span style="color:#E6DB74">'btn btn-outline-primary'</span><span style="color:#F8F8F2">>記事一覧へ戻る&#x3C;/</span><span style="color:#F92672">a</span><span style="color:#F8F8F2">></span></span></code></pre>
+<h3 id="ルーティングの作成-2"><strong>ルーティングの作成</strong></h3>
+<p>message.storeのルーティングを作成する。</p>
+<p>Route::post(“/message/store”, [MessageController::class, “store”])->name(“messages.store”);</p>
+<h3 id="コントローラの作成-2"><strong>コントローラの作成</strong></h3>
+<p>Messageコントローラのstoreメソッドを弄る。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F92672">public</span><span style="color:#66D9EF;font-style:italic"> function</span><span style="color:#A6E22E"> store</span><span style="color:#F8F8F2">(</span><span style="color:#66D9EF;font-style:italic">Request</span><span style="color:#F8F8F2"> $request)</span></span>
+<span class="line"><span style="color:#F8F8F2">    {</span></span>
+<span class="line"><span style="color:#F8F8F2">        $message </span><span style="color:#F92672">=</span><span style="color:#F92672"> new</span><span style="color:#66D9EF;font-style:italic"> Message</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">        $message</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">thread_id </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> $request</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">thread_id;</span></span>
+<span class="line"><span style="color:#F8F8F2">        $message</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">message </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> $request</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">message;</span></span>
+<span class="line"><span style="color:#F8F8F2">        $message</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">role </span><span style="color:#F92672">=</span><span style="color:#F8F8F2"> $request</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">role;</span></span>
+<span class="line"><span style="color:#F8F8F2">        $message</span><span style="color:#F92672">-></span><span style="color:#A6E22E">save</span><span style="color:#F8F8F2">();</span></span>
+<span class="line"><span style="color:#AE81FF">        return</span><span style="color:#A6E22E"> redirect</span><span style="color:#F8F8F2">()</span><span style="color:#F92672">-></span><span style="color:#A6E22E">route</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'threads.detail'</span><span style="color:#F8F8F2">,[</span><span style="color:#E6DB74">"id"</span><span style="color:#F92672">=></span><span style="color:#F8F8F2">$request</span><span style="color:#F92672">-></span><span style="color:#F8F8F2">thread_id]);</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span></code></pre>
+<p>こんな感じ。</p>
+<p>一回動作確認をしてみる。</p>
+<h3 id="テスト-3"><strong>テスト</strong></h3>
+<p>フォームは出来てるっぽい。</p>
+<p><img alt="" loading="lazy" decoding="async" width="920" height="298" src="/_astro/da0881baadeb64d1d74a7736d2c788d2.DSlTz33t_R77Sw.webp" srcset=""></p>
+<p>投稿！</p>
+<p><img alt="" loading="lazy" decoding="async" width="888" height="483" src="/_astro/51678734c29285722a956f2afab97040.DfMeyvvs_2cWp9F.webp" srcset=""></p>
+<p>あ、ルーティングに<br>
+”use App\Http\Controllers\MessageController;”<br>
+追加してなかった。</p>
+<p>再度投稿！</p>
+<p><img alt="" loading="lazy" decoding="async" width="1015" height="514" src="/_astro/aa6fdf0561cd8f7ddd5488b5c18b649f.DJYZMi1k_ZwlT2L.webp" srcset=""></p>
+<p>できた！</p>
+<p>全文追加してみた！</p>
+<p><img alt="" loading="lazy" decoding="async" width="1600" height="773" src="/_astro/e711ca11b38efc2e0f123e4fe0b622fc.C7QNdSsG_ny6iP.webp" srcset=""></p>
+<h2 id="ひとまず完成"><strong>ひとまず、完成</strong></h2>
+<p>最低限の機能しか追加できてないけど、とりあえず完成！<br>
+1日で作るとか言ってたけど、たぶん開始から26時間くらい経ってるのでギリギリ無理だった。</p>
+<p>完成形はこんな感じ。</p>
+<h3 id="スレッド一覧"><strong>スレッド一覧</strong></h3>
+<p><img alt="" loading="lazy" decoding="async" width="1600" height="554" src="/_astro/3ac3bc743a08dfd8affe770093e43a23.DWTvRcLu_1uJi4e.webp" srcset=""></p>
+<p>こんな感じ。シンプルだね。</p>
+<h3 id="新規投稿画面"><strong>新規投稿画面</strong></h3>
+<p>新規スレッドを作成ボタンを押すと記事作成ページに画面遷移します。</p>
+<p><img alt="" loading="lazy" decoding="async" width="769" height="398" src="/_astro/97a617ad8ad3d857d3d6f9095041e879.CwQ8L6qO_1m2gH8.webp" srcset=""></p>
+<h3 id="記事閲覧"><strong>記事閲覧</strong></h3>
+<p>実際に記事タイトルをクリックすると記事閲覧ページに遷移します。</p>
+<p><img alt="" loading="lazy" decoding="async" width="1600" height="728" src="/_astro/94aae56cda99a8c23702bc62acd07df6.D4TG-MIF_ZByyi9.webp" srcset=""></p>
+<h3 id="投稿フォーム"><strong>投稿フォーム</strong></h3>
+<p>投稿フォームは閲覧ページの一番下についています。</p>
+<p><img alt="" loading="lazy" decoding="async" width="1326" height="823" src="/_astro/0a76e9dc904d6d81fc3db73eec7ec308.C4SySPWt_Z2003Qr.webp" srcset=""></p>
+<p>改善点を挙げようとすると本当に無限にあるんだけど、とりあえず作成の流れとか実践的な経験が出来たので一回終わり。</p>
+<p>一応改善点を無限に上げてみる</p>
+<ol>
+<li>
+<p>フォーム投稿のセキュリティ対策をほぼ何もしていないので、このままだと恐らく危険</p>
+</li>
+<li>
+<p>閲覧ページが見にくい</p>
+</li>
+<li>
+<p>文字数の制限かけてないし、メッセージもスレッドも無限に投稿できちゃう</p>
+</li>
+<li>
+<p>つまり、バリデーションしていない</p>
+</li>
+<li>
+<p>UserとChatGPTで交互に投稿するので、ラジオボタンもそれに応じて自動で切り替えてほしい</p>
+</li>
+<li>
+<p>Userは右揃え、ChatGPTは左揃えにすると見やすそう</p>
+</li>
+<li>
+<p>記事の削除、メッセージの削除機能がない</p>
+</li>
+<li>
+<p>同じく編集機能がない</p>
+</li>
+<li>
+<p>日付が世界標準時刻</p>
+</li>
+<li>
+<p>投稿フォームの大きさが全体的に小さい。</p>
+</li>
+</ol>
+<p>意外とこんなもんかもしれない。</p>
+<h2 id="おわりに"><strong>おわりに</strong></h2>
+<p>次はこのWebサイトを改良するか、Qiitaみたいな記事投稿Webサイトを作りたい。</p>
+<p>というか改めて見るとこのブログ長すぎ、これ誰が見るん？</p>
+<p>おやすみなさい。</p></section><aside class="w-[300px] hidden lg:block shrink-0" data-astro-cid-e2rqhpi3><nav class="sticky top-16 h-fit  bg-white py-24 pl-24 rounded-md" data-astro-cid-tqqy2vud><section data-astro-cid-tqqy2vud><header data-astro-cid-tqqy2vud><h2 class="font-bold text-lg" data-astro-cid-tqqy2vud>目次</h2></header></section><div class="article-toc scroll-smooth mt-4 py-16 pr-24 overflow-y-auto max-h-[90svh]" data-astro-cid-tqqy2vud></div></nav><script type="module" src="/_astro/ArticleTOC.astro_astro_type_script_index_0_lang.mX9zJvT_.js"></script></aside></div><div class="mt-40 mb-64" data-pagefind-ignore data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a><svg viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16 mx-4 mt-[2px]" data-astro-cid-e2rqhpi3="true">
+  <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+</svg><a href="/blog#%E4%BD%9C%E6%9B%B2%E3%81%AE%E8%A3%9C%E5%8A%A9%E3%83%84%E3%83%BC%E3%83%AB%E3%82%92%E4%BD%9C%E3%82%8B%E3%81%BE%E3%81%A7%E3%81%AE%E6%97%A5%E8%A8%98" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">作曲の補助ツールを作るまでの日記</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=PHP"># PHP</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%97%A5%E8%A8%98"># 日記</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Laravel"># Laravel</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E5%AE%9F%E8%B7%B5%E7%B7%A8"># 実践編</a></div></div></article></main></div><footer class="pb-40 px-24 md:px-0 bg-white"><hr class="mx-auto w-2/3 md:w-1/2 my-24 h-[1px] border-0 bg-slate-400"><div class="mx-8 md:mx-64"><a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" target="_blank" rel="noopener noreferrer"><img src="/_astro/by-nc.DpMeGFcJ_ZF0RGK.svg" alt="クリエイティブコモンズ 表示-非営利 4.0 ライセンス" loading="lazy" decoding="async" width="125" height="44"></a><p class="text-xs md:text-sm">本サイト「<a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">tamakoma.com</a>」から提供されるブログ内の文章、プログラミングコードは、<a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">クリエイティブ・コモンズ 表示-非営利 4.0 ライセンス</a>の下に提供されます。</p><p class="text-xs md:text-sm">音楽や画像などのメディアコンテンツにはこのライセンスは適用されません。</p></div><p class="text-center text-sm"><a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Top</a> / <a href="/contact" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Contact</a> / <a href="/feed.xml" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">RSS Feed</a></p><p class="mt-24 text-center">&copy; tamakoma 2018-2026</p></footer></div></body></html>

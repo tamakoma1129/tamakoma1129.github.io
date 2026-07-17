@@ -1,0 +1,111 @@
+<!DOCTYPE html><html lang="ja" class="text-slate-700"><head><meta charset="utf-8"><title>PHP-FPMで遅いAPIを叩くとプロセスが枯渇する話 | tamakoma.com</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v7.0.3"><meta name="twitter:card" content="summary"><meta property="og:title" content="PHP-FPMで遅いAPIを叩くとプロセスが枯渇する話"><meta property="og:type" content="website"><meta property="og:url" content="https://tamakoma.com/blog/php-fpm-slow-api-problem/"><meta property="og:image" content="/_astro/mikuteto-OGP.DYQebPDj.png"><meta property="og:description" content="学んだことを残すブログ"><meta property="og:site_name" content="tamakoma.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.0.1/dist/css/yakuhanjp_s.css"><link rel="sitemap" href="/sitemap-index.xml"><link rel="stylesheet" href="/_astro/BaseLayout.Ddu7R_5r.css"><style>/*! tailwindcss v4.2.2 | MIT License | https://tailwindcss.com */
+.article-toc[data-astro-cid-tqqy2vud] .toc-link{font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));display:block}@media (hover:hover){.article-toc[data-astro-cid-tqqy2vud] .toc-link:hover{color:var(--color-slate-600,oklch(44.6% .043 257.281));text-decoration-line:underline}}.article-toc[data-astro-cid-tqqy2vud] .toc-link.to-link-active{color:var(--color-miku-500,oklch(63.7% .1071 185.34))}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H2){margin-left:var(--spacing-24,24px)}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H3){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:10px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H4){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:20px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H5){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:30px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H6){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:40px}.article-toc[data-astro-cid-tqqy2vud] .toc-list{list-style-type:decimal;list-style-position:outside}@layer properties{@supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))){*,:before,:after,::backdrop{--tw-font-weight:initial;--tw-border-style:solid}}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a{--tw-font-weight:var(--font-weight-semibold,600);font-weight:var(--font-weight-semibold,600);color:var(--color-miku-500,oklch(63.7% .1071 185.34));text-underline-offset:2px;text-decoration-line:underline}@media (hover:hover){article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a:hover{color:var(--color-miku-700,oklch(50.5% .0901 187.01))}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] code:not(pre>code){margin-inline:var(--spacing-4,4px);border-radius:var(--radius-md,.375rem);border-style:var(--tw-border-style);background-color:var(--color-sumi-100,oklch(97% 0 0));padding-inline:var(--spacing-4,4px);--tw-font-weight:var(--font-weight-normal,400);font-weight:var(--font-weight-normal,400);color:var(--color-black,#000);border-width:0;padding-block:2px}@property --tw-font-weight{syntax:"*";inherits:false}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid}
+</style><script type="module" src="/_astro/page.DCEeCLip.js"></script><script>!(function(w,p,f,c){if(!window.crossOriginIsolated && !navigator.serviceWorker) return;c=w[p]=Object.assign(w[p]||{},{"lib":"/~partytown/","debug":false});c[f]=(c[f]||[])})(window,'partytown','forward');/* Partytown 0.13.2 - MIT QwikDev */
+const t={preserveBehavior:!1},e=e=>{if("string"==typeof e)return[e,t];const[n,r=t]=e;return[n,{...t,...r}]},n=Object.freeze((t=>{const e=new Set;let n=[];do{Object.getOwnPropertyNames(n).forEach((t=>{"function"==typeof n[t]&&e.add(t)}))}while((n=Object.getPrototypeOf(n))!==Object.prototype);return Array.from(e)})());!function(t,r,o,i,a,s,c,l,d,p,u=t,f){function h(){f||(f=1,"/"==(c=(s.lib||"/~partytown/")+(s.debug?"debug/":""))[0]&&(d=r.querySelectorAll('script[type="text/partytown"]'),i!=t?i.dispatchEvent(new CustomEvent("pt1",{detail:t})):(l=setTimeout(v,(null==s?void 0:s.fallbackTimeout)||1e4),r.addEventListener("pt0",w),a?y(1):o.serviceWorker?o.serviceWorker.register(c+(s.swPath||"partytown-sw.js"),{scope:c}).then((function(t){t.active?y():t.installing&&t.installing.addEventListener("statechange",(function(t){"activated"==t.target.state&&y()}))}),console.error):v())))}function y(e){p=r.createElement(e?"script":"iframe"),t._pttab=Date.now(),e||(p.style.display="block",p.style.width="0",p.style.height="0",p.style.border="0",p.style.visibility="hidden",p.setAttribute("aria-hidden",!0)),p.src=c+"partytown-"+(e?"atomics.js?v=0.13.2":"sandbox-sw.html?"+t._pttab),r.querySelector(s.sandboxParent||"body").appendChild(p)}function v(n,o){for(w(),i==t&&(s.forward||[]).map((function(n){const[r]=e(n);delete t[r.split(".")[0]]})),n=0;n<d.length;n++)(o=r.createElement("script")).innerHTML=d[n].innerHTML,o.nonce=s.nonce,r.head.appendChild(o);p&&p.parentNode.removeChild(p)}function w(){clearTimeout(l)}s=t.partytown||{},i==t&&(s.forward||[]).map((function(r){const[o,{preserveBehavior:i}]=e(r);u=t,o.split(".").map((function(e,r,o){var a;u=u[o[r]]=r+1<o.length?u[o[r]]||(a=o[r+1],n.includes(a)?[]:{}):(()=>{let e=null;if(i){const{methodOrProperty:n,thisObject:r}=((t,e)=>{let n=t;for(let t=0;t<e.length-1;t+=1)n=n[e[t]];return{thisObject:n,methodOrProperty:e.length>0?n[e[e.length-1]]:void 0}})(t,o);"function"==typeof n&&(e=(...t)=>n.apply(r,...t))}return function(){let n;return e&&(n=e(arguments)),(t._ptf=t._ptf||[]).push(o,arguments),n}})()}))})),"complete"==r.readyState?h():(t.addEventListener("DOMContentLoaded",h),t.addEventListener("load",h))}(window,document,navigator,top,window.crossOriginIsolated);;(e=>{e.addEventListener("astro:before-swap",e=>{let r=document.body.querySelector("iframe[src*='/~partytown/']");if(r)e.newDocument.body.append(r)})})(document);</script></head><body class="bg-repeat bg-white anywhere" style="background-image: url(/_astro/mikuteto-gray.Dix8k1Tp.gif)"><div class="min-h-screen flex flex-col justify-between" id="container"><div><header><nav class="flex flex-col items-center pt-40 pb-24"><a href="/blog" class="text-3xl md:text-5xl font-bold mb-40 text-slate-400 drop-shadow-2xl">tamakoma.com</a><div class="w-full flex justify-center [&amp;&gt;a]:bg-white [&amp;&gt;a]:border-slate-400"><a href="/" class="block py-8 px-16 text-sumi-600 rounded-l border-l border-y">home</a><a href="/blog/" class="block py-8 px-16 text-sumi-600 border">blog</a><a href="/about/" class="block py-8 px-16 text-sumi-600 rounded-r border-r border-y">about</a></div></nav></header><main class="bg-slate-100 w-full flex justify-end" data-astro-cid-e2rqhpi3><article class="grow" data-pagefind-body data-astro-cid-e2rqhpi3><header class="mt-24 w-11/12 max-w-[700px] mx-auto" data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-pagefind-weight="6.7" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-pagefind-weight="6.5" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Laravel"># Laravel</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%A4%9C%E8%A8%BC"># 検証</a></div><h1 class="text-center text-xl md:text-3xl font-bold px-24 mt-40" data-astro-cid-e2rqhpi3>PHP-FPMで遅いAPIを叩くとプロセスが枯渇する話</h1><div class="text-slate-400 text-sm gap-16 flex justify-center mt-24" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>投稿日 <time datetime="2025-10-05T00:00:00.000Z">2025/10/05</time></span><span data-astro-cid-e2rqhpi3>最終更新日 <time datetime="2025-10-08T00:00:00.000Z">2025/10/08</time></span></div></header><hr class="bg-slate-200 rounded-full mx-auto h-4 my-40 w-40 border-0"><div class="flex mx-auto justify-center gap-40" data-astro-cid-e2rqhpi3><section id="article-body" class="
+                            prose prose-neutral
+                            prose-blockquote:border-miku-400 prose-blockquote:font-normal
+                            w-0 grow
+                            max-w-[650px] bg-white box-content px-16 md:px-40 py-24 rounded-md
+                            " data-astro-cid-e2rqhpi3><p>2025年10月04日</p>
+<p>PHP-FPMを使っているアプリケーションで、応答がめっちゃ遅い外部APIをいっぱい叩くとどうなるのか気になったので検証してみる。</p>
+<p>予想としては、PHP-FPMのプロセスが枯渇して応答速度が遅くなるはず。</p>
+<h2 id="検証方法">検証方法</h2>
+<ul>
+<li>Dockerで以下の環境を作成
+<ul>
+<li>php-fpm8.4
+<ul>
+<li>laravel12</li>
+<li>OPcache有効</li>
+</ul>
+</li>
+<li>Nginx</li>
+</ul>
+</li>
+</ul>
+<p>以下のようなLaravel処理を作成</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#88846F">// web.php</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#88846F">// 遅いAPIをシミュレート（10秒待機）  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">Route</span><span style="color:#F92672">::</span><span style="color:#A6E22E">get</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'/api/slow'</span><span style="color:#F8F8F2">, </span><span style="color:#66D9EF;font-style:italic">function</span><span style="color:#F8F8F2"> () {  </span></span>
+<span class="line"><span style="color:#66D9EF">    sleep</span><span style="color:#F8F8F2">(</span><span style="color:#AE81FF">10</span><span style="color:#F8F8F2">);  </span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#A6E22E"> response</span><span style="color:#F8F8F2">()</span><span style="color:#F92672">-></span><span style="color:#A6E22E">json</span><span style="color:#F8F8F2">([  </span></span>
+<span class="line"><span style="color:#E6DB74">        'status'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'success'</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">        'message'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'This is a slow API response'</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#F8F8F2">    ]);  </span></span>
+<span class="line"><span style="color:#F8F8F2">});  </span></span>
+<span class="line"><span style="color:#F8F8F2">  </span></span>
+<span class="line"><span style="color:#88846F">// 軽量な通常エンドポイント  </span></span>
+<span class="line"><span style="color:#66D9EF;font-style:italic">Route</span><span style="color:#F92672">::</span><span style="color:#A6E22E">get</span><span style="color:#F8F8F2">(</span><span style="color:#E6DB74">'/api/fast'</span><span style="color:#F8F8F2">, </span><span style="color:#66D9EF;font-style:italic">function</span><span style="color:#F8F8F2"> () {  </span></span>
+<span class="line"><span style="color:#F92672">    return</span><span style="color:#A6E22E"> response</span><span style="color:#F8F8F2">()</span><span style="color:#F92672">-></span><span style="color:#A6E22E">json</span><span style="color:#F8F8F2">([  </span></span>
+<span class="line"><span style="color:#E6DB74">        'status'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'success'</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#E6DB74">        'message'</span><span style="color:#F92672"> =></span><span style="color:#E6DB74"> 'This is a fast API response'</span><span style="color:#F8F8F2">,  </span></span>
+<span class="line"><span style="color:#F8F8F2">    ]);  </span></span>
+<span class="line"><span style="color:#F8F8F2">});</span></span></code></pre>
+<p>php−fpmの設定は以下</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>pm = static  </span></span>
+<span class="line"><span>pm.max_children = 3  </span></span></code></pre>
+<p>つまり、PHPの処理ができるプロセス数を3つにしている。</p>
+<p>この状態で、<a href="https://github.com/wg/wrk" rel="noopener noreferrer" target="_blank">wrk</a>を利用し負荷をかける。<br>
+負荷をかけた上でブラウザから<code>/api/fast</code>へctrl + f5でアクセスし、デベロッパーツールでレスポンス時間を測る。</p>
+<h2 id="負荷がない状態でのスピード">負荷がない状態でのスピード</h2>
+<p>何も他にアクセスがない状態で<code>/api/fast</code>へアクセスした場合<br>
+以下の画像のように<br>
+<img alt="image1.webp" loading="lazy" decoding="async" width="1713" height="357" src="/_astro/image1.CJG-jakA_2fvneg.webp" srcset=""></p>
+<p>読み込みに21.47msかかった。</p>
+<p>5回確認した結果が以下の通り</p>
+<ol>
+<li>21.47ms</li>
+<li>33.74ms</li>
+<li>22.53ms</li>
+<li>23.08ms</li>
+<li>18.74ms</li>
+</ol>
+<p>若干のブレはあるけど、30ms以下でだいたい終わるかなくらい。</p>
+<h2 id="3つ同時にslowへアクセスがある状態でのスピード">3つ同時にslowへアクセスがある状態でのスピード</h2>
+<p>つまり、wrkで</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#A6E22E">wrk</span><span style="color:#AE81FF"> -t3</span><span style="color:#AE81FF"> -c3</span><span style="color:#AE81FF"> -d30s</span><span style="color:#E6DB74"> http://localhost:8080/api/slow</span></span></code></pre>
+<p>のように<code>/slow</code>へ3つから同時にアクセスし負荷をかける。</p>
+<p>この状態で<code>/fast</code>へブラウザからアクセスするとどうなるか。</p>
+<p>以下の画像のように<br>
+<img alt="image2.webp" loading="lazy" decoding="async" width="1707" height="353" src="/_astro/image2.HwmcDVKl_HIlqw.webp" srcset=""><br>
+6秒強かかった。</p>
+<p>これは、wrkを実行してから私がアクセスするまでにラグがあるので10秒の遅延にならなかっただけで、予想通りの結果。</p>
+<p>5回確認した結果が以下の通り</p>
+<ol>
+<li>6.13s</li>
+<li>6.44s</li>
+<li>3.86s</li>
+<li>8.06s</li>
+<li>6.06s</li>
+</ol>
+<p>もちろんブレはあるけど、しっかり遅くなっている。</p>
+<p>つまり、<strong>PHP-FPMを使ってレスポンスの遅いAPIへアクセスする場合は、プロセスの枯渇を考えないといけない</strong>ということが言える。</p>
+<p>もちろん、シンプルに処理が遅い場合も同様。</p>
+<h2 id="どう対策するか">どう対策するか</h2>
+<p>これ、結構対策が難しい。</p>
+<p>色々考えてみる</p>
+<h3 id="プロセス数を増やせばいいのでは">プロセス数を増やせばいいのでは？</h3>
+<p>一番最初に思いつく対策がこれ。<br>
+プロセス数を100とか500とかにしておけば問題なさそう。</p>
+<p>ただ、これは根本的解決じゃなく、最大接続数とのいたちごっこになるし、プロセスが存在するだけである程度CPUやメモリの固定費を食うはずなので非効率的でもある。</p>
+<p>ただ、一時しのぎにはなると思うので、なんかあったらプロセス数を上げたら良さそう。</p>
+<h3 id="laravelのキュー使うとどうなる">Laravelのキュー使うとどうなる？</h3>
+<p>Queueを処理するワーカーにAPI処理任せると…どっちにしろワーカーが詰まるのであんまり意味ないねこれ。</p>
+<p>ただ、ワーカーが詰まるだけで本筋のPHP-FPMは詰まらないと思われるので全体の処理が止まるみたいなことは避けられそう。</p>
+<h3 id="ポーリングするのはどうか">ポーリングするのはどうか？</h3>
+<p>実装コストエグいけど</p>
+<ol>
+<li>API通信を送る</li>
+<li>一旦処理終わらせる</li>
+<li>数秒に１回終わったかどうか確認する</li>
+</ol>
+<p>みたいな感じにすれば解決できなくはなさそう。</p>
+<p>ただ、この場合実装コストがえげつないし、相手のAPIサーバーで状態を持ってもらわなきゃいけなくなるのでそもそもこの実装ができない可能性もある。</p>
+<p>そのため、現実的ではないかなぁ。</p>
+<h3 id="非同期処理サーバーに移行すればいいのでは">非同期処理サーバーに移行すればいいのでは？</h3>
+<p>SwooleやRoadRunnerを使い、非同期的に外部APIからデータを取得するようにすれば理論上は恐らくいけるはず。</p>
+<p>ただ、実際に検証するのは面倒なのでここではしないし、サーバー変えるって結構な手間なのでよほど覚悟がないと実際にはこの方法で解決はできなさそう。</p>
+<h2 id="つまり">つまり</h2>
+<p>つまり、めっちゃ返信が遅いAPIはPHP-FPMで捌くのはやめて、直接そのAPIと通信してもらおう！</p>
+<p>以上です。</p></section><aside class="w-[300px] hidden lg:block shrink-0" data-astro-cid-e2rqhpi3><nav class="sticky top-16 h-fit  bg-white py-24 pl-24 rounded-md" data-astro-cid-tqqy2vud><section data-astro-cid-tqqy2vud><header data-astro-cid-tqqy2vud><h2 class="font-bold text-lg" data-astro-cid-tqqy2vud>目次</h2></header></section><div class="article-toc scroll-smooth mt-4 py-16 pr-24 overflow-y-auto max-h-[90svh]" data-astro-cid-tqqy2vud></div></nav><script type="module" src="/_astro/ArticleTOC.astro_astro_type_script_index_0_lang.mX9zJvT_.js"></script></aside></div><div class="mt-40 mb-64" data-pagefind-ignore data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Laravel"># Laravel</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%A4%9C%E8%A8%BC"># 検証</a></div></div></article></main></div><footer class="pb-40 px-24 md:px-0 bg-white"><hr class="mx-auto w-2/3 md:w-1/2 my-24 h-[1px] border-0 bg-slate-400"><div class="mx-8 md:mx-64"><a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" target="_blank" rel="noopener noreferrer"><img src="/_astro/by-nc.DpMeGFcJ_ZF0RGK.svg" alt="クリエイティブコモンズ 表示-非営利 4.0 ライセンス" loading="lazy" decoding="async" width="125" height="44"></a><p class="text-xs md:text-sm">本サイト「<a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">tamakoma.com</a>」から提供されるブログ内の文章、プログラミングコードは、<a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">クリエイティブ・コモンズ 表示-非営利 4.0 ライセンス</a>の下に提供されます。</p><p class="text-xs md:text-sm">音楽や画像などのメディアコンテンツにはこのライセンスは適用されません。</p></div><p class="text-center text-sm"><a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Top</a> / <a href="/contact" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Contact</a> / <a href="/feed.xml" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">RSS Feed</a></p><p class="mt-24 text-center">&copy; tamakoma 2018-2026</p></footer></div></body></html>

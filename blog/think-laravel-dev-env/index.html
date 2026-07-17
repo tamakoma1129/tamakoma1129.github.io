@@ -1,0 +1,97 @@
+<!DOCTYPE html><html lang="ja" class="text-slate-700"><head><meta charset="utf-8"><title>Laravelの体験が良い開発環境を考え続けたい | tamakoma.com</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v7.0.3"><meta name="twitter:card" content="summary"><meta property="og:title" content="Laravelの体験が良い開発環境を考え続けたい"><meta property="og:type" content="website"><meta property="og:url" content="https://tamakoma.com/blog/think-laravel-dev-env/"><meta property="og:image" content="/_astro/mikuteto-OGP.DYQebPDj.png"><meta property="og:description" content="学んだことを残すブログ"><meta property="og:site_name" content="tamakoma.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.0.1/dist/css/yakuhanjp_s.css"><link rel="sitemap" href="/sitemap-index.xml"><link rel="stylesheet" href="/_astro/BaseLayout.Ddu7R_5r.css"><style>/*! tailwindcss v4.2.2 | MIT License | https://tailwindcss.com */
+.article-toc[data-astro-cid-tqqy2vud] .toc-link{font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));display:block}@media (hover:hover){.article-toc[data-astro-cid-tqqy2vud] .toc-link:hover{color:var(--color-slate-600,oklch(44.6% .043 257.281));text-decoration-line:underline}}.article-toc[data-astro-cid-tqqy2vud] .toc-link.to-link-active{color:var(--color-miku-500,oklch(63.7% .1071 185.34))}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H2){margin-left:var(--spacing-24,24px)}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H3){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:10px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H4){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:20px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H5){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:30px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H6){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:40px}.article-toc[data-astro-cid-tqqy2vud] .toc-list{list-style-type:decimal;list-style-position:outside}@layer properties{@supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))){*,:before,:after,::backdrop{--tw-font-weight:initial;--tw-border-style:solid}}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a{--tw-font-weight:var(--font-weight-semibold,600);font-weight:var(--font-weight-semibold,600);color:var(--color-miku-500,oklch(63.7% .1071 185.34));text-underline-offset:2px;text-decoration-line:underline}@media (hover:hover){article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a:hover{color:var(--color-miku-700,oklch(50.5% .0901 187.01))}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] code:not(pre>code){margin-inline:var(--spacing-4,4px);border-radius:var(--radius-md,.375rem);border-style:var(--tw-border-style);background-color:var(--color-sumi-100,oklch(97% 0 0));padding-inline:var(--spacing-4,4px);--tw-font-weight:var(--font-weight-normal,400);font-weight:var(--font-weight-normal,400);color:var(--color-black,#000);border-width:0;padding-block:2px}@property --tw-font-weight{syntax:"*";inherits:false}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid}
+</style><script type="module" src="/_astro/page.DCEeCLip.js"></script><script>!(function(w,p,f,c){if(!window.crossOriginIsolated && !navigator.serviceWorker) return;c=w[p]=Object.assign(w[p]||{},{"lib":"/~partytown/","debug":false});c[f]=(c[f]||[])})(window,'partytown','forward');/* Partytown 0.13.2 - MIT QwikDev */
+const t={preserveBehavior:!1},e=e=>{if("string"==typeof e)return[e,t];const[n,r=t]=e;return[n,{...t,...r}]},n=Object.freeze((t=>{const e=new Set;let n=[];do{Object.getOwnPropertyNames(n).forEach((t=>{"function"==typeof n[t]&&e.add(t)}))}while((n=Object.getPrototypeOf(n))!==Object.prototype);return Array.from(e)})());!function(t,r,o,i,a,s,c,l,d,p,u=t,f){function h(){f||(f=1,"/"==(c=(s.lib||"/~partytown/")+(s.debug?"debug/":""))[0]&&(d=r.querySelectorAll('script[type="text/partytown"]'),i!=t?i.dispatchEvent(new CustomEvent("pt1",{detail:t})):(l=setTimeout(v,(null==s?void 0:s.fallbackTimeout)||1e4),r.addEventListener("pt0",w),a?y(1):o.serviceWorker?o.serviceWorker.register(c+(s.swPath||"partytown-sw.js"),{scope:c}).then((function(t){t.active?y():t.installing&&t.installing.addEventListener("statechange",(function(t){"activated"==t.target.state&&y()}))}),console.error):v())))}function y(e){p=r.createElement(e?"script":"iframe"),t._pttab=Date.now(),e||(p.style.display="block",p.style.width="0",p.style.height="0",p.style.border="0",p.style.visibility="hidden",p.setAttribute("aria-hidden",!0)),p.src=c+"partytown-"+(e?"atomics.js?v=0.13.2":"sandbox-sw.html?"+t._pttab),r.querySelector(s.sandboxParent||"body").appendChild(p)}function v(n,o){for(w(),i==t&&(s.forward||[]).map((function(n){const[r]=e(n);delete t[r.split(".")[0]]})),n=0;n<d.length;n++)(o=r.createElement("script")).innerHTML=d[n].innerHTML,o.nonce=s.nonce,r.head.appendChild(o);p&&p.parentNode.removeChild(p)}function w(){clearTimeout(l)}s=t.partytown||{},i==t&&(s.forward||[]).map((function(r){const[o,{preserveBehavior:i}]=e(r);u=t,o.split(".").map((function(e,r,o){var a;u=u[o[r]]=r+1<o.length?u[o[r]]||(a=o[r+1],n.includes(a)?[]:{}):(()=>{let e=null;if(i){const{methodOrProperty:n,thisObject:r}=((t,e)=>{let n=t;for(let t=0;t<e.length-1;t+=1)n=n[e[t]];return{thisObject:n,methodOrProperty:e.length>0?n[e[e.length-1]]:void 0}})(t,o);"function"==typeof n&&(e=(...t)=>n.apply(r,...t))}return function(){let n;return e&&(n=e(arguments)),(t._ptf=t._ptf||[]).push(o,arguments),n}})()}))})),"complete"==r.readyState?h():(t.addEventListener("DOMContentLoaded",h),t.addEventListener("load",h))}(window,document,navigator,top,window.crossOriginIsolated);;(e=>{e.addEventListener("astro:before-swap",e=>{let r=document.body.querySelector("iframe[src*='/~partytown/']");if(r)e.newDocument.body.append(r)})})(document);</script></head><body class="bg-repeat bg-white anywhere" style="background-image: url(/_astro/mikuteto-gray.Dix8k1Tp.gif)"><div class="min-h-screen flex flex-col justify-between" id="container"><div><header><nav class="flex flex-col items-center pt-40 pb-24"><a href="/blog" class="text-3xl md:text-5xl font-bold mb-40 text-slate-400 drop-shadow-2xl">tamakoma.com</a><div class="w-full flex justify-center [&amp;&gt;a]:bg-white [&amp;&gt;a]:border-slate-400"><a href="/" class="block py-8 px-16 text-sumi-600 rounded-l border-l border-y">home</a><a href="/blog/" class="block py-8 px-16 text-sumi-600 border">blog</a><a href="/about/" class="block py-8 px-16 text-sumi-600 rounded-r border-r border-y">about</a></div></nav></header><main class="bg-slate-100 w-full flex justify-end" data-astro-cid-e2rqhpi3><article class="grow" data-pagefind-body data-astro-cid-e2rqhpi3><header class="mt-24 w-11/12 max-w-[700px] mx-auto" data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-pagefind-weight="6.7" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-pagefind-weight="6.5" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Laravel"># Laravel</a></div><h1 class="text-center text-xl md:text-3xl font-bold px-24 mt-40" data-astro-cid-e2rqhpi3>Laravelの体験が良い開発環境を考え続けたい</h1><div class="text-slate-400 text-sm gap-16 flex justify-center mt-24" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>投稿日 <time datetime="2025-02-08T00:00:00.000Z">2025/02/08</time></span><span data-astro-cid-e2rqhpi3>最終更新日 <time datetime="2025-02-08T00:00:00.000Z">2025/02/08</time></span></div></header><hr class="bg-slate-200 rounded-full mx-auto h-4 my-40 w-40 border-0"><div class="flex mx-auto justify-center gap-40" data-astro-cid-e2rqhpi3><section id="article-body" class="
+                            prose prose-neutral
+                            prose-blockquote:border-miku-400 prose-blockquote:font-normal
+                            w-0 grow
+                            max-w-[650px] bg-white box-content px-16 md:px-40 py-24 rounded-md
+                            " data-astro-cid-e2rqhpi3><p>2025年2月8日</p>
+<p>Laravel開発環境のHowを発信している人は多いけど、Whyを発信している人が少ないと感じたので私の考えを発信する。</p>
+<h2 id="前提">前提</h2>
+<ol>
+<li>個人開発を行う上での話</li>
+<li>私のよく使うOSはWin</li>
+</ol>
+<h2 id="体験が良いとは">体験が良いとは</h2>
+<p>現在の私の考えだと<br>
+<strong>体験が良い = 開発に割く時間割合が多い</strong><br>
+である。</p>
+<p>だから、開発環境を構築・調整する時間が多いと体験が悪いと言える。</p>
+<h2 id="体験が良い開発環境の結論">体験が良い開発環境の結論</h2>
+<p>現在の結論は、「仮想環境を使わないネイティブな開発環境を作る」である。</p>
+<p>もう少し詳しく言うと</p>
+<ol>
+<li>開発初期 or Linuxに依存しないなら、<code>php artisan serve</code>や<a href="https://laragon.org/" rel="noopener noreferrer" target="_blank">Laragon</a>。Macなら<a href="https://herd.laravel.com/windows" rel="noopener noreferrer" target="_blank">Herd</a>・<a href="https://readouble.com/laravel/11.x/ja/valet.html" rel="noopener noreferrer" target="_blank">Valet</a>を使う。</li>
+<li>開発が乗ってきたり、Linux依存の何かが必要なら<strong>LinuxOSのPC</strong>にDockerで環境を作り開発する。</li>
+</ol>
+<p>という感じ。</p>
+<h2 id="vm-on-winは体験が良くない">VM on Winは体験が良くない</h2>
+<p>私が初めて構築した開発環境がこのWin上にVMを置いて構築する開発環境なんだけど、これは体験が悪い。</p>
+<p>理由は以下</p>
+<ol>
+<li>そもそも環境構築に時間がかかる</li>
+<li>WinとVMの環境差分が原因でトラブルが多々ある</li>
+<li>フォーマット形式の差分のせいでWinとのファイル同期がおっそい</li>
+</ol>
+<p>ただ、もちろんメリットもあって</p>
+<ol>
+<li>本番環境と似た環境を作れて、学べる</li>
+<li>Linux依存のコマンドやツールが使える</li>
+<li>分離されていてWinに干渉しにくい</li>
+</ol>
+<p>ただ、これらのメリットは先の「体験が良い」とはまた違うところ。<br>
+私はVMから入ったので色々学べたという点では良かったと思うんだけど、体験は良くないよね。</p>
+<p>ただ、私は<a href="https://readouble.com/laravel/11.x/ja/homestead.html" rel="noopener noreferrer" target="_blank">Homestead</a>とかをしっかり使ったことがないので、もしかしたら上の課題を改善してくれてるかもしれない。</p>
+<h2 id="docker-on-winは体験が良くない">Docker on Winは体験が良くない</h2>
+<p>Win上にWSL2環境つくって、WSL2上にDocker環境作るっていうやつ。</p>
+<p>上のVMよりは体験が良いと思うけど、こちらも良くない。<br>
+理由は以下</p>
+<ol>
+<li>自分のプロジェクトに合ったDockerfileやdocker-compose.yaml書くのが面倒</li>
+<li>WinとWSL2上のフォーマット形式差分のせいで、ラグがある</li>
+</ol>
+<p>docker-compose.yamlを書く面倒さは<a href="https://readouble.com/laravel/11.x/ja/sail.html" rel="noopener noreferrer" target="_blank">Sail</a>で解決できなくないんだけど、<a href="https://github.com/laravel/sail/issues/83" rel="noopener noreferrer" target="_blank">Sailは正式にPodmanに対応していない</a>ので使いたくないという個人的な好みがある。<br>
+<del>そもそもpodmanを使うなら良い体験を求めるなという気もする</del></p>
+<p>WinとWSL2フォーマット形式の差分ラグは、LaravelプロジェクトをWSL2側に置くことで改善できると言われているが、そうするとWin上のIDE↔WSL2でラグが発生する。</p>
+<p>最近だとIDEのコアをWSL2上に置き、それをWinから遠隔操作する<a href="https://www.jetbrains.com/ja-jp/remote-development/" rel="noopener noreferrer" target="_blank">リモートIDE</a>みたいなのもあるが、リモートなこともあってか現時点ではそもそも操作感が良くなかった。<br>
+これの操作感が良くなると話は変わってくるかもしれない。</p>
+<h2 id="大体の問題はファイルの同期">大体の問題はファイルの同期</h2>
+<p>Win上に仮想環境作り、それをWinから弄ろうとすると体験が悪い。</p>
+<p>私の場合、これの原因の大半がファイルの同期問題だった。</p>
+<p>実際に私が遭遇した簡単に思い出せるトラブルは</p>
+<ol>
+<li><strong>VM↔共有フォルダ↔Win</strong><br>
+フォーマット形式の差異から権限問題でシンボリックリンクを作れない</li>
+<li><strong>VM↔Samba↔Win</strong><br>
+シンプルに遅い。また、時々Win上のIDEがファイルの変更を検知してくれなかったりする</li>
+<li><strong>Docker↔Volume↔Win</strong><br>
+シンプルに遅い。</li>
+</ol>
+<p>これ等を解決するには、開発環境をIDEごと仮想環境に持っていくということをしなきゃいけない。そうするとそれはそれで、操作感が悪かったりとトラブルが発生する。</p>
+<p>だから、ネイティブな開発環境を作るところに至った。</p>
+<h2 id="laragonならネイティブな開発環境を簡単に作れる">Laragonならネイティブな開発環境を簡単に作れる</h2>
+<p>紆余曲折を経て、私が至った現時点での結論が<strong>ネイティブな開発環境を作る</strong>なんだけど、そのきっかけがこの<a href="https://laragon.org/" rel="noopener noreferrer" target="_blank">Laragon</a>。</p>
+<p>初めてLaragonを触ったときは本当に衝撃的だった。<br>
+全てのアプリケーションがWin上で動くのでファイルの形式差分もないし、トラブルもない。</p>
+<p>ファイルの形式差分がないからIDEから読み込みも、サーバーからの読み込みもめちゃはやい。</p>
+<p>しかも、0からLaravel環境構築までが盛りなしで数分で終わる。<br>
+開発体験が良すぎてびっくりした。いままでもLaravel開発楽しかったけど、Laragonにして倍は楽しくなった。本当に。</p>
+<h2 id="laragonでredisは使えない">LaragonでRedisは使えない</h2>
+<p>Laragonはとても素晴らしいんだけど、Win上で全てを動かす関係上、Winに対応していないRedisが使えない。</p>
+<p>Win上に仮想環境を作ればRedisは使える。でも、仮想環境にすると体験が落ちるから戻りたくない。<br>
+だから、私はPCのOSをLinuxにしてみた。</p>
+<h2 id="linuxosのpcで開発するのが今のところの結論">LinuxOSのPCで開発するのが、今のところの結論</h2>
+<p>PCのOSをLinuxにし、そこでDocker環境作れば仮想環境は一層になるし、ファイルのフォーマット形式も一緒になるのでファイルの同期問題も気にならない。</p>
+<p>本当はここでもLaragon使いたいんだけど、Linux版は無いのでDockerを使っているという感じ。</p>
+<p>ただ、新しくプロジェクトを開始する毎にDockerで環境構築するのは少し面倒なので、Linuxが必要 or 開発が進んできた場合にのみこのフェーズに移るような感じでやっている。</p>
+<p>つまり、一番最初の</p>
+<blockquote>
+<ol>
+<li>開発初期 or Linuxに依存しないなら、<code>php artisan serve</code>や<a href="https://laragon.org/" rel="noopener noreferrer" target="_blank">Laragon</a>。Macなら<a href="https://herd.laravel.com/windows" rel="noopener noreferrer" target="_blank">Herd</a>・<a href="https://readouble.com/laravel/11.x/ja/valet.html" rel="noopener noreferrer" target="_blank">Valet</a>を使う。</li>
+<li>開発が乗ってきたり、Linux依存の何かが必要なら<strong>LinuxOSのPC</strong>にDockerで環境を作り開発する。</li>
+</ol>
+</blockquote>
+<p>が現在の結論。</p>
+<p>私の結論が変わり次第、更新します。<br>
+以上です。</p></section><aside class="w-[300px] hidden lg:block shrink-0" data-astro-cid-e2rqhpi3><nav class="sticky top-16 h-fit  bg-white py-24 pl-24 rounded-md" data-astro-cid-tqqy2vud><section data-astro-cid-tqqy2vud><header data-astro-cid-tqqy2vud><h2 class="font-bold text-lg" data-astro-cid-tqqy2vud>目次</h2></header></section><div class="article-toc scroll-smooth mt-4 py-16 pr-24 overflow-y-auto max-h-[90svh]" data-astro-cid-tqqy2vud></div></nav><script type="module" src="/_astro/ArticleTOC.astro_astro_type_script_index_0_lang.mX9zJvT_.js"></script></aside></div><div class="mt-40 mb-64" data-pagefind-ignore data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Laravel"># Laravel</a></div></div></article></main></div><footer class="pb-40 px-24 md:px-0 bg-white"><hr class="mx-auto w-2/3 md:w-1/2 my-24 h-[1px] border-0 bg-slate-400"><div class="mx-8 md:mx-64"><a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" target="_blank" rel="noopener noreferrer"><img src="/_astro/by-nc.DpMeGFcJ_ZF0RGK.svg" alt="クリエイティブコモンズ 表示-非営利 4.0 ライセンス" loading="lazy" decoding="async" width="125" height="44"></a><p class="text-xs md:text-sm">本サイト「<a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">tamakoma.com</a>」から提供されるブログ内の文章、プログラミングコードは、<a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">クリエイティブ・コモンズ 表示-非営利 4.0 ライセンス</a>の下に提供されます。</p><p class="text-xs md:text-sm">音楽や画像などのメディアコンテンツにはこのライセンスは適用されません。</p></div><p class="text-center text-sm"><a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Top</a> / <a href="/contact" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Contact</a> / <a href="/feed.xml" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">RSS Feed</a></p><p class="mt-24 text-center">&copy; tamakoma 2018-2026</p></footer></div></body></html>

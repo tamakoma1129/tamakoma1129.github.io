@@ -1,0 +1,479 @@
+<!DOCTYPE html><html lang="ja" class="text-slate-700"><head><meta charset="utf-8"><title>【26日目】インフラを構築し、サービスを開始する | tamakoma.com</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v7.0.3"><meta name="twitter:card" content="summary"><meta property="og:title" content="【26日目】インフラを構築し、サービスを開始する"><meta property="og:type" content="website"><meta property="og:url" content="https://tamakoma.com/blog/create-dtm-tool-26/"><meta property="og:image" content="/_astro/mikuteto-OGP.DYQebPDj.png"><meta property="og:description" content="学んだことを残すブログ"><meta property="og:site_name" content="tamakoma.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.0.1/dist/css/yakuhanjp_s.css"><link rel="sitemap" href="/sitemap-index.xml"><link rel="stylesheet" href="/_astro/BaseLayout.Ddu7R_5r.css"><style>/*! tailwindcss v4.2.2 | MIT License | https://tailwindcss.com */
+.article-toc[data-astro-cid-tqqy2vud] .toc-link{font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));display:block}@media (hover:hover){.article-toc[data-astro-cid-tqqy2vud] .toc-link:hover{color:var(--color-slate-600,oklch(44.6% .043 257.281));text-decoration-line:underline}}.article-toc[data-astro-cid-tqqy2vud] .toc-link.to-link-active{color:var(--color-miku-500,oklch(63.7% .1071 185.34))}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H2){margin-left:var(--spacing-24,24px)}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H3){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:10px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H4){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:20px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H5){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:30px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H6){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:40px}.article-toc[data-astro-cid-tqqy2vud] .toc-list{list-style-type:decimal;list-style-position:outside}@layer properties{@supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))){*,:before,:after,::backdrop{--tw-font-weight:initial;--tw-border-style:solid}}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a{--tw-font-weight:var(--font-weight-semibold,600);font-weight:var(--font-weight-semibold,600);color:var(--color-miku-500,oklch(63.7% .1071 185.34));text-underline-offset:2px;text-decoration-line:underline}@media (hover:hover){article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a:hover{color:var(--color-miku-700,oklch(50.5% .0901 187.01))}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] code:not(pre>code){margin-inline:var(--spacing-4,4px);border-radius:var(--radius-md,.375rem);border-style:var(--tw-border-style);background-color:var(--color-sumi-100,oklch(97% 0 0));padding-inline:var(--spacing-4,4px);--tw-font-weight:var(--font-weight-normal,400);font-weight:var(--font-weight-normal,400);color:var(--color-black,#000);border-width:0;padding-block:2px}@property --tw-font-weight{syntax:"*";inherits:false}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid}
+</style><script type="module" src="/_astro/page.DCEeCLip.js"></script><script>!(function(w,p,f,c){if(!window.crossOriginIsolated && !navigator.serviceWorker) return;c=w[p]=Object.assign(w[p]||{},{"lib":"/~partytown/","debug":false});c[f]=(c[f]||[])})(window,'partytown','forward');/* Partytown 0.13.2 - MIT QwikDev */
+const t={preserveBehavior:!1},e=e=>{if("string"==typeof e)return[e,t];const[n,r=t]=e;return[n,{...t,...r}]},n=Object.freeze((t=>{const e=new Set;let n=[];do{Object.getOwnPropertyNames(n).forEach((t=>{"function"==typeof n[t]&&e.add(t)}))}while((n=Object.getPrototypeOf(n))!==Object.prototype);return Array.from(e)})());!function(t,r,o,i,a,s,c,l,d,p,u=t,f){function h(){f||(f=1,"/"==(c=(s.lib||"/~partytown/")+(s.debug?"debug/":""))[0]&&(d=r.querySelectorAll('script[type="text/partytown"]'),i!=t?i.dispatchEvent(new CustomEvent("pt1",{detail:t})):(l=setTimeout(v,(null==s?void 0:s.fallbackTimeout)||1e4),r.addEventListener("pt0",w),a?y(1):o.serviceWorker?o.serviceWorker.register(c+(s.swPath||"partytown-sw.js"),{scope:c}).then((function(t){t.active?y():t.installing&&t.installing.addEventListener("statechange",(function(t){"activated"==t.target.state&&y()}))}),console.error):v())))}function y(e){p=r.createElement(e?"script":"iframe"),t._pttab=Date.now(),e||(p.style.display="block",p.style.width="0",p.style.height="0",p.style.border="0",p.style.visibility="hidden",p.setAttribute("aria-hidden",!0)),p.src=c+"partytown-"+(e?"atomics.js?v=0.13.2":"sandbox-sw.html?"+t._pttab),r.querySelector(s.sandboxParent||"body").appendChild(p)}function v(n,o){for(w(),i==t&&(s.forward||[]).map((function(n){const[r]=e(n);delete t[r.split(".")[0]]})),n=0;n<d.length;n++)(o=r.createElement("script")).innerHTML=d[n].innerHTML,o.nonce=s.nonce,r.head.appendChild(o);p&&p.parentNode.removeChild(p)}function w(){clearTimeout(l)}s=t.partytown||{},i==t&&(s.forward||[]).map((function(r){const[o,{preserveBehavior:i}]=e(r);u=t,o.split(".").map((function(e,r,o){var a;u=u[o[r]]=r+1<o.length?u[o[r]]||(a=o[r+1],n.includes(a)?[]:{}):(()=>{let e=null;if(i){const{methodOrProperty:n,thisObject:r}=((t,e)=>{let n=t;for(let t=0;t<e.length-1;t+=1)n=n[e[t]];return{thisObject:n,methodOrProperty:e.length>0?n[e[e.length-1]]:void 0}})(t,o);"function"==typeof n&&(e=(...t)=>n.apply(r,...t))}return function(){let n;return e&&(n=e(arguments)),(t._ptf=t._ptf||[]).push(o,arguments),n}})()}))})),"complete"==r.readyState?h():(t.addEventListener("DOMContentLoaded",h),t.addEventListener("load",h))}(window,document,navigator,top,window.crossOriginIsolated);;(e=>{e.addEventListener("astro:before-swap",e=>{let r=document.body.querySelector("iframe[src*='/~partytown/']");if(r)e.newDocument.body.append(r)})})(document);</script></head><body class="bg-repeat bg-white anywhere" style="background-image: url(/_astro/mikuteto-gray.Dix8k1Tp.gif)"><div class="min-h-screen flex flex-col justify-between" id="container"><div><header><nav class="flex flex-col items-center pt-40 pb-24"><a href="/blog" class="text-3xl md:text-5xl font-bold mb-40 text-slate-400 drop-shadow-2xl">tamakoma.com</a><div class="w-full flex justify-center [&amp;&gt;a]:bg-white [&amp;&gt;a]:border-slate-400"><a href="/" class="block py-8 px-16 text-sumi-600 rounded-l border-l border-y">home</a><a href="/blog/" class="block py-8 px-16 text-sumi-600 border">blog</a><a href="/about/" class="block py-8 px-16 text-sumi-600 rounded-r border-r border-y">about</a></div></nav></header><main class="bg-slate-100 w-full flex justify-end" data-astro-cid-e2rqhpi3><article class="grow" data-pagefind-body data-astro-cid-e2rqhpi3><header class="mt-24 w-11/12 max-w-[700px] mx-auto" data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-pagefind-weight="6.7" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a><svg viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16 mx-4 mt-[2px]" data-astro-cid-e2rqhpi3="true">
+  <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+</svg><a href="/blog#%E4%BD%9C%E6%9B%B2%E3%81%AE%E8%A3%9C%E5%8A%A9%E3%83%84%E3%83%BC%E3%83%AB%E3%82%92%E4%BD%9C%E3%82%8B%E3%81%BE%E3%81%A7%E3%81%AE%E6%97%A5%E8%A8%98" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">作曲の補助ツールを作るまでの日記</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-pagefind-weight="6.5" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%97%A5%E8%A8%98"># 日記</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E7%B5%82%E3%82%8F%E3%82%8A"># 終わり</a></div><h1 class="text-center text-xl md:text-3xl font-bold px-24 mt-40" data-astro-cid-e2rqhpi3>【26日目】インフラを構築し、サービスを開始する</h1><div class="text-slate-400 text-sm gap-16 flex justify-center mt-24" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>投稿日 <time datetime="2025-01-04T00:00:00.000Z">2025/01/04</time></span><span data-astro-cid-e2rqhpi3>最終更新日 <time datetime="2025-01-05T00:00:00.000Z">2025/01/05</time></span></div></header><hr class="bg-slate-200 rounded-full mx-auto h-4 my-40 w-40 border-0"><div class="flex mx-auto justify-center gap-40" data-astro-cid-e2rqhpi3><section id="article-body" class="
+                            prose prose-neutral
+                            prose-blockquote:border-miku-400 prose-blockquote:font-normal
+                            w-0 grow
+                            max-w-[650px] bg-white box-content px-16 md:px-40 py-24 rounded-md
+                            " data-astro-cid-e2rqhpi3><p>2024年5月25日～2025年1月4日</p>
+<h2 id="サービス名を考える">サービス名を考える</h2>
+<p>ここまでサービス名は<code>config("app.name")</code>で逃げて来たんだけど、ドメインの取得で必要になるのでもう決めなきゃいけない。</p>
+<p>サービス名の決定で辛いところは、サービスの本質でないのに重要で、進捗が見えにくいというところだと思う。</p>
+<p>進捗が無い、進捗が思い通りにならないのは意外と結構辛い。</p>
+<p>今のところ、私のサイトは「作曲知識を記事で共有するサイト」だけど、核の部分は作曲知識の共有だと思っている。</p>
+<p>だから、それに沿ったネーミングができたら嬉しい。</p>
+<p>また、以下の条件がある</p>
+<ul>
+<li>覚えやすいもの</li>
+<li>ドメイン登録されてないもの</li>
+<li>商標登録されてないもの<br>
+商標は<a href="https://www.j-platpat.inpit.go.jp/" rel="noopener noreferrer" target="_blank">特許情報プラットフォーム｜J-PlatPat </a>で簡易検索が掛けられる。</li>
+</ul>
+<p>ドメインは国内のICANN公認レジストラが出しているサービスを使うのが無難っぽい。</p>
+<p>正直、2,3ヵ月くらいどうしようか悩んでるんだけど、これというのが思いつかない。</p>
+<p>音楽の「メロディ」と「情報をつないでいく」という意味の「DNA」を合わせてmelodnaというのを思いついたんだけど、「女の子みたい」という誰かの意見で揺らいでしまった。</p>
+<p>更に、音楽＝メロディなのかという問題もある。<br>
+あと、MelodyneというDTMで有名なプラグインがあり、それと混ざってややこしい。</p>
+<p>また、迷走してひらがなのサービス名を考えたりもしたんだけど、ひらがなのサービス名はこういう文章中に現れると分かりにくかったのでぺけ。</p>
+<h3 id="このサイトの目標目的を整理する">このサイトの目標、目的を整理する</h3>
+<p>このサイトの目的が私の中にしかないので、整理したい。前もやった気がする。</p>
+<p>整理した結果からサイト名が決まればいいなぁ。<br>
+どうまとめるのがいいんだろうか。</p>
+<p>このまとめには私目線と、社会的目線の２つがある気がする。</p>
+<h3 id="私目線">私目線</h3>
+<p>私がなぜこのサービスを作り、提供し続けたいか。</p>
+<ul>
+<li>音楽が大好きだけど、音楽制作がめっちゃ苦手
+<ul>
+<li>人生で一番感動するものが音楽</li>
+<li>音楽制作始めるけど、2年で一曲も完成しないくらい苦手</li>
+<li>個人での音楽制作のむずかしさや辛さを実感してるので、どうにか和らげたい</li>
+</ul>
+</li>
+<li>プログラミングが得意
+<ul>
+<li>やっていて苦痛じゃない</li>
+<li>プログラミングやった後DTMやると尚更実感する。</li>
+</ul>
+</li>
+<li>じゃあ、得意なプログラミングで音楽制作を補助できたら私もみんなもハッピーだよね<br>
+ここまでの内容だと知識共有サイトじゃなくても、音楽制作の難しさが和らぐものをプログラミングで作れば当てはまる。</li>
+</ul>
+<p>じゃあ、なぜ音楽知識共有サイトなのか。</p>
+<p>それは、必要な音楽制作の知識を仕入れるのが難しいと感じたから。 <br>
+音楽制作知識を検索する難しさ、音楽制作の知識を表現する難しさ。それに付随して情報が集まる嬉しさとか。</p>
+<p>この課題を音楽制作知識を共有するプラットフォームで和らげる事ができないかなという。</p>
+<h4 id="音楽制作知識を検索する難しさ">音楽制作知識を検索する難しさ</h4>
+<p>音楽のデジタルな表現は楽譜・midi・mp3・DAWのプロジェクトファイルなど、普通の検索エンジンで検索できないものが多い。</p>
+<p>だから、DTMerが何か情報を仕入れたいとき、悩んだ時に私たちは作曲のアナログな悩みを自分なりの検索できるデジタル情報に変換し、検索をかける必要がある。</p>
+<p>例えば、一般的にケロケロボイスと言われているものの本質は”あれ”なんだけど、こうやって文章だと「ケロケロボイス」「ピッチ補正」「オートチューン」「ロボットボイス」などと表記が揺れるし、これらの単語を知らないと文章では”あれ”としか表現できない。</p>
+<p>そんな辛さが音楽制作の検索にある。</p>
+<p>私のサイトでは今の初期段階だと文章による検索しかできないけど、可能ならば他のアプローチから検索できるようにもしたい。</p>
+<h4 id="音楽制作の知識を表現する難しさ">音楽制作の知識を表現する難しさ</h4>
+<p>これ、よく考えたら検索の難しさと難しい理由は一緒かも。</p>
+<p>アナログなものをデジタル空間で表現する以上、デジタルに変換しないといけない。<br>
+しかも、音楽は表現方法がMIDI、DAW、動画、画像、音源ファイル、楽譜、文章と結構多い。<br>
+それを包括化または対応したいし、これも音楽制作に特化したサイトだからこそできる。</p>
+<p>あと、音楽は芸術の1つというのもある。</p>
+<p>音楽は芸術で、だからこそ私は音楽制作の悩みを「センス」という雲をつかむような表現で片づけてしまうことがある。<br>
+音楽制作の悩みやその解決には絶対に理由があり、人に伝わるよう表現できるはず。</p>
+<h4 id="情報が集まる嬉しさ">情報が集まる嬉しさ</h4>
+<p>私がQiitaを使っていて良いなと思ったのが、Qiita内に情報が集まること。</p>
+<p>エンジニアが主なQiita内に情報が集まるから、エンジニア向けのニッチなリコメンド、関連記事を提供できる。また、投稿する人が無名の人でも見てもらえる。</p>
+<p>あと、Qiitaというサイトはサイト自体が評価されているからSEOがめっちゃくっちゃ強い。 <br>
+初めて書く人が書いた記事でも有益な記事なら2日もあれば検索上位にいる。 <br>
+でも、それにはデメリットの側面もあって、あまり良くない記事が上位を占めるという問題もある。</p>
+<h3 id="ユーザー目線">ユーザー目線</h3>
+<p>次はユーザー目線からした、このサイトを使う理由。</p>
+<p>閲覧する側の理由はいくらでもあると思うんだよね。<br>
+○○がわからないから。○○を解決したいから。<br>
+それで疑問で検索→記事に当たるという感じで使ってくれるようになると楽観的でいる。</p>
+<p>記事を書く理由は何だろう。私がQiitaや個人ブログで記事を書く理由は情報の還元をしたいというものだったし、この日記を書く理由は知識の保存と自分が監視されている感。</p>
+<p>じゃあ、同じ理由で書いてくれる人はいそうだし、こんなの考察してても始まらないので早くサービス開始しよう。<br>
+正直、こんなこと言うと悲しいんだけど、なんも宣伝しなかったらユーザー数は確実に0人なので、とりあえずサービス開始してもここらへんは間に合うと思う。</p>
+<h3 id="このサイトの目標と解決手段">このサイトの目標と解決手段</h3>
+<p>このサイトは、私のような個人DTMerが理想の音楽を作れるようになるのが目標。<br>
+その為に手段・価値として知識の共有があり、少しでも悩みの解決に繋がれば御の字という感じ。</p>
+<h2 id="サービス名の考えで進捗がある感を出す為に">サービス名の考えで進捗がある感を出す為に</h2>
+<p>何かを進める上で辛いのが、思った通りに物事が進まないこと。<br>
+プログラミングは手を動かせば進捗が出るのに対し、サービス名決定は進捗が出ている感が少ない。</p>
+<p>そこで、進捗がある感を出す工夫が大事になる。</p>
+<p>人にもよると思うが、サービス名には意味が込められていることが多い。</p>
+<p>ということは、以下のプロセスを辿ると良さそう</p>
+<ol>
+<li>このサービスに込められた想い、達成したいこととまとめる</li>
+<li>それに関するキーワードをまとめる</li>
+<li>キーワードを足し引き合成したりする</li>
+<li>以下1~3の繰り返し</li>
+</ol>
+<p>「サービスの想い、達成したいこと」はドキュメントとかにまとめてもらうとして、「キーワードをまとめる」作業は私なりの方法があるので残しておく。</p>
+<h3 id="キーワードをまとめる">キーワードをまとめる</h3>
+<p>「まとめる」とあるけど、発想するフェーズも含まれる。</p>
+<p>個人的におすすめなのがマインドマップ。</p>
+<p>知ってる人は知ってると思うけど、樹形図のようにアイデアをまとめていくフレームワークっていうのかな。</p>
+<p>例えばYoutubeのような動画共有サービスで考えるなら<br>
+<img alt="マインドマップの画像" loading="lazy" decoding="async" width="939" height="484" src="/_astro/image1.f9vLYmLD_XXdEf.webp" srcset=""><br>
+こんな感じで枝分かれさせていってキーワードをまとめる。</p>
+<p>私はMindMup2というサービスを使っているんだけど、このMindMup2の嬉しいところが、親をコピーすると子もリスト化されて一緒にコピーされるところ。</p>
+<p>例えば、上の画像でいう「拡張子」という親をコピーすると</p>
+<ul>
+<li>拡張子
+<ul>
+<li>mp4</li>
+<li>mov</li>
+<li>avi</li>
+</ul>
+</li>
+</ul>
+<p>こんな感じでリストで表示される。<br>
+html対応してなくてもインデントで表示される。</p>
+<p>これができると、ChatGPTにマインドマップの構造を投げられるんだよね。<br>
+マインドマップで行き詰ったときにChatGPTにそれを投げれば、そこから関連したキーワードを出してくれる。</p>
+<p>一人でも色んなキーワードが出せるのでよいし、マインドマップを埋めることで進捗がある感が出るので良い。</p>
+<h2 id="サイト名を決めた">サイト名を決めた</h2>
+<p>このサイト名は「dtmru」です！<br>
+88888</p>
+<p>dtmruの由来は、「DTM」と「できる」の合わせ言葉。<br>
+このサイトは、DTM（作曲）ができるようになるのをサポートするのが目的なので。</p>
+<p>この「できる」は単純に作曲ができるようになるという意味もあるし、私の目標である「感動する音楽を作れるようになる」という意味もある。</p>
+<p>この名前のプラス点、マイナス点を挙げる。</p>
+<ul>
+<li>プラス点
+<ul>
+<li><strong>何のサイトかわかりやすい</strong><br>
+知識を共有するサイトかは分かりにくいかもだけど、DTMに関するサイトなのはわかる。</li>
+<li><strong>意味がしっかりこもっている</strong><br>
+「意味的にちょっと違うかも」が無いのは良い。</li>
+<li><strong>ドメインが短い</strong><br>
+dtmru.comは奇跡的にプレミアムドメインじゃなかった。</li>
+<li><strong>程よくダサく、親しみやすい</strong><br>
+カッコよすぎてもどうなんだろうと思ってたので。</li>
+<li><strong>日本のサイト感</strong><br>
+日本でのサービス展開なので、DTMという和製英語を入れるのはちょうどよいのでは。</li>
+</ul>
+</li>
+<li>マイナス点
+<ul>
+<li><strong>発音すると長い</strong><br>
+「ディーティーエムル」は長い。敢えて略すなら「エムル」とかどうだろうか。<br>
+ちょっと発音しにくいのも×。</li>
+<li><strong>サイトの領域がDTM(作曲)に限定される</strong><br>
+個人規模だし、目標はDTMの悩み解消なのでヨシ。</li>
+<li><strong>DTMというキーワードとぶつかる</strong><br>
+良いか悪いかはわからないけど、DTMという単語とぶつかってしまいそうなのは、SEO的にどうなのだろうかとは思う。</li>
+<li><strong>普通にちょっとダサい</strong><br>
+もっと横文字っぽいサイト名も思いついてはいたんだけど、しっくりこなかったり。<br>
+DTMるはしっくり来ているけど、ダサめ。</li>
+</ul>
+</li>
+</ul>
+<p>とりあえず、名前が決まったのでドメイン取得やらのフェーズには入れる。</p>
+<h2 id="ロゴを作る">ロゴを作る</h2>
+<p>そういえばロゴも必要だった。<br>
+ロゴは初期段階であれば後から変えるのは簡単だと思うので、ブラウザのタブに表示されるファビコンと簡単なロゴを作ろうと思う。</p>
+<p>といっても、私はそういうデザイン系に長けていないことは明白なので、<a href="https://spatie.be/" rel="noopener noreferrer" target="_blank">SPATIE</a>みたいに簡単なロゴにした。</p>
+<p>フォントは<a href="https://openfontlicense.org/open-font-license-official-text/" rel="noopener noreferrer" target="_blank">SIL OFL</a>で、私のサイトでも利用しているNoto Sans JPを。<br>
+<img alt="ロゴの画像" loading="lazy" decoding="async" width="596" height="200" src="/_astro/image2.BLfPmP4H_Zj9daw.webp" srcset=""><br>
+シンプルすぎるけど、リリース速度を優先する。</p>
+<h2 id="インフラを考える">インフラを考える</h2>
+<p>ここらへんも日記としてめちゃめちゃ書き殴ったんだけど、書き殴りすぎてるのと、セキュリティ的に全然載せられないのでリリース後の私が考えていることを書く。</p>
+<h3 id="laravel個人開発のインフラ構成どうする">Laravel個人開発のインフラ構成どうする？</h3>
+<p>個人開発で、何も宣伝してないのであればユーザー数がとっても低いのは明白なのでとりあえずリリースを第一目標にするべきだと考えている。</p>
+<p>その上で取り得る選択肢はAWS、GCP、Oracle Cloudなどの有名クラウド環境の無料枠か、VPSだと思う。</p>
+<p>最終的に私はVPS + AWS SESにしたけど、その結論までの過程を残す。</p>
+<h3 id="awsで考えてみる">AWSで考えてみる</h3>
+<p>サービス構成&#x26;要件は以下のような感じ</p>
+<ul>
+<li>Laravel(PHP)</li>
+<li>Meilisearch</li>
+<li>MySQL</li>
+<li>Redis</li>
+<li>Apache</li>
+<li>メディアファイルを保存するサーバー</li>
+<li>メールサーバー</li>
+<li>長期運用する予定</li>
+<li>スケールによって変わるだろうが、費用は全部で月1万くらいに抑えれたらいいなぁ</li>
+</ul>
+<p>こんな感じ。</p>
+<p>この要件で本格的に運用するなら</p>
+<ul>
+<li>Amazon EC2	: Webサーバー</li>
+<li>Amazon RDS	: MySQL</li>
+<li>Amazon S3	: ストレージ</li>
+<li>Amazon SES	: メールサーバー</li>
+<li>Route53	: DNS</li>
+<li>Lambda	: HLSに変換する非同期処理を実行</li>
+</ul>
+<p>が必要そう。</p>
+<p>全部軽く見ていく。</p>
+<h4 id="amazon-ec2">Amazon EC2</h4>
+<p><a href="https://aws.amazon.com/jp/ec2/" rel="noopener noreferrer" target="_blank">Amazon EC2</a>。名前くらいは聞いたことあるよね。<br>
+Amazon EC2を簡単に言えばAmazonのIaaS。</p>
+<p>従量課金制だしスケーラブル。<br>
+一応、これだけでもEC2のサーバーインスタンス内でMySQL動かしてストレージの保存もEC2にすればLaravelは動くはず。</p>
+<p>小規模であればEC2じゃなくても<a href="https://aws.amazon.com/jp/lightsail/" rel="noopener noreferrer" target="_blank">Amazon Lightsail</a>という選択肢がある。<br>
+こっちのほうが安いし従量制料金じゃないので課金されすぎがなくて安心。</p>
+<h4 id="amazon-rds">Amazon RDS</h4>
+<p><a href="https://aws.amazon.com/jp/rds/" rel="noopener noreferrer" target="_blank">Amazon RDS</a>。<br>
+Amazon RDSはリレーショナルデータベースを運用するもの。</p>
+<p>MySQLには勿論対応している。</p>
+<p>なんでわざわざDBを別で管理するかなんだけど、スケーリング、バックアップ、セキュリティ的な理由らしい。</p>
+<p>個人開発の料金のボトルネックの理由になりがち。</p>
+<h4 id="amazon-s3">Amazon S3</h4>
+<p><a href="https://aws.amazon.com/jp/s3/" rel="noopener noreferrer" target="_blank">Amazon S3</a>。<br>
+Amazon S3は単なるストレージ。</p>
+<p>私の場合、画像や音源ファイルを保存することになる。<br>
+こちらもバックアップやスケーリング等の理由で分けてるのかな。</p>
+<h4 id="amazon-ses">Amazon SES</h4>
+<p><a href="https://aws.amazon.com/jp/ses/" rel="noopener noreferrer" target="_blank">Amazon SES</a>。<br>
+メール配信サービス。</p>
+<p>私の場合、登録の認証メールで利用する予定。</p>
+<h4 id="route53">Route53</h4>
+<p><a href="https://aws.amazon.com/jp/route53/" rel="noopener noreferrer" target="_blank">Route53</a>。<br>
+DNSサービス。ドメイン登録とかもできるっぽい。</p>
+<p>AWSで完結させたいなら使うべきだけど、日本サービスで管理するより高い。</p>
+<h4 id="lambda">Lambda</h4>
+<p><a href="https://aws.amazon.com/jp/lambda/" rel="noopener noreferrer" target="_blank">Lambda</a>。<br>
+サーバーと違い、イベント発生時にだけ働くサービス。<br>
+これを使いサーバーレスも実現できるみたい。</p>
+<p>私の場合、HLSの非同期処理に使えそうかなと思ったので入れてみた。</p>
+<p>EC2とかだとインスタンスの性能が選べるんだけど、Lambdaは選べない。<br>
+じゃあ処理性能とかどうなってるんだろうと思ったんだけど、どうやらメモリの割り当ては選べるらしく、メモリの性能に比例してCPUもよくなるっぽい。<br>
+勿論、料金もお高くなる。</p>
+<h3 id="awsの気になる料金">AWSの気になる料金</h3>
+<p>料金に関わる変数が多すぎて一概にいくらとは言えないんだけど、以下の条件と前提で試算してみる。</p>
+<ul>
+<li>無料枠は考慮しない</li>
+<li>東京リージョンを使う</li>
+<li>EC2とS3の転送量は同一リージョンであればノーカン</li>
+<li>EC2の転送量は<a href="https://aws.amazon.com/jp/ec2/pricing/on-demand/#Data_Transfer:~:text=%E3%81%94%E8%A6%A7%E3%81%8F%E3%81%A0%E3%81%95%E3%81%84%E3%80%82-,%E3%83%87%E3%83%BC%E3%82%BF%E8%BB%A2%E9%80%81,-%E4%BB%A5%E4%B8%8B%E3%81%AE%E6%96%99%E9%87%91" rel="noopener noreferrer" target="_blank">ネットワークからであればノーカン</a></li>
+<li>EC2とS3転送量はAWSからネットワークまたは別リージョンの時にカウント</li>
+<li>PVはすべて記事閲覧とする</li>
+<li>1記事の閲覧にメディアファイル2MB利用すると仮定</li>
+<li>1PVあたりHTTP通信合計500KB利用すると仮定</li>
+<li>アクティブライターは毎月音源ファイル80MBストレージに保存する</li>
+<li>音源ファイルの半分の値でHLSも保存される</li>
+<li>アクティブライターは毎月画像ファイル20MBストレージに保存する</li>
+<li>後から気づいたけど、Lambdaを考慮してなかった。多分そんなかわんない。</li>
+</ul>
+<p>この前提に明確な根拠は無いので、大幅に間違っている可能性はある。<br>
+一回この前提で小・中・大のスケールに分け、かかりそうな料金をみてみる。</p>
+<h4 id="小規模">小規模</h4>
+<ul>
+<li>月のアクティブライターが10人いる</li>
+<li>月のPVが1万</li>
+</ul>
+<p>の場合</p>
+<ul>
+<li>EC2
+<ul>
+<li>インスタンスはt4g.micro</li>
+<li>データ転送量500KB*1万PV=5GB</li>
+<li>ストレージはわからんけど大体5GBくらい</li>
+</ul>
+</li>
+<li>S3
+<ul>
+<li>容量は(100+HLSの40)MB*10人の1.4GB≒2GB</li>
+<li>データ転送量は2MB*1万＝20GB</li>
+<li>読み込み回数は適当に10万回</li>
+<li>書き込み回数は適当に1万回</li>
+</ul>
+</li>
+<li>RDS
+<ul>
+<li>MySQL</li>
+<li>インスタンスはdb.t4g.micro</li>
+<li>台数1</li>
+<li>冗長構成なし</li>
+<li>ストレージ適当に1GB</li>
+</ul>
+</li>
+<li>Route53
+<ul>
+<li>管理するドメイン数1個</li>
+<li>クエリ数1万</li>
+</ul>
+</li>
+<li>SES
+<ul>
+<li>EC2からの送信数1000(1000回認証メール送る仮定)</li>
+<li>データ転送量文字だけなので適当に1GB</li>
+</ul>
+</li>
+</ul>
+<p>これで<a href="https://aws-rough.cc/" rel="noopener noreferrer" target="_blank">ざっくりAWS</a>という素晴らしいサイトで試算すると<br>
+<img alt="ざっくりAWSの円グラフ" loading="lazy" decoding="async" width="715" height="845" src="/_astro/image3.DhpnyDma_ioDvQ.webp" srcset=""><br>
+大体現時点のレートで月4600円。「<a href="https://aws-rough.cc/detail/?z=30e16100a320dcf34e1e" rel="noopener noreferrer" target="_blank">ざっくりAWS」の共有URL</a>。</p>
+<p>最小規模にしては高いなあというのが正直なところ。<br>
+しかし、この規模であればRDS使わずにEC2だけで余裕だと思われるのでもう少し安くはなりそう。</p>
+<h4 id="中規模">中規模</h4>
+<ul>
+<li>月のアクティブライターが100人いる</li>
+<li>月のPVが10万</li>
+</ul>
+<p>の場合、</p>
+<ul>
+<li>EC2
+<ul>
+<li>インスタンスはt4g.small。適当</li>
+<li>データ転送量500KB*10万PV=50GB</li>
+<li>ストレージはわからんけど大体5GBくらい</li>
+</ul>
+</li>
+<li>S3
+<ul>
+<li>容量は(100+HLSの40)MB*100人の14GB</li>
+<li>データ転送量は2MB*10万＝200GB</li>
+<li>読み込み回数は適当に100万回</li>
+<li>書き込み回数は適当に10万回</li>
+</ul>
+</li>
+<li>RDS
+<ul>
+<li>MySQL</li>
+<li>インスタンスはdb.t4g.small。適当</li>
+<li>台数1</li>
+<li>冗長構成なし</li>
+<li>ストレージ適当に10GB</li>
+</ul>
+</li>
+<li>Route53
+<ul>
+<li>管理するドメイン数1個</li>
+<li>クエリ数10万</li>
+</ul>
+</li>
+<li>SES
+<ul>
+<li>EC2からの送信数10000(10000回認証メール送る仮定)</li>
+<li>データ転送量文字だけなので適当に10GB</li>
+</ul>
+</li>
+</ul>
+<p>これで試算すると<br>
+<img alt="ざっくりAWSの円グラフ" loading="lazy" decoding="async" width="724" height="858" src="/_astro/image4.DHGHEFdY_Z1UjTBD.webp" srcset=""><br>
+大体月13000円。正直、ここが収益0でできるギリギリという感じ。<br>
+「<a href="https://aws-rough.cc/detail/?z=5e7d038878e03b3952b1" rel="noopener noreferrer" target="_blank">ざっくりAWS」の共有URL</a>。</p>
+<p>RDSってそんなにお金かかるんだね。</p>
+<h4 id="大規模">大規模</h4>
+<ul>
+<li>月のアクティブライターが1000人いる</li>
+<li>月のPVが100万</li>
+</ul>
+<p>の場合、</p>
+<ul>
+<li>EC2
+<ul>
+<li>インスタンスはm7g.large。適当</li>
+<li>データ転送量500KB*100万PV=500GB</li>
+<li>ストレージはわからんけど大体10GBくらい(ログやらなんやら増えると思うので)</li>
+</ul>
+</li>
+<li>S3
+<ul>
+<li>容量は(100+HLSの40)MB*1000人の140GB</li>
+<li>データ転送量は2MB*100万＝2000GB</li>
+<li>読み込み回数は適当に1000万回</li>
+<li>書き込み回数は適当に100万回</li>
+</ul>
+</li>
+<li>RDS
+<ul>
+<li>MySQL</li>
+<li>インスタンスはdb.m7g.large。適当</li>
+<li>台数1(これ本当は複数台構成の方が良いと思う)</li>
+<li>冗長構成なし</li>
+<li>ストレージ適当に100GB</li>
+</ul>
+</li>
+<li>Route53
+<ul>
+<li>管理するドメイン数1個</li>
+<li>クエリ数100万</li>
+</ul>
+</li>
+<li>SES
+<ul>
+<li>EC2からの送信数50000(50000回認証メール送る仮定)</li>
+<li>データ転送量文字だけなので適当に50GB</li>
+</ul>
+</li>
+</ul>
+<p>これで試算すると<br>
+<img alt="ざっくりAWSの円グラフ" loading="lazy" decoding="async" width="717" height="865" src="/_astro/image5.CQ5QFz6S_15Agu.webp" srcset=""><br>
+だいたい86000円。ここまでくると広告やらなんやらでマネタイズできてないと無理という感じ。<br>
+<a href="https://aws-rough.cc/detail/?z=81b27a5f1180a0b7ee9c" rel="noopener noreferrer" target="_blank">「ざっくりAWS」の共有URL</a><br>
+しかも、S3は時間とともに容量を食っていくのでもっとかかるはず。</p>
+<p>とりあえず、間違っているところ、考慮できていないところは多いと思うけどなんとなくはわかった。</p>
+<p>また、挙げた5つのAWSのサービス以外にもストリーミング再生用のサービスがあったり、認証サービスがあったり、ファイアウォールサービスがあったりと、連携の強さ・包括力の強さがAWSの強みだと感じた。</p>
+<p>もし、AWSで構成するなら無料枠でとりあえず様子見してっていう感じになると思われる。</p>
+<h2 id="なぜawsではなくvpsを選んだか">なぜAWSではなくVPSを選んだか</h2>
+<p>結論だけ言えば、サービスの規模感に合わないのと定額にしたかったから。</p>
+<p>個人開発サービスってなにかしら元から影響力が無い限り、必ずユーザー数はめっちゃ少ないところから始まる。</p>
+<p>私のサービスはまだ多くの人に使ってもらうようなクオリティじゃないし、最初は規模を小さく運営して改善を重ねていきたいと考えていたので、スケールとかを考える必要が無い。<br>
+それに加え、AWSは無料枠はあるものの従量課金制ではあるので、そこが個人的にちょっと嫌だった。</p>
+<p>予測可能なコストを取りたかったので、そうなると定額でサービスを運営できるVPSを選んだ感じ。</p>
+<h2 id="インフラ構成">インフラ構成</h2>
+<p>サービス開始時点(2024/12/31)でのインフラ構成は</p>
+<ul>
+<li>VPS(Conoha)</li>
+<li>Amazon SES</li>
+<li>Cloudflare(DNS/CDN/DDoS)</li>
+</ul>
+<p>という感じに落ち着いた。</p>
+<h3 id="vpsconoha">VPS(Conoha)</h3>
+<p>VPSサーバーはConohaを利用。<br>
+理由は、</p>
+<ol>
+<li>12ヶ月契約だとキャンペーンで700円/月</li>
+<li>キャンペーンじゃなくても1000円/月　っぽい？　もしかしたら2000円かも？</li>
+<li>ストレージ100GBもある</li>
+<li>CPU 3 core</li>
+<li>RAM 3GB</li>
+<li>AlmaLinux OSが使える</li>
+<li>時間課金プランもあるので、ステージング環境に便利(上の性能で3円/1hほど)</li>
+<li>学割(<a href="https://www.conoha.jp/gakuwari/" rel="noopener noreferrer" target="_blank">Conohaカード</a>)あり</li>
+<li><a href="https://conoha.mikumo.com/" rel="noopener noreferrer" target="_blank">このはちゃん</a>がKawaii</li>
+<li>他の方の個人開発ブログを覗くとConohaを使っている人が多いイメージだった</li>
+</ol>
+<p>というところに惹かれた感じ。</p>
+<p>私が見たときの価格表は以下のような感じ<br>
+<img alt="Conoha VPSの料金表" loading="lazy" decoding="async" width="1217" height="462" src="/_astro/image6.BOWR-rgz_ZkLe0p.webp" srcset=""></p>
+<p>というか、Conohaにした理由を色々書いたけど、正直<a href="https://contabo.com/en/" rel="noopener noreferrer" target="_blank">contabo</a>という格安VPSでない限りどこのVPSサービスも大差ない感じはした。</p>
+<p>そんなcontaboを利用しなかった理由は</p>
+<ol>
+<li>即時契約ができなそう（契約していないためわからないが、英語メールでのやり取りが必要そうで、年末に契約できるか心配だった）</li>
+<li>日本サーバーを選択するとConohaと料金大差ない</li>
+<li>海外サービスでサポートが心配</li>
+<li>選択できるOSがUbuntuのみ？</li>
+</ol>
+<p>という感じ。</p>
+<h3 id="amazon-ses-1">Amazon SES</h3>
+<p>認証に使うメールサーバーはSESを利用した。</p>
+<p>Conohaのメールサーバーを使う手や、VPS内にサーバー置くことも一応できるはず。</p>
+<p>でも、メール送信しかしないし、<a href="https://aws.amazon.com/jp/ses/pricing/" rel="noopener noreferrer" target="_blank">送信1000件で0.1ドル(添付ファイルの 1 ギガバイト (GB) のデータごとに 0.12ドル)</a>と、めちゃんこ安いのでこの選択に。</p>
+<p>サンドボックスというテストモードみたいのを解くのに申請が必要で、1日くらいかかるのと、独自ドメイン必要なのは注意。</p>
+<h3 id="cloudflare">Cloudflare</h3>
+<p>ドメイン契約自体は日本のレジストラだけど、DNSをCloudflareにした。</p>
+<p>こうしてCloudflareをプロキシすることで、<a href="https://www.cloudflare.com/ja-jp/plans/free/" rel="noopener noreferrer" target="_blank">freeプランでもCDN、DNSに加えDDoS対策をしてくれる</a>。</p>
+<p>普通にどうやって利益だしてるのかわかんないくらい高待遇ではあるんだけど、ありがたみながら利用させていただく。</p>
+<h2 id="これから">これから</h2>
+<p>とりあえず、かなり時間はかかっちゃったけどデプロイ&#x26;サービス開始まではこぎつけた。</p>
+<p>ただ、ほんっとうにただ記事を作って投稿できるという最低限の機能しか無いので、dtmruをわざわざ使う理由がほとんど無いというのが、現状。</p>
+<p>そのため、α版→β版に向け、主に以下の実装をしたいと考えている。</p>
+<ol>
+<li>DTM特化だからこその機能追加
+<ol>
+<li>音サムネイルの追加</li>
+<li>音の簡単な加工投稿機能の追加</li>
+</ol>
+</li>
+<li>UXの改善
+<ol>
+<li>WYSIWYGエディタの改善</li>
+<li>一部の非同期処理化</li>
+<li>その他細かいユーザーインターフェースの調整</li>
+</ol>
+</li>
+</ol>
+<h2 id="おわりに">おわりに</h2>
+<p>これでこの日記の目標である「作曲の補助ツールを作る」は達成できた。<br>
+でも、このツールで私の目標である「自分自身が感動する音楽を作る」はまだ達成できていない。</p>
+<p>本当に、作曲って難しいと思う。</p>
+<p>そんな誰かの作曲を、私の作曲を、少しでも手助けできるよう精進していきます。</p></section><aside class="w-[300px] hidden lg:block shrink-0" data-astro-cid-e2rqhpi3><nav class="sticky top-16 h-fit  bg-white py-24 pl-24 rounded-md" data-astro-cid-tqqy2vud><section data-astro-cid-tqqy2vud><header data-astro-cid-tqqy2vud><h2 class="font-bold text-lg" data-astro-cid-tqqy2vud>目次</h2></header></section><div class="article-toc scroll-smooth mt-4 py-16 pr-24 overflow-y-auto max-h-[90svh]" data-astro-cid-tqqy2vud></div></nav><script type="module" src="/_astro/ArticleTOC.astro_astro_type_script_index_0_lang.mX9zJvT_.js"></script></aside></div><div class="mt-40 mb-64" data-pagefind-ignore data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a><svg viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16 mx-4 mt-[2px]" data-astro-cid-e2rqhpi3="true">
+  <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+</svg><a href="/blog#%E4%BD%9C%E6%9B%B2%E3%81%AE%E8%A3%9C%E5%8A%A9%E3%83%84%E3%83%BC%E3%83%AB%E3%82%92%E4%BD%9C%E3%82%8B%E3%81%BE%E3%81%A7%E3%81%AE%E6%97%A5%E8%A8%98" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">作曲の補助ツールを作るまでの日記</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%97%A5%E8%A8%98"># 日記</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E7%B5%82%E3%82%8F%E3%82%8A"># 終わり</a></div></div></article></main></div><footer class="pb-40 px-24 md:px-0 bg-white"><hr class="mx-auto w-2/3 md:w-1/2 my-24 h-[1px] border-0 bg-slate-400"><div class="mx-8 md:mx-64"><a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" target="_blank" rel="noopener noreferrer"><img src="/_astro/by-nc.DpMeGFcJ_ZF0RGK.svg" alt="クリエイティブコモンズ 表示-非営利 4.0 ライセンス" loading="lazy" decoding="async" width="125" height="44"></a><p class="text-xs md:text-sm">本サイト「<a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">tamakoma.com</a>」から提供されるブログ内の文章、プログラミングコードは、<a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">クリエイティブ・コモンズ 表示-非営利 4.0 ライセンス</a>の下に提供されます。</p><p class="text-xs md:text-sm">音楽や画像などのメディアコンテンツにはこのライセンスは適用されません。</p></div><p class="text-center text-sm"><a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Top</a> / <a href="/contact" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Contact</a> / <a href="/feed.xml" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">RSS Feed</a></p><p class="mt-24 text-center">&copy; tamakoma 2018-2026</p></footer></div></body></html>

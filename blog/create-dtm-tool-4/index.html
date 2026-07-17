@@ -1,0 +1,165 @@
+<!DOCTYPE html><html lang="ja" class="text-slate-700"><head><meta charset="utf-8"><title>【4日目】サーバーとLarabelを学び、簡単なWebサイトを作ろう | tamakoma.com</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v7.0.3"><meta name="twitter:card" content="summary"><meta property="og:title" content="【4日目】サーバーとLarabelを学び、簡単なWebサイトを作ろう"><meta property="og:type" content="website"><meta property="og:url" content="https://tamakoma.com/blog/create-dtm-tool-4/"><meta property="og:image" content="/_astro/mikuteto-OGP.DYQebPDj.png"><meta property="og:description" content="学んだことを残すブログ"><meta property="og:site_name" content="tamakoma.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.0.1/dist/css/yakuhanjp_s.css"><link rel="sitemap" href="/sitemap-index.xml"><link rel="stylesheet" href="/_astro/BaseLayout.Ddu7R_5r.css"><style>/*! tailwindcss v4.2.2 | MIT License | https://tailwindcss.com */
+.article-toc[data-astro-cid-tqqy2vud] .toc-link{font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));display:block}@media (hover:hover){.article-toc[data-astro-cid-tqqy2vud] .toc-link:hover{color:var(--color-slate-600,oklch(44.6% .043 257.281));text-decoration-line:underline}}.article-toc[data-astro-cid-tqqy2vud] .toc-link.to-link-active{color:var(--color-miku-500,oklch(63.7% .1071 185.34))}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H2){margin-left:var(--spacing-24,24px)}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H3){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:10px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H4){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:20px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H5){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:30px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H6){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:40px}.article-toc[data-astro-cid-tqqy2vud] .toc-list{list-style-type:decimal;list-style-position:outside}@layer properties{@supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))){*,:before,:after,::backdrop{--tw-font-weight:initial;--tw-border-style:solid}}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a{--tw-font-weight:var(--font-weight-semibold,600);font-weight:var(--font-weight-semibold,600);color:var(--color-miku-500,oklch(63.7% .1071 185.34));text-underline-offset:2px;text-decoration-line:underline}@media (hover:hover){article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a:hover{color:var(--color-miku-700,oklch(50.5% .0901 187.01))}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] code:not(pre>code){margin-inline:var(--spacing-4,4px);border-radius:var(--radius-md,.375rem);border-style:var(--tw-border-style);background-color:var(--color-sumi-100,oklch(97% 0 0));padding-inline:var(--spacing-4,4px);--tw-font-weight:var(--font-weight-normal,400);font-weight:var(--font-weight-normal,400);color:var(--color-black,#000);border-width:0;padding-block:2px}@property --tw-font-weight{syntax:"*";inherits:false}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid}
+</style><script type="module" src="/_astro/page.DCEeCLip.js"></script><script>!(function(w,p,f,c){if(!window.crossOriginIsolated && !navigator.serviceWorker) return;c=w[p]=Object.assign(w[p]||{},{"lib":"/~partytown/","debug":false});c[f]=(c[f]||[])})(window,'partytown','forward');/* Partytown 0.13.2 - MIT QwikDev */
+const t={preserveBehavior:!1},e=e=>{if("string"==typeof e)return[e,t];const[n,r=t]=e;return[n,{...t,...r}]},n=Object.freeze((t=>{const e=new Set;let n=[];do{Object.getOwnPropertyNames(n).forEach((t=>{"function"==typeof n[t]&&e.add(t)}))}while((n=Object.getPrototypeOf(n))!==Object.prototype);return Array.from(e)})());!function(t,r,o,i,a,s,c,l,d,p,u=t,f){function h(){f||(f=1,"/"==(c=(s.lib||"/~partytown/")+(s.debug?"debug/":""))[0]&&(d=r.querySelectorAll('script[type="text/partytown"]'),i!=t?i.dispatchEvent(new CustomEvent("pt1",{detail:t})):(l=setTimeout(v,(null==s?void 0:s.fallbackTimeout)||1e4),r.addEventListener("pt0",w),a?y(1):o.serviceWorker?o.serviceWorker.register(c+(s.swPath||"partytown-sw.js"),{scope:c}).then((function(t){t.active?y():t.installing&&t.installing.addEventListener("statechange",(function(t){"activated"==t.target.state&&y()}))}),console.error):v())))}function y(e){p=r.createElement(e?"script":"iframe"),t._pttab=Date.now(),e||(p.style.display="block",p.style.width="0",p.style.height="0",p.style.border="0",p.style.visibility="hidden",p.setAttribute("aria-hidden",!0)),p.src=c+"partytown-"+(e?"atomics.js?v=0.13.2":"sandbox-sw.html?"+t._pttab),r.querySelector(s.sandboxParent||"body").appendChild(p)}function v(n,o){for(w(),i==t&&(s.forward||[]).map((function(n){const[r]=e(n);delete t[r.split(".")[0]]})),n=0;n<d.length;n++)(o=r.createElement("script")).innerHTML=d[n].innerHTML,o.nonce=s.nonce,r.head.appendChild(o);p&&p.parentNode.removeChild(p)}function w(){clearTimeout(l)}s=t.partytown||{},i==t&&(s.forward||[]).map((function(r){const[o,{preserveBehavior:i}]=e(r);u=t,o.split(".").map((function(e,r,o){var a;u=u[o[r]]=r+1<o.length?u[o[r]]||(a=o[r+1],n.includes(a)?[]:{}):(()=>{let e=null;if(i){const{methodOrProperty:n,thisObject:r}=((t,e)=>{let n=t;for(let t=0;t<e.length-1;t+=1)n=n[e[t]];return{thisObject:n,methodOrProperty:e.length>0?n[e[e.length-1]]:void 0}})(t,o);"function"==typeof n&&(e=(...t)=>n.apply(r,...t))}return function(){let n;return e&&(n=e(arguments)),(t._ptf=t._ptf||[]).push(o,arguments),n}})()}))})),"complete"==r.readyState?h():(t.addEventListener("DOMContentLoaded",h),t.addEventListener("load",h))}(window,document,navigator,top,window.crossOriginIsolated);;(e=>{e.addEventListener("astro:before-swap",e=>{let r=document.body.querySelector("iframe[src*='/~partytown/']");if(r)e.newDocument.body.append(r)})})(document);</script></head><body class="bg-repeat bg-white anywhere" style="background-image: url(/_astro/mikuteto-gray.Dix8k1Tp.gif)"><div class="min-h-screen flex flex-col justify-between" id="container"><div><header><nav class="flex flex-col items-center pt-40 pb-24"><a href="/blog" class="text-3xl md:text-5xl font-bold mb-40 text-slate-400 drop-shadow-2xl">tamakoma.com</a><div class="w-full flex justify-center [&amp;&gt;a]:bg-white [&amp;&gt;a]:border-slate-400"><a href="/" class="block py-8 px-16 text-sumi-600 rounded-l border-l border-y">home</a><a href="/blog/" class="block py-8 px-16 text-sumi-600 border">blog</a><a href="/about/" class="block py-8 px-16 text-sumi-600 rounded-r border-r border-y">about</a></div></nav></header><main class="bg-slate-100 w-full flex justify-end" data-astro-cid-e2rqhpi3><article class="grow" data-pagefind-body data-astro-cid-e2rqhpi3><header class="mt-24 w-11/12 max-w-[700px] mx-auto" data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-pagefind-weight="6.7" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a><svg viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16 mx-4 mt-[2px]" data-astro-cid-e2rqhpi3="true">
+  <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+</svg><a href="/blog#%E4%BD%9C%E6%9B%B2%E3%81%AE%E8%A3%9C%E5%8A%A9%E3%83%84%E3%83%BC%E3%83%AB%E3%82%92%E4%BD%9C%E3%82%8B%E3%81%BE%E3%81%A7%E3%81%AE%E6%97%A5%E8%A8%98" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">作曲の補助ツールを作るまでの日記</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-pagefind-weight="6.5" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=PHP"># PHP</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%97%A5%E8%A8%98"># 日記</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Laravel"># Laravel</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89"># 環境構築</a></div><h1 class="text-center text-xl md:text-3xl font-bold px-24 mt-40" data-astro-cid-e2rqhpi3>【4日目】サーバーとLarabelを学び、簡単なWebサイトを作ろう</h1><div class="text-slate-400 text-sm gap-16 flex justify-center mt-24" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>投稿日 <time datetime="2023-07-11T00:00:00.000Z">2023/07/11</time></span><span data-astro-cid-e2rqhpi3>最終更新日 <time datetime="2023-07-11T00:00:00.000Z">2023/07/11</time></span></div></header><hr class="bg-slate-200 rounded-full mx-auto h-4 my-40 w-40 border-0"><div class="flex mx-auto justify-center gap-40" data-astro-cid-e2rqhpi3><section id="article-body" class="
+                            prose prose-neutral
+                            prose-blockquote:border-miku-400 prose-blockquote:font-normal
+                            w-0 grow
+                            max-w-[650px] bg-white box-content px-16 md:px-40 py-24 rounded-md
+                            " data-astro-cid-e2rqhpi3><p>2023年7月11日</p>
+<p>本当にありがたいご縁で、LarabelというPHPのフレームワークを学び、エンジニアの方に評価していただけることになった。</p>
+<p>そして学ぶ上で、色んな課題が出てきた。今まで個人開発をメイン……もなにもほぼ趣味みたいな感じだったので、実践向けの実力が皆無。オブジェクト指向？　Dcoker?　AWS?　PSR?　フレームワーク？　API?　linuxコマンド？　聞いたことはあるけど、よく説明はできない。最近辛うじてGitとGithubが分かってきたのに、まだまだ分からん事が多すぎる。（普通の個人開発するだけならGithubとかDockerとか弄る機会無いと思うんだけど、皆どこで使ってんの？）</p>
+<p>しかし、今がプログラミングの第二成長チャンスな感じがするので、やれることをやろうかなと。第一成長チャンスはプログラミングゼミに入ることが決まった時。</p>
+<h2 id="アウトプット"><strong>アウトプット</strong></h2>
+<p>色んな技術をインプットするのは当然なんだけど、そろそろアウトプットをしっかりしようかなと考えている。<br>
+いま、こうやって日記を書いているのは一応アウトプットも兼ねてるんだけど、</p>
+<ol>
+<li>
+<p>不特定多数に見られることによる自身のモチベーション維持</p>
+</li>
+<li>
+<p>自分の記録を残したら面白そう</p>
+</li>
+</ol>
+<p>というところもある。</p>
+<p>だから、技術情報としての価値とか、見やすさ的なところはあんま考えられてない。なので、技術的な記事と日記的な記事で分けようかなと考えたり。<br>
+Qiitaに挙げるのも良いかな？　批判コメントが怖すぎて勇気が出せないのよね。意外と殺伐としたコメント欄見るからなぁ。</p>
+<h2 id="とりあえず小さな目標を作る"><strong>とりあえず、小さな目標を作る</strong></h2>
+<p>その、評価していただける先方からの条件、要件を自分なりに嚙み砕くと</p>
+<ul>
+<li>
+<p>SaaS(AWS)やローカル環境などで、AlmaLinux9でWebサーバー構築</p>
+</li>
+<li>
+<p>PHP8とLaravel9を利用したCRUDの実装</p>
+</li>
+<li>
+<p>オブジェクト指向の理解</p>
+</li>
+<li>
+<p>laravel-adminの利用</p>
+</li>
+<li>
+<p>バリデート、セキュリティの意識</p>
+</li>
+<li>
+<p>DBはMySQL</p>
+</li>
+</ul>
+<p>とのこと。</p>
+<p>以上を全て満たさなくてもいいけど、これ等の知識は身に着けてくれるといいねみたいな。</p>
+<p>うん。用語の時点で怪しいね。</p>
+<ul>
+<li>
+<p>SaaSはITパスポートで若干知ってる。易しく理解するなら<a href="https://wa3.i-3-i.info/diff35saas.html" rel="noopener noreferrer" target="_blank">このサイト</a>がいい。</p>
+</li>
+<li>
+<p>AlmaLinux9はLinuxディストリビューションのことらしい。Linuxディストリビューションについて<a href="https://wa3.i-3-i.info/word12473.html" rel="noopener noreferrer" target="_blank">このサイト</a>で。</p>
+</li>
+<li>
+<p>PHP8とLaravel9はバージョンの話……だよね？　CRUDはDBの基本操作ってやつ。</p>
+</li>
+<li>
+<p>オブジェクト指向は……理解してない。Pythonを学び始めた頃に図書館で「なぜオブジェクト指向なのか」みたいな本買って読んだことあるけど、まじで学びたてだったから1ミリも理解できずに返却した。<br>
+ホントに、何となく理解するなら<a href="https://www.moringa-moringu.com/%E3%82%AA%E3%83%96%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E6%8C%87%E5%90%91%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E3%81%A8%E3%81%AF/" rel="noopener noreferrer" target="_blank">このサイト</a>だろうか。後々本でも買って学習しよう。</p>
+</li>
+<li>
+<p>laravel-adminは管理画面のライブラリらしい。これを入れると簡単に管理画面を作れるんだとか。まだ早いね。</p>
+</li>
+<li>
+<p>バリデートは、入力フォームなどに入力された文字列が規定の通りかをチェックするというものらしい。DBの破壊とかSQLインジェクションとかが起きないように的なこと？　セキュリティはそのままの意味だろう。</p>
+</li>
+<li>
+<p>DBはMySQL。まあ、聞いたことはあるよね。RealmとAccess使ったことあるからある程度楽だと信じたい。</p>
+</li>
+</ul>
+<p>とりあえず、サーバー構築→簡単なサイトの作成→簡単なサイトの公開を目指してやっていこうか。</p>
+<p>簡単なサイトは色々考えたんだけど、javascriptのスキルが無いから結構できることが狭い。先ずは背伸びせずに、単純な掲示板のような文章投稿サイトを作ろう。</p>
+<p>とりあえず、サーバー構築さえできればそんなに難しくないのでは、と甘く考えている。</p>
+<h2 id="サーバーを構築しよう"><strong>サーバーを構築しよう！</strong></h2>
+<p>といっても、何も分からないので色々調べる。</p>
+<p>AWSはお金がかかってしまうので、とりあえずローカル環境でAlmaLinux9のOSを使用し作成したい。<br>
+そこで、おすすめされたのが<strong>VirtualBox</strong>というもの。</p>
+<h3 id="virtualboxとは"><strong>VirtualBoxとは</strong></h3>
+<p>現在のOS上に別の仮想OSを稼働させる<strong>ハイパーバイザソフトウェア</strong>である！<br>
+いや～、もうわけわからん。カタカナで濁音なのでカッコよくはある。<br>
+一応、ここらへんのソースは<a href="https://www.tohoho-web.com/ex/virtualbox.html" rel="noopener noreferrer" target="_blank">とほほさん</a>。</p>
+<p>ハイパーバイザっていうのは、<strong>仮想マシン</strong>を作って動かすためのソフトのこと。（教義な意味では、ホストOSを必要としないタイプの、仮想マシンを作って動かすためのソフト→<a href="https://wa3.i-3-i.info/word12196.html" rel="noopener noreferrer" target="_blank">ソース</a>）<br>
+仮想マシンを作り、その上に好きなOS(今回はAlmaLinux9)を乗っけるというイメージ？<br>
+恐らく、この仮想マシンとして作るっていうところが肝で、Dockerとは違うところだと思うんだよね。</p>
+<p>要するに、<br>
+VirtualBox→ハードウェアレベルの仮想化<br>
+Docker→OSレベルの仮想化</p>
+<h3 id="そもそも何故仮想化するのか"><strong>そもそも何故仮想化するのか？</strong></h3>
+<p>そもそも論。仮想化っている？　→　やんなくてもいいけど、やってると便利って感じ？<br>
+仮想化の有用性はこの<a href="https://linuc.org/study/column/2968/" rel="noopener noreferrer" target="_blank">サイト</a>がソース。</p>
+<p>簡単に言えば仮想化するとこんな良いことがある。</p>
+<ol>
+<li>
+<p><strong>リソースの有効活用</strong><br>
+コントロールパネルを開いてCPUの使用率を見てもらうとわかるけど、ゲームとかしない限り、そんな使わない。要するにリソースに余裕があるということ。今回は1個しかサーバーは建てないけど、仮想化を使えば1台のPCからリソースがあるだけ複数のサーバーが建てれるよね的な。</p>
+</li>
+<li>
+<p><strong>可搬性の向上</strong><br>
+普通のデスクトップPCのホストOSにサーバーを建てたとして、それを他に移したいとき物理的なストレージを使ってるから、移動するのが面倒だよね。それに代わって仮想化は、あくまで仮想化だから、フォルダを移すだけで問題ないらしい。便利やね。</p>
+</li>
+</ol>
+<p>とりあえず、VirtualBoxをインストールしてAlmaLinux9を使えるところまで今日は行こうか。LinuxOSって今まで使ったことないから、結構wktk。</p>
+<h2 id="virtualboxのインストールとalmalinux9のインストール"><strong>VirtualBoxのインストールとAlmaLinux9のインストール</strong></h2>
+<p>正直、出来る気がしないけどやっていこう。</p>
+<p>今回の環境は</p>
+<ul>
+<li>
+<p>Windows10</p>
+</li>
+<li>
+<p>AMD Ryzen 7 4700U</p>
+</li>
+<li>
+<p>メモリ16GB</p>
+</li>
+<li>
+<p>ノートPC</p>
+</li>
+</ul>
+<p>インストールは<a href="https://relax-tech.net/linux-almalinux-9-install/" rel="noopener noreferrer" target="_blank">こちらのサイト</a>を参考に行う。本当に情報ありがたい。</p>
+<p>AlmaLinux9はCentOSというLinuxディストリビューションがサポート終了するので、その変わりとして使われているみたいね。なんか色々調べたんだけど、Linuxの歴史って結構複雑。</p>
+<p>とりあえず、AlmaLinux9.2をダウンロード。8GBのフル版。</p>
+<p>サーバーはJPのmirrors.xtom.jpというのが10分くらいでダウンロードできて速かった。</p>
+<p><img alt="" loading="lazy" decoding="async" width="895" height="420" src="/_astro/a7e2ab4bd17a891ff55795c1fb9e7694.BqJT3eBu_Z1clPII.webp" srcset=""></p>
+<p><img alt="" loading="lazy" decoding="async" width="1600" height="399" src="/_astro/6ba339c69c218c94c82868e3ba171300.B_F5DsQF_Z2oXr1W.webp" srcset=""></p>
+<p>次に、VirtualBoxのダウンロード。今回はwindows版の7.0.8。</p>
+<p>インストールや使い方は<a href="https://www.virtualbox.org/manual/ch01.html#intro-installing" rel="noopener noreferrer" target="_blank">公式ドキュメント</a>で良いと思われる。Google翻訳の精度が上がってるのか、普通に違和感なく読めた。</p>
+<p>VrtualBoxｷﾀｰｰ</p>
+<p><img alt="" loading="lazy" decoding="async" width="955" height="518" src="/_astro/0e8c075bbae8fb688b7988dc340abe64.Ba3aJikr_Z1Fjc4n.webp" srcset=""></p>
+<p>とりあえず、「新規」ボタンから新しく作る。</p>
+<p><img alt="" loading="lazy" decoding="async" width="847" height="467" src="/_astro/14f8851aca1df8a4501eb36091abba1a.BELze4Ka_2u2ROG.webp" srcset=""></p>
+<p>isoイメージはさっきダウンロードした8GBのやつ。<br>
+バージョンはRed Hatを選ぶらしいけど、このisoを指定したら今は勝手にやってくれるっぽい？</p>
+<p>フォルダー位置とかはよくわかんないので、初期設定で。</p>
+<p>また、ハードウェアの設定は私のCPUが8コアで、メモリが16GBなので以下の感じにしてみた。</p>
+<p><img alt="" loading="lazy" decoding="async" width="850" height="478" src="/_astro/08b3b50e1b93fddd2f7e562b95376818.BFhZ2XeV_Z1glbqT.webp" srcset=""></p>
+<p>後からでも変えられるっぽいので、適当に。</p>
+<p>ハードディスクの量はホストOSが残り222GBだったので、22GBで。</p>
+<p><img alt="" loading="lazy" decoding="async" width="850" height="477" src="/_astro/08dc4d6df9e20c6e99d2751927e77a7a.BHS6k2bh_1ahKfq.webp" srcset=""></p>
+<p>よし、これで出来たか！？</p>
+<p><img alt="" loading="lazy" decoding="async" width="639" height="557" src="/_astro/45a5c1f733ec3cce99febf025f794e2e.CQrKWN0H_k6glc.webp" srcset=""></p>
+<p>キターーーーーー！　なんか昔のゲームみたいで興奮するねぇ。</p>
+<p>初めてのLinuxっておおおおおおおいいいい！　危ない！　Linuxの世界に閉じ込められるところだった。どうやら、VirtualBoxとメインOSの操作切り替えが<strong>右Ctrl</strong>らしい。右Ctrlが無いときは<strong>Ctrl+Alt+delete</strong>で抜けれる。</p>
+<p>私のノートPCに右Ctrlはないので、マジで閉じ込められかけた。ちょっと設定を右シフトに変えておく。</p>
+<p><img alt="" loading="lazy" decoding="async" width="692" height="484" src="/_astro/f4246701392d4fe574fe71d17d49d80d.B3SiZnDx_BFJfr.webp" srcset=""></p>
+<p>日本語設定等をしたら下にスクロールし、rootパスワード設定へ。</p>
+<p><img alt="" loading="lazy" decoding="async" width="786" height="377" src="/_astro/232bf7b29ea6d3bb71aa97b8a8fc73f8.L4t0OJjX_Z1qeMFo.webp" srcset=""></p>
+<p>今回は練習目的でネットに接続しないので簡単なパスワードでも恐らく問題ないんだけど、rootは最上位権限らしく、それを握られたらと考えると怖いのでパスワードジェネレーターで生成したものを使う。</p>
+<p>ここまでやると、インストールが可能に。</p>
+<p><img alt="" loading="lazy" decoding="async" width="751" height="593" src="/_astro/8e638ad5ff21ecefab6d95f0ef858d9e.Cpt0sMCC_Z1m0X72.webp" srcset=""></p>
+<p>インストールが完了したら……</p>
+<p><img alt="" loading="lazy" decoding="async" width="794" height="600" src="/_astro/424decde7f0f8d47017ddfffd2b03d93.BaNS2B6i_ZX0kru.webp" srcset=""></p>
+<p>AlmaLinuxキターーーーーー！</p>
+<p>初Linux！　ここからどうやってサーバー構築するのかはマジでわかんないけど、とりあえずもう夜も更けたので今日はこんなもんで。</p>
+<p>ノートPCでも案外いける。</p>
+<p>おやすみなさい。</p></section><aside class="w-[300px] hidden lg:block shrink-0" data-astro-cid-e2rqhpi3><nav class="sticky top-16 h-fit  bg-white py-24 pl-24 rounded-md" data-astro-cid-tqqy2vud><section data-astro-cid-tqqy2vud><header data-astro-cid-tqqy2vud><h2 class="font-bold text-lg" data-astro-cid-tqqy2vud>目次</h2></header></section><div class="article-toc scroll-smooth mt-4 py-16 pr-24 overflow-y-auto max-h-[90svh]" data-astro-cid-tqqy2vud></div></nav><script type="module" src="/_astro/ArticleTOC.astro_astro_type_script_index_0_lang.mX9zJvT_.js"></script></aside></div><div class="mt-40 mb-64" data-pagefind-ignore data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a><svg viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16 mx-4 mt-[2px]" data-astro-cid-e2rqhpi3="true">
+  <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+</svg><a href="/blog#%E4%BD%9C%E6%9B%B2%E3%81%AE%E8%A3%9C%E5%8A%A9%E3%83%84%E3%83%BC%E3%83%AB%E3%82%92%E4%BD%9C%E3%82%8B%E3%81%BE%E3%81%A7%E3%81%AE%E6%97%A5%E8%A8%98" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">作曲の補助ツールを作るまでの日記</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=PHP"># PHP</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%97%A5%E8%A8%98"># 日記</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=Laravel"># Laravel</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89"># 環境構築</a></div></div></article></main></div><footer class="pb-40 px-24 md:px-0 bg-white"><hr class="mx-auto w-2/3 md:w-1/2 my-24 h-[1px] border-0 bg-slate-400"><div class="mx-8 md:mx-64"><a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" target="_blank" rel="noopener noreferrer"><img src="/_astro/by-nc.DpMeGFcJ_ZF0RGK.svg" alt="クリエイティブコモンズ 表示-非営利 4.0 ライセンス" loading="lazy" decoding="async" width="125" height="44"></a><p class="text-xs md:text-sm">本サイト「<a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">tamakoma.com</a>」から提供されるブログ内の文章、プログラミングコードは、<a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">クリエイティブ・コモンズ 表示-非営利 4.0 ライセンス</a>の下に提供されます。</p><p class="text-xs md:text-sm">音楽や画像などのメディアコンテンツにはこのライセンスは適用されません。</p></div><p class="text-center text-sm"><a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Top</a> / <a href="/contact" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Contact</a> / <a href="/feed.xml" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">RSS Feed</a></p><p class="mt-24 text-center">&copy; tamakoma 2018-2026</p></footer></div></body></html>

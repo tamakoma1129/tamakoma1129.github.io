@@ -1,0 +1,167 @@
+<!DOCTYPE html><html lang="ja" class="text-slate-700"><head><meta charset="utf-8"><title>【2日目】Webについて学ぼう | tamakoma.com</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v7.0.3"><meta name="twitter:card" content="summary"><meta property="og:title" content="【2日目】Webについて学ぼう"><meta property="og:type" content="website"><meta property="og:url" content="https://tamakoma.com/blog/create-dtm-tool-2/"><meta property="og:image" content="/_astro/mikuteto-OGP.DYQebPDj.png"><meta property="og:description" content="学んだことを残すブログ"><meta property="og:site_name" content="tamakoma.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yakuhanjp@4.0.1/dist/css/yakuhanjp_s.css"><link rel="sitemap" href="/sitemap-index.xml"><link rel="stylesheet" href="/_astro/BaseLayout.Ddu7R_5r.css"><style>/*! tailwindcss v4.2.2 | MIT License | https://tailwindcss.com */
+.article-toc[data-astro-cid-tqqy2vud] .toc-link{font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));display:block}@media (hover:hover){.article-toc[data-astro-cid-tqqy2vud] .toc-link:hover{color:var(--color-slate-600,oklch(44.6% .043 257.281));text-decoration-line:underline}}.article-toc[data-astro-cid-tqqy2vud] .toc-link.to-link-active{color:var(--color-miku-500,oklch(63.7% .1071 185.34))}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H2){margin-left:var(--spacing-24,24px)}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H3){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:10px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H4){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:20px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H5){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:30px}.article-toc[data-astro-cid-tqqy2vud] .toc-list-item:has(>.toc-link.node-name--H6){font-size:var(--text-sm,.875rem);line-height:var(--tw-leading,var(--text-sm--line-height,calc(1.25 / .875)));margin-left:40px}.article-toc[data-astro-cid-tqqy2vud] .toc-list{list-style-type:decimal;list-style-position:outside}@layer properties{@supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))){*,:before,:after,::backdrop{--tw-font-weight:initial;--tw-border-style:solid}}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a{--tw-font-weight:var(--font-weight-semibold,600);font-weight:var(--font-weight-semibold,600);color:var(--color-miku-500,oklch(63.7% .1071 185.34));text-underline-offset:2px;text-decoration-line:underline}@media (hover:hover){article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] a:hover{color:var(--color-miku-700,oklch(50.5% .0901 187.01))}}article[data-astro-cid-e2rqhpi3] section[data-astro-cid-e2rqhpi3] code:not(pre>code){margin-inline:var(--spacing-4,4px);border-radius:var(--radius-md,.375rem);border-style:var(--tw-border-style);background-color:var(--color-sumi-100,oklch(97% 0 0));padding-inline:var(--spacing-4,4px);--tw-font-weight:var(--font-weight-normal,400);font-weight:var(--font-weight-normal,400);color:var(--color-black,#000);border-width:0;padding-block:2px}@property --tw-font-weight{syntax:"*";inherits:false}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid}
+</style><script type="module" src="/_astro/page.DCEeCLip.js"></script><script>!(function(w,p,f,c){if(!window.crossOriginIsolated && !navigator.serviceWorker) return;c=w[p]=Object.assign(w[p]||{},{"lib":"/~partytown/","debug":false});c[f]=(c[f]||[])})(window,'partytown','forward');/* Partytown 0.13.2 - MIT QwikDev */
+const t={preserveBehavior:!1},e=e=>{if("string"==typeof e)return[e,t];const[n,r=t]=e;return[n,{...t,...r}]},n=Object.freeze((t=>{const e=new Set;let n=[];do{Object.getOwnPropertyNames(n).forEach((t=>{"function"==typeof n[t]&&e.add(t)}))}while((n=Object.getPrototypeOf(n))!==Object.prototype);return Array.from(e)})());!function(t,r,o,i,a,s,c,l,d,p,u=t,f){function h(){f||(f=1,"/"==(c=(s.lib||"/~partytown/")+(s.debug?"debug/":""))[0]&&(d=r.querySelectorAll('script[type="text/partytown"]'),i!=t?i.dispatchEvent(new CustomEvent("pt1",{detail:t})):(l=setTimeout(v,(null==s?void 0:s.fallbackTimeout)||1e4),r.addEventListener("pt0",w),a?y(1):o.serviceWorker?o.serviceWorker.register(c+(s.swPath||"partytown-sw.js"),{scope:c}).then((function(t){t.active?y():t.installing&&t.installing.addEventListener("statechange",(function(t){"activated"==t.target.state&&y()}))}),console.error):v())))}function y(e){p=r.createElement(e?"script":"iframe"),t._pttab=Date.now(),e||(p.style.display="block",p.style.width="0",p.style.height="0",p.style.border="0",p.style.visibility="hidden",p.setAttribute("aria-hidden",!0)),p.src=c+"partytown-"+(e?"atomics.js?v=0.13.2":"sandbox-sw.html?"+t._pttab),r.querySelector(s.sandboxParent||"body").appendChild(p)}function v(n,o){for(w(),i==t&&(s.forward||[]).map((function(n){const[r]=e(n);delete t[r.split(".")[0]]})),n=0;n<d.length;n++)(o=r.createElement("script")).innerHTML=d[n].innerHTML,o.nonce=s.nonce,r.head.appendChild(o);p&&p.parentNode.removeChild(p)}function w(){clearTimeout(l)}s=t.partytown||{},i==t&&(s.forward||[]).map((function(r){const[o,{preserveBehavior:i}]=e(r);u=t,o.split(".").map((function(e,r,o){var a;u=u[o[r]]=r+1<o.length?u[o[r]]||(a=o[r+1],n.includes(a)?[]:{}):(()=>{let e=null;if(i){const{methodOrProperty:n,thisObject:r}=((t,e)=>{let n=t;for(let t=0;t<e.length-1;t+=1)n=n[e[t]];return{thisObject:n,methodOrProperty:e.length>0?n[e[e.length-1]]:void 0}})(t,o);"function"==typeof n&&(e=(...t)=>n.apply(r,...t))}return function(){let n;return e&&(n=e(arguments)),(t._ptf=t._ptf||[]).push(o,arguments),n}})()}))})),"complete"==r.readyState?h():(t.addEventListener("DOMContentLoaded",h),t.addEventListener("load",h))}(window,document,navigator,top,window.crossOriginIsolated);;(e=>{e.addEventListener("astro:before-swap",e=>{let r=document.body.querySelector("iframe[src*='/~partytown/']");if(r)e.newDocument.body.append(r)})})(document);</script></head><body class="bg-repeat bg-white anywhere" style="background-image: url(/_astro/mikuteto-gray.Dix8k1Tp.gif)"><div class="min-h-screen flex flex-col justify-between" id="container"><div><header><nav class="flex flex-col items-center pt-40 pb-24"><a href="/blog" class="text-3xl md:text-5xl font-bold mb-40 text-slate-400 drop-shadow-2xl">tamakoma.com</a><div class="w-full flex justify-center [&amp;&gt;a]:bg-white [&amp;&gt;a]:border-slate-400"><a href="/" class="block py-8 px-16 text-sumi-600 rounded-l border-l border-y">home</a><a href="/blog/" class="block py-8 px-16 text-sumi-600 border">blog</a><a href="/about/" class="block py-8 px-16 text-sumi-600 rounded-r border-r border-y">about</a></div></nav></header><main class="bg-slate-100 w-full flex justify-end" data-astro-cid-e2rqhpi3><article class="grow" data-pagefind-body data-astro-cid-e2rqhpi3><header class="mt-24 w-11/12 max-w-[700px] mx-auto" data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-pagefind-weight="6.7" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a><svg viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16 mx-4 mt-[2px]" data-astro-cid-e2rqhpi3="true">
+  <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+</svg><a href="/blog#%E4%BD%9C%E6%9B%B2%E3%81%AE%E8%A3%9C%E5%8A%A9%E3%83%84%E3%83%BC%E3%83%AB%E3%82%92%E4%BD%9C%E3%82%8B%E3%81%BE%E3%81%A7%E3%81%AE%E6%97%A5%E8%A8%98" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">作曲の補助ツールを作るまでの日記</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-pagefind-weight="6.5" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=PHP"># PHP</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%97%A5%E8%A8%98"># 日記</a></div><h1 class="text-center text-xl md:text-3xl font-bold px-24 mt-40" data-astro-cid-e2rqhpi3>【2日目】Webについて学ぼう</h1><div class="text-slate-400 text-sm gap-16 flex justify-center mt-24" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>投稿日 <time datetime="2023-07-09T00:00:00.000Z">2023/07/09</time></span><span data-astro-cid-e2rqhpi3>最終更新日 <time datetime="2023-07-09T00:00:00.000Z">2023/07/09</time></span></div></header><hr class="bg-slate-200 rounded-full mx-auto h-4 my-40 w-40 border-0"><div class="flex mx-auto justify-center gap-40" data-astro-cid-e2rqhpi3><section id="article-body" class="
+                            prose prose-neutral
+                            prose-blockquote:border-miku-400 prose-blockquote:font-normal
+                            w-0 grow
+                            max-w-[650px] bg-white box-content px-16 md:px-40 py-24 rounded-md
+                            " data-astro-cid-e2rqhpi3><p>2023年7月7日~2023年7月9日</p>
+<h2 id="近況"><strong>近況</strong></h2>
+<p>最近、あまりにも就活に時間が取られている。<br>
+これは私のアプリで記録したものなんだけど、左が最近の1週間。右が1週間前の1週間。</p>
+<p>就活に関してはまとまった時間でどかっとやらないので、記録された時間が実際よりは少ないと思う。</p>
+<p><img alt="" loading="lazy" decoding="async" width="1586" height="1427" src="/_astro/89d32bc1180d7dcaaa62ccbdd8e4f496.DY0C_XJe_Z1vJjAD.webp" srcset=""></p>
+<p>あまりにも、やらなすぎてGithubの草も生えない。というより、やれない。本当にいっぱいいっぱい。就活向いてない。</p>
+<p>でも、今週末は少し余裕が出来たので、やっていこう。</p>
+<h2 id="目標"><strong>目標</strong></h2>
+<p>とりあえず、最初の目標は「<a href="https://qiita.com/marusho_summers/items/a2d3681fac863734ec8a" rel="noopener noreferrer" target="_blank"><strong>1000円サイゼリヤ</strong></a><strong>のDTM版を作ること</strong>」にする。</p>
+<p>最終的にはDTM版Qiitaを作りたい。しかし、そもそも音楽とプログラミングって表現する媒体が音と文字で違うし、正解がある程度ある、無い、という違いもあるので、実際に実用的かは疑問符。</p>
+<p>しかし、色々アプリを実際に作ってみて、いちいち人にインストールしてもらう大変さを感じていたので、手軽に使えるWeb系を学んでおいて損は無いと思い、ちょっと学んでみる。</p>
+<p>そこで、何か小さな目標が欲しいんだけど、昔流行った1000円サイゼリヤっていうやつが適度に簡単で面白そうだったので、これにする。Web系を作ったことは一度もないので、もちろん実際に簡単かはわからん。</p>
+<p>最初はPythonのFlaskというフレームワークとHTML+CSSで作ろうと思ったんだけど、大学で少しだけPHPを学んでいるっていうのと、PHPを使うかもな事情が出たのでPHPで作成することにした。</p>
+<h2 id="webの疑問"><strong>Webの疑問</strong></h2>
+<p>大学でPHPを学んだことがあるといっても文系大学だし、教えていただいてる教授がかなり感覚派の方で「理論よりまず慣れろ！」って感じなんだよね。だから、具体的に何がどうなってんのかがわからない。正直あの授業、私はプログラミング経験あったからついていけてるけど、無かったらかなり厳しい。</p>
+<p>そういうわけで、とりあえず疑問点を出して基礎的なところを少し補強したい。</p>
+<p>個人的な疑問点は</p>
+<ol>
+<li>
+<p>そもそもWebの仕組みってどうなってんの？</p>
+</li>
+<li>
+<p>その上でPHPは何を担っているの？</p>
+</li>
+<li>
+<p>PHPとJavaScript、Flaskなどの違いはなんなの？</p>
+</li>
+</ol>
+<p>ってところかな。</p>
+<p>Webに関する知識の調べ方を調べてたんだけど、やっぱり最初は体系的にまとまっている書籍がいいのかなぁという感じ。ネットのいろんなところに情報はあるんだけど、断片的かつ限定的なものが多い印象。Swiftを学んだ時にも感じたんだけど、Pythonって情報の質と量が共に恵まれてたんだなぁと思う。</p>
+<p>ChatGPTに説明を頼んでもいい気がするけど、基礎的なところを間違ってしまうと厳しいので一回保留。</p>
+<h2 id="書籍で学ぶ"><strong>書籍で学ぶ</strong></h2>
+<p>とりあえず「<a href="https://amzn.asia/d/0RLx1jv" rel="noopener noreferrer" target="_blank">Webを支える技術</a>」という本がWebの概要を掴むのによさげなので、これを読んでみる。ページ数はかなり多いっぽいけど、要所だけつまむ感じでKindleで読めば問題はなさそう。</p>
+<p>昔、本は最初から最後まで読まなきゃいけないっていう固定観念があったんだけど、別にそんなこと無いって誰かに言われてから本を買ったり借りるハードルがだいぶ下がった。</p>
+<p>そもそも本を読むことに抵抗がある人も、動画や音といった媒体が使える中、こうやって文字を選んで情報を手に入れている時点で適正はあると思うので、ラノベからでも読んで見ると幅が広がるかもしれない。</p>
+<p>Webを支える技術を読んでみた</p>
+<p>1回目はとりあえずさらっと読む。</p>
+<p>以下はメモ</p>
+<ul>
+<li>
+<p><strong>正直、最初は専門用語が多いため想像しにくく、理解しにくい。</strong></p>
+</li>
+<li>
+<p><strong>現在のWebは一言では表せない巨大なシステム</strong></p>
+</li>
+<li>
+<p><strong>ハイパーメディア（文章にリンクを貼れる技術）が意外にも大切そう</strong><br>
+なんとも無い技術な気がしてしまうけど、確かにこの機能が無いとネット上を移動するのがめちゃくちゃ大変なのか。</p>
+</li>
+<li>
+<p><strong>Webは分散システム</strong><br>
+まあ集権的ではないよね。</p>
+</li>
+<li>
+<p><strong>URIってなんなんだ</strong>URIはUniformResourceIdentifierの略。ルールに従ってリソースを識別する一意のIDという感じでいいと思う。<br>
+また、URLとURNの総称でもあるが、だいたいURLと思っていいっぽい。<a href="https://wa3.i-3-i.info/word1815.html" rel="noopener noreferrer" target="_blank">このサイト</a>がわかりやすい。このURIを使ってWeb上のリソースを識別してる。</p>
+</li>
+<li>
+<p><strong>リソースというのは、Web上にあるあらゆる情報</strong><br>
+いろんな解釈があるっぽいけど、とりあえず私たちがブラウザで開ける物のことと捉えていい？　だから、このブログページも数あるリソースの1つだし、URIがある。</p>
+</li>
+<li>
+<p><strong>なぜURIが必要なのか</strong><br>
+URIがあることで、例えば「<a href="https://tamakoma.com/%E3%80%8D%E3%81%AB%E9%A3%9B%E3%82%93%E3%81%A7%E3%81%A3%E3%81%A6%E3%81%84%E3%81%86%E3%81%A0%E3%81%91%E3%81%A7%E7%9B%AE%E7%9A%84%E3%81%AE%E3%83%AA%E3%82%BD%E3%83%BC%E3%82%B9%E3%81%AB%E8%BE%BF%E3%82%8A%E7%9D%80%E3%81%91%E3%82%8B%E3%81%8B%E3%82%89%E3%80%82%E3%81%84%E3%81%A1%E3%81%84%E3%81%A1%E3%82%B5%E3%83%BC%E3%83%90%E3%83%BC%E3%81%AE%E6%83%85%E5%A0%B1%E3%82%84%E3%83%87%E3%82%A3%E3%83%AC%E3%82%AF%E3%83%88%E3%83%AA%E3%81%AE%E9%9A%8E%E5%B1%A4%E3%82%92%E6%B0%97%E3%81%AB%E3%81%99%E3%82%8B%E5%BF%85%E8%A6%81%E3%81%8C%E7%84%A1%E3%81%8F%E3%81%AA%E3%81%A3%E3%81%9F%E3%82%89%E3%81%97%E3%81%84%E3%80%82" rel="noopener noreferrer" target="_blank">https://tamakoma.com/」に飛んでっていうだけで目的のリソースに辿り着けるから。いちいちサーバーの情報やディレクトリの階層を気にする必要が無くなったらしい。</a></p>
+</li>
+<li>
+<p><strong>リソースは複数のURIを持てる</strong>確かに、短縮URLとかあるもんね</p>
+</li>
+<li>
+<p><strong>マルチプラットフォームとは</strong><br>
+異なる種類のハードウェアからシステムを同じように動作させること。例えば、YoutubeはPCでもスマホでも、アプリでもブラウザでも同じように見れる。Youtubeはマルチプラットフォームであるということ。</p>
+</li>
+<li>
+<p><strong>Webのマルチプラットフォーム化</strong><br>
+汎用性を高くするために、Webではユーザーインターフェース（ユーザーが見る、触れる所）の処理をクライアント側が、内部的な処理をサーバー側が担当している。クライアント側っていうのは私たちが使うPCやスマホ側という認識で良い？</p>
+<p>クライアントとサーバーで処理を分けることでマルチプラットフォームを実現しているということか。そのサーバー側の処理をPHPで書くという認識で良い？</p>
+</li>
+<li>
+<p><strong>クライアントとサーバーに分けるメリット2</strong><br>
+他にもこのクライアントとサーバーに分けるメリットはあって、サーバー側にデータを保存し、そこにアクセスさせることで常に新しく普遍的な情報を提供できる。</p>
+</li>
+<li>
+<p><strong>キャッシュとは</strong><br>
+「キャッシュを削除してからアクセスしてください」って1回くらいは聞いたことあるよね。そのキャッシュ。一度取得したリソースをある程度使い回すという”概念”でいいのかな。<br>
+実際にスマホでどっかのサイトにアクセスして、そこから他のサイトに飛ぶ。その次にネットワークを切って前のサイトに戻ってもある程度の情報は表示されるはず。これはクライアント側でリソースをある程度保持するキャッシュが実装されてるからということかな。<br>
+毎回データをダウンロードしなくて良くなるから、データ処理とネットワークの省エネ化に繋がるってことか。その代わり、古い情報を使ってしまう可能性にもなる。</p>
+<p>ちなむと、キャッシュの綴りはCacheだが、お金「Cash」と発音が似ているので、「$」と表現することもある……と…。今、大学で感覚的に書いていたPHPコードの謎が一つ解けた気がする。</p>
+</li>
+<li>
+<p><strong>コードオンデマンドとは</strong><br>
+プログラムコードをサーバーからダウンロードしてクライアント側で実行すること。具体的には、JavaScriptとかFlashがそれに当たる（Flashってもうサービス終了したよね？　悲しいね）。この技術があることでHTMLとCSSだけじゃできない動的なユーザーインターフェースを提供できるってことか。</p>
+<p>ここまで理解すると、Webのバックエンドとフロントエンドの概念がある程度分かってきた。フロントエンドはこのHTMLとかCSSとかJavaScriptとかのクライアント側で処理されるプログラムを書くことで、バックエンドはサーバーで処理されるプログラムを書くことってことかな。</p>
+<p>ちなみにPHPはサーバーで実行・処理を行い、その結果をサーバーからクライアントに送るものなので、バックエンドになるのかな。</p>
+</li>
+</ul>
+<p>とりあえずここまででまだ本の20%もいってないんだけど、基礎知識は程度仕入れた感があるので、一旦実践に移る。</p>
+<h2 id="phpを学ぶ"><strong>PHPを学ぶ</strong></h2>
+<p>とりあえず、Webサイトを作るにはフロントエンドのHTML,CSSとバックエンドのPHPがあればいいのかな？</p>
+<p><a href="https://www.php.net/manual/ja/index.php" rel="noopener noreferrer" target="_blank">PHPの公式ドキュメント</a>を読んでみる。</p>
+<p>かなり自然な日本語に訳されているので、読みやすい。</p>
+<p>以下はメモ</p>
+<ul>
+<li>
+<p><strong>PHPはHTMLの中に埋め込めるが、実行はサーバーで行われ結果だけ返す形</strong><br>
+なるほどね。授業でコードは書いたことあったけど、普通にHTML内に記述するのが正しいんだね。なんか勝手に正式な方法じゃないと思ってた。</p>
+</li>
+<li>
+<p><strong>PHPはすごいぞ</strong><br>
+PHPは基本的なOS全てで動作します。しかも、多くのデータベースをサポートしています。また、様々なプロトコルや拡張モジュールにも対応しています。</p>
+<p>ってあるけど、初心者にとっちゃなんのこっちゃ。<br>
+きっとすごいんだろう。</p>
+</li>
+<li>
+<p><strong>環境構築</strong><br>
+なんかWebサイトってHTMLをVSCodeとかで適当に書いて実行すれば動くのかと思ったけど、よくよく考えたらPHPも入れるとPHPはサーバーで処理しなきゃいけないから、ローカルで動かすとしてもそのパソコンにサーバーのツールをインストールしてサーバーを建てなきゃいけないっぽい。</p>
+<p>WebサーバーはApache(アパッチ)というのが有名で、他にPHPとか使いたいDBとかのインストールが必要なのかな？　でも、Pythonで言うAnacondaみたいに必要な物がパッケージ化されてるものがあるらしいので、今回はそれを使う。</p>
+<p>今回使うのは<a href="https://www.apachefriends.org/jp/index.html" rel="noopener noreferrer" target="_blank">XAMPP</a>(ザンプ)というもの。理由は、授業で使ってるのがこれだから。</p>
+</li>
+</ul>
+<h2 id="phpを書いてみる"><strong>PHPを書いてみる</strong></h2>
+<p>とりあえず、もうできるっぽいので<a href="https://www.php.net/manual/ja/tutorial.php" rel="noopener noreferrer" target="_blank">PHPのチュートリアル</a>をやってみる。<br>
+Githubの草生やしたかったらこういうのもGithubと連携させるべきなんだろな……やっとくか。</p>
+<p>cmdでのgitの操作むずいけど、どうにか必要なとこだけgithubと連携できた。しかし、first commitが2個になっちゃった。しょうがないね。</p>
+<p>よし、ここまで来てようやくHelloWorldまで来れた。1時間くらいかかった気がする。</p>
+<p><img alt="" loading="lazy" decoding="async" width="434" height="114" src="/_astro/bcaaa5f6349c2f74ca34b3860ed6ef04.DGYWfcsA_qkQ6Y.webp" srcset=""></p>
+<p>目標の物は実質ガチャみたいなものなので、乱数を生成する必要があるよね。<br>
+phpの基本は<a href="https://www.php.net/manual/ja/language.types.intro.php" rel="noopener noreferrer" target="_blank">公式ドキュメント</a>に分かりやすくあるので、これを見れば良さそう。こうやって公式ドキュメントって使うのか。</p>
+<p>また、github copilot君が滅茶苦茶有能</p>
+<p><img alt="" loading="lazy" decoding="async" width="449" height="657" src="/_astro/b5cfa18eff8ec7e07b2017efbaa6d03d.CZ_UVGn8_cpP2J.webp" srcset=""></p>
+<p>恐らく、タイトルをGachaにしてるからだと思うんだけど、すごいねぇ。</p>
+<p>しかし、ちょっと基本的なところがわからないので、とりあえずfizzbuzzでも書いてみる。<br>
+というか、github copilotがすぐ予測出すから練習にならない。切ろう。</p>
+<pre class="astro-code monokai" style="background-color:#272822;color:#F8F8F2; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF">html</span><span style="color:#F92672">></span></span>
+<span class="line"><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF">head</span><span style="color:#F92672">></span></span>
+<span class="line"><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF">title</span><span style="color:#F92672">></span><span style="color:#AE81FF">PHP</span><span style="color:#AE81FF"> Gacha</span><span style="color:#F92672">&#x3C;/</span><span style="color:#AE81FF">title</span><span style="color:#F92672">></span></span>
+<span class="line"><span style="color:#F92672">&#x3C;/</span><span style="color:#AE81FF">head</span><span style="color:#F92672">></span></span>
+<span class="line"><span style="color:#F92672">&#x3C;</span><span style="color:#AE81FF">body</span><span style="color:#F92672">></span></span>
+<span class="line"><span style="color:#F92672">&#x3C;?</span><span style="color:#AE81FF">php</span></span>
+<span class="line"><span style="color:#F92672">for</span><span style="color:#F8F8F2"> ($i </span><span style="color:#F92672">=</span><span style="color:#AE81FF"> 1</span><span style="color:#F8F8F2">; $i </span><span style="color:#F92672">&#x3C;=</span><span style="color:#AE81FF"> 10</span><span style="color:#F8F8F2">; $i</span><span style="color:#F92672">++</span><span style="color:#F8F8F2">) {</span></span>
+<span class="line"><span style="color:#F92672">    if</span><span style="color:#F8F8F2"> ($i </span><span style="color:#F92672">%</span><span style="color:#AE81FF"> 3</span><span style="color:#F92672"> ==</span><span style="color:#AE81FF"> 0</span><span style="color:#F92672"> &#x26;&#x26;</span><span style="color:#F8F8F2"> $i </span><span style="color:#F92672">%</span><span style="color:#AE81FF"> 5</span><span style="color:#F92672"> ==</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">){</span></span>
+<span class="line"><span style="color:#66D9EF">        echo</span><span style="color:#E6DB74"> "FizzBuzz&#x3C;br>"</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">    } </span><span style="color:#F92672">else</span><span style="color:#F92672"> if</span><span style="color:#F8F8F2"> ($i </span><span style="color:#F92672">%</span><span style="color:#AE81FF"> 3</span><span style="color:#F92672"> ==</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">){</span></span>
+<span class="line"><span style="color:#66D9EF">        echo</span><span style="color:#E6DB74"> "Fizz&#x3C;br>"</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">    } </span><span style="color:#F92672">else</span><span style="color:#F92672"> if</span><span style="color:#F8F8F2"> ($i </span><span style="color:#F92672">%</span><span style="color:#AE81FF"> 5</span><span style="color:#F92672"> ==</span><span style="color:#AE81FF"> 0</span><span style="color:#F8F8F2">){</span></span>
+<span class="line"><span style="color:#66D9EF">        echo</span><span style="color:#E6DB74"> "Buzz&#x3C;br>"</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">    } </span><span style="color:#F92672">else</span><span style="color:#F8F8F2"> {</span></span>
+<span class="line"><span style="color:#66D9EF">        echo</span><span style="color:#F8F8F2"> $i </span><span style="color:#F92672">.</span><span style="color:#E6DB74"> "&#x3C;br>"</span><span style="color:#F8F8F2">;</span></span>
+<span class="line"><span style="color:#F8F8F2">    }</span></span>
+<span class="line"><span style="color:#F8F8F2">}</span></span>
+<span class="line"><span style="color:#F92672">?></span></span>
+<span class="line"><span style="color:#F92672">&#x3C;/</span><span style="color:#AE81FF">body</span><span style="color:#F92672">></span></span>
+<span class="line"><span style="color:#F92672">&#x3C;/</span><span style="color:#AE81FF">html</span><span style="color:#F92672">></span></span></code></pre>
+<p>やっぱり新しい言語は慣れない。</p>
+<p>ちょっとさすがに眠いので寝る。</p></section><aside class="w-[300px] hidden lg:block shrink-0" data-astro-cid-e2rqhpi3><nav class="sticky top-16 h-fit  bg-white py-24 pl-24 rounded-md" data-astro-cid-tqqy2vud><section data-astro-cid-tqqy2vud><header data-astro-cid-tqqy2vud><h2 class="font-bold text-lg" data-astro-cid-tqqy2vud>目次</h2></header></section><div class="article-toc scroll-smooth mt-4 py-16 pr-24 overflow-y-auto max-h-[90svh]" data-astro-cid-tqqy2vud></div></nav><script type="module" src="/_astro/ArticleTOC.astro_astro_type_script_index_0_lang.mX9zJvT_.js"></script></aside></div><div class="mt-40 mb-64" data-pagefind-ignore data-astro-cid-e2rqhpi3><div class="flex justify-center items-center flex-wrap" data-astro-cid-e2rqhpi3><span data-astro-cid-e2rqhpi3>category:</span><a href="/blog#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">プログラミング</a><svg viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16 mx-4 mt-[2px]" data-astro-cid-e2rqhpi3="true">
+  <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+</svg><a href="/blog#%E4%BD%9C%E6%9B%B2%E3%81%AE%E8%A3%9C%E5%8A%A9%E3%83%84%E3%83%BC%E3%83%AB%E3%82%92%E4%BD%9C%E3%82%8B%E3%81%BE%E3%81%A7%E3%81%AE%E6%97%A5%E8%A8%98" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">作曲の補助ツールを作るまでの日記</a></div><div class="flex gap-8 justify-center max-w-[650px] mx-auto flex-wrap mt-8" data-astro-cid-e2rqhpi3><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=PHP"># PHP</a><a class="px-4 md:px-8 py-4 text-sm md:text-base border border-slate-300 rounded-lg" href="/blog?tag=%E6%97%A5%E8%A8%98"># 日記</a></div></div></article></main></div><footer class="pb-40 px-24 md:px-0 bg-white"><hr class="mx-auto w-2/3 md:w-1/2 my-24 h-[1px] border-0 bg-slate-400"><div class="mx-8 md:mx-64"><a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" target="_blank" rel="noopener noreferrer"><img src="/_astro/by-nc.DpMeGFcJ_ZF0RGK.svg" alt="クリエイティブコモンズ 表示-非営利 4.0 ライセンス" loading="lazy" decoding="async" width="125" height="44"></a><p class="text-xs md:text-sm">本サイト「<a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">tamakoma.com</a>」から提供されるブログ内の文章、プログラミングコードは、<a href="https://creativecommons.org/licenses/by-nc/4.0/deed.ja" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">クリエイティブ・コモンズ 表示-非営利 4.0 ライセンス</a>の下に提供されます。</p><p class="text-xs md:text-sm">音楽や画像などのメディアコンテンツにはこのライセンスは適用されません。</p></div><p class="text-center text-sm"><a href="/" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Top</a> / <a href="/contact" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_self">Contact</a> / <a href="/feed.xml" class="underline underline-offset-2 text-miku-500 hover:text-miku-600" target="_blank" rel="noopener noreferrer">RSS Feed</a></p><p class="mt-24 text-center">&copy; tamakoma 2018-2026</p></footer></div></body></html>
